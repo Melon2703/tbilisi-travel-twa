@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import { getRouteById } from '@/lib/data/routes';
 import StopCard from '@/components/StopCard';
+import TelegramBackButtonController from '@/components/TelegramBackButtonController';
 
 interface PageProps {
   params: Promise<{ routeId: string }>;
@@ -37,6 +38,8 @@ export default async function RoutePage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-[var(--twa-bg-color,#f7f4ef)] text-[var(--twa-text-color,#1f2421)] antialiased">
+      <TelegramBackButtonController />
+
       {/* Route Hero Header */}
       <header className="relative bg-[var(--tbilisi-slate)] text-white overflow-hidden pb-8 pt-6 px-4 sm:px-6 shadow-md">
         {route.heroImage && (

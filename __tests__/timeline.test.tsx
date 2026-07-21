@@ -1,14 +1,18 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import RoutePage from '@/app/twa/[routeId]/page';
 import StopCard from '@/components/StopCard';
 import { Stop } from '@/lib/types/route';
 
-// Mock next/navigation notFound
+// Mock next/navigation notFound & useRouter
 vi.mock('next/navigation', () => ({
   notFound: vi.fn(() => {
     throw new Error('NEXT_NOT_FOUND');
   }),
+  useRouter: vi.fn(() => ({
+    back: vi.fn(),
+    push: vi.fn(),
+  })),
 }));
 
 describe('TWA Timeline & Card Feed UI', () => {
@@ -74,6 +78,17 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(screen.getByText(/Gently push through the wooden carriage doors/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /Open in Maps/i })).toBeInTheDocument();
       expect(screen.queryByTestId('logistics-warning')).not.toBeInTheDocument();
+    });
+
+    it('opens MapProviderSheet dialog when "Open in Maps" button is clicked', () => {
+      render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
+
+      const mapsButton = screen.getByRole('button', { name: /Open in Maps/i });
+      fireEvent.click(mapsButton);
+
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByText(/Open in Navigation App/i)).toBeInTheDocument();
+      expect(screen.getByText('Google Maps')).toBeInTheDocument();
     });
 
     it('renders logistics warning when provided', () => {
