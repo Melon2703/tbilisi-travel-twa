@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --terracotta-h: 16;
+  --terracotta-s: 60%;
+  --terracotta-l: 49%;
+  --terracotta: hsl(var(--terracotta-h) var(--terracotta-s) var(--terracotta-l));
+
+  --tbilisi-slate-h: 140;
+  --tbilisi-slate-s: 9%;
+  --tbilisi-slate-l: 13%;
+  --tbilisi-slate: hsl(var(--tbilisi-slate-h) var(--tbilisi-slate-s) var(--tbilisi-slate-l));
+
+  --warm-stone-h: 38;
+  --warm-stone-s: 33%;
+  --warm-stone-l: 95%;
+  --warm-stone: hsl(var(--warm-stone-h) var(--warm-stone-s) var(--warm-stone-l));
+
+  --golden-amber-h: 16;
+  --golden-amber-s: 65%;
+  --golden-amber-l: 68%;
+  --golden-amber: hsl(var(--golden-amber-h) var(--golden-amber-s) var(--golden-amber-l));
+
+  /* Telegram WebApp theme CSS variables (with fallback design system HSL values) */
+  --twa-bg-color: var(--warm-stone);
+  --twa-text-color: var(--tbilisi-slate);
+  --twa-hint-color: hsl(210, 8%, 47%);
+  --twa-link-color: var(--terracotta);
+  --twa-button-color: var(--terracotta);
+  --twa-button-text-color: hsl(0, 0%, 100%);
+  --twa-secondary-bg-color: hsl(0, 0%, 100%);
+  --twa-header-bg-color: var(--tbilisi-slate);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-terracotta: var(--terracotta);
+  --color-tbilisi-slate: var(--tbilisi-slate);
+  --color-warm-stone: var(--warm-stone);
+  --color-golden-amber: var(--golden-amber);
+  --color-twa-bg: var(--twa-bg-color);
+  --color-twa-text: var(--twa-text-color);
+  --color-twa-hint: var(--twa-hint-color);
+  --color-twa-link: var(--twa-link-color);
+  --color-twa-button: var(--twa-button-color);
+  --color-twa-button-text: var(--twa-button-text-color);
+  --color-twa-secondary-bg: var(--twa-secondary-bg-color);
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--twa-bg-color);
+  color: var(--twa-text-color);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
