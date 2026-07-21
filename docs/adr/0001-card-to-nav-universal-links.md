@@ -1,0 +1,3 @@
+# Card-to-Nav Universal Link Navigation over Embedded Maps
+
+We decided to build the TWA interface as a lightweight vertical card timeline with universal deep-links to external map applications (Google Maps, Apple Maps, Yandex Maps) rather than embedding interactive Mapbox/Leaflet web maps inside the Telegram WebView. Tbilisi's physical geography presents steep inclines (30° in Sololaki/Vera), cobblestones, high summer heat, and spotty 3G/4G coverage in deep stone courtyards. Heavy WebGL/Canvas map rendering causes lag and battery drain on mobile WebViews, whereas native navigation apps provide superior GPS tracking, offline caching, and turn-by-turn directions.
