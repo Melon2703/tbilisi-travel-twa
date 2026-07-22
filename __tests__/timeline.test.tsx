@@ -192,7 +192,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       const { container } = render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
       const scrollContainer = container.querySelector('[data-testid="stop-card-container"]');
       expect(scrollContainer).toBeInTheDocument();
-      expect(scrollContainer).toHaveClass('touch-pan-y');
+      expect(scrollContainer).toHaveClass('touch-pan-x');
+      expect(scrollContainer).toHaveClass('pan-y');
       expect(scrollContainer).toHaveClass('overscroll-y-contain');
     });
   });

@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Mousewheel } from 'swiper/modules';
 import 'swiper/css';
 import { Route } from '@/lib/types/route';
 import { getVisitedStops, toggleVisitedStop } from '@/lib/utils/visited';
@@ -27,25 +28,32 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
     setVisitedStopIds(initialVisited);
   }, [route.id]);
 
+  // Synchronize Swiper slide position whenever activeIndex changes
+  useEffect(() => {
+    if (swiperRef.current && swiperRef.current.activeIndex !== activeIndex) {
+      swiperRef.current.slideTo(activeIndex, 300);
+    }
+  }, [activeIndex]);
+
   const handleStartRoute = () => {
+    setActiveIndex(1);
     if (swiperRef.current) {
-      swiperRef.current.slideTo(1);
-      setActiveIndex(1);
+      swiperRef.current.slideTo(1, 300);
     }
   };
 
   const handleStopClick = (slideIndex: number) => {
+    setActiveIndex(slideIndex);
     if (swiperRef.current) {
-      swiperRef.current.slideTo(slideIndex);
-      setActiveIndex(slideIndex);
+      swiperRef.current.slideTo(slideIndex, 300);
     }
   };
 
   const handleToggleVisited = () => {
     if (activeIndex === 0) {
+      setActiveIndex(1);
       if (swiperRef.current) {
-        swiperRef.current.slideTo(1);
-        setActiveIndex(1);
+        swiperRef.current.slideTo(1, 300);
       }
       return;
     }
@@ -59,9 +67,12 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
 
     if (isVisitedNow) {
       const isLastStop = activeIndex === sortedStops.length;
-      if (!isLastStop && swiperRef.current) {
-        swiperRef.current.slideNext();
-        setActiveIndex((prev) => Math.min(prev + 1, sortedStops.length));
+      if (!isLastStop) {
+        const nextIndex = activeIndex + 1;
+        setActiveIndex(nextIndex);
+        if (swiperRef.current) {
+          swiperRef.current.slideTo(nextIndex, 300);
+        }
       }
     }
   };
@@ -69,16 +80,30 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
   return (
     <div className="w-full min-h-screen relative overflow-hidden bg-[var(--twa-bg-color,#f7f4ef)]">
       <Swiper
+        modules={[Mousewheel]}
+        mousewheel={{ forceToAxis: true, releaseOnEdges: true }}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
-          setActiveIndex(swiper.activeIndex);
+          if (swiper.activeIndex !== activeIndex) {
+            swiper.slideTo(activeIndex, 0);
+          }
         }}
         onSlideChange={(swiper) => {
           setActiveIndex(swiper.activeIndex);
         }}
+        onSlideChangeTransitionEnd={(swiper) => {
+          setActiveIndex(swiper.activeIndex);
+        }}
         slidesPerView={1}
         spaceBetween={0}
+        allowTouchMove={true}
+        simulateTouch={true}
+        preventClicks={false}
+        preventClicksPropagation={false}
+        touchStartPreventDefault={false}
+        threshold={10}
         touchAngle={45}
+        touchEventsTarget="container"
         className="w-full min-h-screen"
       >
         {/* Slide 0: Route Intro Card */}

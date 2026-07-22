@@ -15,7 +15,7 @@ export default function RouteIntroCard({ route, onStartRoute }: RouteIntroCardPr
   const formattedTime = hours > 0 ? `${hours}h ${mins > 0 ? `${mins}m` : ''}` : `${mins}m`;
 
   return (
-    <div className="relative flex flex-col justify-between min-h-screen w-full bg-[var(--twa-bg-color,#f7f4ef)] text-[var(--twa-text-color,#1f2421)] overflow-y-auto pb-24">
+    <div className="relative flex flex-col justify-between min-h-screen w-full bg-[var(--twa-bg-color,#f7f4ef)] text-[var(--twa-text-color,#1f2421)] overflow-y-auto touch-pan-x pan-y pb-36 sm:pb-40">
       {/* Hero Cover Image Header */}
       <div className="relative w-full h-72 sm:h-80 bg-[var(--tbilisi-slate)] overflow-hidden shadow-lg">
         {route.heroImage && (

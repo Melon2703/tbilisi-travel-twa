@@ -47,6 +47,7 @@ export interface TelegramWebApp {
   ready: () => void;
   expand: () => void;
   close: () => void;
+  disableVerticalSwipes?: () => void;
   onEvent: (eventType: string, eventHandler: () => void) => void;
   offEvent: (eventType: string, eventHandler: () => void) => void;
   sendData: (data: string) => void;

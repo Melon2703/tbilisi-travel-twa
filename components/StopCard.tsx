@@ -17,7 +17,7 @@ export default function StopCard({ stop, isLast = false }: StopCardProps) {
     <>
       <div
         data-testid="stop-card-container"
-        className="relative flex gap-4 sm:gap-6 group touch-pan-y overscroll-y-contain"
+        className="relative flex gap-4 sm:gap-6 group touch-pan-x pan-y overscroll-y-contain"
       >
         {/* Timeline spine and node indicator */}
         <div className="flex flex-col items-center">

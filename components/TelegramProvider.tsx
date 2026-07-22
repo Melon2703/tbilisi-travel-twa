@@ -67,6 +67,9 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
 
       app.ready();
       app.expand();
+      if (app.disableVerticalSwipes) {
+        app.disableVerticalSwipes();
+      }
 
       const handleThemeChange = () => {
         if (app.themeParams) {
