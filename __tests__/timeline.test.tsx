@@ -189,26 +189,35 @@ describe('TWA Timeline & Card Feed UI', () => {
     };
 
     it('renders stop details, order badge, estimated time, and Olya\'s tips correctly', () => {
-      render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
+      render(<StopCard stop={mockStopWithoutWarning} isLast={false} totalStops={2} />);
 
-      expect(screen.getByText('Stop 2')).toBeInTheDocument();
+      expect(screen.getByText('STOP 2 OF 2')).toBeInTheDocument();
       expect(screen.getByText('Lado Asatiani St Merchant Houses')).toBeInTheDocument();
       expect(screen.getByText('Sololaki')).toBeInTheDocument();
       expect(screen.getByText('25 min')).toBeInTheDocument();
       expect(screen.getByText(/Gently push through the wooden carriage doors/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /Open in Maps/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /Google Maps/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /Yandex Maps/i })).toBeInTheDocument();
       expect(screen.queryByTestId('logistics-warning')).not.toBeInTheDocument();
     });
 
-    it('opens MapProviderSheet dialog when "Open in Maps" button is clicked', () => {
+    it('embeds direct Google Maps and Yandex Maps provider link pills under the head photo', () => {
       render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
 
-      const mapsButton = screen.getByRole('button', { name: /Open in Maps/i });
-      fireEvent.click(mapsButton);
+      const googleLink = screen.getByRole('link', { name: /Google Maps/i });
+      const yandexLink = screen.getByRole('link', { name: /Yandex Maps/i });
 
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-      expect(screen.getByText(/Open in Navigation App/i)).toBeInTheDocument();
-      expect(screen.getByText('Google Maps')).toBeInTheDocument();
+      expect(googleLink).toBeInTheDocument();
+      expect(googleLink).toHaveAttribute(
+        'href',
+        'https://www.google.com/maps/search/?api=1&query=41.6918,44.7972'
+      );
+
+      expect(yandexLink).toBeInTheDocument();
+      expect(yandexLink).toHaveAttribute(
+        'href',
+        'https://yandex.com/maps/?pt=44.7972,41.6918&z=17'
+      );
     });
 
     it('renders logistics warning when provided', () => {
@@ -224,7 +233,7 @@ describe('TWA Timeline & Card Feed UI', () => {
     it('renders best time of day when provided', () => {
       render(<StopCard stop={mockStopWithWarning} isLast={false} />);
 
-      expect(screen.getByText('Morning (10 AM - 12 PM)')).toBeInTheDocument();
+      expect(screen.getByText(/Morning \(10 AM - 12 PM\)/i)).toBeInTheDocument();
     });
 
     it('renders photo spot recommendation when provided', () => {

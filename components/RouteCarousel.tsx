@@ -118,6 +118,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
               <StopCard
                 stop={stop}
                 isLast={index === sortedStops.length - 1}
+                totalStops={sortedStops.length}
               />
             </div>
           </SwiperSlide>
