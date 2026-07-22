@@ -18,17 +18,14 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [visitedStopIds, setVisitedStopIds] = useState<string[]>([]);
-  const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
+  const isCompleted = sortedStops.length > 0 && visitedStopIds.length === sortedStops.length;
 
   useEffect(() => {
     const initialVisited = getVisitedStops(route.id);
     setVisitedStopIds(initialVisited);
-    if (initialVisited.length === sortedStops.length && sortedStops.length > 0) {
-      setIsCompleted(true);
-    }
-  }, [route.id, sortedStops.length]);
+  }, [route.id]);
 
   const handleStartRoute = () => {
     if (swiperRef.current) {
@@ -37,7 +34,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
     }
   };
 
-  const handleNodeClick = (slideIndex: number) => {
+  const handleStopClick = (slideIndex: number) => {
     if (swiperRef.current) {
       swiperRef.current.slideTo(slideIndex);
       setActiveIndex(slideIndex);
@@ -60,22 +57,12 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
     const { visited, isVisitedNow } = toggleVisitedStop(route.id, currentStop.id);
     setVisitedStopIds(visited);
 
-    const isAllVisited = visited.length === sortedStops.length;
-
     if (isVisitedNow) {
       const isLastStop = activeIndex === sortedStops.length;
-      if (!isLastStop) {
-        if (swiperRef.current) {
-          swiperRef.current.slideNext();
-          setActiveIndex((prev) => Math.min(prev + 1, sortedStops.length));
-        }
-      } else {
-        setIsCompleted(true);
+      if (!isLastStop && swiperRef.current) {
+        swiperRef.current.slideNext();
+        setActiveIndex((prev) => Math.min(prev + 1, sortedStops.length));
       }
-    }
-
-    if (isAllVisited) {
-      setIsCompleted(true);
     }
   };
 
@@ -117,7 +104,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
         stops={sortedStops}
         activeIndex={activeIndex}
         visitedStopIds={visitedStopIds}
-        onNodeClick={handleNodeClick}
+        onStopClick={handleStopClick}
         onToggleVisited={handleToggleVisited}
         isCompleted={isCompleted}
       />

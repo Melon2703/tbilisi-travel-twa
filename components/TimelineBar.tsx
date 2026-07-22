@@ -7,7 +7,7 @@ export interface TimelineBarProps {
   stops: Stop[];
   activeIndex: number;
   visitedStopIds: string[];
-  onNodeClick: (slideIndex: number) => void;
+  onStopClick: (slideIndex: number) => void;
   onToggleVisited: () => void;
   isCompleted?: boolean;
 }
@@ -16,17 +16,17 @@ export default function TimelineBar({
   stops,
   activeIndex,
   visitedStopIds,
-  onNodeClick,
+  onStopClick,
   onToggleVisited,
   isCompleted = false,
 }: TimelineBarProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const activeNodeRef = useRef<HTMLButtonElement | null>(null);
+  const activeStopRef = useRef<HTMLButtonElement | null>(null);
 
-  // Auto-center active stop node in scrollable container
+  // Auto-center active stop indicator in scrollable container
   useEffect(() => {
-    if (activeNodeRef.current) {
-      activeNodeRef.current.scrollIntoView?.({
+    if (activeStopRef.current) {
+      activeStopRef.current.scrollIntoView?.({
         behavior: 'smooth',
         block: 'nearest',
         inline: 'center',
@@ -40,7 +40,7 @@ export default function TimelineBar({
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-stone-200 shadow-lg px-3 py-2.5 sm:px-6">
-      {/* Optional Completion Banner */}
+      {/* Route Completion Banner */}
       {isCompleted && (
         <div
           data-testid="completion-feedback"
@@ -52,11 +52,11 @@ export default function TimelineBar({
       )}
 
       <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
-        {/* Scrollable Node Timeline */}
+        {/* Scrollable Stop Indicator Timeline */}
         <div
           ref={containerRef}
           data-testid="timeline-bar-container"
-          className="flex-1 flex items-center gap-1.5 overflow-x-auto py-1 px-1 scrollbar-none scroll-smooth"
+          className="flex-1 flex items-center gap-2 overflow-x-auto py-1 px-1 scrollbar-none scroll-smooth"
         >
           {stops.map((stop, index) => {
             const slideIndex = index + 1;
@@ -64,48 +64,25 @@ export default function TimelineBar({
             const isVisited = visitedStopIds.includes(stop.id);
 
             return (
-              <React.Fragment key={stop.id}>
-                {index > 0 && (
-                  <div
-                    className={`w-3 h-0.5 shrink-0 transition-colors ${
-                      visitedStopIds.includes(stops[index - 1].id) && isVisited
-                        ? 'bg-emerald-500'
-                        : 'bg-stone-300'
-                    }`}
-                  />
-                )}
-                <button
-                  type="button"
-                  ref={isActive ? activeNodeRef : null}
-                  data-testid={`timeline-node-${stop.order}`}
-                  onClick={() => onNodeClick(slideIndex)}
-                  aria-label={`Jump to stop ${stop.order}: ${stop.name}`}
-                  className={`w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 cursor-pointer focus:outline-none ${
-                    isVisited
-                      ? 'bg-emerald-600 text-white border-2 border-emerald-600'
-                      : 'bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200'
-                  } ${
-                    isActive
-                      ? 'ring-4 ring-[#e07a5f]/40 border-2 border-[#e07a5f] font-bold scale-110 z-10'
-                      : ''
-                  }`}
-                >
-                  {isVisited ? (
-                    <span className="flex items-center justify-center">
-                      <svg
-                        className="w-4 h-4 stroke-[3]"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </span>
-                  ) : (
-                    stop.order
-                  )}
-                </button>
-              </React.Fragment>
+              <button
+                key={stop.id}
+                type="button"
+                ref={isActive ? activeStopRef : null}
+                data-testid={`timeline-stop-${stop.order}`}
+                onClick={() => onStopClick(slideIndex)}
+                aria-label={`Jump to stop ${stop.order}: ${stop.name}`}
+                className={`w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 cursor-pointer focus:outline-none ${
+                  isVisited
+                    ? 'bg-emerald-600 text-white border-2 border-emerald-600'
+                    : 'bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200'
+                } ${
+                  isActive
+                    ? 'ring-4 ring-[#e07a5f]/40 border-2 border-[#e07a5f] font-bold scale-110 z-10'
+                    : ''
+                }`}
+              >
+                {stop.order}
+              </button>
             );
           })}
         </div>

@@ -202,38 +202,38 @@ describe('TWA Timeline & Card Feed UI', () => {
       localStorage.clear();
     });
 
-    it('renders scrollable bottom timeline bar with numbered node badges (1..N) and 56x56px FAB', () => {
+    it('renders scrollable bottom timeline bar with numbered badges (1..N) and 56x56px FAB', () => {
       render(<RouteCarousel route={mockRoute} />);
 
-      const node1 = screen.getByTestId('timeline-node-1');
-      const node2 = screen.getByTestId('timeline-node-2');
+      const stop1 = screen.getByTestId('timeline-stop-1');
+      const stop2 = screen.getByTestId('timeline-stop-2');
       const fab = screen.getByTestId('visited-fab');
 
-      expect(node1).toBeInTheDocument();
-      expect(node2).toBeInTheDocument();
-      expect(node1).toHaveTextContent('1');
-      expect(node2).toHaveTextContent('2');
+      expect(stop1).toBeInTheDocument();
+      expect(stop2).toBeInTheDocument();
+      expect(stop1).toHaveTextContent('1');
+      expect(stop2).toHaveTextContent('2');
       expect(fab).toBeInTheDocument();
       expect(fab).toHaveClass('w-[56px]');
       expect(fab).toHaveClass('h-[56px]');
     });
 
-    it('jumps directly to stop card slide when node badge is tapped', () => {
+    it('jumps directly to stop card slide when stop badge is tapped', () => {
       render(<RouteCarousel route={mockRoute} />);
 
-      const node1 = screen.getByTestId('timeline-node-1');
-      fireEvent.click(node1);
+      const stop1 = screen.getByTestId('timeline-stop-1');
+      fireEvent.click(stop1);
 
-      // Node 1 should now be active and have active ring styling
-      expect(node1).toHaveClass('ring-4');
+      // Stop 1 badge should now be active and have active ring styling
+      expect(stop1).toHaveClass('ring-4');
     });
 
     it('toggles visited state in localStorage and auto-swipes to next card when FAB is clicked', () => {
       render(<RouteCarousel route={mockRoute} />);
 
-      // First tap node 1 to jump to Stop 1
-      const node1 = screen.getByTestId('timeline-node-1');
-      fireEvent.click(node1);
+      // First tap stop 1 badge to jump to Stop 1 card
+      const stop1 = screen.getByTestId('timeline-stop-1');
+      fireEvent.click(stop1);
 
       const fab = screen.getByTestId('visited-fab');
       fireEvent.click(fab);
@@ -244,25 +244,28 @@ describe('TWA Timeline & Card Feed UI', () => {
       const parsedData = JSON.parse(savedData!);
       expect(parsedData).toContain('sololaki-stop-1');
 
-      // Auto-swiped to Stop 2 (node 2 is now active)
-      const node2 = screen.getByTestId('timeline-node-2');
-      expect(node2).toHaveClass('ring-4');
+      // Auto-swiped to Stop 2 (stop 2 badge is now active)
+      const stop2 = screen.getByTestId('timeline-stop-2');
+      expect(stop2).toHaveClass('ring-4');
     });
 
-    it('displays completion feedback without auto-swiping past end when toggling FAB on final stop', () => {
+    it('displays completion feedback when all stops are marked visited without auto-swiping past end', () => {
       render(<RouteCarousel route={mockRoute} />);
 
-      // Jump to Stop 2 (final stop in mockRoute)
-      const node2 = screen.getByTestId('timeline-node-2');
-      fireEvent.click(node2);
-
+      // Mark stop 1 visited
+      const stop1 = screen.getByTestId('timeline-stop-1');
+      fireEvent.click(stop1);
       const fab = screen.getByTestId('visited-fab');
       fireEvent.click(fab);
 
-      // Should contain sololaki-stop-2 in localStorage
+      // Now at stop 2 (final stop). Mark stop 2 visited
+      fireEvent.click(fab);
+
+      // Both stops visited in localStorage
       const savedData = localStorage.getItem('tbilisi_visited_test-route-1');
       expect(savedData).not.toBeNull();
       const parsedData = JSON.parse(savedData!);
+      expect(parsedData).toContain('sololaki-stop-1');
       expect(parsedData).toContain('sololaki-stop-2');
 
       // Completion feedback should be visible
@@ -275,11 +278,13 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       render(<RouteCarousel route={mockRoute} />);
 
-      const node1 = screen.getByTestId('timeline-node-1');
-      // Node 1 should show green background / checkmark styling for visited stop
-      expect(node1).toHaveClass('bg-emerald-600');
+      const stop1 = screen.getByTestId('timeline-stop-1');
+      // Stop 1 should show green background for visited stop
+      expect(stop1).toHaveClass('bg-emerald-600');
+      expect(stop1).toHaveTextContent('1');
     });
   });
 });
+
 
 
