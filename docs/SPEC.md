@@ -1,131 +1,59 @@
-# Technical Specification: Tbilisi Curated Travel Route Service MVP
+# UI Refactor Specification: Stories-Style Horizontal Carousel Route Guide
 
 ## Problem Statement
 
-Travelers exploring Tbilisi, Georgia face a severe "Context Crisis." The city's unique geography — featuring 30° steep hill inclines in Sololaki and Vera, uneven cobblestones in Old Kala, high summer heat, and spotty cellular reception in deep stone courtyards — creates hidden physical barriers for different demographic groups (e.g., families with strollers, elderly travelers, casual strollers). Additionally, travelers struggle to discover authentic, curated local experiences (hidden courtyards, photo spots, polyphonic dining) matching their specific available time and aesthetic preferences without drowning in generic review apps or suffering heavy mobile battery drain from complex map applications.
+Travelers using the Tbilisi Travel Telegram WebApp currently view routes as a heavy, single-page vertical scrolling feed. On mobile devices, this scroll-heavy layout lacks visual immersion, does not provide persistent progress tracking as users move from stop to stop, and fails to deliver the fast, modern "Stories UX" touch experience expected in Telegram WebApps.
 
 ## Solution
 
-A high-performance, lightweight dual-interface service built as a unified Next.js monorepo delivered via Telegram:
-1. **Interactive Telegram Bot Funnel**: A 3-step conversational filter (`Duration` → `Logistics Constraint` → `Vibe`) that matches travelers to curated walking routes using a hard-constraint logistics filter and soft-constraint preference relaxation.
-2. **Telegram Web App (TWA) Mini-App**: A fast-loading, server-side rendered vertical **Card** timeline presenting **Olya's Tips**, **Logistics Warnings**, estimated stop durations, and photo spots.
-3. **Card-to-Nav Architecture**: A zero-lag navigation mechanism that opens exact GPS coordinates directly in native mobile apps (Google Maps, Apple Maps, Yandex Maps) via universal links, avoiding heavy embedded mobile WebGL maps.
+Refactor the Next.js TWA route interface into a 60fps horizontal swipe carousel powered by Swiper.js. The interface presents:
+- **Slide 0 (Route Intro Card):** A cover page displaying route metadata, terrain overview, description, and a prominent sticky bottom `[ START ROUTE ➔ ]` CTA button.
+- **Slide 1..N (Stop Cards):** Individual stop cards featuring timing recommendations, Olya's local tips, photo spot recommendations, terrain warning alerts, and map app deep links.
+- **Sticky Bottom Navigation Bar:** An auto-centering scrollable timeline bar with numbered node indicators (`1`..`N`), active ring highlight, green checkmark fill for visited stops, and a circular 56x56px Visited `[ ✓ ]` FAB that updates `localStorage` and triggers auto-swiping to the next stop card.
+- **Rich 19-Stop Dataset:** Full 19-stop "Old Tbilisi Heartbeat" route dataset with tailored sub-route derivative matching.
 
 ## User Stories
 
-1. As a traveler with a baby stroller, I want to filter routes by stroller accessibility, so that I never get stuck facing steep 30° stone staircases or impassable cobblestone hills in Sololaki.
-2. As an elderly traveler, I want clear logistics warnings on steep inclines and uneven pavement, so that I can safely navigate walking routes at my own pace.
-3. As a busy traveler with only 2 hours available, I want to filter routes by duration, so that I can complete a curated walk within my tight schedule.
-4. As a photography enthusiast, I want to select a photo-spot vibe filter, so that I am guided directly to Tbilisi's most aesthetic courtyards and viewpoints.
-5. As a food lover, I want to select a culinary and wine vibe filter, so that my route includes authentic local taverns and polyphonic dance dining stops.
-6. As a Telegram user, I want to interact with a stateless 3-step filter funnel using inline keyboard buttons, so that I can find a recommended route in seconds without filling out forms.
-7. As a traveler entering the Bot funnel, I want to receive warm, conversational messages in Olya's personal voice, so that the recommendation feels like a recommendation from a local friend.
-8. As a traveler whose specific filter combination yields no exact match, I want the system to safely relax soft constraints (Vibe/Duration) while preserving hard accessibility rules, so that I always receive a safe and enjoyable route recommendation.
-9. As a Telegram Mini-App user, I want the TWA interface to match Telegram's active light/dark color scheme, so that the Mini-App feels native to the messaging app.
-10. As a traveler viewing a route timeline in the TWA, I want to see a vertical feed of Stop Cards ordered chronologically, so that I can easily follow the route step-by-step.
-11. As a traveler at a specific Stop, I want to read Olya's personal tips and visual recommendations, so that I gain rich local context and hidden details about the location.
-12. As a traveler ready to move to the next Stop, I want to tap "Open in Maps" on a Card, so that I can launch my preferred native mapping application with exact latitude/longitude coordinates.
-13. As an iOS Telegram user, I want an easy option to open navigation in Apple Maps or Google Maps, so that turn-by-turn navigation opens seamlessly in my preferred iOS app.
-14. As an Android Telegram user, I want an easy option to open navigation in Google Maps or Yandex Maps, so that navigation launches reliably in my default Android map app.
-15. As a repeat traveler, I want the TWA to remember my preferred Map Provider in local storage, so that future "Open in Maps" taps open directly without prompting every time.
-16. As a traveler using Telegram's native navigation header, I want the TWA BackButton to seamlessly return me to the route selector or close the webview, so that screen real estate is maximized.
-17. As a traveler experiencing spotty mobile network in deep Tbilisi courtyards, I want static SSR timeline pages that load instantaneously without client-side data fetching spinners, so that the app works reliably in low-connectivity areas.
-18. As a content curator (Olya), I want route data stored in a strongly-typed JSON structure, so that new routes, stops, and tips can be added and deployed without database management.
+1. As a traveler opening a route in Telegram WebApp, I want to see a Route Intro Card with cover photo, tags, and summary, so that I can quickly preview the route overview before starting.
+2. As a traveler on the Route Intro Card, I want a sticky "START ROUTE ➔" CTA button, so that I can immediately begin navigating the first stop.
+3. As a traveler exploring a route, I want to swipe horizontally left and right between slides with 60fps mobile touch performance, so that navigation feels smooth and natural like Telegram Stories.
+4. As a traveler reading a long stop description, I want vertical scrolling inside the stop card body to be isolated from horizontal swiping, so that scrolling text does not accidentally switch cards.
+5. As a traveler at a designated stop, I want to see Google Maps and Yandex Maps universal deep-link buttons, so that I can launch turn-by-turn navigation in my preferred map app.
+6. As a traveler at a stop, I want to read Olya's Local Tip in a styled callout box, so that I get authentic local insider recommendations.
+7. As a traveler navigating a stop, I want to see clear logistics and terrain warnings, so that I am prepared for steep inclines or cobblestone paving.
+8. As a traveler at a stop, I want to view designated photo spot highlights and best time-of-day tips, so that I can take the best photos.
+9. As a traveler, I want a sticky bottom timeline bar showing numbered nodes for all stops on the route, so that I can see my exact progress through the route.
+10. As a traveler on a route with many stops (up to 19), I want the bottom timeline bar to automatically scroll and center on my current active stop node, so that nodes remain clearly readable on small screens.
+11. As a traveler, I want to tap any numbered node on the bottom timeline bar, so that I can jump directly to that specific stop card.
+12. As a traveler visiting a stop, I want to tap the circular Visited FAB [ ✓ ], so that I can mark the stop completed and automatically advance to the next stop card.
+13. As a traveler completing the final stop of a route, I want tapping the Visited FAB [ ✓ ] to mark the stop visited and display a completion message without attempting to auto-swipe past the end.
+14. As a traveler, I want my visited stops to persist in localStorage per route, so that my checked-off progress is remembered when I close and re-open the Telegram WebApp.
+15. As a Telegram WebApp user, I want the WebApp viewport to expand automatically on load, so that I have maximum screen real estate for the card carousel.
+16. As a traveler matching routes via Telegram Bot filter choices, I want the matching engine to support both the master 19-stop route and tailored sub-routes, so that I receive recommendations tailored to my preferred duration, accessibility, and vibe.
 
 ## Implementation Decisions
 
-1. **Unified Next.js App Router Architecture**:
-   - Single repository hosting both the Telegram Bot Webhook endpoint and the Telegram Web App timeline pages.
-   - Standard static local JSON data store stored at a central location.
-
-2. **Stateless Bot Webhook & Callback Payload Routing**:
-   - Telegram Bot Webhook processes incoming `Message` and `CallbackQuery` updates.
-   - Filter state is encoded statefully inside inline keyboard callback data strings (e.g. `dur:1-2h|acc:stroller|vibe:photo-spots`).
-   - Serverless execution on Vercel requires zero persistent session memory or Redis databases.
-
-3. **Constraint-Based Route Matching Engine**:
-   - Hard Constraint: `Logistics Constraint` (Accessibility: `stroller-friendly` vs `moderate` vs `steep-stairs`). If a user requests `stroller-friendly`, routes containing `steep-stairs` are strictly excluded.
-   - Soft Constraints: `Duration Category` (`1-2h`, `2-4h`, `half-day`) and `Vibe` (`photo-spots`, `courtyards`, `food-wine`, `architecture`).
-   - If no exact match satisfies all three parameters, the engine selects the best match with matching accessibility, relaxing vibe/duration, and appends Olya's clarification note to the Bot response message.
-
-4. **Data Schema Shape**:
-   ```ts
-   export type DurationCategory = '1-2h' | '2-4h' | 'half-day';
-   export type AccessibilityLevel = 'stroller-friendly' | 'moderate' | 'steep-stairs';
-   export type VibeCategory = 'photo-spots' | 'courtyards' | 'food-wine' | 'architecture';
-
-   export interface Stop {
-     id: string;
-     order: number;
-     name: string;
-     neighborhood: string;
-     coordinates: { lat: number; lng: number };
-     estimatedMinutes: number;
-     imageUrl: string;
-     olyaTips: string;
-     logisticsWarning?: string;
-     bestTimeOfDay?: string;
-   }
-
-   export interface Route {
-     id: string;
-     title: string;
-     subtitle: string;
-     durationCategory: DurationCategory;
-     accessibility: AccessibilityLevel;
-     vibes: VibeCategory[];
-     heroImage: string;
-     introCopy: string;
-     stops: Stop[];
-   }
-   ```
-
-5. **Card-to-Nav Deep-Link Provider Sheet**:
-   - TWA Card "Open in Maps" button launches a lightweight modal bottom sheet presenting universal links:
-     - Google Maps: `https://www.google.com/maps/search/?api=1&query={lat},{lng}`
-     - Apple Maps: `https://maps.apple.com/?q={lat},{lng}`
-     - Yandex Maps: `https://yandex.com/maps/?pt={lng},{lat}&z=17`
-   - Choice is saved in browser local storage.
-
-6. **Telegram WebApp SDK Integration**:
-   - `window.Telegram.WebApp` initialized via context wrapper.
-   - Root CSS variables synchronized to Telegram theme palette (`--twa-bg-color`, `--twa-text-color`, `--twa-button-color`, etc.).
-   - Fallback design system palette applied for non-Telegram web browsers:
-     - Terracotta: `#C85A32`
-     - Tbilisi Slate: `#1F2421`
-     - Warm Stone: `#F7F4EF`
-     - Golden Amber: `#E29578`
+- **Domain Language Alignment:** Canonical terminology updated in [CONTEXT.md](file:///Users/danilaalexeev/Desktop/Projects/tbilisi-travel-twa/CONTEXT.md) (`Route Intro Card`, `Stop Card`, `Visited State`, `Card`).
+- **Carousel Engine:** Swiper.js (`swiper` React component) selected for horizontal gesture isolation, touch acceleration, and programmatic navigation control (`slideTo`, `slideNext`). Recorded in [ADR 0004](file:///Users/danilaalexeev/Desktop/Projects/tbilisi-travel-twa/docs/adr/0004-swiper-js-horizontal-carousel.md).
+- **State Management & Persistence:** Visited stop IDs per route stored in browser `localStorage` using key format `tbilisi_visited_[routeId]`.
+- **Bottom Navigation Component:** Auto-centering scrollable timeline container holding node buttons (`1`..`N`) with active ring styles, visited checkmark badges, and sticky Visited `[ ✓ ]` FAB button.
+- **Dataset Expansion:** 19-stop master dataset ("Old Tbilisi Heartbeat") added to `lib/data/routes.ts` with complete coordinates, timing, Olya's tips, photo spots, and terrain notes, along with sub-route definitions for constraint matching.
+- **Gesture Isolation:** Body overflow and touch actions configured (`touch-action: pan-y` on card body scroll area) to prevent webview drag conflicts.
 
 ## Testing Decisions
 
-1. **Test Seam 1: Route Matching Logic (Unit Tests)**:
-   - Test external behavior of the route matcher given exact filter matches, edge cases, and soft-constraint relaxation scenarios.
-   - Verify hard accessibility constraints are never violated under any combination.
-
-2. **Test Seam 2: Bot Webhook Handler (Integration Tests)**:
-   - Send simulated Telegram API POST updates (`/start`, callback queries) to the API route handler.
-   - Verify correct inline keyboard callback data generation and final WebApp button URL generation.
-
-3. **Test Seam 3: TWA Timeline SSR & Card Rendering (Component/Page Tests)**:
-   - Test timeline page rendering given valid route IDs and missing route IDs (404 fallback).
-   - Test Map Provider selection bottom sheet behavior and local storage persistence.
+- **Testing Principles:** Tests evaluate external user-visible behavior (slide transition, active node highlighting, localStorage state persistence, button interactions) rather than internal implementation details.
+- **Target Modules:**
+  - `app/twa/[routeId]/page.tsx` (Integration tests for carousel rendering, slide jumping, visited FAB toggles, and intro card CTA).
+  - `lib/engine/matcher.ts` (Unit tests for 19-stop route dataset matching across duration, accessibility, and vibe constraints).
+- **Prior Art:** `__tests__/timeline.test.tsx` and `__tests__/matcher.test.tsx` using `Vitest` and `@testing-library/react`.
 
 ## Out of Scope
 
-- Payment gateways, token logic, monetization, or paywalls.
-- Audio guide streaming, voice notes, or speech synthesis.
-- Live GPS user location tracking / real-time turn-by-turn map canvas rendering inside TWA.
-- User accounts, registration, login forms, or user route creation.
-- Dynamic backend database management (PostgreSQL/Supabase).
+- Native device GPS live tracking inside the webview (universal map deep-links used per ADR 0001).
+- Server database synchronization for user visited states (client-side `localStorage` used per offline design principles).
+- Custom video playback inside cards.
 
 ## Further Notes
 
-- All code implementation adheres strictly to the existing domain glossary in CONTEXT.md and architectural decisions in docs/adr/.
-
-## Sub-issues
-
-- [ ] #2
-- [ ] #3
-- [ ] #4
-- [ ] #5
-
+- Bundle size impact of `swiper` dependency is ~38KB gzipped, keeping total application JS bundle well under the 150KB constraint for fast mobile loading.

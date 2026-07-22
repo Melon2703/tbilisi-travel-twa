@@ -158,6 +158,48 @@ describe('Static Tbilisi Route Dataset', () => {
     expect(route?.id).toBe('sololaki-courtyards');
   });
 
+  it('contains the full 19-stop Old Tbilisi Heartbeat master dataset with complete metadata', () => {
+    const heartbeat = getRouteById('old-tbilisi-heartbeat');
+    expect(heartbeat).toBeDefined();
+    expect(heartbeat?.title).toContain('Old Tbilisi Heartbeat');
+    expect(heartbeat?.stops).toHaveLength(19);
+
+    heartbeat?.stops.forEach((stop, index) => {
+      expect(stop.order).toBe(index + 1);
+      expect(stop.id).toBeDefined();
+      expect(stop.name).toBeDefined();
+      expect(stop.neighborhood).toBeDefined();
+      expect(stop.coordinates.lat).toBeGreaterThan(41.6);
+      expect(stop.coordinates.lng).toBeGreaterThan(44.7);
+      expect(stop.estimatedMinutes).toBeGreaterThan(0);
+      expect(stop.imageUrl).toBeDefined();
+      expect(stop.olyaTips.length).toBeGreaterThan(10);
+    });
+
+    // Check specific stops from spec
+    const puppetStop = heartbeat?.stops.find((s) => s.order === 4);
+    expect(puppetStop?.name).toContain('Gabriadze');
+    expect(puppetStop?.bestTimeOfDay).toContain('11:45 AM');
+    expect(puppetStop?.photoSpot).toBeDefined();
+
+    const waterfallStop = heartbeat?.stops.find((s) => s.order === 15);
+    expect(waterfallStop?.name).toContain('Legvtakhevi Waterfall');
+
+    const funicularStop = heartbeat?.stops.find((s) => s.order === 19);
+    expect(funicularStop?.name).toContain('Funicular Restaurant');
+  });
+
+  it('contains sub-route derivatives for duration, accessibility, and vibe matching', () => {
+    const all = getAllRoutes();
+    const subRoutes = all.filter((r) => r.id.startsWith('heartbeat-'));
+    expect(subRoutes.length).toBeGreaterThanOrEqual(2);
+
+    subRoutes.forEach((route) => {
+      expect(route.stops.length).toBeGreaterThan(0);
+      expect(route.stops.length).toBeLessThan(19);
+    });
+  });
+
   it('matches stroller-friendly routes from real dataset without returning steep routes', () => {
     const criteria: MatchCriteria = {
       durationCategory: 'half-day',
@@ -172,3 +214,4 @@ describe('Static Tbilisi Route Dataset', () => {
     expect(result?.route.id).not.toBe('mtatsminda-panoramic-trail');
   });
 });
+

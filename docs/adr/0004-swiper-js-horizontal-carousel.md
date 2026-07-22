@@ -1,0 +1,3 @@
+# Swiper.js Horizontal Carousel for Telegram WebApp Stories UX
+
+We decided to build the TWA route guide as a horizontal swipe carousel (Stories UX) powered by Swiper.js rather than CSS Scroll Snap or Framer Motion. Horizontal touch swiping inside Telegram WebApp webviews can interfere with native iOS/Android back gestures and vertical content scrolling. Swiper.js provides battle-tested touch gesture isolation (`touchReleaseOnEdges`, touch event stopPropagation), hardware-accelerated CSS transforms for 60fps performance, and a robust programmatic API for index jumping and auto-swiping upon stop completion.

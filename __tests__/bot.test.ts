@@ -130,12 +130,12 @@ describe('Bot Funnel Engine', () => {
     const response = handleBotUpdate(update, 'https://example.com');
     expect(response?.method).toBe('editMessageText');
     expect(response?.text).toContain("Olya's Route Recommendation");
-    expect(response?.text).toContain('Sololaki');
+    expect(response?.text).toContain('Heartbeat Express');
 
     const buttons = response?.reply_markup?.inline_keyboard.flat();
     const webAppButton = buttons?.find((b) => b.web_app !== undefined);
     expect(webAppButton).toBeDefined();
-    expect(webAppButton?.web_app?.url).toBe('https://example.com/twa/sololaki-courtyards');
+    expect(webAppButton?.web_app?.url).toBe('https://example.com/twa/heartbeat-express-1-2h');
 
     const restartButton = buttons?.find((b) => b.callback_data === 'restart');
     expect(restartButton).toBeDefined();

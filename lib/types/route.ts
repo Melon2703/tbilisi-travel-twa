@@ -17,6 +17,7 @@ export interface Stop {
   olyaTips: string;
   logisticsWarning?: string;
   bestTimeOfDay?: string;
+  photoSpot?: string;
 }
 
 export interface Route {
