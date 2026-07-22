@@ -150,9 +150,10 @@ describe('TWA Timeline & Card Feed UI', () => {
     });
 
     it('renders sticky START ROUTE button in preview mode at root level', () => {
-      const { container } = render(<RouteCarousel route={mockRoute} />);
+      render(<RouteCarousel route={mockRoute} />);
 
       const startBtn = screen.getByRole('button', { name: /START ROUTE/i });
+
       expect(startBtn).toBeInTheDocument();
 
       // The container wrapping START ROUTE should be outside swiper-slide to avoid transform stacking context breaking fixed positioning
@@ -361,8 +362,26 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(stop1).toHaveClass('bg-emerald-600');
       expect(stop1).toHaveTextContent('1');
     });
+
+    it('renders connecting progress lines between progress nodes', () => {
+      render(<RouteCarousel route={mockRoute} />);
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
+
+      const lines = screen.getAllByTestId('timeline-connecting-line');
+      expect(lines.length).toBeGreaterThan(0);
+    });
+
+    it('highlights active stop with Terracotta ring styling', () => {
+      render(<RouteCarousel route={mockRoute} />);
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
+
+      const stop1 = screen.getByTestId('timeline-stop-1');
+      expect(stop1).toHaveClass('ring-[#e07a5f]/40');
+      expect(stop1).toHaveClass('border-[#e07a5f]');
+    });
   });
 });
+
 
 
 

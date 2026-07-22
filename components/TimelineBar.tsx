@@ -44,7 +44,7 @@ export default function TimelineBar({
       {isCompleted && (
         <div
           data-testid="completion-feedback"
-          className="mb-2 p-2 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs sm:text-sm text-center font-medium shadow-sm animate-fade-in flex items-center justify-center gap-1.5"
+          className="mb-2 p-2.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs sm:text-sm text-center font-semibold shadow-xs animate-fade-in flex items-center justify-center gap-2"
         >
           <span>🎉</span>
           <span>Route completed! All stops visited!</span>
@@ -52,42 +52,68 @@ export default function TimelineBar({
       )}
 
       <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
-        {/* Scrollable Stop Indicator Timeline */}
+        {/* Scrollable Stop Indicator Timeline with Connecting Line */}
         <div
           ref={containerRef}
           data-testid="timeline-bar-container"
-          className="flex-1 flex items-center gap-2 overflow-x-auto py-1 px-1 scrollbar-none scroll-smooth"
+          className="flex-1 flex items-center gap-1.5 overflow-x-auto py-1 px-1 scrollbar-none scroll-smooth"
         >
           {stops.map((stop, index) => {
             const slideIndex = index + 1;
             const isActive = activeIndex === slideIndex;
             const isVisited = visitedStopIds.includes(stop.id);
+            const isPrevVisited = index > 0 && visitedStopIds.includes(stops[index - 1].id);
 
             return (
-              <button
-                key={stop.id}
-                type="button"
-                ref={isActive ? activeStopRef : null}
-                data-testid={`timeline-stop-${stop.order}`}
-                onClick={() => onStopClick(slideIndex)}
-                aria-label={`Jump to stop ${stop.order}: ${stop.name}`}
-                className={`w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 cursor-pointer focus:outline-none ${
-                  isVisited
-                    ? 'bg-emerald-600 text-white border-2 border-emerald-600'
-                    : 'bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200'
-                } ${
-                  isActive
-                    ? 'ring-4 ring-[#e07a5f]/40 border-2 border-[#e07a5f] font-bold scale-110 z-10'
-                    : ''
-                }`}
-              >
-                {stop.order}
-              </button>
+              <React.Fragment key={stop.id}>
+                {/* Connecting Line Segment between nodes */}
+                {index > 0 && (
+                  <div
+                    data-testid="timeline-connecting-line"
+                    className={`h-0.5 w-3 sm:w-5 shrink-0 transition-colors duration-200 ${
+                      isVisited && isPrevVisited ? 'bg-emerald-600' : 'bg-stone-200'
+                    }`}
+                  />
+                )}
+
+                {/* Progress Node Button */}
+                <button
+                  type="button"
+                  ref={isActive ? activeStopRef : null}
+                  data-testid={`timeline-stop-${stop.order}`}
+                  onClick={() => onStopClick(slideIndex)}
+                  aria-label={`Jump to stop ${stop.order}: ${stop.name}`}
+                  className={`w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 cursor-pointer focus:outline-none relative ${
+                    isVisited
+                      ? 'bg-emerald-600 text-white border-2 border-emerald-600'
+                      : 'bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200'
+                  } ${
+                    isActive
+                      ? 'ring-4 ring-[#e07a5f]/40 border-2 border-[#e07a5f] font-bold scale-110 z-10'
+                      : ''
+                  }`}
+                >
+                  <span className="flex items-center gap-0.5">
+                    {isVisited && (
+                      <svg
+                        className="w-3 h-3 stroke-[3] shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                    <span>{stop.order}</span>
+                  </span>
+                </button>
+              </React.Fragment>
             );
           })}
         </div>
 
-        {/* 56x56px Visited Floating Action Button (FAB) */}
+        {/* 56x56px Terracotta FAB button [ ✓ ] */}
         <button
           type="button"
           data-testid="visited-fab"
@@ -112,3 +138,4 @@ export default function TimelineBar({
     </div>
   );
 }
+
