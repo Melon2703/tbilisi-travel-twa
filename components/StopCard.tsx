@@ -15,7 +15,10 @@ export default function StopCard({ stop, isLast = false }: StopCardProps) {
 
   return (
     <>
-      <div className="relative flex gap-4 sm:gap-6 group">
+      <div
+        data-testid="stop-card-container"
+        className="relative flex gap-4 sm:gap-6 group touch-pan-y overscroll-y-contain"
+      >
         {/* Timeline spine and node indicator */}
         <div className="flex flex-col items-center">
           <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--terracotta)] text-white text-xs sm:text-sm font-bold shadow-sm shrink-0 z-10">
@@ -92,6 +95,25 @@ export default function StopCard({ stop, isLast = false }: StopCardProps) {
                   &ldquo;{stop.olyaTips}&rdquo;
                 </p>
               </div>
+
+              {/* Photo Spot Recommendation Callout */}
+              {stop.photoSpot && (
+                <div
+                  data-testid="photo-spot"
+                  className="bg-emerald-50/80 rounded-xl p-3.5 sm:p-4 border border-emerald-200 space-y-1"
+                >
+                  <div className="flex items-center gap-1.5 text-emerald-800 font-semibold text-xs uppercase tracking-wider">
+                    <svg className="w-4 h-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h0.93a2 2 0 001.664-.89l0.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l0.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>Photo Spot Recommendation</span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-emerald-900 leading-normal font-medium">
+                    {stop.photoSpot}
+                  </p>
+                </div>
+              )}
 
               {/* Logistics Warning Callout */}
               {stop.logisticsWarning && (

@@ -173,5 +173,28 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       expect(screen.getByText('Morning (10 AM - 12 PM)')).toBeInTheDocument();
     });
+
+    it('renders photo spot recommendation when provided', () => {
+      const mockStopWithPhotoSpot: Stop = {
+        ...mockStopWithoutWarning,
+        photoSpot: 'Pardag carpets hanging along the narrow brick alley.',
+      };
+      render(<StopCard stop={mockStopWithPhotoSpot} isLast={false} />);
+
+      const photoElement = screen.getByTestId('photo-spot');
+      expect(photoElement).toBeInTheDocument();
+      expect(photoElement).toHaveTextContent(
+        'Pardag carpets hanging along the narrow brick alley.'
+      );
+    });
+
+    it('has touch isolation styling for vertical body scrolling', () => {
+      const { container } = render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
+      const scrollContainer = container.querySelector('[data-testid="stop-card-container"]');
+      expect(scrollContainer).toBeInTheDocument();
+      expect(scrollContainer).toHaveClass('touch-pan-y');
+      expect(scrollContainer).toHaveClass('overscroll-y-contain');
+    });
   });
 });
+
