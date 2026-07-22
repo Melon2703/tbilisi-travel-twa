@@ -108,7 +108,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
       >
         {/* Slide 0: Route Intro Card */}
         <SwiperSlide key="route-intro">
-          <RouteIntroCard route={route} onStartRoute={handleStartRoute} />
+          <RouteIntroCard route={route} onStartRoute={handleStartRoute} showStartButton={false} />
         </SwiperSlide>
 
         {/* Slide 1..N: Stop Cards */}
@@ -124,15 +124,34 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
         ))}
       </Swiper>
 
-      {/* Sticky Bottom Navigation Bar */}
-      <TimelineBar
-        stops={sortedStops}
-        activeIndex={activeIndex}
-        visitedStopIds={visitedStopIds}
-        onStopClick={handleStopClick}
-        onToggleVisited={handleToggleVisited}
-        isCompleted={isCompleted}
-      />
+      {/* Sticky Bottom START ROUTE CTA in Preview mode */}
+      {activeIndex === 0 && (
+        <div
+          data-testid="sticky-start-container"
+          className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--twa-bg-color,#f7f4ef)] via-[var(--twa-bg-color,#f7f4ef)]/90 to-transparent z-30 max-w-2xl mx-auto"
+        >
+          <button
+            type="button"
+            onClick={handleStartRoute}
+            className="w-full bg-[var(--terracotta)] hover:bg-orange-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer"
+          >
+            <span>START ROUTE</span>
+            <span className="text-lg">➔</span>
+          </button>
+        </div>
+      )}
+
+      {/* Sticky Bottom Navigation Bar (Visible only on stop cards, activeIndex > 0) */}
+      {activeIndex > 0 && (
+        <TimelineBar
+          stops={sortedStops}
+          activeIndex={activeIndex}
+          visitedStopIds={visitedStopIds}
+          onStopClick={handleStopClick}
+          onToggleVisited={handleToggleVisited}
+          isCompleted={isCompleted}
+        />
+      )}
     </div>
   );
 }

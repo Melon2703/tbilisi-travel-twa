@@ -5,9 +5,10 @@ import { Route } from '@/lib/types/route';
 export interface RouteIntroCardProps {
   route: Route;
   onStartRoute?: () => void;
+  showStartButton?: boolean;
 }
 
-export default function RouteIntroCard({ route, onStartRoute }: RouteIntroCardProps) {
+export default function RouteIntroCard({ route, onStartRoute, showStartButton = true }: RouteIntroCardProps) {
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
   const totalMinutes = sortedStops.reduce((acc, stop) => acc + stop.estimatedMinutes, 0);
   const hours = Math.floor(totalMinutes / 60);
@@ -119,16 +120,18 @@ export default function RouteIntroCard({ route, onStartRoute }: RouteIntroCardPr
       </div>
 
       {/* Sticky Bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--twa-bg-color,#f7f4ef)] via-[var(--twa-bg-color,#f7f4ef)]/90 to-transparent z-30 max-w-2xl mx-auto">
-        <button
-          type="button"
-          onClick={onStartRoute}
-          className="w-full bg-[var(--terracotta)] hover:bg-orange-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer"
-        >
-          <span>START ROUTE</span>
-          <span className="text-lg">➔</span>
-        </button>
-      </div>
+      {showStartButton && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--twa-bg-color,#f7f4ef)] via-[var(--twa-bg-color,#f7f4ef)]/90 to-transparent z-30 max-w-2xl mx-auto">
+          <button
+            type="button"
+            onClick={onStartRoute}
+            className="w-full bg-[var(--terracotta)] hover:bg-orange-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer"
+          >
+            <span>START ROUTE</span>
+            <span className="text-lg">➔</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

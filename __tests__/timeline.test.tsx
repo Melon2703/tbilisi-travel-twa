@@ -108,6 +108,27 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(screen.getByText('Lado Asatiani St Merchant Houses')).toBeInTheDocument();
       expect(screen.getByText('Galaktion Tabidze Balcony House')).toBeInTheDocument();
     });
+
+    it('does not render TimelineBar in preview mode (activeIndex === 0)', () => {
+      render(<RouteCarousel route={mockRoute} />);
+
+      // In preview mode (activeIndex === 0), timeline bar should NOT be visible
+      expect(screen.queryByTestId('timeline-bar-container')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('visited-fab')).not.toBeInTheDocument();
+    });
+
+    it('renders sticky START ROUTE button in preview mode at root level', () => {
+      const { container } = render(<RouteCarousel route={mockRoute} />);
+
+      const startBtn = screen.getByRole('button', { name: /START ROUTE/i });
+      expect(startBtn).toBeInTheDocument();
+
+      // The container wrapping START ROUTE should be outside swiper-slide to avoid transform stacking context breaking fixed positioning
+      const startBtnWrapper = startBtn.closest('[data-testid="sticky-start-container"]');
+      expect(startBtnWrapper).toBeInTheDocument();
+      expect(startBtnWrapper).toHaveClass('fixed');
+      expect(startBtnWrapper).toHaveClass('bottom-0');
+    });
   });
 
   describe('StopCard Component', () => {
@@ -203,8 +224,11 @@ describe('TWA Timeline & Card Feed UI', () => {
       localStorage.clear();
     });
 
-    it('renders scrollable bottom timeline bar with numbered badges (1..N) and 56x56px FAB', () => {
+    it('renders scrollable bottom timeline bar with numbered badges (1..N) and 56x56px FAB when route is started', () => {
       render(<RouteCarousel route={mockRoute} />);
+
+      // Click START ROUTE to transition to Stop 1 (activeIndex 1)
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
       const stop1 = screen.getByTestId('timeline-stop-1');
       const stop2 = screen.getByTestId('timeline-stop-2');
@@ -222,6 +246,9 @@ describe('TWA Timeline & Card Feed UI', () => {
     it('jumps directly to stop card slide when stop badge is tapped', () => {
       render(<RouteCarousel route={mockRoute} />);
 
+      // Click START ROUTE to transition to Stop 1
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
+
       const stop1 = screen.getByTestId('timeline-stop-1');
       fireEvent.click(stop1);
 
@@ -232,9 +259,8 @@ describe('TWA Timeline & Card Feed UI', () => {
     it('toggles visited state in localStorage and auto-swipes to next card when FAB is clicked', () => {
       render(<RouteCarousel route={mockRoute} />);
 
-      // First tap stop 1 badge to jump to Stop 1 card
-      const stop1 = screen.getByTestId('timeline-stop-1');
-      fireEvent.click(stop1);
+      // Click START ROUTE to transition to Stop 1
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
       const fab = screen.getByTestId('visited-fab');
       fireEvent.click(fab);
@@ -253,9 +279,10 @@ describe('TWA Timeline & Card Feed UI', () => {
     it('displays completion feedback when all stops are marked visited without auto-swiping past end', () => {
       render(<RouteCarousel route={mockRoute} />);
 
+      // Click START ROUTE to transition to Stop 1
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
+
       // Mark stop 1 visited
-      const stop1 = screen.getByTestId('timeline-stop-1');
-      fireEvent.click(stop1);
       const fab = screen.getByTestId('visited-fab');
       fireEvent.click(fab);
 
@@ -278,6 +305,9 @@ describe('TWA Timeline & Card Feed UI', () => {
       localStorage.setItem('tbilisi_visited_test-route-1', JSON.stringify(['sololaki-stop-1']));
 
       render(<RouteCarousel route={mockRoute} />);
+
+      // Click START ROUTE to transition to Stop 1 where TimelineBar is visible
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
       const stop1 = screen.getByTestId('timeline-stop-1');
       // Stop 1 should show green background for visited stop
