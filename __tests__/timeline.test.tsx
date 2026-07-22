@@ -86,9 +86,11 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(screen.getByRole('heading', { name: mockRoute.title })).toBeInTheDocument();
       expect(screen.getByText(mockRoute.subtitle)).toBeInTheDocument();
       expect(screen.getByText(/1-2h/i)).toBeInTheDocument();
-      expect(screen.getByText(/stroller-friendly/i)).toBeInTheDocument();
+      expect(screen.getByText(/stroller/i)).toBeInTheDocument();
       expect(screen.getByText(/#courtyards/i)).toBeInTheDocument();
+      expect(screen.getByTestId('olya-welcome-card')).toBeInTheDocument();
       expect(screen.getByText(/Olya's Route Welcome/i)).toBeInTheDocument();
+      expect(screen.getByTestId('route-at-a-glance')).toBeInTheDocument();
       expect(screen.getByText(/Curated Stops/i)).toBeInTheDocument();
 
       const ctaButton = screen.getByRole('button', { name: /START ROUTE/i });
@@ -96,6 +98,36 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       fireEvent.click(ctaButton);
       expect(onStartMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders clean hero cover image and sequential body elements without overlays', () => {
+      render(<RouteIntroCard route={mockRoute} />);
+
+      const heroImg = screen.getByAltText(mockRoute.title);
+      expect(heroImg).toBeInTheDocument();
+
+      // Check badges, title, and subtitle are present
+      expect(screen.getByTestId('pill-badges-row')).toBeInTheDocument();
+      expect(screen.getByText(mockRoute.title)).toBeInTheDocument();
+      expect(screen.getByText(mockRoute.subtitle)).toBeInTheDocument();
+    });
+
+    it('renders Olya\'s Welcome quote card', () => {
+      render(<RouteIntroCard route={mockRoute} />);
+
+      const quoteCard = screen.getByTestId('olya-welcome-card');
+      expect(quoteCard).toBeInTheDocument();
+      expect(quoteCard).toHaveTextContent(mockRoute.introCopy);
+    });
+
+    it('renders Route At A Glance summary line with stop count, walking time/distance, and transit modes', () => {
+      render(<RouteIntroCard route={mockRoute} />);
+
+      const summaryCard = screen.getByTestId('route-at-a-glance');
+      expect(summaryCard).toBeInTheDocument();
+      expect(summaryCard).toHaveTextContent('2 Curated Stops');
+      expect(summaryCard).toHaveTextContent('50m');
+      expect(summaryCard).toHaveTextContent('Pedestrian Walkway');
     });
   });
 

@@ -128,7 +128,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
       {activeIndex === 0 && (
         <div
           data-testid="sticky-start-container"
-          className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--twa-bg-color,#f7f4ef)] via-[var(--twa-bg-color,#f7f4ef)]/90 to-transparent z-30 max-w-2xl mx-auto"
+          className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--twa-bg-color,#fafaf7)] via-[var(--twa-bg-color,#fafaf7)]/90 to-transparent z-30 max-w-2xl mx-auto"
         >
           <button
             type="button"
