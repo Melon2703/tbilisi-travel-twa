@@ -2,7 +2,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import RoutePage from '@/app/twa/[routeId]/page';
 import StopCard from '@/components/StopCard';
-import { Stop } from '@/lib/types/route';
+import RouteIntroCard from '@/components/RouteIntroCard';
+import RouteCarousel from '@/components/RouteCarousel';
+import { Stop, Route } from '@/lib/types/route';
 
 // Mock next/navigation notFound & useRouter
 vi.mock('next/navigation', () => ({
@@ -16,6 +18,39 @@ vi.mock('next/navigation', () => ({
 }));
 
 describe('TWA Timeline & Card Feed UI', () => {
+  const mockRoute: Route = {
+    id: 'test-route-1',
+    title: 'Sololaki Italianate Courtyards & Stained Glass',
+    subtitle: 'Low-incline residential walk through 19th-century merchant mansions',
+    durationCategory: '1-2h',
+    accessibility: 'stroller-friendly',
+    vibes: ['courtyards', 'photo-spots'],
+    heroImage: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f',
+    introCopy: 'Explore the peaceful, flat avenues of Sololaki.',
+    stops: [
+      {
+        id: 'sololaki-stop-1',
+        order: 1,
+        name: 'Lado Asatiani St Merchant Houses',
+        neighborhood: 'Sololaki',
+        coordinates: { lat: 41.6918, lng: 44.7972 },
+        estimatedMinutes: 25,
+        imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f',
+        olyaTips: 'Gently push through the wooden carriage doors into court #28.',
+      },
+      {
+        id: 'sololaki-stop-2',
+        order: 2,
+        name: 'Galaktion Tabidze Balcony House',
+        neighborhood: 'Sololaki',
+        coordinates: { lat: 41.6931, lng: 44.7989 },
+        estimatedMinutes: 25,
+        imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c',
+        olyaTips: 'Look up at the spiral wrought-iron balcony.',
+      },
+    ],
+  };
+
   describe('RoutePage (/twa/[routeId])', () => {
     it('renders route details and timeline stop cards for a valid routeId', async () => {
       const pageComponent = await RoutePage({
@@ -40,6 +75,38 @@ describe('TWA Timeline & Card Feed UI', () => {
           params: Promise.resolve({ routeId: 'non-existent-route-xyz' }),
         })
       ).rejects.toThrow('NEXT_NOT_FOUND');
+    });
+  });
+
+  describe('RouteIntroCard Component', () => {
+    it('renders intro card cover, badges, title, subtitle, and sticky START ROUTE CTA button', () => {
+      const onStartMock = vi.fn();
+      render(<RouteIntroCard route={mockRoute} onStartRoute={onStartMock} />);
+
+      expect(screen.getByRole('heading', { name: mockRoute.title })).toBeInTheDocument();
+      expect(screen.getByText(mockRoute.subtitle)).toBeInTheDocument();
+      expect(screen.getByText(/1-2h/i)).toBeInTheDocument();
+      expect(screen.getByText(/stroller-friendly/i)).toBeInTheDocument();
+      expect(screen.getByText(/#courtyards/i)).toBeInTheDocument();
+      expect(screen.getByText(/Olya's Route Welcome/i)).toBeInTheDocument();
+      expect(screen.getByText(/Curated Stops/i)).toBeInTheDocument();
+
+      const ctaButton = screen.getByRole('button', { name: /START ROUTE/i });
+      expect(ctaButton).toBeInTheDocument();
+
+      fireEvent.click(ctaButton);
+      expect(onStartMock).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('RouteCarousel Component', () => {
+    it('renders Swiper horizontal carousel containing Slide 0 intro card and stop slides', () => {
+      render(<RouteCarousel route={mockRoute} />);
+
+      expect(screen.getByRole('heading', { name: mockRoute.title })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /START ROUTE/i })).toBeInTheDocument();
+      expect(screen.getByText('Lado Asatiani St Merchant Houses')).toBeInTheDocument();
+      expect(screen.getByText('Galaktion Tabidze Balcony House')).toBeInTheDocument();
     });
   });
 
