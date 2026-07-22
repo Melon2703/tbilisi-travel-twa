@@ -250,6 +250,12 @@ describe('TWA Timeline & Card Feed UI', () => {
       );
     });
 
+    it('does not render vertical timeline spine lines or node indicators on stop cards', () => {
+      const { container } = render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
+      const spineLine = container.querySelector('.bg-gradient-to-b');
+      expect(spineLine).not.toBeInTheDocument();
+    });
+
     it('has touch isolation styling for vertical body scrolling', () => {
       const { container } = render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
       const scrollContainer = container.querySelector('[data-testid="stop-card-container"]');

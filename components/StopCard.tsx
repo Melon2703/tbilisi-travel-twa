@@ -11,10 +11,12 @@ export interface StopCardProps {
   totalStops?: number;
 }
 
-export default function StopCard({ stop, isLast = false, totalStops }: StopCardProps) {
-  const googleMapUrl = getMapUrl('google', stop.coordinates);
-  const yandexMapUrl = getMapUrl('yandex', stop.coordinates);
+const MAP_PILLS = [
+  { id: 'google' as const, label: 'Google Maps' },
+  { id: 'yandex' as const, label: 'Yandex Maps' },
+];
 
+export default function StopCard({ stop, totalStops }: StopCardProps) {
   return (
     <div
       data-testid="stop-card-container"
@@ -55,24 +57,18 @@ export default function StopCard({ stop, isLast = false, totalStops }: StopCardP
         <div className="p-4 sm:p-6 space-y-4">
           {/* Dual Map Deep Link Pills (Directly Under Head Photo) */}
           <div className="flex items-center gap-2" data-testid="map-pills-row">
-            <a
-              href={googleMapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-[var(--neutral-border)] bg-[var(--warm-stone)] hover:bg-slate-100 text-xs font-semibold text-[var(--tbilisi-slate)] transition-colors shadow-2xs"
-            >
-              <span>📍</span>
-              <span>Google Maps</span>
-            </a>
-            <a
-              href={yandexMapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-[var(--neutral-border)] bg-[var(--warm-stone)] hover:bg-slate-100 text-xs font-semibold text-[var(--tbilisi-slate)] transition-colors shadow-2xs"
-            >
-              <span>📍</span>
-              <span>Yandex Maps</span>
-            </a>
+            {MAP_PILLS.map((provider) => (
+              <a
+                key={provider.id}
+                href={getMapUrl(provider.id, stop.coordinates)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-[var(--neutral-border)] bg-[var(--warm-stone)] hover:bg-slate-100 text-xs font-semibold text-[var(--tbilisi-slate)] transition-colors shadow-2xs"
+              >
+                <span>📍</span>
+                <span>{provider.label}</span>
+              </a>
+            ))}
           </div>
 
           {/* Header info & Order badge */}
@@ -93,11 +89,11 @@ export default function StopCard({ stop, isLast = false, totalStops }: StopCardP
           </div>
 
           {/* Olya's Tips Callout */}
-          <div className="bg-[var(--warm-stone)] rounded-xl p-3.5 sm:p-4 border border-[var(--neutral-border)] border-l-4 border-l-[var(--terracotta)] space-y-1.5">
+          <div className="bg-[var(--warm-stone)] rounded-xl p-3.5 sm:p-4 border border-[var(--neutral-border)] space-y-1.5 shadow-2xs">
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-[var(--terracotta)] text-white text-[10px] font-bold flex items-center justify-center">
-                O
-              </div>
+              <svg className="w-4 h-4 text-[var(--terracotta)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
               <span className="text-xs font-bold text-[var(--terracotta)] uppercase tracking-wider">
                 Olya&apos;s Tip
               </span>
@@ -111,7 +107,7 @@ export default function StopCard({ stop, isLast = false, totalStops }: StopCardP
           {stop.photoSpot && (
             <div
               data-testid="photo-spot"
-              className="bg-[var(--warm-stone)] rounded-xl p-3.5 sm:p-4 border border-[var(--neutral-border)] space-y-1"
+              className="bg-[var(--warm-stone)] rounded-xl p-3.5 sm:p-4 border border-[var(--neutral-border)] space-y-1 shadow-2xs"
             >
               <div className="flex items-center gap-1.5 text-[var(--tbilisi-slate)] font-semibold text-xs uppercase tracking-wider">
                 <svg className="w-4 h-4 text-[var(--terracotta)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -130,7 +126,7 @@ export default function StopCard({ stop, isLast = false, totalStops }: StopCardP
           {stop.logisticsWarning && (
             <div
               data-testid="logistics-warning"
-              className="bg-[var(--warm-stone)] rounded-xl p-3.5 sm:p-4 border border-[var(--neutral-border)] space-y-1"
+              className="bg-[var(--warm-stone)] rounded-xl p-3.5 sm:p-4 border border-[var(--neutral-border)] space-y-1 shadow-2xs"
             >
               <div className="flex items-center gap-1.5 text-[var(--tbilisi-slate)] font-semibold text-xs uppercase tracking-wider">
                 <svg className="w-4 h-4 text-[var(--terracotta)] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -148,4 +144,3 @@ export default function StopCard({ stop, isLast = false, totalStops }: StopCardP
     </div>
   );
 }
-
