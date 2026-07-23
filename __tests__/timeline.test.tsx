@@ -129,6 +129,34 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(summaryCard).toHaveTextContent('50m');
       expect(summaryCard).toHaveTextContent('Pedestrian Walkway');
     });
+
+    it('renders vibe and duration tags in a single horizontal scroll row with visual scroll indicator', () => {
+      render(<RouteIntroCard route={mockRoute} />);
+
+      const badgesRow = screen.getByTestId('pill-badges-row');
+      expect(badgesRow).toHaveClass('overflow-x-auto');
+      expect(badgesRow).toHaveClass('whitespace-nowrap');
+      expect(badgesRow).toHaveClass('flex-nowrap');
+
+      const scrollIndicator = screen.getByTestId('pill-badges-scroll-indicator');
+      expect(scrollIndicator).toBeInTheDocument();
+    });
+
+    it('renders swipe hint prompt with adequate bottom spacing clear of CTA bar', () => {
+      render(<RouteIntroCard route={mockRoute} />);
+
+      const swipePrompt = screen.getByText(/👉 Swipe left or tap below to begin!/i);
+      expect(swipePrompt).toBeInTheDocument();
+      expect(swipePrompt.parentElement).toHaveClass('text-center');
+    });
+
+    it('applies break-words and min-w-0 on h1 title to prevent right-edge truncation', () => {
+      render(<RouteIntroCard route={mockRoute} />);
+
+      const heading = screen.getByRole('heading', { name: mockRoute.title });
+      expect(heading).toHaveClass('break-words');
+      expect(heading).toHaveClass('min-w-0');
+    });
   });
 
   describe('RouteCarousel Component', () => {
@@ -202,7 +230,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(screen.queryByTestId('logistics-warning')).not.toBeInTheDocument();
     });
 
-    it('embeds direct Google Maps and Yandex Maps provider link pills under the head photo', () => {
+    it('embeds direct Google Maps and Yandex Maps provider link pills under the head photo meeting 48x48px min tap target size', () => {
       render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
 
       const googleLink = screen.getByRole('link', { name: /Google Maps/i });
@@ -213,12 +241,14 @@ describe('TWA Timeline & Card Feed UI', () => {
         'href',
         'https://www.google.com/maps/search/?api=1&query=41.6918,44.7972'
       );
+      expect(googleLink).toHaveClass('min-h-[48px]');
 
       expect(yandexLink).toBeInTheDocument();
       expect(yandexLink).toHaveAttribute(
         'href',
         'https://yandex.com/maps/?pt=44.7972,41.6918&z=17'
       );
+      expect(yandexLink).toHaveClass('min-h-[48px]');
     });
 
     it('renders logistics warning when provided', () => {
@@ -286,6 +316,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(stop2).toBeInTheDocument();
       expect(stop1).toHaveTextContent('1');
       expect(stop2).toHaveTextContent('2');
+      expect(stop1).toHaveClass('min-w-[48px]');
+      expect(stop1).toHaveClass('min-h-[48px]');
       expect(fab).toBeInTheDocument();
       expect(fab).toHaveClass('w-[56px]');
       expect(fab).toHaveClass('h-[56px]');

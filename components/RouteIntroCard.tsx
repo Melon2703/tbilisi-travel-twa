@@ -44,31 +44,40 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
       </div>
 
       {/* Main Content Body */}
-      <div className="p-4 sm:p-6 space-y-6 max-w-2xl mx-auto w-full flex-1">
-        {/* 1. Pill Badges Row */}
-        <div className="flex flex-wrap gap-2 text-xs font-semibold" data-testid="pill-badges-row">
-          <span className="bg-[var(--terracotta,#e07a5f)] text-white px-3 py-1 rounded-full uppercase tracking-wide shadow-xs">
-            {route.durationCategory}
-          </span>
-          <span className="bg-stone-200 text-stone-800 px-3 py-1 rounded-full uppercase tracking-wide border border-[var(--neutral-border,#e5e5e0)]">
-            {route.accessibility.replace('-', ' ')}
-          </span>
-          {route.vibes.map((vibe) => (
-            <span
-              key={vibe}
-              className="bg-stone-200 text-stone-800 px-3 py-1 rounded-full capitalize border border-[var(--neutral-border,#e5e5e0)]"
-            >
-              #{vibe}
+      <div className="p-4 sm:p-6 space-y-6 max-w-2xl mx-auto w-full flex-1 pb-32 sm:pb-36">
+        {/* 1. Pill Badges Row (Horizontally Scrollable) */}
+        <div className="relative w-full overflow-hidden">
+          <div
+            data-testid="pill-badges-row"
+            className="flex items-center gap-2 overflow-x-auto py-1 px-1 text-xs font-semibold scrollbar-none scroll-smooth whitespace-nowrap flex-nowrap touch-pan-x no-scrollbar"
+          >
+            <span className="shrink-0 bg-[var(--terracotta,#e07a5f)] text-white px-3 py-1 rounded-full uppercase tracking-wide shadow-xs">
+              {route.durationCategory}
             </span>
-          ))}
+            <span className="shrink-0 bg-stone-200 text-stone-800 px-3 py-1 rounded-full uppercase tracking-wide border border-[var(--neutral-border,#e5e5e0)]">
+              {route.accessibility.replace('-', ' ')}
+            </span>
+            {route.vibes.map((vibe) => (
+              <span
+                key={vibe}
+                className="shrink-0 bg-stone-200 text-stone-800 px-3 py-1 rounded-full capitalize border border-[var(--neutral-border,#e5e5e0)]"
+              >
+                #{vibe}
+              </span>
+            ))}
+          </div>
+          <div
+            data-testid="pill-badges-scroll-indicator"
+            className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[var(--twa-bg-color,#fafaf7)] to-transparent z-10"
+          />
         </div>
 
         {/* 2. Title & Subtitle Block */}
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight text-[var(--twa-text-color,#1f2421)]">
+        <div className="space-y-1 min-w-0 max-w-full">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight text-[var(--twa-text-color,#1f2421)] break-words min-w-0 max-w-full">
             {route.title}
           </h1>
-          <p className="text-xs sm:text-sm text-stone-600 font-medium">
+          <p className="text-xs sm:text-sm text-stone-600 font-medium break-words min-w-0">
             {route.subtitle}
           </p>
         </div>
@@ -124,7 +133,7 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
         </div>
 
         {/* 5. Swipe Prompt */}
-        <div className="text-center pt-2 pb-4">
+        <div className="text-center pt-2 pb-8" data-testid="swipe-prompt-container">
           <p className="text-xs sm:text-sm font-semibold text-[var(--terracotta,#e07a5f)] animate-pulse">
             👉 Swipe left or tap below to begin!
           </p>
@@ -137,7 +146,7 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
           <button
             type="button"
             onClick={onStartRoute}
-            className="w-full bg-[var(--terracotta,#e07a5f)] hover:bg-orange-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer"
+            className="w-full bg-[var(--terracotta,#e07a5f)] hover:bg-orange-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer min-h-[48px] min-w-[48px]"
           >
             <span>START ROUTE</span>
             <span className="text-lg">➔</span>

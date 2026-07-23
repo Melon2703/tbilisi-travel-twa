@@ -83,7 +83,7 @@ export default function TimelineBar({
                   data-testid={`timeline-stop-${stop.order}`}
                   onClick={() => onStopClick(slideIndex)}
                   aria-label={`Jump to stop ${stop.order}: ${stop.name}`}
-                  className={`w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 cursor-pointer focus:outline-none relative ${
+                  className={`w-12 h-12 min-w-[48px] min-h-[48px] shrink-0 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer focus:outline-none relative ${
                     isVisited
                       ? 'bg-emerald-600 text-white border-2 border-emerald-600'
                       : 'bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200'

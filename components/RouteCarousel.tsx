@@ -132,12 +132,12 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
       {activeIndex === 0 && (
         <div
           data-testid="sticky-start-container"
-          className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--twa-bg-color,#fafaf7)] via-[var(--twa-bg-color,#fafaf7)]/90 to-transparent z-30 max-w-2xl mx-auto"
+          className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--twa-bg-color,#fafaf7)] via-[var(--twa-bg-color,#fafaf7)]/90 to-transparent z-30 max-w-2xl mx-auto pointer-events-auto"
         >
           <button
             type="button"
             onClick={handleStartRoute}
-            className="w-full bg-[var(--terracotta)] hover:bg-orange-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer"
+            className="w-full bg-[var(--terracotta)] hover:bg-orange-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer min-h-[48px] min-w-[48px]"
           >
             <span>START ROUTE</span>
             <span className="text-lg">➔</span>
