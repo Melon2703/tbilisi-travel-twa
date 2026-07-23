@@ -34,16 +34,16 @@ export default function StopCard({ stop, totalStops }: StopCardProps) {
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent z-10" />
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-medium z-20">
-              <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1">
+              <span className="bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white font-semibold flex items-center gap-1 shadow-xs">
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 {stop.neighborhood}
               </span>
-              <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1">
+              <span className="bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white font-semibold flex items-center gap-1 shadow-xs">
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 9 0 0118 0z" />
                 </svg>

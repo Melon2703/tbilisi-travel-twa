@@ -39,7 +39,7 @@ export default function TimelineBar({
   const isCurrentVisited = currentStop ? visitedStopIds.includes(currentStop.id) : false;
 
   return (
-    <div className="fixed left-0 right-0 bottom-0 z-30 bg-white/95 backdrop-blur-md border-t border-stone-200 shadow-lg px-3 py-2.5 sm:px-6 transition-all duration-200">
+    <div className="fixed left-0 right-0 bottom-0 z-30 bg-white/95 backdrop-blur-md border-t border-stone-200 shadow-lg px-3 sm:px-6 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-all duration-200">
       {/* Route Completion Banner */}
       {isCompleted && (
         <div
@@ -56,7 +56,7 @@ export default function TimelineBar({
         <div
           ref={containerRef}
           data-testid="timeline-bar-container"
-          className="flex-1 flex items-center gap-1.5 overflow-x-auto py-1 px-1 scrollbar-none scroll-smooth"
+          className="flex-1 flex items-center gap-1.5 overflow-x-auto py-2 px-2.5 sm:px-3 scrollbar-none scroll-smooth"
         >
           {stops.map((stop, index) => {
             const slideIndex = index + 1;
@@ -113,27 +113,36 @@ export default function TimelineBar({
           })}
         </div>
 
-        {/* 56x56px Terracotta FAB button [ ✓ ] */}
-        <button
-          type="button"
-          data-testid="visited-fab"
-          onClick={onToggleVisited}
-          aria-label={isCurrentVisited ? 'Mark as unvisited' : 'Mark as visited'}
-          className={`w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full flex items-center justify-center font-bold shadow-md transition-all duration-200 active:scale-95 cursor-pointer shrink-0 ${
-            isCurrentVisited
-              ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-600/30 ring-2 ring-emerald-400/50'
-              : 'bg-[var(--terracotta,#e07a5f)] text-white hover:bg-orange-700 shadow-orange-500/30'
-          }`}
-        >
-          <svg
-            className="w-7 h-7 stroke-[3]"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* 56x56px Terracotta FAB button [ ✓ ] with clear visual label / tooltip */}
+        <div className="relative flex flex-col items-center shrink-0">
+          <span
+            data-testid="visited-fab-label"
+            className="absolute -top-7 right-0 text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-md bg-stone-900/90 backdrop-blur-xs text-white shadow-xs pointer-events-none transition-all duration-200 whitespace-nowrap z-20 flex items-center gap-1"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        </button>
+            {isCurrentVisited ? 'Visited ✓' : 'Mark Visited'}
+          </span>
+          <button
+            type="button"
+            data-testid="visited-fab"
+            onClick={onToggleVisited}
+            aria-label={isCurrentVisited ? 'Mark as unvisited' : 'Mark as visited'}
+            title={isCurrentVisited ? 'Mark as unvisited' : 'Mark as visited'}
+            className={`w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full flex items-center justify-center font-bold shadow-md transition-all duration-200 active:scale-95 cursor-pointer ${
+              isCurrentVisited
+                ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-600/30 ring-2 ring-emerald-400/50'
+                : 'bg-[var(--terracotta,#e07a5f)] text-white hover:bg-orange-700 shadow-orange-500/30'
+            }`}
+          >
+            <svg
+              className="w-7 h-7 stroke-[3]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

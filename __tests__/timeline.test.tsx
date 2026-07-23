@@ -230,6 +230,17 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(screen.queryByTestId('logistics-warning')).not.toBeInTheDocument();
     });
 
+    it('renders step card image badges with high-contrast dark overlay and white text', () => {
+      render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
+      const locationBadge = screen.getByText('Sololaki');
+      const durationBadge = screen.getByText('25 min');
+
+      expect(locationBadge).toHaveClass('bg-slate-900/80');
+      expect(locationBadge).toHaveClass('text-white');
+      expect(durationBadge).toHaveClass('bg-slate-900/80');
+      expect(durationBadge).toHaveClass('text-white');
+    });
+
     it('embeds direct Google Maps and Yandex Maps provider link pills under the head photo meeting 48x48px min tap target size', () => {
       render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
 
@@ -281,7 +292,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       );
     });
 
-    it('does not render vertical timeline spine lines or node indicators on stop cards', () => {
+    it('does not render vertical timeline spine lines or indicators on stop cards', () => {
       const { container } = render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
       const spineLine = container.querySelector('.bg-gradient-to-b');
       expect(spineLine).not.toBeInTheDocument();
@@ -395,7 +406,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(stop1).toHaveTextContent('1');
     });
 
-    it('renders connecting progress lines between progress nodes', () => {
+    it('renders connecting progress lines between progress indicators', () => {
       render(<RouteCarousel route={mockRoute} />);
       fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
@@ -410,6 +421,28 @@ describe('TWA Timeline & Card Feed UI', () => {
       const stop1 = screen.getByTestId('timeline-stop-1');
       expect(stop1).toHaveClass('ring-[var(--terracotta,#e07a5f)]/40');
       expect(stop1).toHaveClass('border-[var(--terracotta,#e07a5f)]');
+    });
+
+    it('renders clear visual label or tooltip for visited FAB button', () => {
+      render(<RouteCarousel route={mockRoute} />);
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
+
+      const fabLabel = screen.getByTestId('visited-fab-label');
+      expect(fabLabel).toBeInTheDocument();
+      expect(fabLabel).toHaveTextContent('Mark Visited');
+
+      // Toggling visited changes label to Visited
+      const fab = screen.getByTestId('visited-fab');
+      fireEvent.click(fab);
+      expect(screen.getByTestId('visited-fab-label')).toHaveTextContent(/Visited/i);
+    });
+
+    it('provides safe side padding in timeline container so stop 1 is not obscured', () => {
+      render(<RouteCarousel route={mockRoute} />);
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
+
+      const container = screen.getByTestId('timeline-bar-container');
+      expect(container).toHaveClass('px-2.5');
     });
   });
 });
