@@ -49,7 +49,7 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
         <div className="relative w-full overflow-hidden">
           <div
             data-testid="pill-badges-row"
-            className="flex items-center gap-2 overflow-x-auto py-1 px-1 text-xs font-semibold scrollbar-none scroll-smooth whitespace-nowrap flex-nowrap touch-pan-x no-scrollbar"
+            className="flex items-center gap-2 overflow-x-auto py-1 pl-1 pr-8 text-xs font-semibold scrollbar-none scroll-smooth whitespace-nowrap flex-nowrap touch-pan-x no-scrollbar"
           >
             <span className="shrink-0 bg-[var(--terracotta,#e07a5f)] text-white px-3 py-1 rounded-full uppercase tracking-wide shadow-xs">
               {route.durationCategory}

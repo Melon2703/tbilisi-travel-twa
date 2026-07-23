@@ -39,10 +39,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
   }, [activeIndex]);
 
   const handleStartRoute = () => {
-    setActiveIndex(1);
-    if (swiperRef.current) {
-      swiperRef.current.slideTo(1, 300);
-    }
+    handleStopClick(1);
   };
 
   const handleStopClick = (slideIndex: number) => {

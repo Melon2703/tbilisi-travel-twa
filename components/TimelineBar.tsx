@@ -66,7 +66,7 @@ export default function TimelineBar({
 
             return (
               <React.Fragment key={stop.id}>
-                {/* Connecting Line Segment between nodes */}
+                {/* Connecting Line Segment between stops */}
                 {index > 0 && (
                   <div
                     data-testid="timeline-connecting-line"
@@ -76,7 +76,7 @@ export default function TimelineBar({
                   />
                 )}
 
-                {/* Progress Node Button */}
+                {/* Progress Stop Button */}
                 <button
                   type="button"
                   ref={isActive ? activeStopRef : null}
@@ -89,7 +89,7 @@ export default function TimelineBar({
                       : 'bg-stone-100 text-stone-700 border border-stone-300 hover:bg-stone-200'
                   } ${
                     isActive
-                      ? 'ring-4 ring-[#e07a5f]/40 border-2 border-[#e07a5f] font-bold scale-110 z-10'
+                      ? 'ring-4 ring-[var(--terracotta,#e07a5f)]/40 border-2 border-[var(--terracotta,#e07a5f)] font-bold scale-110 z-10'
                       : ''
                   }`}
                 >
@@ -122,7 +122,7 @@ export default function TimelineBar({
           className={`w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full flex items-center justify-center font-bold shadow-md transition-all duration-200 active:scale-95 cursor-pointer shrink-0 ${
             isCurrentVisited
               ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-600/30 ring-2 ring-emerald-400/50'
-              : 'bg-[#e07a5f] text-white hover:bg-[#d0694e] shadow-orange-500/30'
+              : 'bg-[var(--terracotta,#e07a5f)] text-white hover:bg-orange-700 shadow-orange-500/30'
           }`}
         >
           <svg

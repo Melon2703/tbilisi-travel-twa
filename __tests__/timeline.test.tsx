@@ -408,8 +408,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
       const stop1 = screen.getByTestId('timeline-stop-1');
-      expect(stop1).toHaveClass('ring-[#e07a5f]/40');
-      expect(stop1).toHaveClass('border-[#e07a5f]');
+      expect(stop1).toHaveClass('ring-[var(--terracotta,#e07a5f)]/40');
+      expect(stop1).toHaveClass('border-[var(--terracotta,#e07a5f)]');
     });
   });
 });
