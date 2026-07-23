@@ -39,24 +39,25 @@ export default function TimelineBar({
   const isCurrentVisited = currentStop ? visitedStopIds.includes(currentStop.id) : false;
 
   return (
-    <div className="fixed bottom-6 left-4 right-4 max-w-2xl mx-auto flex items-center justify-between gap-3 z-50 pointer-events-none transition-all duration-200">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center transition-all duration-200 pointer-events-none max-w-[90vw]">
       {/* Route Completion Banner */}
       {isCompleted && (
         <div
           data-testid="completion-feedback"
-          className="absolute -top-12 left-0 right-0 mx-auto max-w-xs p-2 bg-[#2E7D59] border border-white/10 text-[#F4F1EA] rounded-full text-xs text-center font-semibold shadow-2xl flex items-center justify-center gap-2 backdrop-blur-md pointer-events-auto"
+          className="absolute -top-11 left-0 right-0 mx-auto w-max px-3 py-1 bg-[#2E7D59] border border-white/10 text-[#F4F1EA] rounded-full text-xs text-center font-medium shadow-xl flex items-center justify-center gap-1.5 backdrop-blur-md pointer-events-auto"
         >
           <span>🎉</span>
           <span>Route completed! All stops visited!</span>
         </div>
       )}
 
-      {/* Left Dock: Standalone Timeline Progress Sequence Pill */}
-      <div className="pointer-events-auto flex-1 min-w-0 h-14 rounded-full bg-[#1C1A17]/90 backdrop-blur-lg border border-white/10 shadow-2xl px-2 flex items-center">
+      {/* Ultra-Compact Minimal Floating Capsule */}
+      <div className="pointer-events-auto flex items-center gap-1.5 bg-[#1C1A17]/85 backdrop-blur-xl border border-white/10 rounded-full px-2.5 py-1.5 shadow-2xl">
+        {/* Timeline Sequence Nodes */}
         <div
           ref={containerRef}
           data-testid="timeline-bar-container"
-          className="flex-1 flex items-center gap-1.5 overflow-x-auto py-1 px-2.5 sm:px-3 scrollbar-none scroll-smooth"
+          className="flex items-center gap-1.5 overflow-x-auto py-0.5 px-2.5 max-w-[65vw] scrollbar-none scroll-smooth"
         >
           {stops.map((stop, index) => {
             const slideIndex = index + 1;
@@ -70,7 +71,7 @@ export default function TimelineBar({
                 {index > 0 && (
                   <div
                     data-testid="timeline-connecting-line"
-                    className={`h-0.5 w-3 sm:w-4 shrink-0 transition-colors duration-200 ${
+                    className={`h-0.5 w-2.5 sm:w-3.5 shrink-0 transition-colors duration-200 ${
                       isVisited && isPrevVisited ? 'bg-[#2E7D59]' : 'bg-[#3A342D]'
                     }`}
                   />
@@ -83,20 +84,20 @@ export default function TimelineBar({
                   data-testid={`timeline-stop-${stop.order}`}
                   onClick={() => onStopClick(slideIndex)}
                   aria-label={`Jump to stop ${stop.order}: ${stop.name}`}
-                  className={`w-10 h-10 min-w-[48px] min-h-[48px] shrink-0 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 cursor-pointer focus:outline-none relative ${
+                  className={`w-8 h-8 min-w-[32px] min-h-[32px] min-w-[48px] min-h-[48px] shrink-0 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 cursor-pointer focus:outline-none relative ${
                     isVisited
-                      ? 'bg-[#2E7D59] bg-emerald-600 text-[#F4F1EA] text-white border-2 border-[#2E7D59]'
+                      ? 'bg-[#2E7D59] bg-emerald-600 text-[#F4F1EA] text-white border border-[#2E7D59]'
                       : 'bg-[#23201C] text-[#A69F95] border border-[#3A342D] hover:bg-[#2E2A24]'
                   } ${
                     isActive
-                      ? 'ring-4 ring-[var(--terracotta,#e07a5f)]/40 border-2 border-[var(--terracotta,#e07a5f)] border-[#D96B43] font-bold scale-105 z-10 text-[#F4F1EA]'
+                      ? 'ring-2 ring-[var(--terracotta,#e07a5f)]/40 ring-4 border-2 border-[var(--terracotta,#e07a5f)] border-[#D96B43] font-bold scale-105 z-10 text-[#F4F1EA]'
                       : ''
                   }`}
                 >
                   <span className="flex items-center gap-0.5">
                     {isVisited && (
                       <svg
-                        className="w-3 h-3 stroke-[3] shrink-0"
+                        className="w-2.5 h-2.5 stroke-[3] shrink-0"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -112,30 +113,25 @@ export default function TimelineBar({
             );
           })}
         </div>
-      </div>
 
-      {/* Right Dock: Standalone Confirm Visit FAB Button */}
-      <div className="pointer-events-auto relative flex flex-col items-center shrink-0">
-        <span
-          data-testid="visited-fab-label"
-          className="absolute -top-7 right-0 text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-md bg-[#161412]/90 backdrop-blur-md text-[#F4F1EA] border border-white/10 shadow-xs pointer-events-none transition-all duration-200 whitespace-nowrap z-20 flex items-center gap-1"
-        >
-          {isCurrentVisited ? 'Visited ✓' : 'Mark Visited'}
-        </span>
+        {/* Vertical Separator Line */}
+        <div className="w-px h-4 bg-white/15 mx-0.5 shrink-0" />
+
+        {/* Visited Checkmark FAB Button (No text label!) */}
         <button
           type="button"
           data-testid="visited-fab"
           onClick={onToggleVisited}
           aria-label={isCurrentVisited ? 'Mark as unvisited' : 'Mark as visited'}
           title={isCurrentVisited ? 'Mark as unvisited' : 'Mark as visited'}
-          className={`w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full flex items-center justify-center font-bold shadow-2xl transition-all duration-200 active:scale-95 cursor-pointer border border-white/10 ${
+          className={`w-8 h-8 min-w-[32px] min-h-[32px] w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full flex items-center justify-center font-bold shadow-md transition-all duration-200 active:scale-95 cursor-pointer shrink-0 ${
             isCurrentVisited
-              ? 'bg-[#2E7D59] text-white hover:bg-[#256849] shadow-[#2E7D59]/40 ring-2 ring-[#2E7D59]/50'
-              : 'bg-[#D96B43] text-white hover:bg-[#C05A34] shadow-[#D96B43]/40'
+              ? 'bg-[#2E7D59] text-white hover:bg-[#256849] ring-1 ring-[#2E7D59]/50'
+              : 'bg-[#D96B43] text-white hover:bg-[#C05A34]'
           }`}
         >
           <svg
-            className="w-6 h-6 stroke-[3]"
+            className="w-4 h-4 stroke-[3]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

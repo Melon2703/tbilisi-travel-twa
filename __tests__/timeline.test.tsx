@@ -423,18 +423,19 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(stop1).toHaveClass('border-[var(--terracotta,#e07a5f)]');
     });
 
-    it('renders clear visual label or tooltip for visited FAB button', () => {
+    it('provides clear tooltip and accessible label for visited FAB button', () => {
       render(<RouteCarousel route={mockRoute} />);
       fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
-      const fabLabel = screen.getByTestId('visited-fab-label');
-      expect(fabLabel).toBeInTheDocument();
-      expect(fabLabel).toHaveTextContent('Mark Visited');
-
-      // Toggling visited changes label to Visited
       const fab = screen.getByTestId('visited-fab');
+      expect(fab).toHaveAttribute('title', 'Mark as visited');
+      expect(fab).toHaveAttribute('aria-label', 'Mark as visited');
+
+      // Toggling visited on stop 1 auto-swipes to stop 2; jump back to stop 1 to check visited tooltip
       fireEvent.click(fab);
-      expect(screen.getByTestId('visited-fab-label')).toHaveTextContent(/Visited/i);
+      fireEvent.click(screen.getByTestId('timeline-stop-1'));
+      expect(fab).toHaveAttribute('title', 'Mark as unvisited');
+      expect(fab).toHaveAttribute('aria-label', 'Mark as unvisited');
     });
 
     it('provides safe side padding in timeline container so stop 1 is not obscured', () => {
