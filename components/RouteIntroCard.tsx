@@ -29,7 +29,7 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
   const transitModeStr = transitModes.length > 0 ? transitModes.join(' + ') : 'Pedestrian Walkway';
 
   return (
-    <div className="relative flex flex-col min-h-screen w-full bg-[var(--twa-bg-color,#fafaf7)] text-[var(--twa-text-color,#1f2421)] overflow-y-auto touch-pan-x pan-y pb-36 sm:pb-40">
+    <div className="relative flex flex-col min-h-screen w-full bg-[var(--twa-bg-color,#fafaf7)] text-[var(--twa-text-color,#1f2421)] overflow-y-auto touch-pan-x touch-pan-y pb-36 sm:pb-40">
       {/* Clean Hero Cover Image Header (no text overlays) */}
       <div className="relative w-full h-64 sm:h-72 bg-[var(--tbilisi-slate,#1f2421)] overflow-hidden">
         {route.heroImage && (

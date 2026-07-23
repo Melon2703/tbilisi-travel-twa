@@ -20,7 +20,7 @@ export default function StopCard({ stop, totalStops }: StopCardProps) {
   return (
     <div
       data-testid="stop-card-container"
-      className="w-full touch-pan-x pan-y overscroll-y-contain"
+      className="w-full touch-pan-x touch-pan-y overscroll-y-contain"
     >
       <div className="bg-white rounded-2xl shadow-xs border border-[var(--neutral-border)] overflow-hidden hover:shadow-md transition-all duration-200">
         {/* Hero Image */}
