@@ -526,3 +526,15 @@ export function getRouteById(id: string): Route | undefined {
   return ROUTES.find((route) => route.id === id);
 }
 
+export function getRouteDurationFormatted(route: Route): string {
+  const totalMinutes = route.stops.reduce((acc, stop) => acc + stop.estimatedMinutes, 0);
+  const hours = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+  return hours > 0 ? `${hours}h ${mins > 0 ? `${mins}m` : ''}` : `${mins}m`;
+}
+
+export function formatAccessibilityLabel(accessibility: string): string {
+  return accessibility.replace('-', ' ');
+}
+
+
