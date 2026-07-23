@@ -29,9 +29,9 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
   const transitModeStr = transitModes.length > 0 ? transitModes.join(' + ') : 'Pedestrian Walkway';
 
   return (
-    <div className="relative flex flex-col min-h-screen w-full bg-[#161412] text-[#F4F1EA] overflow-y-auto touch-pan-x touch-pan-y pb-36 sm:pb-40">
-      {/* Clean Hero Cover Image Header (no text overlays) */}
-      <div className="relative w-full h-64 sm:h-72 bg-[#161412] overflow-hidden">
+    <div className="relative flex flex-col h-[100dvh] w-full bg-[#161412] text-[#F4F1EA] overflow-hidden justify-between touch-pan-x touch-pan-y">
+      {/* Clean Hero Cover Image Header */}
+      <div className="relative w-full h-36 sm:h-44 shrink-0 bg-[#161412] overflow-hidden">
         {route.heroImage && (
           <Image
             src={route.heroImage}
@@ -43,13 +43,13 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
         )}
       </div>
 
-      {/* Main Content Body */}
-      <div className="p-4 sm:p-6 space-y-6 max-w-2xl mx-auto w-full flex-1 pb-32 sm:pb-36">
-        {/* 1. Pill Badges Row (Horizontally Scrollable) */}
-        <div className="relative w-full overflow-hidden">
+      {/* Main Content Body - Zero Scroll Fit */}
+      <div className="p-3.5 sm:p-5 space-y-3 max-w-2xl mx-auto w-full flex-1 flex flex-col justify-between overflow-hidden pb-20 sm:pb-24">
+        {/* 1. Pill Badges Row */}
+        <div className="relative w-full overflow-hidden shrink-0">
           <div
             data-testid="pill-badges-row"
-            className="flex items-center gap-2 overflow-x-auto py-1 pl-1 pr-8 text-xs font-semibold scrollbar-none scroll-smooth whitespace-nowrap flex-nowrap touch-pan-x no-scrollbar"
+            className="flex items-center gap-2 overflow-x-auto py-0.5 pl-1 pr-8 text-xs font-semibold scrollbar-none scroll-smooth whitespace-nowrap flex-nowrap touch-pan-x no-scrollbar"
           >
             <span className="shrink-0 bg-[#D96B43] text-white px-3 py-1 rounded-full uppercase tracking-wide shadow-xs">
               {route.durationCategory}
@@ -73,28 +73,28 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
         </div>
 
         {/* 2. Title & Subtitle Block */}
-        <div className="space-y-1 min-w-0 max-w-full">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight text-[#F4F1EA] break-words min-w-0 max-w-full">
+        <div className="space-y-0.5 min-w-0 max-w-full shrink-0">
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight leading-tight text-[#F4F1EA] break-words min-w-0 max-w-full">
             {route.title}
           </h1>
-          <p className="text-xs sm:text-sm text-[#A69F95] font-medium break-words min-w-0">
+          <p className="text-xs text-[#A69F95] font-medium break-words min-w-0 line-clamp-2">
             {route.subtitle}
           </p>
         </div>
 
-        {/* 3. Olya's Welcome Quote Card with subtle 1px border */}
+        {/* 3. Olya's Welcome Quote Card */}
         {route.introCopy && (
           <div
             data-testid="olya-welcome-card"
-            className="bg-[#1C1A17] rounded-2xl p-4 sm:p-5 border border-[#3A342D] shadow-xs relative"
+            className="bg-[#1C1A17] rounded-2xl p-3 sm:p-4 border border-[#3A342D] shadow-xs relative shrink-0"
           >
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">💬</span>
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#D96B43] mb-1">
+            <div className="flex items-start gap-2.5">
+              <span className="text-xl shrink-0">💬</span>
+              <div className="min-w-0">
+                <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#D96B43] mb-0.5">
                   Olya&apos;s Route Welcome
                 </h3>
-                <p className="text-sm sm:text-base text-[#F4F1EA] leading-relaxed italic">
+                <p className="text-xs sm:text-sm text-[#F4F1EA] leading-relaxed italic line-clamp-3">
                   &quot;{route.introCopy}&quot;
                 </p>
               </div>
@@ -105,26 +105,26 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
         {/* 4. Route At A Glance Summary Line */}
         <div
           data-testid="route-at-a-glance"
-          className="bg-[#1C1A17] rounded-2xl p-5 border border-[#3A342D] shadow-xs space-y-3"
+          className="bg-[#1C1A17] rounded-2xl p-3.5 sm:p-4 border border-[#3A342D] shadow-xs space-y-2 shrink-0"
         >
-          <h2 className="text-xs font-bold text-[#D96B43] uppercase tracking-wider border-b border-[#3A342D] pb-2">
+          <h2 className="text-[11px] font-bold text-[#D96B43] uppercase tracking-wider border-b border-[#3A342D] pb-1.5">
             ── ROUTE AT A GLANCE ──
           </h2>
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm font-medium text-[#A69F95]">
-            <div className="flex items-center gap-2">
-              <span className="text-base">📍</span>
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-[#A69F95]">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm">📍</span>
               <span>
                 <strong className="text-[#F4F1EA]">{sortedStops.length}</strong> Curated Stops
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-base">👟</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm">👟</span>
               <span>
                 ~<strong className="text-[#F4F1EA]">{approxKm} km</strong> ({formattedTime})
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-base">🚠</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm">🚠</span>
               <span>
                 <strong className="text-[#F4F1EA]">{transitModeStr}</strong>
               </span>
@@ -133,8 +133,8 @@ export default function RouteIntroCard({ route, onStartRoute, showStartButton = 
         </div>
 
         {/* 5. Swipe Prompt */}
-        <div className="text-center pt-2 pb-8" data-testid="swipe-prompt-container">
-          <p className="text-xs sm:text-sm font-semibold text-[#D96B43] animate-pulse">
+        <div className="text-center pt-1 pb-1 shrink-0" data-testid="swipe-prompt-container">
+          <p className="text-xs font-semibold text-[#D96B43] animate-pulse">
             👉 Swipe left or tap below to begin!
           </p>
         </div>
