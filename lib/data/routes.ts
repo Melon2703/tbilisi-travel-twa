@@ -8,7 +8,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Center',
     coordinates: { lat: 41.6934, lng: 44.8015 },
     estimatedMinutes: 15,
-    imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1555246050-8957960659b4?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Meet under St. George statue. Baseline orient point for Old Tbilisi.',
     bestTimeOfDay: '09:00 AM',
   },
@@ -30,7 +30,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Orbeliani',
     coordinates: { lat: 41.6975, lng: 44.8045 },
     estimatedMinutes: 20,
-    imageUrl: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1682005789653-d6311db860c9?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Renovated street stalls. Great vibrant morning photos.',
     bestTimeOfDay: '10:25 AM - 10:45 AM',
     photoSpot: 'Capture the colorful flower buckets against the restored facades.',
@@ -42,7 +42,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Old Kala',
     coordinates: { lat: 41.6957, lng: 44.8066 },
     estimatedMinutes: 30,
-    imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1611905998781-f21744fcad47?auto=format&fit=crop&w=800&q=80',
     olyaTips:
       'Be here by 11:50 AM! At exactly 12:00 PM, the tiny angel comes out to strike the bell, followed by "The Cycle of Life" puppet show.',
     bestTimeOfDay: '11:45 AM - 12:15 PM',
@@ -56,7 +56,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Old Kala',
     coordinates: { lat: 41.6953, lng: 44.8063 },
     estimatedMinutes: 30,
-    imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Peep into 6th-century Anchiskhati church along the alley — the oldest surviving church in Tbilisi.',
     bestTimeOfDay: '12:15 PM - 12:45 PM',
     logisticsWarning: 'Historic cobblestone paving.',
@@ -68,7 +68,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Old Kala',
     coordinates: { lat: 41.6914, lng: 44.8080 },
     estimatedMinutes: 20,
-    imageUrl: 'https://images.unsplash.com/photo-1548625149-fc4a29cf7092?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1777906626046-407d486d3e44?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Step inside quietly. See Grapevine Cross of St. Nino.',
     bestTimeOfDay: '12:50 PM - 01:10 PM',
   },
@@ -91,7 +91,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Rike',
     coordinates: { lat: 41.6930, lng: 44.8083 },
     estimatedMinutes: 15,
-    imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1707961372938-8b68e8472f52?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Glass canopy bridge toward Rike Park. Modern contrast.',
     bestTimeOfDay: '01:30 PM - 01:45 PM',
     photoSpot: 'Center of the glass bridge looking up river toward Metekhi.',
@@ -115,7 +115,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Metekhi',
     coordinates: { lat: 41.6902, lng: 44.8114 },
     estimatedMinutes: 15,
-    imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1656415297286-537ae30069a7?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Look back across river for classic postcard cliff shot.',
     bestTimeOfDay: '02:00 PM',
     photoSpot: 'Promontory near Metekhi Church looking down over the Mtkvari river.',
@@ -127,7 +127,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Sololaki Ridge',
     coordinates: { lat: 41.6880, lng: 44.8051 },
     estimatedMinutes: 15,
-    imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1663785011617-ffeea3d7dc49?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Tap TravelCard/bank card at turnstile; glide up ridge.',
     bestTimeOfDay: '02:15 PM - 02:30 PM',
   },
@@ -138,7 +138,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Old Kala',
     coordinates: { lat: 41.6892, lng: 44.8055 },
     estimatedMinutes: 30,
-    imageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1618595016029-030692faf166?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Watch footing on old Betlemi cobblestone stairs; enjoy views.',
     bestTimeOfDay: '02:45 PM - 03:15 PM',
     photoSpot: 'Betlemi stairs platform overlooking sulfur bath domes.',
@@ -162,7 +162,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Abanotubani',
     coordinates: { lat: 41.6883, lng: 44.8094 },
     estimatedMinutes: 30,
-    imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1716671225845-d15fe51ae099?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Brick domed bathhouses & warm sulfur vapors.',
     bestTimeOfDay: '04:45 PM - 05:15 PM',
   },
@@ -173,7 +173,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Abanotubani',
     coordinates: { lat: 41.6869, lng: 44.8087 },
     estimatedMinutes: 20,
-    imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1693234969086-e6e662a89ff9?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Wooden canyon boardwalk straight to the waterfall.',
     bestTimeOfDay: '05:15 PM - 05:35 PM',
     photoSpot: 'Wooden bridge in front of the waterfall pool.',
@@ -196,7 +196,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Abanotubani',
     coordinates: { lat: 41.6886, lng: 44.8101 },
     estimatedMinutes: 25,
-    imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1713545482961-2338c8919493?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Royal blue tile work facade of Zabron/Orbeliani baths.',
     bestTimeOfDay: '05:50 PM - 06:15 PM',
     photoSpot: 'Front facade of Orbeliani/Chreli Abano baths with mosaic tilework.',
@@ -208,7 +208,7 @@ const HEARTBEAT_STOPS: Stop[] = [
     neighborhood: 'Mtatsminda',
     coordinates: { lat: 41.6958, lng: 44.7901 },
     estimatedMinutes: 45,
-    imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1559684844-ec295fd647ed?auto=format&fit=crop&w=800&q=80',
     olyaTips: 'Head to Chonkadze St, take steep Funicular tram up mountain.',
     bestTimeOfDay: '06:30 PM - 07:15 PM',
     logisticsWarning: 'Funicular tram ride up steep incline.',
@@ -242,7 +242,7 @@ export const ROUTES: Route[] = [
     durationCategory: 'half-day',
     accessibility: 'steep-stairs',
     vibes: ['photo-spots', 'courtyards', 'food-wine', 'architecture'],
-    heroImage: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1707908884432-26832ebb2e12?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       "Hey! Ready to explore Tbilisi's iconic core? From puppet clock shows to sulfur bath waterfalls and funicular sunset views. Take your time!",
     stops: HEARTBEAT_STOPS,
@@ -254,7 +254,7 @@ export const ROUTES: Route[] = [
     durationCategory: '1-2h',
     accessibility: 'stroller-friendly',
     vibes: ['photo-spots', 'courtyards'],
-    heroImage: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1555246050-8957960659b4?auto=format&fit=crop&w=1200&q=80',
     introCopy: 'A short, accessible walk through flat pedestrian avenues and historic spots.',
     stops: selectStops([0, 1, 2, 3, 7, 8]),
   },
@@ -265,7 +265,7 @@ export const ROUTES: Route[] = [
     durationCategory: '2-4h',
     accessibility: 'moderate',
     vibes: ['architecture', 'photo-spots'],
-    heroImage: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1716671225845-d15fe51ae099?auto=format&fit=crop&w=1200&q=80',
     introCopy: 'Discover the ancient sulfur bath district and hidden waterfall in Old Tbilisi.',
     stops: selectStops([3, 4, 5, 6, 13, 14, 15, 16]),
   },
@@ -287,7 +287,7 @@ export const ROUTES: Route[] = [
     durationCategory: '1-2h',
     accessibility: 'stroller-friendly',
     vibes: ['courtyards', 'photo-spots'],
-    heroImage: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1580233015636-7ed8fd6ba328?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Explore the peaceful, flat avenues of Sololaki where 19th-century merchants built opulent European mansions around lush wooden courtyards.',
     stops: [
@@ -298,7 +298,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Sololaki',
         coordinates: { lat: 41.6918, lng: 44.7972 },
         estimatedMinutes: 25,
-        imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1580233015636-7ed8fd6ba328?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Gently push through the wooden carriage doors into court #28. The original 1890s oil-painted ceiling is hidden right inside the foyer!',
         bestTimeOfDay: 'Morning (10 AM - 12 PM)',
@@ -310,7 +310,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Sololaki',
         coordinates: { lat: 41.6931, lng: 44.7989 },
         estimatedMinutes: 25,
-        imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Look up at the spiral wrought-iron balcony. Afternoon light hits the turquoise stained glass windows around 4 PM.',
         bestTimeOfDay: 'Late afternoon (3 PM - 5 PM)',
@@ -322,7 +322,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Sololaki',
         coordinates: { lat: 41.6908, lng: 44.7995 },
         estimatedMinutes: 20,
-        imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1674128420882-6a35c563be2d?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Resident Tbilisi street cats often sunbathe by the inner fountain. A cozy stop with flat, wide sidewalks.',
       },
@@ -335,7 +335,7 @@ export const ROUTES: Route[] = [
     durationCategory: '2-4h',
     accessibility: 'moderate',
     vibes: ['architecture', 'courtyards'],
-    heroImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Vera combines tree-lined residential tranquility with breathtaking turn-of-the-century architecture and leafy courtyard cafes.',
     stops: [
@@ -346,7 +346,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Vera',
         coordinates: { lat: 41.7042, lng: 44.7895 },
         estimatedMinutes: 30,
-        imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Notice the subtle dragon and floral motifs carved on the stone lintel — a prime example of 1905 Tbilisi Modernism.',
         logisticsWarning: 'Moderate gradient on Kiacheli St with slightly uneven historic paving.',
@@ -369,7 +369,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Vera',
         coordinates: { lat: 41.7089, lng: 44.7864 },
         estimatedMinutes: 30,
-        imageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1580233015636-7ed8fd6ba328?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Walk down the brick archway between #7 and #9 to enter a secluded courtyard with vintage carpets and wild ivy.',
       },
@@ -382,7 +382,7 @@ export const ROUTES: Route[] = [
     durationCategory: '2-4h',
     accessibility: 'steep-stairs',
     vibes: ['photo-spots', 'architecture'],
-    heroImage: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1663785011617-ffeea3d7dc49?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Step back into medieval Tbilisi along the ancient cliffside citadel of Narikala and the sulfur bath district of Abanotubani.',
     stops: [
@@ -393,7 +393,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Old Kala',
         coordinates: { lat: 41.6883, lng: 44.8094 },
         estimatedMinutes: 30,
-        imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1716671225845-d15fe51ae099?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Walk over the brick bath domes for an iconic postcard photo of the Persian blue tile facade of Orbeliani Baths.',
       },
@@ -404,7 +404,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Old Kala',
         coordinates: { lat: 41.6895, lng: 44.8051 },
         estimatedMinutes: 35,
-        imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1618595016029-030692faf166?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Catch your breath halfway up the 120 Betlemi stone stairs — the view of Metekhi cliff across the river is legendary.',
         logisticsWarning: 'Steep 30° stone staircase with no handrails in certain sections. High exertion required.',
@@ -416,7 +416,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Old Kala',
         coordinates: { lat: 41.6876, lng: 44.8055 },
         estimatedMinutes: 40,
-        imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1663785011617-ffeea3d7dc49?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Golden hour here lights up Mother of Georgia (Kartlis Deda) and the entire Mtkvari river valley.',
         bestTimeOfDay: 'Sunset (7:00 PM - 8:30 PM)',
@@ -430,7 +430,7 @@ export const ROUTES: Route[] = [
     durationCategory: '2-4h',
     accessibility: 'stroller-friendly',
     vibes: ['food-wine', 'photo-spots'],
-    heroImage: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1548747132-bab97231571a?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Cross the river into vibrant Chugureti for natural wines, modern street art murals, and historic German-style merchant avenues.',
     stops: [
@@ -441,7 +441,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Chugureti',
         coordinates: { lat: 41.7075, lng: 44.8018 },
         estimatedMinutes: 30,
-        imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Stroll the flat restored pedestrian zone and grab a fresh hot Adjarian khachapuri from the neighborhood bakery.',
       },
@@ -452,7 +452,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Chugureti',
         coordinates: { lat: 41.7102, lng: 44.8041 },
         estimatedMinutes: 45,
-        imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1548747132-bab97231571a?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Former Soviet garment factory turned urban hotspot. Head to the back alley for huge mural photo opportunities.',
       },
@@ -463,7 +463,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Chugureti',
         coordinates: { lat: 41.7091, lng: 44.7985 },
         estimatedMinutes: 45,
-        imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Ask the sommelier for an unfiltered Amber Kisi wine made in ancient underground Qvevri clay vessels.',
       },
@@ -476,7 +476,7 @@ export const ROUTES: Route[] = [
     durationCategory: 'half-day',
     accessibility: 'steep-stairs',
     vibes: ['photo-spots', 'food-wine'],
-    heroImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1559684844-ec295fd647ed?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Ascend the sacred mountain Mtatsminda for pine mountain air, historic pantheon tombs, famous cream doughnuts, and panoramic city views.',
     stops: [
@@ -487,7 +487,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Mtatsminda',
         coordinates: { lat: 41.6975, lng: 44.7915 },
         estimatedMinutes: 30,
-        imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1740920338982-4148774fd078?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Grab a rich Georgian espresso near Vilnius park before hopping onto the cable funicular train.',
       },
@@ -498,7 +498,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Mtatsminda',
         coordinates: { lat: 41.6955, lng: 44.7891 },
         estimatedMinutes: 45,
-        imageUrl: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1638534146166-bbd81faf05f9?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Drink from the mountain holy spring tap inside the stone alcove. The air up here is always 3 degrees cooler.',
         logisticsWarning: 'Loose gravel mountain path with steep incline sections.',
@@ -510,7 +510,7 @@ export const ROUTES: Route[] = [
         neighborhood: 'Mtatsminda',
         coordinates: { lat: 41.6942, lng: 44.7842 },
         estimatedMinutes: 60,
-        imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1559684844-ec295fd647ed?auto=format&fit=crop&w=800&q=80',
         olyaTips:
           'Do NOT leave without ordering hot cream-filled ponchiki doughnuts and cold tarragon Lagidze soda on the terrace balcony!',
       },
@@ -536,5 +536,3 @@ export function getRouteDurationFormatted(route: Route): string {
 export function formatAccessibilityLabel(accessibility: string): string {
   return accessibility.replace('-', ' ');
 }
-
-
