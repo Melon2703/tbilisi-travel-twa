@@ -78,7 +78,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
   };
 
   return (
-    <div className="w-full min-h-screen relative overflow-hidden bg-[var(--twa-bg-color,#f7f4ef)]">
+    <div className="w-full h-[100dvh] relative overflow-hidden bg-[#161412]">
       <Swiper
         modules={[Mousewheel]}
         mousewheel={{ forceToAxis: true, releaseOnEdges: true }}
@@ -104,17 +104,19 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
         threshold={10}
         touchAngle={45}
         touchEventsTarget="container"
-        className="w-full min-h-screen"
+        className="w-full h-[100dvh]"
       >
         {/* Slide 0: Route Intro Card */}
         <SwiperSlide key="route-intro">
-          <RouteIntroCard route={route} onStartRoute={handleStartRoute} showStartButton={false} />
+          <div className="h-[100dvh] w-full overflow-hidden bg-[#161412]">
+            <RouteIntroCard route={route} onStartRoute={handleStartRoute} showStartButton={false} />
+          </div>
         </SwiperSlide>
 
         {/* Slide 1..N: Stop Cards */}
         {sortedStops.map((stop, index) => (
           <SwiperSlide key={stop.id}>
-            <div className="min-h-screen p-4 sm:p-6 pb-28 max-w-2xl mx-auto overflow-y-auto">
+            <div className="h-[100dvh] w-full overflow-hidden flex flex-col justify-between bg-[#161412] max-w-2xl mx-auto">
               <StopCard
                 stop={stop}
                 isLast={index === sortedStops.length - 1}
@@ -129,12 +131,12 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
       {activeIndex === 0 && (
         <div
           data-testid="sticky-start-container"
-          className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[var(--twa-bg-color,#fafaf7)] via-[var(--twa-bg-color,#fafaf7)]/90 to-transparent z-30 max-w-2xl mx-auto pointer-events-auto"
+          className="fixed bottom-0 left-4 right-4 pb-4 max-w-2xl mx-auto z-30 pointer-events-auto"
         >
           <button
             type="button"
             onClick={handleStartRoute}
-            className="w-full bg-[var(--terracotta)] hover:bg-orange-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer min-h-[48px] min-w-[48px]"
+            className="w-full bg-[#D96B43] hover:bg-[#C05A34] active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-full shadow-2xl flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer min-h-[48px] min-w-[48px]"
           >
             <span>START ROUTE</span>
             <span className="text-lg">➔</span>

@@ -6,6 +6,16 @@
   --warm-stone: #FAFAF7;
   --neutral-border: #E5E5E0;
 
+  /* Warm Tbilisi Editorial Travel Journal Color Tokens */
+  --canvas-bg: #161412;
+  --card-bg: #1C1A17;
+  --tip-box-bg: #23201C;
+  --tip-box-border: #3A342D;
+  --terracotta-accent: #D96B43;
+  --success-accent: #2E7D59;
+  --text-primary: #F4F1EA;
+  --text-secondary: #A69F95;
+
   /* Telegram WebApp theme CSS variables (with fallback design system tokens) */
   --twa-bg-color: var(--warm-stone);
   --twa-text-color: var(--tbilisi-slate);
