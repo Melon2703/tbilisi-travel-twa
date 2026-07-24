@@ -327,8 +327,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(stop2).toBeInTheDocument();
       expect(stop1).toHaveTextContent('1');
       expect(stop2).toHaveTextContent('2');
-      expect(stop1).toHaveClass('min-w-[48px]');
-      expect(stop1).toHaveClass('min-h-[48px]');
+      expect(stop1).toHaveClass('min-w-[36px]');
+      expect(stop2).toHaveClass('min-w-[28px]');
       expect(fab).toBeInTheDocument();
       expect(fab).toHaveClass('w-[56px]');
       expect(fab).toHaveClass('h-[56px]');
@@ -344,7 +344,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       fireEvent.click(stop1);
 
       // Stop 1 badge should now be active and have active ring styling
-      expect(stop1).toHaveClass('ring-4');
+      expect(stop1).toHaveClass('ring-2');
+      expect(stop1).toHaveClass('scale-110');
     });
 
     it('toggles visited state in localStorage and auto-swipes to next card when FAB is clicked', () => {
@@ -364,7 +365,8 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       // Auto-swiped to Stop 2 (stop 2 badge is now active)
       const stop2 = screen.getByTestId('timeline-stop-2');
-      expect(stop2).toHaveClass('ring-4');
+      expect(stop2).toHaveClass('ring-2');
+      expect(stop2).toHaveClass('scale-110');
     });
 
     it('displays completion feedback when all stops are marked visited without auto-swiping past end', () => {
@@ -406,12 +408,12 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(stop1).toHaveTextContent('1');
     });
 
-    it('renders connecting progress lines between progress indicators', () => {
+    it('does not render connecting lines between progress indicators', () => {
       render(<RouteCarousel route={mockRoute} />);
       fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
-      const lines = screen.getAllByTestId('timeline-connecting-line');
-      expect(lines.length).toBeGreaterThan(0);
+      const lines = screen.queryAllByTestId('timeline-connecting-line');
+      expect(lines.length).toBe(0);
     });
 
     it('highlights active stop with Terracotta ring styling', () => {
@@ -419,8 +421,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
       const stop1 = screen.getByTestId('timeline-stop-1');
-      expect(stop1).toHaveClass('ring-[var(--terracotta,#e07a5f)]/40');
-      expect(stop1).toHaveClass('border-[var(--terracotta,#e07a5f)]');
+      expect(stop1).toHaveClass('ring-2');
+      expect(stop1).toHaveClass('scale-110');
     });
 
     it('provides clear tooltip and accessible label for visited FAB button', () => {
@@ -443,7 +445,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
 
       const container = screen.getByTestId('timeline-bar-container');
-      expect(container).toHaveClass('px-2.5');
+      expect(container).toHaveClass('px-3');
     });
   });
 });

@@ -31,10 +31,15 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
 
 
 
-  // Synchronize Swiper slide position whenever activeIndex changes
+  const isProgrammatic = useRef<boolean>(false);
+
+  // Synchronize Swiper slide position when activeIndex changes programmatically (e.g. via Timeline button tap)
   useEffect(() => {
-    if (swiperRef.current && swiperRef.current.activeIndex !== activeIndex) {
-      swiperRef.current.slideTo(activeIndex, 300);
+    if (isProgrammatic.current) {
+      if (swiperRef.current && swiperRef.current.activeIndex !== activeIndex) {
+        swiperRef.current.slideTo(activeIndex, 250);
+      }
+      isProgrammatic.current = false;
     }
   }, [activeIndex]);
 
@@ -43,18 +48,16 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
   };
 
   const handleStopClick = (slideIndex: number) => {
+    isProgrammatic.current = true;
     setActiveIndex(slideIndex);
     if (swiperRef.current) {
-      swiperRef.current.slideTo(slideIndex, 300);
+      swiperRef.current.slideTo(slideIndex, 250);
     }
   };
 
   const handleToggleVisited = () => {
     if (activeIndex === 0) {
-      setActiveIndex(1);
-      if (swiperRef.current) {
-        swiperRef.current.slideTo(1, 300);
-      }
+      handleStopClick(1);
       return;
     }
 
@@ -69,19 +72,19 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
       const isLastStop = activeIndex === sortedStops.length;
       if (!isLastStop) {
         const nextIndex = activeIndex + 1;
-        setActiveIndex(nextIndex);
-        if (swiperRef.current) {
-          swiperRef.current.slideTo(nextIndex, 300);
-        }
+        handleStopClick(nextIndex);
       }
     }
   };
 
   return (
-    <div className="w-full h-[100dvh] relative overflow-hidden bg-[#161412]">
+    <div className="w-full h-[100dvh] relative overflow-hidden bg-[#161412] transform-gpu">
       <Swiper
         modules={[Mousewheel]}
         mousewheel={{ forceToAxis: true, releaseOnEdges: true }}
+        speed={250}
+        resistanceRatio={0.65}
+        watchSlidesProgress={true}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
           if (swiper.activeIndex !== activeIndex) {
@@ -101,7 +104,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
         preventClicks={false}
         preventClicksPropagation={false}
         touchStartPreventDefault={false}
-        threshold={10}
+        threshold={8}
         touchAngle={45}
         touchEventsTarget="container"
         className="w-full h-[100dvh]"

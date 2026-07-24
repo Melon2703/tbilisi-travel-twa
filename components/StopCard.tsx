@@ -16,11 +16,11 @@ const MAP_PILLS = [
   { id: 'yandex' as const, label: 'Yandex Maps' },
 ];
 
-export default function StopCard({ stop, totalStops }: StopCardProps) {
+function StopCard({ stop, totalStops }: StopCardProps) {
   return (
     <div
       data-testid="stop-card-container"
-      className="w-full h-[100dvh] overflow-hidden flex flex-col justify-between bg-[#161412] touch-pan-x touch-pan-y overscroll-y-contain p-2 sm:p-4"
+      className="w-full h-[100dvh] overflow-hidden flex flex-col justify-between bg-[#161412] touch-pan-x touch-pan-y overscroll-y-contain p-2 sm:p-4 transform-gpu"
     >
       <div className="bg-[#1C1A17] rounded-2xl border border-[#3A342D] overflow-hidden flex flex-col h-full max-w-2xl mx-auto shadow-2xl w-full">
         {/* Header & Media Section (Top) */}
@@ -145,3 +145,5 @@ export default function StopCard({ stop, totalStops }: StopCardProps) {
     </div>
   );
 }
+
+export default React.memo(StopCard);
