@@ -18,7 +18,10 @@ export interface Stop {
   logisticsWarning?: string;
   bestTimeOfDay?: string;
   photoSpot?: string;
+  rating?: number;
+  ratingCount?: number;
 }
+
 
 export interface Route {
   id: string;

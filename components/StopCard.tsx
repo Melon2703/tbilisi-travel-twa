@@ -75,7 +75,7 @@ const WARNING_ICON = (
     aria-hidden="true"
   >
     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-    <line x1="12" y1="9" x2="12" y2="13" />
+    <line x1="12" y1="9" x2="12" />
     <line x1="12" y1="17" x2="12.01" y2="17" />
   </svg>
 );
@@ -104,9 +104,62 @@ const GeorgianDivider = () => (
   </div>
 );
 
+// Star rating row component
+function StarRating({ rating, count }: { rating: number; count: number }) {
+  const full = Math.floor(rating);
+  const half = rating - full >= 0.3;
+  const stars = Array.from({ length: 5 }, (_, i) => {
+    if (i < full) return 'full';
+    if (i === full && half) return 'half';
+    return 'empty';
+  });
+  const formatted = count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count);
+  return (
+    <div className="flex items-center gap-1 mt-0.5">
+      <span className="text-xs font-bold text-[#C4572A]">{rating.toFixed(1)}</span>
+      <span className="flex items-center gap-[1px]">
+        {stars.map((type, i) => (
+          <svg key={i} width="10" height="10" viewBox="0 0 24 24" aria-hidden="true">
+            {type === 'full' && (
+              <polygon
+                points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                fill="#C4572A"
+              />
+            )}
+            {type === 'half' && (
+              <>
+                <defs>
+                  <linearGradient id={`star-grad-${i}`} x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="50%" stopColor="#C4572A" />
+                    <stop offset="50%" stopColor="#E8D5C8" />
+                  </linearGradient>
+                </defs>
+                <polygon
+                  points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                  fill={`url(#star-grad-${i})`}
+                />
+              </>
+            )}
+            {type === 'empty' && (
+              <polygon
+                points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                fill="#E8D5C8"
+              />
+            )}
+          </svg>
+        ))}
+      </span>
+      <span className="text-[10px] text-[#9A7A68]">({formatted})</span>
+    </div>
+  );
+}
+
 function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
   const googleMapsUrl = getMapUrl('google', stop.coordinates);
   const yandexMapsUrl = getMapUrl('yandex', stop.coordinates);
+
+  const rating = stop.rating ?? 4.7;
+  const ratingCount = stop.ratingCount ?? 1250;
 
   return (
     <div
@@ -189,30 +242,38 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
             href={googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs text-xs sm:text-sm font-semibold text-[#1C1008]"
+            className="flex flex-col items-center justify-center gap-1 py-3 px-3 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs"
+
             aria-label="Open in Google Maps"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335" />
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 2 .8 3.8 2.1 5.1L12 2z" fill="#FBBC04" />
-              <path d="M12 2v7l5.5-4.1A7 7 0 0 0 12 2z" fill="#34A853" />
-              <circle cx="12" cy="9" r="2.8" fill="white" />
-            </svg>
-            <span>Google Maps</span>
+            <div className="flex items-center gap-1.5">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335" />
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 2 .8 3.8 2.1 5.1L12 2z" fill="#FBBC04" />
+                <path d="M12 2v7l5.5-4.1A7 7 0 0 0 12 2z" fill="#34A853" />
+                <circle cx="12" cy="9" r="2.8" fill="white" />
+              </svg>
+              <span className="text-[13px] font-semibold text-[#1C1008]">Google Maps</span>
+            </div>
+            <StarRating rating={rating} count={ratingCount} />
           </a>
 
           <a
             href={yandexMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs text-xs sm:text-sm font-semibold text-[#1C1008]"
+            className="flex flex-col items-center justify-center gap-1 py-3 px-3 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs"
+
             aria-label="Open in Yandex Maps"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
-              <circle cx="12" cy="12" r="10" fill="#FC3F1D" />
-              <path d="M13.4 7H11.6V13.5L8.5 7H6.7L10.4 15H9V17H13.4V15H12V9.2L15.3 17H17L13.4 7Z" fill="white" />
-            </svg>
-            <span>Yandex Maps</span>
+            <div className="flex items-center gap-1.5">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+                <circle cx="12" cy="12" r="10" fill="#FC3F1D" />
+                <path d="M13.4 7H11.6V13.5L8.5 7H6.7L10.4 15H9V17H13.4V15H12V9.2L15.3 17H17L13.4 7Z" fill="white" />
+              </svg>
+              <span className="text-[13px] font-semibold text-[#1C1008]">Yandex Maps</span>
+            </div>
+            <StarRating rating={rating} count={ratingCount} />
           </a>
         </div>
 
