@@ -25,13 +25,11 @@ const ARROW_RIGHT_ICON = (
 export default function RouteCarousel({ route }: RouteCarouselProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [visitedStopIds, setVisitedStopIds] = useState<string[]>(() => getVisitedStops(route.id));
-  const [prevRouteId, setPrevRouteId] = useState<string>(route.id);
+  const [visitedStopIds, setVisitedStopIds] = useState<string[]>([]);
 
-  if (prevRouteId !== route.id) {
-    setPrevRouteId(route.id);
+  useEffect(() => {
     setVisitedStopIds(getVisitedStops(route.id));
-  }
+  }, [route.id]);
 
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
   const isCompleted = sortedStops.length > 0 && visitedStopIds.length === sortedStops.length;

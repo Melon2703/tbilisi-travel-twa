@@ -1,7 +1,6 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import Script from 'next/script';
 import { TelegramWebApp, TelegramThemeParams, TelegramUser } from '@/lib/types/telegram';
 
 interface TelegramContextValue {
@@ -67,7 +66,7 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
 
       app.ready();
       app.expand();
-      if (app.disableVerticalSwipes) {
+      if (app.disableVerticalSwipes && (!app.isVersionAtLeast || app.isVersionAtLeast('7.7'))) {
         app.disableVerticalSwipes();
       }
 
@@ -90,9 +89,15 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
     initTelegram();
   }, [initTelegram]);
 
+  const isBackButtonSupported = useCallback(() => {
+    if (!webApp?.BackButton) return false;
+    if (webApp.isVersionAtLeast && !webApp.isVersionAtLeast('6.1')) return false;
+    return true;
+  }, [webApp]);
+
   const showBackButton = useCallback(
     (onBackClick?: () => void) => {
-      if (webApp?.BackButton) {
+      if (isBackButtonSupported() && webApp?.BackButton) {
         if (backButtonHandlerRef.current && webApp.BackButton.offClick) {
           webApp.BackButton.offClick(backButtonHandlerRef.current);
         }
@@ -108,18 +113,18 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
         webApp.BackButton.show();
       }
     },
-    [webApp]
+    [webApp, isBackButtonSupported]
   );
 
   const hideBackButton = useCallback(() => {
-    if (webApp?.BackButton) {
+    if (isBackButtonSupported() && webApp?.BackButton) {
       if (backButtonHandlerRef.current && webApp.BackButton.offClick) {
         webApp.BackButton.offClick(backButtonHandlerRef.current);
         backButtonHandlerRef.current = null;
       }
       webApp.BackButton.hide();
     }
-  }, [webApp]);
+  }, [webApp, isBackButtonSupported]);
 
   return (
     <TelegramContext.Provider
@@ -133,11 +138,6 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
         hideBackButton,
       }}
     >
-      <Script
-        src="https://telegram.org/js/telegram-web-app.js"
-        strategy="beforeInteractive"
-        onLoad={initTelegram}
-      />
       {children}
     </TelegramContext.Provider>
   );

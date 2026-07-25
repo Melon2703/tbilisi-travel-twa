@@ -98,13 +98,13 @@ function TimelineBar({
         </div>
       )}
 
-      <div className="flex items-center gap-3 px-4 py-3 max-w-2xl mx-auto w-full">
+      <div className="flex items-center gap-3 px-4 py-3.5 max-w-2xl mx-auto w-full">
         {/* Track + dots container */}
         <div
           ref={containerRef}
           data-testid="timeline-bar-container"
-          className="relative flex items-center justify-between flex-1 overflow-x-auto py-1 px-3 scrollbar-none scroll-smooth"
-          style={{ height: DOT, minHeight: DOT }}
+          className="relative flex items-center justify-between flex-1 overflow-x-auto py-1.5 px-3 scrollbar-none scroll-smooth"
+          style={{ minHeight: 46 }}
         >
           {/* Georgian ornament track line (repeating wave SVG) */}
           <div
