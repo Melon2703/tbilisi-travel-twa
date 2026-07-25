@@ -10,6 +10,7 @@ import { getVisitedStops, toggleVisitedStop } from '@/lib/utils/visited';
 import RouteIntroCard from './RouteIntroCard';
 import StopCard from './StopCard';
 import TimelineBar from './TimelineBar';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export interface RouteCarouselProps {
   route: Route;
@@ -22,7 +23,10 @@ const ARROW_RIGHT_ICON = (
   </svg>
 );
 
-export default function RouteCarousel({ route }: RouteCarouselProps) {
+export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
+  const { getLocalizedRoute, t } = useLanguage();
+  const route = getLocalizedRoute(rawRoute);
+
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [visitedStopIds, setVisitedStopIds] = useState<string[]>([]);
@@ -140,7 +144,6 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
           data-testid="sticky-start-container"
           className="fixed bottom-0 left-4 right-4 pb-4 max-w-2xl mx-auto z-30 pointer-events-auto"
         >
-
           <button
             type="button"
             onClick={handleStartRoute}
@@ -150,10 +153,9 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
               boxShadow: '0 6px 24px rgba(196,87,42,0.35)',
             }}
           >
-            <span>START ROUTE</span>
+            <span>{t('startRoute')}</span>
             {ARROW_RIGHT_ICON}
           </button>
-
         </div>
       )}
 

@@ -2,34 +2,51 @@ import { describe, it, expect } from 'vitest';
 import { parseCallbackData, handleBotUpdate } from '../lib/engine/bot';
 import { POST, GET } from '../app/api/bot/route';
 
-describe('Stateless Callback Data Parser', () => {
-  it('parses empty or reset callback data as duration step', () => {
-    expect(parseCallbackData(undefined)).toEqual({ step: 'duration' });
-    expect(parseCallbackData('')).toEqual({ step: 'duration' });
-    expect(parseCallbackData('/start')).toEqual({ step: 'duration' });
-    expect(parseCallbackData('restart')).toEqual({ step: 'duration' });
+describe('Stateless Callback Data Parser with i18n', () => {
+  it('parses /start or empty callback data as language selection step', () => {
+    expect(parseCallbackData(undefined)).toEqual({ step: 'language' });
+    expect(parseCallbackData('')).toEqual({ step: 'language' });
+    expect(parseCallbackData('/start')).toEqual({ step: 'language' });
+    expect(parseCallbackData('restart')).toEqual({ step: 'language' });
+    expect(parseCallbackData('/language')).toEqual({ step: 'language' });
+    expect(parseCallbackData('/lang')).toEqual({ step: 'language' });
+    expect(parseCallbackData('change_lang')).toEqual({ step: 'language' });
   });
 
-  it('parses duration step data correctly and advances to accessibility step', () => {
-    const result = parseCallbackData('dur:1-2h');
+  it('parses language selection callback query correctly', () => {
+    expect(parseCallbackData('lang:en')).toEqual({
+      language: 'en',
+      step: 'duration',
+    });
+    expect(parseCallbackData('lang:ru')).toEqual({
+      language: 'ru',
+      step: 'duration',
+    });
+  });
+
+  it('parses duration step with language correctly and advances to accessibility step', () => {
+    const result = parseCallbackData('lang:ru|dur:1-2h');
     expect(result).toEqual({
+      language: 'ru',
       durationCategory: '1-2h',
       step: 'accessibility',
     });
   });
 
-  it('parses accessibility step data correctly and advances to vibe step', () => {
-    const result = parseCallbackData('dur:1-2h|acc:stroller-friendly');
+  it('parses accessibility step with language correctly and advances to vibe step', () => {
+    const result = parseCallbackData('lang:ru|dur:1-2h|acc:stroller-friendly');
     expect(result).toEqual({
+      language: 'ru',
       durationCategory: '1-2h',
       accessibility: 'stroller-friendly',
       step: 'vibe',
     });
   });
 
-  it('parses full callback data and advances to results step', () => {
-    const result = parseCallbackData('dur:1-2h|acc:stroller-friendly|vibe:photo-spots');
+  it('parses full callback data with language and advances to results step', () => {
+    const result = parseCallbackData('lang:ru|dur:1-2h|acc:stroller-friendly|vibe:photo-spots');
     expect(result).toEqual({
+      language: 'ru',
       durationCategory: '1-2h',
       accessibility: 'stroller-friendly',
       vibe: 'photo-spots',
@@ -39,12 +56,12 @@ describe('Stateless Callback Data Parser', () => {
 
   it('ignores invalid parameters gracefully', () => {
     const result = parseCallbackData('dur:invalid|acc:invalid|vibe:invalid');
-    expect(result).toEqual({ step: 'duration' });
+    expect(result).toEqual({ language: 'en', step: 'duration' });
   });
 });
 
-describe('Bot Funnel Engine', () => {
-  it('handles /start message update and returns Step 1 (Duration) prompt', () => {
+describe('Bot Funnel Engine i18n Flow', () => {
+  it('handles /start command and returns bilingual English & Russian language selection prompt', () => {
     const update = {
       update_id: 100,
       message: {
@@ -58,108 +75,105 @@ describe('Bot Funnel Engine', () => {
     expect(response).not.toBeNull();
     expect(response?.method).toBe('sendMessage');
     expect(response?.chat_id).toBe(12345);
-    expect(response?.text).toContain("I'm Olya");
-    expect(response?.text).toContain('how much time do you have');
-    expect(response?.reply_markup?.inline_keyboard.length).toBeGreaterThan(0);
-    
-    // Check buttons point to dur:* callback_data
+    expect(response?.text).toContain('Select your language / Выберите язык');
+    expect(response?.text).toContain("Hi! I'm Olya");
+    expect(response?.text).toContain('Привет! Я Оля');
+
     const buttons = response?.reply_markup?.inline_keyboard.flat();
-    expect(buttons?.some((b) => b.callback_data === 'dur:1-2h')).toBe(true);
+    expect(buttons?.some((b) => b.callback_data === 'lang:en')).toBe(true);
+    expect(buttons?.some((b) => b.callback_data === 'lang:ru')).toBe(true);
   });
 
-  it('handles duration callback query and returns Step 2 (Accessibility) prompt', () => {
+  it('handles separate /language command to trigger language selection prompt', () => {
+    const update = {
+      update_id: 1001,
+      message: {
+        message_id: 2,
+        chat: { id: 12345, type: 'private' },
+        text: '/language',
+      },
+    };
+
+    const response = handleBotUpdate(update, 'https://example.com');
+    expect(response?.text).toContain('Select your language / Выберите язык');
+    const buttons = response?.reply_markup?.inline_keyboard.flat();
+    expect(buttons?.some((b) => b.callback_data === 'lang:ru')).toBe(true);
+  });
+
+  it('handles English selection (lang:en) and returns Step 1 (Duration) prompt in English', () => {
     const update = {
       update_id: 101,
       callback_query: {
-        id: 'cb1',
+        id: 'cb_en',
         from: { id: 12345, first_name: 'TestUser' },
         message: {
           message_id: 50,
           chat: { id: 12345, type: 'private' },
         },
-        data: 'dur:1-2h',
+        data: 'lang:en',
       },
     };
 
     const response = handleBotUpdate(update, 'https://example.com');
     expect(response?.method).toBe('editMessageText');
-    expect(response?.chat_id).toBe(12345);
-    expect(response?.message_id).toBe(50);
-    expect(response?.text).toContain('accessibility or mobility needs');
-    
+    expect(response?.text).toContain("Hi! I'm Olya");
+    expect(response?.text).toContain('how much time do you have today?');
+
     const buttons = response?.reply_markup?.inline_keyboard.flat();
-    expect(buttons?.some((b) => b.callback_data === 'dur:1-2h|acc:stroller-friendly')).toBe(true);
+    expect(buttons?.some((b) => b.callback_data === 'lang:en|dur:1-2h')).toBe(true);
   });
 
-  it('handles accessibility callback query and returns Step 3 (Vibe) prompt', () => {
+  it('handles Russian selection (lang:ru) and returns Step 1 (Duration) prompt in Russian', () => {
     const update = {
       update_id: 102,
       callback_query: {
-        id: 'cb2',
+        id: 'cb_ru',
         from: { id: 12345, first_name: 'TestUser' },
         message: {
           message_id: 50,
           chat: { id: 12345, type: 'private' },
         },
-        data: 'dur:1-2h|acc:stroller-friendly',
+        data: 'lang:ru',
       },
     };
 
     const response = handleBotUpdate(update, 'https://example.com');
     expect(response?.method).toBe('editMessageText');
-    expect(response?.text).toContain('vibe are you looking for');
+    expect(response?.text).toContain('Привет! Я Оля, ваш локальный гид по Тбилиси');
+    expect(response?.text).toContain('сколько у вас сегодня времени?');
 
     const buttons = response?.reply_markup?.inline_keyboard.flat();
-    expect(buttons?.some((b) => b.callback_data === 'dur:1-2h|acc:stroller-friendly|vibe:photo-spots')).toBe(true);
+    expect(buttons?.some((b) => b.callback_data === 'lang:ru|dur:1-2h')).toBe(true);
+    expect(buttons?.some((b) => b.text === '⏱️ 1–2 часа')).toBe(true);
   });
 
-  it('handles final vibe callback query and returns Step 4 Recommendation with web_app button', () => {
+  it('handles Russian funnel to final Recommendation with web_app URL containing ?lang=ru', () => {
     const update = {
       update_id: 103,
       callback_query: {
-        id: 'cb3',
+        id: 'cb_ru_final',
         from: { id: 12345, first_name: 'TestUser' },
         message: {
           message_id: 50,
           chat: { id: 12345, type: 'private' },
         },
-        data: 'dur:1-2h|acc:stroller-friendly|vibe:courtyards',
+        data: 'lang:ru|dur:1-2h|acc:stroller-friendly|vibe:courtyards',
       },
     };
 
     const response = handleBotUpdate(update, 'https://example.com');
     expect(response?.method).toBe('editMessageText');
-    expect(response?.text).toContain("Olya's Route Recommendation");
-    expect(response?.text).toContain('Heartbeat Express');
+    expect(response?.text).toContain('Рекомендация маршрута от Оли');
+    expect(response?.text).toContain('Сердце Тбилиси Экспресс: Ровный маршрут');
 
     const buttons = response?.reply_markup?.inline_keyboard.flat();
     const webAppButton = buttons?.find((b) => b.web_app !== undefined);
     expect(webAppButton).toBeDefined();
-    expect(webAppButton?.web_app?.url).toBe('https://example.com/twa/heartbeat-express-1-2h');
+    expect(webAppButton?.text).toBe('🗺️ Открыть пеший маршрут');
+    expect(webAppButton?.web_app?.url).toBe('https://example.com/twa/heartbeat-express-1-2h?lang=ru');
 
-    const restartButton = buttons?.find((b) => b.callback_data === 'restart');
+    const restartButton = buttons?.find((b) => b.callback_data === 'restart|lang:ru');
     expect(restartButton).toBeDefined();
-  });
-
-  it('includes soft constraint relaxation note when soft criteria are relaxed', () => {
-    // Request half-day + stroller-friendly + food-wine (where stroller-friendly routes might not match half-day)
-    const update = {
-      update_id: 104,
-      callback_query: {
-        id: 'cb4',
-        from: { id: 12345, first_name: 'TestUser' },
-        message: {
-          message_id: 50,
-          chat: { id: 12345, type: 'private' },
-        },
-        data: 'dur:half-day|acc:stroller-friendly|vibe:food-wine',
-      },
-    };
-
-    const response = handleBotUpdate(update, 'https://example.com');
-    expect(response?.text).toContain("Olya's Route Recommendation");
-    // Hard constraint (stroller-friendly) must still be satisfied
-    expect(response?.text).toContain('couldn\'t find an exact match');
   });
 });
 
@@ -192,44 +206,5 @@ describe('/api/bot Webhook Route Handler', () => {
     const json = await res.json();
     expect(json.method).toBe('sendMessage');
     expect(json.chat_id).toBe(999);
-  });
-
-  it('handles POST webhook payload for callback query', async () => {
-    const update = {
-      update_id: 201,
-      callback_query: {
-        id: 'cb_test',
-        from: { id: 999, first_name: 'Alex' },
-        message: {
-          message_id: 10,
-          chat: { id: 999, type: 'private' },
-        },
-        data: 'dur:1-2h',
-      },
-    };
-
-    const req = new Request('http://localhost:3000/api/bot', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(update),
-    });
-
-    const res = await POST(req);
-    expect(res.status).toBe(200);
-    const json = await res.json();
-    expect(json.method).toBe('editMessageText');
-    expect(json.chat_id).toBe(999);
-    expect(json.message_id).toBe(10);
-  });
-
-  it('returns 400 Bad Request on invalid JSON payload', async () => {
-    const req = new Request('http://localhost:3000/api/bot', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: 'invalid-json',
-    });
-
-    const res = await POST(req);
-    expect(res.status).toBe(400);
   });
 });

@@ -56,9 +56,12 @@ export interface TelegramBotResponsePayload {
   reply_markup?: TelegramInlineKeyboardMarkup;
 }
 
+import { Language } from '../i18n/types';
+
 export interface ParsedFunnelState {
+  language?: Language;
   durationCategory?: DurationCategory;
   accessibility?: AccessibilityLevel;
   vibe?: VibeCategory;
-  step: 'duration' | 'accessibility' | 'vibe' | 'results';
+  step: 'language' | 'duration' | 'accessibility' | 'vibe' | 'results';
 }

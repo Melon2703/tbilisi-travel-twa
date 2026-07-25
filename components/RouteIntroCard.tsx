@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import { Route } from '@/lib/types/route';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export interface RouteIntroCardProps {
   route: Route;
@@ -79,24 +82,41 @@ export default function RouteIntroCard({
   onStartRoute,
   showStartButton = true,
 }: RouteIntroCardProps) {
+  const { language, setLanguage, t } = useLanguage();
+
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
   const totalMinutes = sortedStops.reduce((acc, stop) => acc + stop.estimatedMinutes, 0);
   const hours = Math.floor(totalMinutes / 60);
   const mins = totalMinutes % 60;
-  const formattedTime = hours > 0 ? `${hours}h ${mins > 0 ? `${mins}m` : ''}` : `${mins}m`;
+
+  const formattedTime =
+    language === 'ru'
+      ? hours > 0
+        ? `${hours}ч ${mins > 0 ? `${mins}м` : ''}`
+        : `${mins}м`
+      : hours > 0
+        ? `${hours}h ${mins > 0 ? `${mins}m` : ''}`
+        : `${mins}m`;
+
   const approxKm = (sortedStops.length * 0.35 + totalMinutes * 0.02).toFixed(1);
 
   const hasCableCar = sortedStops.some(
-    (s) => s.name.toLowerCase().includes('cable car') || s.olyaTips.toLowerCase().includes('cable car')
+    (s) =>
+      s.name.toLowerCase().includes('cable car') ||
+      s.name.toLowerCase().includes('канатная') ||
+      s.olyaTips.toLowerCase().includes('cable car')
   );
   const hasFunicular = sortedStops.some(
-    (s) => s.name.toLowerCase().includes('funicular') || s.olyaTips.toLowerCase().includes('funicular')
+    (s) =>
+      s.name.toLowerCase().includes('funicular') ||
+      s.name.toLowerCase().includes('фуникулёр') ||
+      s.olyaTips.toLowerCase().includes('funicular')
   );
   const transitModes = [
-    hasCableCar ? 'Cable Car' : null,
-    hasFunicular ? 'Funicular' : null,
+    hasCableCar ? t('cableCar') : null,
+    hasFunicular ? t('funicular') : null,
   ].filter(Boolean);
-  const transitModeStr = transitModes.length > 0 ? transitModes.join(' + ') : 'Pedestrian Walkway';
+  const transitModeStr = transitModes.length > 0 ? transitModes.join(' + ') : t('pedestrianWalkway');
 
   return (
     <div className="relative flex flex-col h-[100dvh] w-full bg-[#FAF7F2] text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y">
@@ -116,9 +136,33 @@ export default function RouteIntroCard({
           className="absolute inset-0 z-10"
           style={{
             background:
-              'linear-gradient(to bottom, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 50%, rgba(250,247,242,0.6) 85%, rgba(250,247,242,1) 100%)',
+              'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(250,247,242,0.6) 85%, rgba(250,247,242,1) 100%)',
           }}
         />
+
+        {/* Top Language Toggle Switch */}
+        <div className="absolute top-3 right-3 z-20 flex items-center bg-black/60 backdrop-blur-md rounded-full p-1 border border-white/20 shadow-md">
+          <button
+            type="button"
+            onClick={() => setLanguage('en')}
+            className={`px-2.5 py-0.5 rounded-full text-xs font-bold transition-all ${
+              language === 'en' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
+            }`}
+            aria-label="Switch to English"
+          >
+            EN
+          </button>
+          <button
+            type="button"
+            onClick={() => setLanguage('ru')}
+            className={`px-2.5 py-0.5 rounded-full text-xs font-bold transition-all ${
+              language === 'ru' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
+            }`}
+            aria-label="Переключить на русский"
+          >
+            RU
+          </button>
+        </div>
       </div>
 
       {/* ── Scrollable content body ── */}
@@ -133,13 +177,13 @@ export default function RouteIntroCard({
               className="shrink-0 text-white px-3 py-1 rounded-full uppercase tracking-wide shadow-xs text-xs font-bold"
               style={{ background: '#C4572A' }}
             >
-              {route.durationCategory}
+              {t(route.durationCategory as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.durationCategory}
             </span>
             <span
               className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide border border-black/10"
               style={{ background: 'rgba(28,16,8,0.08)', color: '#1C1008' }}
             >
-              {route.accessibility.replace('-', ' ')}
+              {t(route.accessibility as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.accessibility.replace('-', ' ')}
             </span>
             {route.vibes.map((vibe) => (
               <span
@@ -147,7 +191,7 @@ export default function RouteIntroCard({
                 className="shrink-0 text-xs font-medium px-3 py-1 rounded-full border border-black/10 capitalize"
                 style={{ background: 'rgba(28,16,8,0.05)', color: '#7A6552' }}
               >
-                #{vibe}
+                #{t(vibe as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || vibe}
               </span>
             ))}
           </div>
@@ -194,10 +238,8 @@ export default function RouteIntroCard({
                 O
               </div>
               <div className="min-w-0 flex-1">
-                <h3
-                  className="text-xs font-bold uppercase tracking-wider text-[#C4572A] mb-1"
-                >
-                  Olya&apos;s Route Welcome
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A] mb-1">
+                  {t('olyaWelcome')}
                 </h3>
                 <p
                   className="text-xs sm:text-sm text-[#4A3828] leading-relaxed italic"
@@ -222,7 +264,7 @@ export default function RouteIntroCard({
           <div className="flex items-center gap-3">
             <span className="h-px bg-[#C4572A]/20 flex-1" />
             <h2 className="text-xs font-bold text-[#C4572A] uppercase tracking-wider">
-              Route at a Glance
+              {t('routeAtAGlance')}
             </h2>
             <span className="h-px bg-[#C4572A]/20 flex-1" />
           </div>
@@ -236,9 +278,9 @@ export default function RouteIntroCard({
               </div>
               <div>
                 <p className="text-sm font-bold leading-none text-[#1C1008]">
-                  {sortedStops.length} Curated Stops
+                  {sortedStops.length} {t('curatedStops')}
                 </p>
-                <p className="text-[11px] mt-0.5 text-[#A0876E]">Curated</p>
+                <p className="text-[11px] mt-0.5 text-[#A0876E]">{language === 'ru' ? 'Отобрано' : 'Curated'}</p>
               </div>
             </div>
 
@@ -264,7 +306,7 @@ export default function RouteIntroCard({
               </div>
               <div>
                 <p className="text-sm font-bold leading-none text-[#1C1008]">{transitModeStr}</p>
-                <p className="text-[11px] mt-0.5 text-[#A0876E]">Transit included</p>
+                <p className="text-[11px] mt-0.5 text-[#A0876E]">{t('transitIncluded')}</p>
               </div>
             </div>
           </div>
@@ -273,7 +315,7 @@ export default function RouteIntroCard({
         {/* 5. Swipe Prompt */}
         <div className="text-center py-1 shrink-0" data-testid="swipe-prompt-container">
           <p className="text-xs font-semibold uppercase tracking-wider text-[#C4572A]/80">
-            👉 Swipe left or tap below to begin!
+            {t('swipePrompt')}
           </p>
         </div>
       </div>
@@ -290,10 +332,9 @@ export default function RouteIntroCard({
               boxShadow: '0 6px 24px rgba(196,87,42,0.35)',
             }}
           >
-            <span>START ROUTE</span>
+            <span>{t('startRoute')}</span>
             {ARROW_RIGHT_ICON}
           </button>
-
         </div>
       )}
     </div>

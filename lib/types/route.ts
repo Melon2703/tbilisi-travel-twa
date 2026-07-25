@@ -10,14 +10,20 @@ export interface Stop {
   id: string;
   order: number;
   name: string;
+  nameRu?: string;
   neighborhood: string;
+  neighborhoodRu?: string;
   coordinates: { lat: number; lng: number };
   estimatedMinutes: number;
   imageUrl: string;
   olyaTips: string;
+  olyaTipsRu?: string;
   logisticsWarning?: string;
+  logisticsWarningRu?: string;
   bestTimeOfDay?: string;
+  bestTimeOfDayRu?: string;
   photoSpot?: string;
+  photoSpotRu?: string;
   rating?: number;
   ratingCount?: number;
 }
@@ -26,12 +32,15 @@ export interface Stop {
 export interface Route {
   id: string;
   title: string;
+  titleRu?: string;
   subtitle: string;
+  subtitleRu?: string;
   durationCategory: DurationCategory;
   accessibility: AccessibilityLevel;
   vibes: VibeCategory[];
   heroImage: string;
   introCopy: string;
+  introCopyRu?: string;
   stops: Stop[];
 }
 
@@ -39,6 +48,7 @@ export interface MatchCriteria {
   durationCategory?: DurationCategory;
   accessibility: AccessibilityLevel;
   vibe?: VibeCategory;
+  lang?: import('../i18n/types').Language;
 }
 
 export interface MatchResult {

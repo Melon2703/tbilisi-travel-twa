@@ -79,12 +79,19 @@ export function matchRoute(routes: Route[], criteria: MatchCriteria): MatchResul
   let explanationNote: string | undefined;
 
   if (relaxed) {
-    const relaxedAspects: string[] = [];
-    if (durationRelaxed) relaxedAspects.push('duration');
-    if (vibeRelaxed) relaxedAspects.push('vibe');
-
-    const aspectList = relaxedAspects.join(' and ');
-    explanationNote = `I couldn't find an exact match for your ${aspectList} with your ${criteria.accessibility} accessibility needs, so I picked the best ${bestRoute.accessibility} route for you!`;
+    if (criteria.lang === 'ru') {
+      const relaxedAspects: string[] = [];
+      if (durationRelaxed) relaxedAspects.push('длительности');
+      if (vibeRelaxed) relaxedAspects.push('атмосфере');
+      const aspectList = relaxedAspects.join(' и ');
+      explanationNote = `Мне не удалось найти точное совпадение по ${aspectList} для ваших требований к доступности, поэтому я выбрала лучший подходящий маршрут для вас!`;
+    } else {
+      const relaxedAspects: string[] = [];
+      if (durationRelaxed) relaxedAspects.push('duration');
+      if (vibeRelaxed) relaxedAspects.push('vibe');
+      const aspectList = relaxedAspects.join(' and ');
+      explanationNote = `I couldn't find an exact match for your ${aspectList} with your ${criteria.accessibility} accessibility needs, so I picked the best ${bestRoute.accessibility} route for you!`;
+    }
   }
 
   return {

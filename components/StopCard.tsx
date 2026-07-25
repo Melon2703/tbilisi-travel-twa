@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Stop } from '@/lib/types/route';
 import { getMapUrl } from '@/lib/utils/maps';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export interface StopCardProps {
   stop: Stop;
@@ -154,12 +155,19 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
   );
 }
 
-function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
+function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProps) {
+  const { t, getLocalizedStop } = useLanguage();
+  const stop = getLocalizedStop(rawStop);
+
   const googleMapsUrl = getMapUrl('google', stop.coordinates);
   const yandexMapsUrl = getMapUrl('yandex', stop.coordinates);
 
   const rating = stop.rating ?? 4.7;
   const ratingCount = stop.ratingCount ?? 1250;
+
+  const stopLabel = totalStops
+    ? t('stopOf', { order: stop.order, total: totalStops })
+    : t('stopNumber', { order: stop.order });
 
   return (
     <div
@@ -198,7 +206,7 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
 
           <span className="absolute top-3 right-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs">
             <span style={{ color: '#F4B57A' }}>{CLOCK_ICON}</span>
-            {stop.estimatedMinutes} min
+            {stop.estimatedMinutes} {t('min')}
           </span>
         </div>
       )}
@@ -209,7 +217,7 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
         <div className="flex items-start justify-between gap-3 min-w-0">
           <div className="min-w-0 flex-1">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A] mb-1">
-              {totalStops ? `STOP ${stop.order} OF ${totalStops}` : `STOP ${stop.order}`}
+              {stopLabel}
             </p>
             <h2
               className="text-xl sm:text-2xl font-black text-[#1C1008] tracking-tight leading-snug break-words min-w-0"
@@ -220,7 +228,7 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
                   className="text-xs font-sans font-semibold uppercase tracking-widest mr-2 align-middle px-2 py-0.5 rounded-md bg-[#228255]/10"
                   style={{ color: '#228255' }}
                 >
-                  Visited
+                  {t('visited')}
                 </span>
               )}
               {stop.name}
@@ -236,14 +244,13 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
         {/* Georgian Divider */}
         <GeorgianDivider />
 
-        {/* Branded Navigation App Deep Link Buttons */}
+        {/* Branded Map Provider Deep Link Buttons */}
         <div className="grid grid-cols-2 gap-3 my-2" data-testid="map-pills-row">
           <a
             href={googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center justify-center gap-1 py-3 px-3 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs"
-
             aria-label="Open in Google Maps"
           >
             <div className="flex items-center gap-1.5">
@@ -263,7 +270,6 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center justify-center gap-1 py-3 px-3 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs"
-
             aria-label="Open in Yandex Maps"
           >
             <div className="flex items-center gap-1.5">
@@ -288,7 +294,7 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
           <div className="flex items-center gap-2">
             <span style={{ color: '#C4572A' }}>{CHAT_ICON}</span>
             <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
-              Olya&apos;s Tip
+              {t('olyaTip')}
             </span>
           </div>
           <p
@@ -311,7 +317,7 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
           >
             <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs uppercase tracking-[0.16em]">
               <span style={{ color: '#C4572A' }}>{CAMERA_ICON}</span>
-              <span>Photo Spot Recommendation</span>
+              <span>{t('photoSpotRec')}</span>
             </div>
             <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
               {stop.photoSpot}
@@ -331,7 +337,7 @@ function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
           >
             <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs uppercase tracking-[0.16em]">
               <span style={{ color: '#C4572A' }}>{WARNING_ICON}</span>
-              <span>Logistics Warning</span>
+              <span>{t('logisticsWarning')}</span>
             </div>
             <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
               {stop.logisticsWarning}

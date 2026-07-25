@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Stop } from '@/lib/types/route';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export interface TimelineBarProps {
   stops: Stop[];
@@ -39,7 +40,6 @@ const FAB_CHECK_ICON = (
   </svg>
 );
 
-
 function TimelineBar({
   stops,
   activeIndex,
@@ -48,6 +48,7 @@ function TimelineBar({
   onToggleVisited,
   isCompleted = false,
 }: TimelineBarProps) {
+  const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeStopRef = useRef<HTMLButtonElement | null>(null);
 
@@ -94,7 +95,7 @@ function TimelineBar({
           className="absolute -top-11 left-0 right-0 mx-auto w-max px-3 py-1 bg-[#228255] border border-white/20 text-[#FAF7F2] rounded-full text-xs text-center font-bold shadow-lg flex items-center justify-center gap-1.5 backdrop-blur-md pointer-events-auto z-10"
         >
           <span>🎉</span>
-          <span>Route completed! All stops visited!</span>
+          <span>{t('routeCompleted')}</span>
         </div>
       )}
 
@@ -178,7 +179,7 @@ function TimelineBar({
                 ref={isActive ? activeStopRef : null}
                 data-testid={`timeline-stop-${stopOrder}`}
                 onClick={() => onStopClick(slideIndex)}
-                aria-label={`Jump to stop ${stopOrder}: ${stop.name}`}
+                aria-label={t('jumpToStop', { order: stopOrder, name: stop.name })}
                 aria-current={isActive ? 'step' : undefined}
                 className={`relative flex items-center justify-center rounded-full text-xs font-bold transition-all duration-200 active:scale-90 select-none shrink-0 ${
                   isActive
@@ -241,8 +242,8 @@ function TimelineBar({
           type="button"
           data-testid="visited-fab"
           onClick={onToggleVisited}
-          aria-label={isCurrentVisited ? 'Mark as unvisited' : 'Mark as visited'}
-          title={isCurrentVisited ? 'Mark as unvisited' : 'Mark as visited'}
+          aria-label={isCurrentVisited ? t('markAsUnvisited') : t('markAsVisited')}
+          title={isCurrentVisited ? t('markAsUnvisited') : t('markAsVisited')}
           className="shrink-0 flex items-center justify-center w-[56px] h-[56px] min-w-[44px] min-h-[44px] rounded-full transition-all duration-300 active:scale-90 cursor-pointer"
           style={
             isCurrentVisited
@@ -264,4 +265,3 @@ function TimelineBar({
 }
 
 export default React.memo(TimelineBar);
-
