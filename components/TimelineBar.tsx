@@ -12,6 +12,9 @@ export interface TimelineBarProps {
   isCompleted?: boolean;
 }
 
+const GEORGIAN_WAVE_PATH =
+  'M0,8 C10,4 15,12 25,8 C35,4 40,12 50,8 C60,4 65,12 75,8 C85,4 90,12 100,8 C110,4 115,12 125,8 C135,4 140,12 150,8 C160,4 165,12 175,8 C185,4 190,12 200,8 C210,4 215,12 225,8 C235,4 240,12 250,8 C260,4 265,12 275,8 C285,4 290,12 300,8';
+
 const CHECK_ICON_SMALL = (
   <svg
     className="w-2.5 h-2.5 stroke-[3] shrink-0 text-white"
@@ -35,6 +38,7 @@ const FAB_CHECK_ICON = (
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
   </svg>
 );
+
 
 function TimelineBar({
   stops,
@@ -122,7 +126,7 @@ function TimelineBar({
               viewBox="0 0 300 16"
             >
               <path
-                d="M0,8 C10,4 15,12 25,8 C35,4 40,12 50,8 C60,4 65,12 75,8 C85,4 90,12 100,8 C110,4 115,12 125,8 C135,4 140,12 150,8 C160,4 165,12 175,8 C185,4 190,12 200,8 C210,4 215,12 225,8 C235,4 240,12 250,8 C260,4 265,12 275,8 C285,4 290,12 300,8"
+                d={GEORGIAN_WAVE_PATH}
                 stroke="rgba(196,87,42,0.15)"
                 strokeWidth="1.5"
                 fill="none"
@@ -142,7 +146,7 @@ function TimelineBar({
               >
                 {/* Glow behind colored line */}
                 <path
-                  d="M0,8 C10,4 15,12 25,8 C35,4 40,12 50,8 C60,4 65,12 75,8 C85,4 90,12 100,8 C110,4 115,12 125,8 C135,4 140,12 150,8 C160,4 165,12 175,8 C185,4 190,12 200,8 C210,4 215,12 225,8 C235,4 240,12 250,8 C260,4 265,12 275,8 C285,4 290,12 300,8"
+                  d={GEORGIAN_WAVE_PATH}
                   stroke="rgba(196,87,42,0.25)"
                   strokeWidth="5"
                   fill="none"
@@ -150,7 +154,7 @@ function TimelineBar({
                 />
                 {/* Main colored line */}
                 <path
-                  d="M0,8 C10,4 15,12 25,8 C35,4 40,12 50,8 C60,4 65,12 75,8 C85,4 90,12 100,8 C110,4 115,12 125,8 C135,4 140,12 150,8 C160,4 165,12 175,8 C185,4 190,12 200,8 C210,4 215,12 225,8 C235,4 240,12 250,8 C260,4 265,12 275,8 C285,4 290,12 300,8"
+                  d={GEORGIAN_WAVE_PATH}
                   stroke="#C4572A"
                   strokeWidth="2"
                   fill="none"
