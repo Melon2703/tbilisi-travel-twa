@@ -9,138 +9,274 @@ export interface StopCardProps {
   stop: Stop;
   isLast?: boolean;
   totalStops?: number;
+  isVisited?: boolean;
 }
 
-const MAP_PILLS = [
-  { id: 'google' as const, label: 'Google Maps' },
-  { id: 'yandex' as const, label: 'Yandex Maps' },
-];
+const CLOCK_ICON = (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 3" />
+  </svg>
+);
 
-function StopCard({ stop, totalStops }: StopCardProps) {
+const CHAT_ICON = (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const CAMERA_ICON = (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+    <circle cx="12" cy="13" r="4" />
+  </svg>
+);
+
+const WARNING_ICON = (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+    <line x1="12" y1="9" x2="12" y2="13" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
+  </svg>
+);
+
+// Centered Georgian vine ornament
+const GeorgianDivider = () => (
+  <div className="flex justify-center my-1">
+    <svg
+      viewBox="0 0 120 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-[120px]"
+      aria-hidden="true"
+    >
+      <line x1="0" y1="6" x2="38" y2="6" stroke="#C4572A" strokeWidth="1" strokeOpacity="0.3" />
+      <path
+        d="M42 6 C44 3, 46 3, 48 6 C50 9, 52 9, 54 6 C56 3, 58 3, 60 6 C62 9, 64 9, 66 6 C68 3, 70 3, 72 6 C74 9, 76 9, 78 6"
+        stroke="#C4572A"
+        strokeWidth="1.2"
+        strokeOpacity="0.6"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <line x1="82" y1="6" x2="120" y2="6" stroke="#C4572A" strokeWidth="1" strokeOpacity="0.3" />
+    </svg>
+  </div>
+);
+
+function StopCard({ stop, totalStops, isVisited = false }: StopCardProps) {
+  const googleMapsUrl = getMapUrl('google', stop.coordinates);
+  const yandexMapsUrl = getMapUrl('yandex', stop.coordinates);
+
   return (
     <div
       data-testid="stop-card-container"
-      className="w-full h-[100dvh] overflow-hidden flex flex-col justify-between bg-[#161412] touch-pan-x touch-pan-y overscroll-y-contain p-2 sm:p-4 transform-gpu"
+      className="relative flex flex-col h-[100dvh] w-full bg-[#FAF7F2] text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
     >
-      <div className="bg-[#1C1A17] rounded-2xl border border-[#3A342D] overflow-hidden flex flex-col h-full max-w-2xl mx-auto shadow-2xl w-full">
-        {/* Header & Media Section (Top) */}
-        {stop.imageUrl && (
-          <div className="relative h-52 sm:h-60 w-full shrink-0 bg-[#161412] overflow-hidden">
-            <Image
-              src={stop.imageUrl}
-              alt={stop.name}
-              fill
-              sizes="(max-width: 640px) 100vw, 640px"
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1C1A17] via-black/20 to-transparent z-10" />
+      {/* ── Hero image — full-bleed header section ── */}
+      {stop.imageUrl && (
+        <div className="relative w-full h-52 sm:h-60 shrink-0 bg-[#FAF7F2] overflow-hidden">
+          <Image
+            src={stop.imageUrl}
+            alt={stop.name}
+            fill
+            sizes="(max-width: 640px) 100vw, 640px"
+            className="object-cover"
+            priority={stop.order === 1}
+          />
 
-            {/* District & Duration Floating Frosted-Glass Pills */}
-            <span className="absolute top-3 left-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#F4F1EA] text-white px-3 py-1.5 rounded-full font-medium z-20 flex items-center gap-1.5 border border-white/15 shadow-sm">
-              <svg className="w-3.5 h-3.5 text-[#D96B43]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              {stop.neighborhood}
-            </span>
+          {/* Top scrim gradient overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none z-10"
+            style={{
+              background:
+                'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 45%, rgba(250,247,242,0) 75%, rgba(250,247,242,1) 100%)',
+            }}
+          />
 
-            <span className="absolute top-3 right-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#F4F1EA] text-white px-3 py-1.5 rounded-full font-medium z-20 flex items-center gap-1.5 border border-white/15 shadow-sm">
-              <svg className="w-3.5 h-3.5 text-[#D96B43]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 9 0 0118 0z" />
-              </svg>
-              {stop.estimatedMinutes} min
+          {/* Floating frosted-glass badges */}
+          <span className="absolute top-3 left-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs">
+            <svg className="w-3.5 h-3.5 text-[#F4B57A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {stop.neighborhood}
+          </span>
+
+          <span className="absolute top-3 right-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs">
+            <span style={{ color: '#F4B57A' }}>{CLOCK_ICON}</span>
+            {stop.estimatedMinutes} min
+          </span>
+        </div>
+      )}
+
+      {/* ── Scrollable Card Content Body ── */}
+      <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
+        {/* Header & Order Badge */}
+        <div className="flex items-start justify-between gap-3 min-w-0">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A] mb-1">
+              {totalStops ? `STOP ${stop.order} OF ${totalStops}` : `STOP ${stop.order}`}
+            </p>
+            <h2
+              className="text-xl sm:text-2xl font-black text-[#1C1008] tracking-tight leading-snug break-words min-w-0"
+              style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+            >
+              {isVisited && (
+                <span
+                  className="text-xs font-sans font-semibold uppercase tracking-widest mr-2 align-middle px-2 py-0.5 rounded-md bg-[#228255]/10"
+                  style={{ color: '#228255' }}
+                >
+                  Visited
+                </span>
+              )}
+              {stop.name}
+            </h2>
+          </div>
+          {stop.bestTimeOfDay && (
+            <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full border border-black/10 text-[#7A6552] bg-black/5">
+              ⏱️ {stop.bestTimeOfDay}
             </span>
+          )}
+        </div>
+
+        {/* Georgian Divider */}
+        <GeorgianDivider />
+
+        {/* Branded Navigation App Deep Link Buttons */}
+        <div className="grid grid-cols-2 gap-3 my-2" data-testid="map-pills-row">
+          <a
+            href={googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs text-xs sm:text-sm font-semibold text-[#1C1008]"
+            aria-label="Open in Google Maps"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335" />
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 2 .8 3.8 2.1 5.1L12 2z" fill="#FBBC04" />
+              <path d="M12 2v7l5.5-4.1A7 7 0 0 0 12 2z" fill="#34A853" />
+              <circle cx="12" cy="9" r="2.8" fill="white" />
+            </svg>
+            <span>Google Maps</span>
+          </a>
+
+          <a
+            href={yandexMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs text-xs sm:text-sm font-semibold text-[#1C1008]"
+            aria-label="Open in Yandex Maps"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+              <circle cx="12" cy="12" r="10" fill="#FC3F1D" />
+              <path d="M13.4 7H11.6V13.5L8.5 7H6.7L10.4 15H9V17H13.4V15H12V9.2L15.3 17H17L13.4 7Z" fill="white" />
+            </svg>
+            <span>Yandex Maps</span>
+          </a>
+        </div>
+
+        {/* Olya's Tip Box */}
+        <div
+          className="rounded-2xl p-4 my-2 shadow-xs space-y-2"
+          style={{
+            background: '#FFF8F3',
+            border: '1px solid rgba(196,87,42,0.18)',
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <span style={{ color: '#C4572A' }}>{CHAT_ICON}</span>
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
+              Olya&apos;s Tip
+            </span>
+          </div>
+          <p
+            className="text-sm italic leading-relaxed text-[#4A3828]"
+            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+          >
+            &ldquo;{stop.olyaTips}&rdquo;
+          </p>
+        </div>
+
+        {/* Photo Spot Recommendation Callout */}
+        {stop.photoSpot && (
+          <div
+            data-testid="photo-spot"
+            className="rounded-2xl p-4 my-2 shadow-xs space-y-1.5"
+            style={{
+              background: '#FFF8F3',
+              border: '1px solid rgba(196,87,42,0.15)',
+            }}
+          >
+            <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs uppercase tracking-[0.16em]">
+              <span style={{ color: '#C4572A' }}>{CAMERA_ICON}</span>
+              <span>Photo Spot Recommendation</span>
+            </div>
+            <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+              {stop.photoSpot}
+            </p>
           </div>
         )}
 
-        {/* Scrollable Card Body (Middle & Lower Section) */}
-        <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none">
-          {/* Header info & Order badge */}
-          <div className="flex items-start justify-between gap-3 min-w-0">
-            <div className="min-w-0 flex-1">
-              <span className="inline-block text-xs font-bold uppercase tracking-wider text-[#D96B43] mb-1">
-                {totalStops ? `STOP ${stop.order} OF ${totalStops}` : `STOP ${stop.order}`}
-              </span>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-[#F4F1EA] tracking-wide mt-1 mb-1 leading-snug break-words min-w-0">
-                {stop.name}
-              </h3>
+        {/* Logistics Warning Callout */}
+        {stop.logisticsWarning && (
+          <div
+            data-testid="logistics-warning"
+            className="rounded-2xl p-4 my-2 shadow-xs space-y-1.5"
+            style={{
+              background: '#FFF8F3',
+              border: '1px solid rgba(196,87,42,0.3)',
+            }}
+          >
+            <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs uppercase tracking-[0.16em]">
+              <span style={{ color: '#C4572A' }}>{WARNING_ICON}</span>
+              <span>Logistics Warning</span>
             </div>
-            {stop.bestTimeOfDay && (
-              <span className="shrink-0 text-xs font-medium bg-[#23201C] text-[#A69F95] px-3 py-1.5 rounded-full border border-white/10 shadow-xs">
-                ⏱️ {stop.bestTimeOfDay}
-              </span>
-            )}
-          </div>
-
-          {/* Dual Map Deep Link Pills */}
-          <div className="grid grid-cols-2 gap-3 my-3" data-testid="map-pills-row">
-            {MAP_PILLS.map((provider) => (
-              <a
-                key={provider.id}
-                href={getMapUrl(provider.id, stop.coordinates)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 min-h-[48px] py-2.5 px-4 rounded-xl border border-[#3A342D] bg-[#23201C] hover:bg-[#2E2A24] active:scale-[0.98] text-xs sm:text-sm font-semibold text-[#F4F1EA] transition-all shadow-xs"
-              >
-                <span className="text-base">{provider.id === 'google' ? '🗺️' : '📍'}</span>
-                <span>{provider.label}</span>
-              </a>
-            ))}
-          </div>
-
-          {/* Olya's Tip Box */}
-          <div className="bg-[#23201C] rounded-2xl p-4 my-3 border border-[#3A342D] space-y-2 shadow-xs">
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-[#D96B43] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-              <span className="text-xs font-bold text-[#D96B43] uppercase tracking-wider">
-                Olya&apos;s Tip
-              </span>
-            </div>
-            <p className="text-[#F4F1EA] text-sm leading-relaxed italic">
-              &ldquo;{stop.olyaTips}&rdquo;
+            <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+              {stop.logisticsWarning}
             </p>
           </div>
-
-          {/* Photo Spot Recommendation Callout */}
-          {stop.photoSpot && (
-            <div
-              data-testid="photo-spot"
-              className="bg-[#23201C] rounded-2xl p-4 my-3 border border-[#3A342D] space-y-1.5 shadow-xs"
-            >
-              <div className="flex items-center gap-1.5 text-[#D96B43] font-bold text-xs uppercase tracking-wider">
-                <svg className="w-4 h-4 text-[#D96B43] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h0.93a2 2 0 001.664-.89l0.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l0.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span>Photo Spot Recommendation</span>
-              </div>
-              <p className="text-xs sm:text-sm text-[#F4F1EA] leading-relaxed font-medium">
-                {stop.photoSpot}
-              </p>
-            </div>
-          )}
-
-          {/* Logistics Warning Callout */}
-          {stop.logisticsWarning && (
-            <div
-              data-testid="logistics-warning"
-              className="bg-[#2D221C] rounded-2xl p-4 my-3 border border-[#D96B43]/30 space-y-1.5 shadow-xs"
-            >
-              <div className="flex items-center gap-1.5 text-[#D96B43] font-bold text-xs uppercase tracking-wider">
-                <svg className="w-4 h-4 text-[#D96B43] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                <span>Logistics Warning</span>
-              </div>
-              <p className="text-xs sm:text-sm text-[#F4F1EA] leading-relaxed font-medium">
-                {stop.logisticsWarning}
-              </p>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

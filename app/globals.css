@@ -6,17 +6,17 @@
   --warm-stone: #FAFAF7;
   --neutral-border: #E5E5E0;
 
-  /* Warm Tbilisi Editorial Travel Journal Color Tokens */
-  --canvas-bg: #161412;
-  --card-bg: #1C1A17;
-  --tip-box-bg: #23201C;
-  --tip-box-border: #3A342D;
-  --terracotta-accent: #D96B43;
-  --success-accent: #2E7D59;
-  --text-primary: #F4F1EA;
-  --text-secondary: #A69F95;
+  /* Warm Georgian Travel Journal Design Tokens */
+  --canvas-bg: #FAF7F2;
+  --card-bg: #FFF8F3;
+  --tip-box-bg: #FFF8F3;
+  --tip-box-border: rgba(196, 87, 42, 0.18);
+  --terracotta-accent: #C4572A;
+  --success-accent: #228255;
+  --text-primary: #1C1008;
+  --text-secondary: #7A6552;
 
-  /* Telegram WebApp theme CSS variables (with fallback design system tokens) */
+  /* Telegram WebApp theme CSS variables */
   --twa-bg-color: var(--warm-stone);
   --twa-text-color: var(--tbilisi-slate);
   --twa-hint-color: var(--tbilisi-slate);
@@ -26,6 +26,7 @@
   --twa-secondary-bg-color: var(--warm-stone);
   --twa-header-bg-color: var(--tbilisi-slate);
 }
+
 
 @theme inline {
   --color-terracotta: var(--terracotta);
@@ -40,7 +41,19 @@
   --color-twa-button-text: var(--twa-button-text-color);
   --color-twa-secondary-bg: var(--twa-secondary-bg-color);
   --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-display: var(--font-playfair), Georgia, serif;
   --font-mono: var(--font-geist-mono), monospace;
+}
+
+/* Swiper overrides */
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+.swiper-slide {
+  overflow-y: auto;
+  height: 100%;
 }
 
 body {
@@ -49,3 +62,4 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
+

@@ -15,6 +15,13 @@ export interface RouteCarouselProps {
   route: Route;
 }
 
+const ARROW_RIGHT_ICON = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <line x1="5" y1="12" x2="19" y2="12" />
+    <polyline points="12 5 19 12 12 19" />
+  </svg>
+);
+
 export default function RouteCarousel({ route }: RouteCarouselProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -28,8 +35,6 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
 
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
   const isCompleted = sortedStops.length > 0 && visitedStopIds.length === sortedStops.length;
-
-
 
   const isProgrammatic = useRef<boolean>(false);
 
@@ -78,7 +83,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
   };
 
   return (
-    <div className="w-full h-[100dvh] relative overflow-hidden bg-[#161412] transform-gpu">
+    <div className="w-full h-[100dvh] relative overflow-hidden bg-[#FAF7F2] transform-gpu text-[#1C1008]">
       <Swiper
         modules={[Mousewheel]}
         mousewheel={{ forceToAxis: true, releaseOnEdges: true }}
@@ -111,7 +116,7 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
       >
         {/* Slide 0: Route Intro Card */}
         <SwiperSlide key="route-intro">
-          <div className="h-[100dvh] w-full overflow-hidden bg-[#161412]">
+          <div className="h-[100dvh] w-full overflow-hidden bg-[#FAF7F2]">
             <RouteIntroCard route={route} onStartRoute={handleStartRoute} showStartButton={false} />
           </div>
         </SwiperSlide>
@@ -119,11 +124,12 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
         {/* Slide 1..N: Stop Cards */}
         {sortedStops.map((stop, index) => (
           <SwiperSlide key={stop.id}>
-            <div className="h-[100dvh] w-full overflow-hidden flex flex-col justify-between bg-[#161412] max-w-2xl mx-auto">
+            <div className="h-[100dvh] w-full overflow-hidden flex flex-col justify-between bg-[#FAF7F2] max-w-2xl mx-auto">
               <StopCard
                 stop={stop}
                 isLast={index === sortedStops.length - 1}
                 totalStops={sortedStops.length}
+                isVisited={visitedStopIds.includes(stop.id)}
               />
             </div>
           </SwiperSlide>
@@ -136,14 +142,20 @@ export default function RouteCarousel({ route }: RouteCarouselProps) {
           data-testid="sticky-start-container"
           className="fixed bottom-0 left-4 right-4 pb-4 max-w-2xl mx-auto z-30 pointer-events-auto"
         >
+
           <button
             type="button"
             onClick={handleStartRoute}
-            className="w-full bg-[#D96B43] hover:bg-[#C05A34] active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-full shadow-2xl flex items-center justify-center gap-2 text-base tracking-wide transition-all cursor-pointer min-h-[48px] min-w-[48px]"
+            className="w-full text-white font-bold py-3.5 px-6 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-sm uppercase tracking-[0.18em] transition-all active:scale-[0.98] cursor-pointer min-h-[48px]"
+            style={{
+              background: '#C4572A',
+              boxShadow: '0 6px 24px rgba(196,87,42,0.35)',
+            }}
           >
             <span>START ROUTE</span>
-            <span className="text-lg">➔</span>
+            {ARROW_RIGHT_ICON}
           </button>
+
         </div>
       )}
 
