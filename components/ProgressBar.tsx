@@ -1,17 +1,27 @@
 'use client';
 
 import React from 'react';
-import TimelineBar, { TimelineBarProps } from './TimelineBar';
+import TimelineBar from './TimelineBar';
+import { Stop } from '@/lib/types/route';
 
-export function ProgressBar(props: {
+export interface ProgressBarProps {
   totalStops: number;
   currentStopIndex: number;
-  visitedStops: Set<number>;
+  visitedStops: Set<number | string>;
   onStopClick: (stopIndex: number) => void;
   onMarkVisited: () => void;
   isCurrentVisited: boolean;
-}) {
-  const dummyStops = Array.from({ length: props.totalStops }, (_, i) => ({
+}
+
+export function ProgressBar({
+  totalStops,
+  currentStopIndex,
+  visitedStops,
+  onStopClick,
+  onMarkVisited,
+  isCurrentVisited,
+}: ProgressBarProps) {
+  const dummyStops: Stop[] = Array.from({ length: totalStops }, (_, i) => ({
     id: String(i + 1),
     order: i + 1,
     name: `Stop ${i + 1}`,
@@ -22,17 +32,18 @@ export function ProgressBar(props: {
     olyaTips: '',
   }));
 
-  const visitedStopIds = Array.from(props.visitedStops).map(String);
+  const visitedStopIds = Array.from(visitedStops).map(String);
 
   return (
     <TimelineBar
       stops={dummyStops}
-      activeIndex={props.currentStopIndex + 1}
+      activeIndex={currentStopIndex + 1}
       visitedStopIds={visitedStopIds}
-      onStopClick={(slideIndex) => props.onStopClick(slideIndex - 1)}
-      onToggleVisited={props.onMarkVisited}
+      onStopClick={(slideIndex) => onStopClick(slideIndex - 1)}
+      onToggleVisited={onMarkVisited}
     />
   );
 }
 
 export default ProgressBar;
+
