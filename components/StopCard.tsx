@@ -6,11 +6,10 @@ import { Stop } from '@/lib/types/route';
 import { getMapUrl } from '@/lib/utils/maps';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
-import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 
-import { getStopRatings, fetchPlaceRatingsFromAPI } from '@/lib/services/places';
+import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
 
 export interface StopCardProps {
   stop: Stop;
@@ -79,16 +78,18 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
   const googleMapsUrl = getMapUrl('google', stop.coordinates);
   const yandexMapsUrl = getMapUrl('yandex', stop.coordinates);
 
-  const initialRatings = getStopRatings(stop);
-  const [ratings, setRatings] = React.useState(initialRatings);
+  const staticRatings = getStopRatings(stop);
+  const [liveRatings, setLiveRatings] = React.useState<{ stopId: string; ratings: ResolvedRatings } | null>(null);
+
+  const ratings = (liveRatings && liveRatings.stopId === stop.id) ? liveRatings.ratings : staticRatings;
 
   React.useEffect(() => {
-    const currentRatings = getStopRatings(stop);
-    setRatings(currentRatings);
     if (stop.placeIds) {
       let isMounted = true;
-      fetchPlaceRatingsFromAPI(stop).then((liveRatings) => {
-        if (isMounted) setRatings(liveRatings);
+      fetchPlaceRatingsFromAPI(stop).then((fetchedRatings) => {
+        if (isMounted) {
+          setLiveRatings({ stopId: stop.id, ratings: fetchedRatings });
+        }
       });
       return () => {
         isMounted = false;

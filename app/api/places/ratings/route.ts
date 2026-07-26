@@ -49,7 +49,6 @@ export async function GET(request: Request) {
         if (feature?.properties?.CompanyMetaData) {
           const meta = feature.properties.CompanyMetaData;
           if (meta.Hours || meta.name) {
-            googleRating = googleRating ?? null;
             // Extract ratings from metadata if present
             yandexRating = {
               rating: meta.rating?.score ?? 4.8,
