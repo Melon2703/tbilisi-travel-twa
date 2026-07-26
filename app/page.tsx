@@ -3,30 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getAllRoutes, getRouteDurationFormatted, formatAccessibilityLabel } from '@/lib/data/routes';
 import EmojiIcon from '@/components/ui/EmojiIcon';
-
-// Georgian ornament divider SVG
-const GeorgianOrnament = () => (
-  <svg
-    viewBox="0 0 240 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-full max-w-[200px] mx-auto my-2"
-    aria-hidden="true"
-  >
-    <line x1="0" y1="8" x2="70" y2="8" stroke="#C4572A" strokeWidth="1" strokeOpacity="0.25" />
-    <circle cx="75" cy="8" r="2" fill="#C4572A" fillOpacity="0.4" />
-    <path
-      d="M85 8 C88 4, 92 4, 95 8 C98 12, 102 12, 105 8 C108 4, 112 4, 115 8 C118 12, 122 12, 125 8 C128 4, 132 4, 135 8 C138 12, 142 12, 145 8 C148 4, 152 4, 155 8"
-      stroke="#C4572A"
-      strokeWidth="1.2"
-      strokeOpacity="0.6"
-      fill="none"
-      strokeLinecap="round"
-    />
-    <circle cx="165" cy="8" r="2" fill="#C4572A" fillOpacity="0.4" />
-    <line x1="170" y1="8" x2="240" y2="8" stroke="#C4572A" strokeWidth="1" strokeOpacity="0.25" />
-  </svg>
-);
+import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 
 export default function Home() {
   const routes = getAllRoutes();

@@ -6,6 +6,7 @@ import { Stop } from '@/lib/types/route';
 import { getMapUrl } from '@/lib/utils/maps';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
+import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 
@@ -17,30 +18,6 @@ export interface StopCardProps {
   totalStops?: number;
   isVisited?: boolean;
 }
-
-// Centered Georgian vine ornament
-const GeorgianDivider = () => (
-  <div className="flex justify-center my-1">
-    <svg
-      viewBox="0 0 120 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-[120px]"
-      aria-hidden="true"
-    >
-      <line x1="0" y1="6" x2="38" y2="6" stroke="#C4572A" strokeWidth="1" strokeOpacity="0.3" />
-      <path
-        d="M42 6 C44 3, 46 3, 48 6 C50 9, 52 9, 54 6 C56 3, 58 3, 60 6 C62 9, 64 9, 66 6 C68 3, 70 3, 72 6 C74 9, 76 9, 78 6"
-        stroke="#C4572A"
-        strokeWidth="1.2"
-        strokeOpacity="0.6"
-        fill="none"
-        strokeLinecap="round"
-      />
-      <line x1="82" y1="6" x2="120" y2="6" stroke="#C4572A" strokeWidth="1" strokeOpacity="0.3" />
-    </svg>
-  </div>
-);
 
 function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProps) {
   const { t, getLocalizedStop } = useLanguage();
@@ -115,12 +92,12 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
       <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
         {/* Header & Order Badge */}
         <div className="flex items-start justify-between gap-3 min-w-0">
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A] mb-1">
+          <div className="min-w-0 flex-1 space-y-1">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
               {stopLabel}
             </p>
             <h2
-              className="text-xl sm:text-2xl font-black text-[#1C1008] tracking-tight leading-snug break-words min-w-0"
+              className="text-2xl sm:text-3xl font-black text-[#1C1008] tracking-tight leading-tight break-words min-w-0 max-w-full"
               style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
             >
               {stop.name}
@@ -134,19 +111,19 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
         </div>
 
         {/* Georgian Divider */}
-        <GeorgianDivider />
+        <GeorgianOrnament />
 
         {/* Standalone Google Rating Badge */}
         <div
           data-testid="google-rating-badge"
-          className="flex items-center justify-center gap-1.5 text-xs text-[#5C4D42] py-1 font-medium"
+          className="flex items-center justify-center gap-1.5 text-xs text-[#5C4D42] font-medium"
         >
           <span className="text-[#C4572A] font-bold text-sm">★ {ratings.google.rating.toFixed(1)}</span>
           <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
         </div>
 
         {/* Branded Map Provider Deep Link Buttons */}
-        <div className="grid grid-cols-2 gap-3 my-2" data-testid="map-pills-row">
+        <div className="grid grid-cols-2 gap-3" data-testid="map-pills-row">
           <a
             href={googleMapsUrl}
             target="_blank"
@@ -171,7 +148,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
         </div>
 
         {/* Olya's Tip Box */}
-        <Callout emoji="chat" title={t('olyaTip')} className="my-2">
+        <Callout emoji="chat" title={t('olyaTip')}>
           <p
             className="text-sm italic leading-relaxed text-[#4A3828]"
             style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
@@ -183,7 +160,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
         {/* Photo Spot Recommendation Callout */}
         {stop.photoSpot && (
           <div data-testid="photo-spot">
-            <Callout emoji="camera" title={t('photoSpotRec')} className="my-2">
+            <Callout emoji="camera" title={t('photoSpotRec')}>
               {stop.photoSpot}
             </Callout>
           </div>
@@ -192,7 +169,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
         {/* Logistics Warning Callout */}
         {stop.logisticsWarning && (
           <div data-testid="logistics-warning">
-            <Callout emoji="warning" title={t('logisticsWarning')} variant="warning" className="my-2">
+            <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
               {stop.logisticsWarning}
             </Callout>
           </div>
