@@ -48,6 +48,14 @@ _Avoid_: Location, place, waypoint, station.
 An external navigation mapping service (Google Maps, Apple Maps, or Yandex Maps) launched via universal link.
 _Avoid_: Navigation app, external map.
 
+**Google Rating**:
+The place rating score and review count sourced exclusively from Google Places API.
+_Avoid_: Aggregated rating, place score, star rating, multi-provider rating.
+
+**Map Link**:
+Minimalist action deep-link buttons pointing to Map Providers (Google Maps, Yandex Maps) placed below the Google Rating.
+_Avoid_: Direction button, map button, navigation link, external map CTA.
+
 **Olya's Tips**:
 Personal, warm, conversational text recommendations attached to a Stop or Route.
 _Avoid_: Audio guide, commentary, description.
@@ -63,7 +71,3 @@ _Avoid_: Telegram API, webview plugin.
 **Callback Payload**:
 A structured, encoded string in Telegram inline button data carrying transient filter state without server database storage.
 _Avoid_: Session data, state parameter, URL query.
-
-
-
-
