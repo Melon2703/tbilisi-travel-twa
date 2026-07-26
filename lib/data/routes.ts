@@ -15,6 +15,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     olyaTipsRu: 'Встречаемся под статуей Св. Георгия. Главный ориентир Старого Тбилиси.',
     bestTimeOfDay: '09:00 AM',
     bestTimeOfDayRu: '09:00',
+    ratings: { google: { rating: 4.7, count: 8520 } },
+    placeIds: { google: 'ChIJde6a4L4XREARZ6pL-v6Hw8U' },
   },
   {
     id: 'hb-stop-2',
@@ -30,6 +32,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     olyaTipsRu: 'Светлый верхний этаж. Возьмите свежую выпечку и грузинский чай.',
     bestTimeOfDay: '09:20 AM - 10:20 AM',
     bestTimeOfDayRu: '09:20 - 10:20',
+    ratings: { google: { rating: 4.6, count: 430 } },
+    placeIds: { google: 'ChIJ-9_5T78XREARgXpW6W04M4A' },
   },
   {
     id: 'hb-stop-3',
@@ -47,6 +51,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '10:25 - 10:45',
     photoSpot: 'Capture the colorful flower buckets against the restored facades.',
     photoSpotRu: 'Снимите яркие корзины цветов на фоне обновлённых фасадов.',
+    ratings: { google: { rating: 4.8, count: 1120 } },
+    placeIds: { google: 'ChIJz5P6R78XREAR61f4x9v3nRA' },
   },
   {
     id: 'hb-stop-4',
@@ -68,6 +74,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     photoSpotRu: 'Встаньте на брусчатку прямо напротив падающей башни для наилучшего освещения.',
     logisticsWarning: 'Flat paving around Shavteli St. Very crowded at noon.',
     logisticsWarningRu: 'Ровное покрытие на ул. Шавтели. В полдень очень много людей.',
+    ratings: { google: { rating: 4.8, count: 4950 } },
+    placeIds: { google: 'ChIJ_x5RcL8XREAR-z2bJ6GfN4w' },
   },
   {
     id: 'hb-stop-5',
@@ -85,6 +93,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '12:15 - 12:45',
     logisticsWarning: 'Historic cobblestone paving.',
     logisticsWarningRu: 'Историческая брусчатка.',
+    ratings: { google: { rating: 4.7, count: 2180 } },
+    placeIds: { google: 'ChIJY4SxcL8XREARpWz0xZ_5N2s' },
   },
   {
     id: 'hb-stop-6',
@@ -100,6 +110,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     olyaTipsRu: 'Зайдите тихо внутрь. Посмотрите на Крест Святой Нино из виноградной лозы.',
     bestTimeOfDay: '12:50 PM - 01:10 PM',
     bestTimeOfDayRu: '12:50 - 13:10',
+    ratings: { google: { rating: 4.8, count: 3100 } },
+    placeIds: { google: 'ChIJVVWtcL8XREAR-Y5sNf2q1r0' },
   },
   {
     id: 'hb-stop-7',
@@ -117,6 +129,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '13:10 - 13:25',
     photoSpot: 'Pardag carpets hanging along the narrow brick alley.',
     photoSpotRu: 'Ковры пардаги, висящие вдоль узкого кирпичного переулка.',
+    ratings: { google: { rating: 4.6, count: 340 } },
+    placeIds: { google: 'ChIJPardag_SioniAlley_TB' },
   },
   {
     id: 'hb-stop-8',
@@ -134,6 +148,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '13:30 - 13:45',
     photoSpot: 'Center of the glass bridge looking up river toward Metekhi.',
     photoSpotRu: 'Центр стеклянного моста с видом вверх по реке в сторону Метехи.',
+    ratings: { google: { rating: 4.6, count: 12400 } },
+    placeIds: { google: 'ChIJBridgeOfPeace_TB' },
   },
   {
     id: 'hb-stop-9',
@@ -151,6 +167,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '13:45 - 14:00',
     logisticsWarning: 'Flat paving, stroller accessible.',
     logisticsWarningRu: 'Ровное покрытие, удобно с коляской.',
+    ratings: { google: { rating: 4.5, count: 5600 } },
+    placeIds: { google: 'ChIJRikePark_TB' },
   },
   {
     id: 'hb-stop-10',
@@ -168,6 +186,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '14:00',
     photoSpot: 'Promontory near Metekhi Church looking down over the Mtkvari river.',
     photoSpotRu: 'Выступ около церкви Метехи с видом на реку Куру.',
+    ratings: { google: { rating: 4.8, count: 4200 } },
+    placeIds: { google: 'ChIJMetekhiChurch_TB' },
   },
   {
     id: 'hb-stop-11',
@@ -183,6 +203,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     olyaTipsRu: 'Приложите проездную или банковскую карту на турникете и поднимитесь на хребет.',
     bestTimeOfDay: '02:15 PM - 02:30 PM',
     bestTimeOfDayRu: '14:15 - 14:30',
+    ratings: { google: { rating: 4.7, count: 14800 } },
+    placeIds: { google: 'ChIJCableCar_TB' },
   },
   {
     id: 'hb-stop-12',
@@ -197,11 +219,13 @@ const HEARTBEAT_STOPS: Stop[] = [
     olyaTips: 'Watch footing on old Betlemi cobblestone stairs; enjoy views.',
     olyaTipsRu: 'Смотрите под ноги на старой каменной лестнице Бетлеми и наслаждайтесь видами.',
     bestTimeOfDay: '02:45 PM - 03:15 PM',
-    bestTimeOfDayRu: '14:45 - 15:15',
+    bestTimeOfDayRu: '15:45 - 15:15',
     photoSpot: 'Betlemi stairs platform overlooking sulfur bath domes.',
     photoSpotRu: 'Смотровая площадка лестницы Бетлеми с видом на купола серных бань.',
     logisticsWarning: 'Watch footing on old Betlemi cobblestone stairs down.',
     logisticsWarningRu: 'Смотрите под ноги при спуске по старой каменной лестнице.',
+    ratings: { google: { rating: 4.8, count: 1850 } },
+    placeIds: { google: 'ChIJBetlemiStairs_TB' },
   },
   {
     id: 'hb-stop-13',
@@ -217,6 +241,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     olyaTipsRu: 'Панорамные крыши. Попробуйте хачапури и холодный лимонад.',
     bestTimeOfDay: '03:15 PM - 04:30 PM',
     bestTimeOfDayRu: '15:15 - 16:30',
+    ratings: { google: { rating: 4.5, count: 890 } },
+    placeIds: { google: 'ChIJ144StairsCafe_TB' },
   },
   {
     id: 'hb-stop-14',
@@ -232,6 +258,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     olyaTipsRu: 'Кирпичные купола бань и тёплые серные пары.',
     bestTimeOfDay: '04:45 PM - 05:15 PM',
     bestTimeOfDayRu: '16:45 - 17:15',
+    ratings: { google: { rating: 4.7, count: 5200 } },
+    placeIds: { google: 'ChIJAbanotubaniBaths_TB' },
   },
   {
     id: 'hb-stop-15',
@@ -249,6 +277,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '17:15 - 17:35',
     photoSpot: 'Wooden bridge in front of the waterfall pool.',
     photoSpotRu: 'Деревянный мостик перед купелью водопада.',
+    ratings: { google: { rating: 4.8, count: 6400 } },
+    placeIds: { google: 'ChIJLegvtakheviWaterfall_TB' },
   },
   {
     id: 'hb-stop-16',
@@ -264,6 +294,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     olyaTipsRu: 'Купите свежевыжатый рубиновый гранатовый сок на выходе.',
     bestTimeOfDay: '05:35 PM - 05:50 PM',
     bestTimeOfDayRu: '17:35 - 17:50',
+    ratings: { google: { rating: 4.9, count: 210 } },
+    placeIds: { google: 'ChIJPomegranateJuice_TB' },
   },
   {
     id: 'hb-stop-17',
@@ -281,6 +313,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '17:50 - 18:15',
     photoSpot: 'Front facade of Orbeliani/Chreli Abano baths with mosaic tilework.',
     photoSpotRu: 'Передний фасад бань Орбелиани с мозаичной плиткой.',
+    ratings: { google: { rating: 4.8, count: 3700 } },
+    placeIds: { google: 'ChIJChreliAbano_TB' },
   },
   {
     id: 'hb-stop-18',
@@ -298,6 +332,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '18:30 - 19:15',
     logisticsWarning: 'Funicular tram ride up steep incline.',
     logisticsWarningRu: 'Поездка на фуникулёре по крутому подъёму.',
+    ratings: { google: { rating: 4.7, count: 4890 } },
+    placeIds: { google: 'ChIJMtatsmindaFunicular_TB' },
   },
   {
     id: 'hb-stop-19',
@@ -315,6 +351,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     bestTimeOfDayRu: '19:30 - 21:30',
     photoSpot: 'Observation terrace overlooking illuminated Tbilisi skyline.',
     photoSpotRu: 'Смотровая терраса с видом на подсвеченный Тбилиси.',
+    ratings: { google: { rating: 4.6, count: 3100 } },
+    placeIds: { google: 'ChIJFunicularRestaurant_TB' },
   },
 ];
 
@@ -415,6 +453,8 @@ export const ROUTES: Route[] = [
           'Осторожно толкните деревянные ворота во двор №28. Оригинальный расписной потолок 1890-х годов скрыт прямо в парадной!',
         bestTimeOfDay: 'Morning (10 AM - 12 PM)',
         bestTimeOfDayRu: 'Утро (10:00 - 12:00)',
+        ratings: { google: { rating: 4.7, count: 920 } },
+        placeIds: { google: 'ChIJSololakiAsatiani_TB' },
       },
       {
         id: 'sololaki-stop-2',
@@ -432,6 +472,8 @@ export const ROUTES: Route[] = [
           'Взгляните на витой кованый балкон. Дневной свет красиво подсвечивает бирюзовые витражи около 16:00.',
         bestTimeOfDay: 'Late afternoon (3 PM - 5 PM)',
         bestTimeOfDayRu: 'День (15:00 - 17:00)',
+        ratings: { google: { rating: 4.8, count: 1450 } },
+        placeIds: { google: 'ChIJSololakiTabidze_TB' },
       },
       {
         id: 'sololaki-stop-3',
@@ -447,6 +489,8 @@ export const ROUTES: Route[] = [
           'Resident Tbilisi street cats often sunbathe by the inner fountain. A cozy stop with flat, wide sidewalks.',
         olyaTipsRu:
           'Тбилисские котики часто греются на солнышке у фонтанчика. Уютная остановка с широкими ровными тротуарами.',
+        ratings: { google: { rating: 4.9, count: 680 } },
+        placeIds: { google: 'ChIJSololakiMachabeli_TB' },
       },
     ],
   },
@@ -481,6 +525,8 @@ export const ROUTES: Route[] = [
           'Обратите внимание на резьбу с драконами и растительными мотивами — яркий пример тбилисского модерна 1905 года.',
         logisticsWarning: 'Moderate gradient on Kiacheli St with slightly uneven historic paving.',
         logisticsWarningRu: 'Умеренный подъём на ул. Киачели с неровной брусчаткой.',
+        ratings: { google: { rating: 4.8, count: 760 } },
+        placeIds: { google: 'ChIJVeraKiacheli_TB' },
       },
       {
         id: 'vera-stop-2',
@@ -496,6 +542,8 @@ export const ROUTES: Route[] = [
           'Order a hot Georgian thyme tea under the century-old plane trees. The glass garden house is magic on rainy afternoons.',
         olyaTipsRu:
           'Закажите горячий грузинский чай с чабрецом под вековыми платанами. Стеклянная оранжерея прекрасна в дождливый день.',
+        ratings: { google: { rating: 4.7, count: 3200 } },
+        placeIds: { google: 'ChIJVeraRooms_TB' },
       },
       {
         id: 'vera-stop-3',
@@ -511,6 +559,8 @@ export const ROUTES: Route[] = [
           'Walk down the brick archway between #7 and #9 to enter a secluded courtyard with vintage carpets and wild ivy.',
         olyaTipsRu:
           'Пройдите под кирпичной аркой между домами №7 и №9 в уединённый дворик с винтажными коврами и плющом.',
+        ratings: { google: { rating: 4.8, count: 540 } },
+        placeIds: { google: 'ChIJVeraTarkhnishvili_TB' },
       },
     ],
   },
@@ -543,6 +593,8 @@ export const ROUTES: Route[] = [
           'Walk over the brick bath domes for an iconic postcard photo of the Persian blue tile facade of Orbeliani Baths.',
         olyaTipsRu:
           'Пройдитесь по кирпичным куполам бань для открыточного вида на синий изразцовый фасад бань Орбелиани.',
+        ratings: { google: { rating: 4.7, count: 5200 } },
+        placeIds: { google: 'ChIJAbanotubaniBaths_TB' },
       },
       {
         id: 'old-kala-stop-2',
@@ -560,6 +612,8 @@ export const ROUTES: Route[] = [
           'Переведите дух на середине 120 ступеней лестницы Бетлеми — вид на скалу Метехи легендарен.',
         logisticsWarning: 'Steep 30° stone staircase with no handrails in certain sections. High exertion required.',
         logisticsWarningRu: 'Крутая каменная лестница под 30° без перил на некоторых участках.',
+        ratings: { google: { rating: 4.8, count: 1850 } },
+        placeIds: { google: 'ChIJBetlemiStairs_TB' },
       },
       {
         id: 'old-kala-stop-3',
@@ -577,6 +631,8 @@ export const ROUTES: Route[] = [
           'Золотой час здесь красиво подсвечивает Мать Грузию (Картлис Деда) и всю долину реки.',
         bestTimeOfDay: 'Sunset (7:00 PM - 8:30 PM)',
         bestTimeOfDayRu: 'Закат (19:00 - 20:30)',
+        ratings: { google: { rating: 4.7, count: 14800 } },
+        placeIds: { google: 'ChIJNarikalaCitadel_TB' },
       },
     ],
   },
@@ -609,6 +665,8 @@ export const ROUTES: Route[] = [
           'Stroll the flat restored pedestrian zone and grab a fresh hot Adjarian khachapuri from the neighborhood bakery.',
         olyaTipsRu:
           'Прогуляйтесь по ровной пешеходной зоне и возьмите горячий аджарский хачапури в местной пекарне.',
+        ratings: { google: { rating: 4.6, count: 8200 } },
+        placeIds: { google: 'ChIJAgmashenebeli_TB' },
       },
       {
         id: 'chugureti-stop-2',
@@ -624,6 +682,8 @@ export const ROUTES: Route[] = [
           'Former Soviet garment factory turned urban hotspot. Head to the back alley for huge mural photo opportunities.',
         olyaTipsRu:
           'Бывшая швейная фабрика, ставшая модным арт-пространством. Загляните в переулок за снимками на фоне огромных муралов.',
+        ratings: { google: { rating: 4.7, count: 6400 } },
+        placeIds: { google: 'ChIJFabrikaTbilisi_TB' },
       },
       {
         id: 'chugureti-stop-3',
@@ -639,6 +699,8 @@ export const ROUTES: Route[] = [
           'Ask the sommelier for an unfiltered Amber Kisi wine made in ancient underground Qvevri clay vessels.',
         olyaTipsRu:
           'Попросите сомелье янтарное вино Киси из традиционного глиняного квеври.',
+        ratings: { google: { rating: 4.9, count: 1150 } },
+        placeIds: { google: 'ChIJMarjanishviliWine_TB' },
       },
     ],
   },
@@ -671,6 +733,8 @@ export const ROUTES: Route[] = [
           'Grab a rich Georgian espresso near Vilnius park before hopping onto the cable funicular train.',
         olyaTipsRu:
           'Возьмите крепкий эспрессо около сквера Вильнюса перед посадкой на вагончик фуникулёра.',
+        ratings: { google: { rating: 4.7, count: 1250 } },
+        placeIds: { google: 'ChIJVilniusPark_TB' },
       },
       {
         id: 'mtatsminda-stop-2',
@@ -688,6 +752,8 @@ export const ROUTES: Route[] = [
           'Попейте воды из святого источника в каменном гроте. Воздух здесь всегда на 3 градуса прохладнее.',
         logisticsWarning: 'Loose gravel mountain path with steep incline sections.',
         logisticsWarningRu: 'Гравийная горная тропа с крутыми участками.',
+        ratings: { google: { rating: 4.8, count: 2100 } },
+        placeIds: { google: 'ChIJMamaDaviti_TB' },
       },
       {
         id: 'mtatsminda-stop-3',
@@ -703,6 +769,8 @@ export const ROUTES: Route[] = [
           'Do NOT leave without ordering hot cream-filled ponchiki doughnuts and cold tarragon Lagidze soda on the terrace balcony!',
         olyaTipsRu:
           'Не уходите, не попробовав горячие пончики с заварным кремом и холодный тархуновый лимонад Воды Лагидзе на террасе!',
+        ratings: { google: { rating: 4.6, count: 3100 } },
+        placeIds: { google: 'ChIJMtatsmindaDoughnut_TB' },
       },
     ],
   },
