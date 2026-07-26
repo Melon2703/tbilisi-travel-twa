@@ -42,7 +42,6 @@ export async function fetchPlaceRatingsFromAPI(
     try {
       const params = new URLSearchParams();
       if (stop.placeIds.google) params.set('googleId', stop.placeIds.google);
-      if (stop.placeIds.yandex) params.set('yandexId', stop.placeIds.yandex);
 
       if (params.toString()) {
         const res = await fetchImpl(`/api/places/ratings?${params.toString()}`);
