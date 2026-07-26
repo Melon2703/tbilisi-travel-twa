@@ -10,6 +10,8 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 
+import { getStopRatings, fetchPlaceRatingsFromAPI } from '@/lib/services/places';
+
 export interface StopCardProps {
   stop: Stop;
   isLast?: boolean;
@@ -77,8 +79,22 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
   const googleMapsUrl = getMapUrl('google', stop.coordinates);
   const yandexMapsUrl = getMapUrl('yandex', stop.coordinates);
 
-  const rating = stop.rating ?? 4.7;
-  const ratingCount = stop.ratingCount ?? 1250;
+  const initialRatings = getStopRatings(stop);
+  const [ratings, setRatings] = React.useState(initialRatings);
+
+  React.useEffect(() => {
+    const currentRatings = getStopRatings(stop);
+    setRatings(currentRatings);
+    if (stop.placeIds) {
+      let isMounted = true;
+      fetchPlaceRatingsFromAPI(stop).then((liveRatings) => {
+        if (isMounted) setRatings(liveRatings);
+      });
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [stop]);
 
   const stopLabel = totalStops
     ? t('stopOf', { order: stop.order, total: totalStops })
@@ -161,7 +177,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
               <EmojiIcon name="googleMaps" size="md" />
               <span className="text-[13px] font-semibold text-[#1C1008]">Google Maps</span>
             </div>
-            <StarRating rating={rating} count={ratingCount} />
+            <StarRating rating={ratings.google.rating} count={ratings.google.count} />
           </a>
 
           <a
@@ -175,7 +191,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
               <EmojiIcon name="yandexMaps" size="md" />
               <span className="text-[13px] font-semibold text-[#1C1008]">Yandex Maps</span>
             </div>
-            <StarRating rating={rating} count={ratingCount} />
+            <StarRating rating={ratings.yandex.rating} count={ratings.yandex.count} />
           </a>
         </div>
 

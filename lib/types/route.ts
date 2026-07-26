@@ -6,6 +6,11 @@ export type VibeCategory = 'photo-spots' | 'courtyards' | 'food-wine' | 'archite
 export type LogisticsConstraint = AccessibilityLevel;
 export type Vibe = VibeCategory;
 
+export interface ProviderRating {
+  rating: number;
+  count: number;
+}
+
 export interface Stop {
   id: string;
   order: number;
@@ -24,6 +29,14 @@ export interface Stop {
   bestTimeOfDayRu?: string;
   photoSpot?: string;
   photoSpotRu?: string;
+  ratings?: {
+    google?: ProviderRating;
+    yandex?: ProviderRating;
+  };
+  placeIds?: {
+    google?: string;
+    yandex?: string;
+  };
   rating?: number;
   ratingCount?: number;
 }
