@@ -31,7 +31,6 @@ export interface Stop {
   photoSpotRu?: string;
   ratings?: {
     google?: ProviderRating;
-    yandex?: ProviderRating;
   };
   placeIds?: {
     google?: string;

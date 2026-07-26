@@ -262,6 +262,26 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(yandexLink).toHaveClass('min-h-[48px]');
     });
 
+    it('renders standalone Google Rating badge below divider and minimalist map buttons without ratings inside', () => {
+      render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
+
+      const ratingBadge = screen.getByTestId('google-rating-badge');
+      expect(ratingBadge).toBeInTheDocument();
+      expect(ratingBadge).toHaveTextContent(/★ 4.7 \(1,250 reviews on Google\)/i);
+
+      const googleLink = screen.getByRole('link', { name: /Google Maps/i });
+      const yandexLink = screen.getByRole('link', { name: /Yandex Maps/i });
+
+      // Minimalist map buttons contain label text but no rating numbers or star icons inside
+      expect(googleLink).toHaveTextContent('Google Maps');
+      expect(googleLink).not.toHaveTextContent('4.7');
+      expect(googleLink).not.toHaveTextContent('★');
+
+      expect(yandexLink).toHaveTextContent('Yandex Maps');
+      expect(yandexLink).not.toHaveTextContent('4.7');
+      expect(yandexLink).not.toHaveTextContent('★');
+    });
+
     it('renders Visited badge on the right when isVisited is true and not inside the title', () => {
       const { container } = render(<StopCard stop={mockStopWithoutWarning} isVisited={true} />);
       const visitedBadge = screen.getByText('Visited');

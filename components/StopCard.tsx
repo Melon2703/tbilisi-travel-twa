@@ -42,35 +42,6 @@ const GeorgianDivider = () => (
   </div>
 );
 
-// Star rating row component using emoji format
-function StarRating({ rating, count }: { rating: number; count: number }) {
-  const full = Math.floor(rating);
-  const hasHalf = rating - full >= 0.3;
-  const stars = Array.from({ length: 5 }, (_, i) => {
-    if (i < full) return 'full';
-    if (i === full && hasHalf) return 'half';
-    return 'empty';
-  });
-  const formatted = count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count);
-  return (
-    <div className="flex items-center gap-1 mt-0.5">
-      <span className="text-xs font-bold text-[#C4572A]">{rating.toFixed(1)}</span>
-      <span className="flex items-center gap-[1px]">
-        {stars.map((type, i) => (
-          <EmojiIcon
-            key={i}
-            name="star"
-            className={`text-[10px] ${
-              type === 'full' ? 'opacity-100' : type === 'half' ? 'opacity-70' : 'opacity-25'
-            }`}
-          />
-        ))}
-      </span>
-      <span className="text-[10px] text-[#9A7A68]">({formatted})</span>
-    </div>
-  );
-}
-
 function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProps) {
   const { t, getLocalizedStop } = useLanguage();
   const stop = getLocalizedStop(rawStop);
@@ -84,7 +55,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
   const ratings = (liveRatings && liveRatings.stopId === stop.id) ? liveRatings.ratings : staticRatings;
 
   React.useEffect(() => {
-    if (stop.placeIds) {
+    if (stop.placeIds?.google) {
       let isMounted = true;
       fetchPlaceRatingsFromAPI(stop).then((fetchedRatings) => {
         if (isMounted) {
@@ -165,34 +136,37 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
         {/* Georgian Divider */}
         <GeorgianDivider />
 
+        {/* Standalone Google Rating Badge */}
+        <div
+          data-testid="google-rating-badge"
+          className="flex items-center justify-center gap-1.5 text-xs text-[#5C4D42] py-1 font-medium"
+        >
+          <span className="text-[#C4572A] font-bold text-sm">★ {ratings.google.rating.toFixed(1)}</span>
+          <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
+        </div>
+
         {/* Branded Map Provider Deep Link Buttons */}
         <div className="grid grid-cols-2 gap-3 my-2" data-testid="map-pills-row">
           <a
             href={googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center gap-1 py-3 px-3 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs"
+            className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/30 text-sm font-semibold text-[#1C1008]"
             aria-label="Open in Google Maps"
           >
-            <div className="flex items-center gap-1.5">
-              <EmojiIcon name="googleMaps" size="md" />
-              <span className="text-[13px] font-semibold text-[#1C1008]">Google Maps</span>
-            </div>
-            <StarRating rating={ratings.google.rating} count={ratings.google.count} />
+            <EmojiIcon name="googleMaps" size="md" />
+            <span>Google Maps</span>
           </a>
 
           <a
             href={yandexMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center gap-1 py-3 px-3 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs"
+            className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/30 text-sm font-semibold text-[#1C1008]"
             aria-label="Open in Yandex Maps"
           >
-            <div className="flex items-center gap-1.5">
-              <EmojiIcon name="yandexMaps" size="md" />
-              <span className="text-[13px] font-semibold text-[#1C1008]">Yandex Maps</span>
-            </div>
-            <StarRating rating={ratings.yandex.rating} count={ratings.yandex.count} />
+            <EmojiIcon name="yandexMaps" size="md" />
+            <span>Yandex Maps</span>
           </a>
         </div>
 

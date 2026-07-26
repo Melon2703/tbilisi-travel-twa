@@ -7,11 +7,10 @@ export const DEFAULT_RATING: ProviderRating = {
 
 export interface ResolvedRatings {
   google: ProviderRating;
-  yandex: ProviderRating;
 }
 
 /**
- * Extracts and resolves provider-specific map ratings for a given Stop.
+ * Extracts and resolves Google map rating for a given Stop.
  * Falls back to legacy rating/ratingCount fields or global default if undefined.
  */
 export function getStopRatings(stop: Stop): ResolvedRatings {
@@ -22,14 +21,13 @@ export function getStopRatings(stop: Stop): ResolvedRatings {
 
   return {
     google: stop.ratings?.google ?? fallback,
-    yandex: stop.ratings?.yandex ?? fallback,
   };
 }
 
 /**
- * Server/Client helper to fetch live place ratings or return curated fallbacks.
- * When real API keys (GOOGLE_PLACES_API_KEY, YANDEX_MAPS_API_KEY) are configured on server,
- * live ratings are queried from the providers. Otherwise, curated stop ratings are returned.
+ * Server/Client helper to fetch live Google place rating or return curated fallbacks.
+ * When real API key (GOOGLE_PLACES_API_KEY) is configured on server,
+ * live rating is queried from Google Places API. Otherwise, curated stop rating is returned.
  */
 export async function fetchPlaceRatingsFromAPI(
   stop: Stop,
@@ -38,20 +36,15 @@ export async function fetchPlaceRatingsFromAPI(
   const fallback = getStopRatings(stop);
 
   // If running in browser or environment without backend keys, return resolved stop ratings
-  if (typeof window !== 'undefined' && stop.placeIds) {
+  if (typeof window !== 'undefined' && stop.placeIds?.google) {
     try {
-      const params = new URLSearchParams();
-      if (stop.placeIds.google) params.set('googleId', stop.placeIds.google);
-
-      if (params.toString()) {
-        const res = await fetchImpl(`/api/places/ratings?${params.toString()}`);
-        if (res.ok) {
-          const data = await res.json();
-          return {
-            google: data.google ?? fallback.google,
-            yandex: data.yandex ?? fallback.yandex,
-          };
-        }
+      const params = new URLSearchParams({ googleId: stop.placeIds.google });
+      const res = await fetchImpl(`/api/places/ratings?${params.toString()}`);
+      if (res.ok) {
+        const data = await res.json();
+        return {
+          google: data.google ?? fallback.google,
+        };
       }
     } catch {
       // Return fallback ratings gracefully on network or API failure

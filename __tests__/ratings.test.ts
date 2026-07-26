@@ -16,18 +16,15 @@ describe('Places Ratings Service', () => {
     olyaTips: 'Great atmosphere',
     ratings: {
       google: { rating: 4.7, count: 3200 },
-      yandex: { rating: 4.8, count: 1400 },
     },
     placeIds: {
       google: 'ChIJx5mG_r8XREARaZ2b_test',
-      yandex: 'yandex_place_123',
     },
   };
 
-  it('returns distinct provider ratings when defined on Stop object', () => {
+  it('returns Google rating when defined on Stop object', () => {
     const ratings = getStopRatings(mockStop);
     expect(ratings.google).toEqual({ rating: 4.7, count: 3200 });
-    expect(ratings.yandex).toEqual({ rating: 4.8, count: 1400 });
   });
 
   it('falls back to single rating when ratings object is missing', () => {
@@ -39,7 +36,6 @@ describe('Places Ratings Service', () => {
     };
     const ratings = getStopRatings(legacyStop);
     expect(ratings.google).toEqual({ rating: 4.6, count: 800 });
-    expect(ratings.yandex).toEqual({ rating: 4.6, count: 800 });
   });
 
   it('uses global default when no ratings are provided', () => {
@@ -51,13 +47,11 @@ describe('Places Ratings Service', () => {
     };
     const ratings = getStopRatings(emptyStop);
     expect(ratings.google).toEqual({ rating: 4.7, count: 1250 });
-    expect(ratings.yandex).toEqual({ rating: 4.7, count: 1250 });
   });
 
   it('returns fallback data when API keys are not present', async () => {
     const result = await fetchPlaceRatingsFromAPI(mockStop);
     expect(result.google).toEqual({ rating: 4.7, count: 3200 });
-    expect(result.yandex).toEqual({ rating: 4.8, count: 1400 });
   });
 });
 
