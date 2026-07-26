@@ -262,6 +262,15 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(yandexLink).toHaveClass('min-h-[48px]');
     });
 
+    it('renders Visited badge on the right when isVisited is true and not inside the title', () => {
+      const { container } = render(<StopCard stop={mockStopWithoutWarning} isVisited={true} />);
+      const visitedBadge = screen.getByText('Visited');
+      expect(visitedBadge).toBeInTheDocument();
+      const heading = container.querySelector('h2');
+      expect(heading).toHaveTextContent('Lado Asatiani St Merchant Houses');
+      expect(heading).not.toHaveTextContent('Visited');
+    });
+
     it('renders logistics warning when provided', () => {
       render(<StopCard stop={mockStopWithWarning} isLast={false} />);
 
@@ -272,10 +281,10 @@ describe('TWA Timeline & Card Feed UI', () => {
       );
     });
 
-    it('renders best time of day when provided', () => {
+    it('does not render redundant best time of day badge on the right', () => {
       render(<StopCard stop={mockStopWithWarning} isLast={false} />);
 
-      expect(screen.getByText(/Morning \(10 AM - 12 PM\)/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Morning \(10 AM - 12 PM\)/i)).not.toBeInTheDocument();
     });
 
     it('renders photo spot recommendation when provided', () => {

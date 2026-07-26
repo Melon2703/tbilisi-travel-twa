@@ -135,21 +135,13 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
               className="text-xl sm:text-2xl font-black text-[#1C1008] tracking-tight leading-snug break-words min-w-0"
               style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
             >
-              {isVisited && (
-                <span
-                  className="text-xs font-sans font-semibold uppercase tracking-widest mr-2 align-middle px-2 py-0.5 rounded-md bg-[#228255]/10"
-                  style={{ color: '#228255' }}
-                >
-                  {t('visited')}
-                </span>
-              )}
               {stop.name}
             </h2>
           </div>
-          {stop.bestTimeOfDay && (
-            <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full border border-black/10 text-[#7A6552] bg-black/5">
-              <EmojiIcon name="clock" size="xs" className="mr-1" /> {stop.bestTimeOfDay}
-            </span>
+          {isVisited && (
+            <Badge variant="visited">
+              {t('visited')}
+            </Badge>
           )}
         </div>
 
