@@ -3,7 +3,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Stop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import EmojiIcon from '@/components/ui/EmojiIcon';
 
 export interface TimelineBarProps {
   stops: Stop[];
@@ -194,14 +193,7 @@ function TimelineBar({
                         }),
                 }}
               >
-                {isVisited ? (
-                  <span className="flex items-center gap-[2px]">
-                    <EmojiIcon name="check" size="xs" />
-                    <span>{stopOrder}</span>
-                  </span>
-                ) : (
-                  stopOrder
-                )}
+                {stopOrder}
               </button>
             );
           })}
@@ -234,7 +226,15 @@ function TimelineBar({
                 }
           }
         >
-          <EmojiIcon name="check" size="md" />
+          <svg
+            className="w-6 h-6 text-white stroke-[2.5]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
         </button>
       </div>
     </div>
