@@ -8,6 +8,7 @@ import {
   getPreferredMapProvider,
   setPreferredMapProvider,
 } from '@/lib/utils/maps';
+import EmojiIcon from '@/components/ui/EmojiIcon';
 
 interface MapProviderSheetProps {
   isOpen: boolean;
@@ -53,6 +54,12 @@ export default function MapProviderSheet({
     onClose();
   };
 
+  const PROVIDER_EMOJIS: Record<MapProvider, keyof typeof import('@/components/ui/EmojiIcon').EMOJI_ICONS> = {
+    google: 'googleMaps',
+    apple: 'appleMaps',
+    yandex: 'yandexMaps',
+  };
+
   return (
     <div
       role="dialog"
@@ -86,9 +93,7 @@ export default function MapProviderSheet({
             onClick={onClose}
             className="w-8 h-8 rounded-full bg-black/5 hover:bg-black/10 text-[var(--tbilisi-slate)] flex items-center justify-center transition-colors cursor-pointer"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <EmojiIcon name="close" size="sm" />
           </button>
         </div>
 
@@ -111,15 +116,9 @@ export default function MapProviderSheet({
                 <div className="flex items-center gap-3">
                   {/* App Icon Indicator */}
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-bold text-sm ${
-                      provider.id === 'google'
-                        ? 'bg-blue-600 text-white'
-                        : provider.id === 'apple'
-                        ? 'bg-slate-900 text-white'
-                        : 'bg-red-600 text-white'
-                    }`}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-bold text-lg bg-black/5"
                   >
-                    {provider.id === 'google' ? 'G' : provider.id === 'apple' ? '' : 'Y'}
+                    <EmojiIcon name={PROVIDER_EMOJIS[provider.id]} size="lg" />
                   </div>
 
                   <div>
@@ -139,19 +138,7 @@ export default function MapProviderSheet({
                   </div>
                 </div>
 
-                <svg
-                  className="w-5 h-5 text-[var(--terracotta)] shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
+                <EmojiIcon name="externalLink" size="sm" className="text-[var(--terracotta)]" />
               </button>
             );
           })}

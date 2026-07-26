@@ -11,17 +11,11 @@ import RouteIntroCard from './RouteIntroCard';
 import StopCard from './StopCard';
 import TimelineBar from './TimelineBar';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import Button from '@/components/ui/Button';
 
 export interface RouteCarouselProps {
   route: Route;
 }
-
-const ARROW_RIGHT_ICON = (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <line x1="5" y1="12" x2="19" y2="12" />
-    <polyline points="12 5 19 12 12 19" />
-  </svg>
-);
 
 export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
   const { getLocalizedRoute, t } = useLanguage();
@@ -144,18 +138,9 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
           data-testid="sticky-start-container"
           className="fixed bottom-0 left-4 right-4 pb-4 max-w-2xl mx-auto z-30 pointer-events-auto"
         >
-          <button
-            type="button"
-            onClick={handleStartRoute}
-            className="w-full text-white font-bold py-3.5 px-6 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-sm uppercase tracking-[0.18em] transition-all active:scale-[0.98] cursor-pointer min-h-[48px]"
-            style={{
-              background: '#C4572A',
-              boxShadow: '0 6px 24px rgba(196,87,42,0.35)',
-            }}
-          >
-            <span>{t('startRoute')}</span>
-            {ARROW_RIGHT_ICON}
-          </button>
+          <Button onClick={handleStartRoute} emoji="arrowRight">
+            {t('startRoute')}
+          </Button>
         </div>
       )}
 

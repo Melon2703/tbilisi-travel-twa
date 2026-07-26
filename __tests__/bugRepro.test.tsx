@@ -11,8 +11,8 @@ const sampleRoute: Route = {
   title: 'Heartbeat Express',
   subtitle: 'Classic landmarks route',
   durationCategory: '1-2h',
-  accessibility: 'wheelchair-accessible',
-  vibes: ['landmarks', 'panoramic-views'],
+  accessibility: 'stroller-friendly',
+  vibes: ['photo-spots', 'architecture'],
   heroImage: '/images/hero.jpg',
   introCopy: 'Welcome to the heartbeat of Tbilisi.',
   stops: [

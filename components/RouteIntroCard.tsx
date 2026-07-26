@@ -4,6 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import EmojiIcon from '@/components/ui/EmojiIcon';
+import Button from '@/components/ui/Button';
 
 export interface RouteIntroCardProps {
   route: Route;
@@ -36,48 +38,8 @@ const GeorgianOrnament = () => (
   </svg>
 );
 
-const MAP_PIN_ICON = (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-    <circle cx="12" cy="10" r="3" />
-  </svg>
-);
-
-const FOOTPRINTS_ICON = (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3-2 4-2 6.5v2" />
-    <path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3 2 4 2 6.5v2" />
-  </svg>
-);
-
-const ARROW_RIGHT_ICON = (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <line x1="5" y1="12" x2="19" y2="12" />
-    <polyline points="12 5 19 12 12 19" />
-  </svg>
-);
-
-const FUNICULAR_ICON = (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <rect x="5" y="8" width="14" height="10" rx="2" />
-    <path d="M3 6l18-2" />
-    <circle cx="9" cy="18" r="2" />
-    <circle cx="15" cy="18" r="2" />
-    <line x1="12" y1="8" x2="12" y2="18" />
-  </svg>
-);
-
 export default function RouteIntroCard({
+
   route,
   onStartRoute,
   showStartButton = true,
@@ -274,7 +236,7 @@ export default function RouteIntroCard({
                 className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-[#C4572A]"
                 style={{ background: 'rgba(196,87,42,0.1)' }}
               >
-                {MAP_PIN_ICON}
+                <EmojiIcon name="mapPin" size="md" />
               </div>
               <div>
                 <p className="text-sm font-bold leading-none text-[#1C1008]">
@@ -289,7 +251,7 @@ export default function RouteIntroCard({
                 className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-[#7A6552]"
                 style={{ background: 'rgba(28,16,8,0.06)' }}
               >
-                {FOOTPRINTS_ICON}
+                <EmojiIcon name="footprints" size="md" />
               </div>
               <div>
                 <p className="text-sm font-bold leading-none text-[#1C1008]">~{approxKm} km</p>
@@ -302,7 +264,7 @@ export default function RouteIntroCard({
                 className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-[#7A6552]"
                 style={{ background: 'rgba(28,16,8,0.06)' }}
               >
-                {FUNICULAR_ICON}
+                <EmojiIcon name="funicular" size="md" />
               </div>
               <div>
                 <p className="text-sm font-bold leading-none text-[#1C1008]">{transitModeStr}</p>
@@ -323,18 +285,9 @@ export default function RouteIntroCard({
       {/* 6. Sticky Bottom CTA Button */}
       {showStartButton && (
         <div className="fixed bottom-4 left-4 right-4 max-w-2xl mx-auto z-30 pointer-events-auto">
-          <button
-            type="button"
-            onClick={onStartRoute}
-            className="w-full text-white font-bold py-3.5 px-6 rounded-2xl shadow-xl flex items-center justify-center gap-3 text-sm uppercase tracking-[0.18em] transition-all active:scale-[0.98] cursor-pointer min-h-[48px]"
-            style={{
-              background: '#C4572A',
-              boxShadow: '0 6px 24px rgba(196,87,42,0.35)',
-            }}
-          >
-            <span>{t('startRoute')}</span>
-            {ARROW_RIGHT_ICON}
-          </button>
+          <Button onClick={onStartRoute} emoji="arrowRight">
+            {t('startRoute')}
+          </Button>
         </div>
       )}
     </div>

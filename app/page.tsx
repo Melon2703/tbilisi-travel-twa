@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getAllRoutes, getRouteDurationFormatted, formatAccessibilityLabel } from '@/lib/data/routes';
+import EmojiIcon from '@/components/ui/EmojiIcon';
 
 // Georgian ornament divider SVG
 const GeorgianOrnament = () => (
@@ -169,14 +170,14 @@ export default function Home() {
                     <div className="pt-3 border-t border-[#C4572A]/12 flex items-center justify-between text-xs font-semibold text-[#7A6552]">
                       <div className="flex items-center gap-3">
                         <span className="flex items-center gap-1">
-                          📍 <span className="text-[#1C1008] font-bold">{route.stops.length} stops</span>
+                          <EmojiIcon name="mapPin" size="xs" /> <span className="text-[#1C1008] font-bold">{route.stops.length} stops</span>
                         </span>
                         <span className="flex items-center gap-1">
-                          ⏱️ <span className="text-[#1C1008] font-bold">{formattedTime}</span>
+                          <EmojiIcon name="clock" size="xs" /> <span className="text-[#1C1008] font-bold">{formattedTime}</span>
                         </span>
                       </div>
                       <span className="text-[#C4572A] group-hover:translate-x-1 transition-transform flex items-center gap-1 font-bold min-h-[44px]">
-                        View ➔
+                        View <EmojiIcon name="arrowRight" size="xs" />
                       </span>
                     </div>
                   </div>

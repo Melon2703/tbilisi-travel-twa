@@ -5,6 +5,10 @@ import Image from 'next/image';
 import { Stop } from '@/lib/types/route';
 import { getMapUrl } from '@/lib/utils/maps';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import EmojiIcon from '@/components/ui/EmojiIcon';
+import Card from '@/components/ui/Card';
+import Badge from '@/components/ui/Badge';
+import Callout from '@/components/ui/Callout';
 
 export interface StopCardProps {
   stop: Stop;
@@ -12,74 +16,6 @@ export interface StopCardProps {
   totalStops?: number;
   isVisited?: boolean;
 }
-
-const CLOCK_ICON = (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 7v5l3 3" />
-  </svg>
-);
-
-const CHAT_ICON = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-  </svg>
-);
-
-const CAMERA_ICON = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-    <circle cx="12" cy="13" r="4" />
-  </svg>
-);
-
-const WARNING_ICON = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-    <line x1="12" y1="9" x2="12" />
-    <line x1="12" y1="17" x2="12.01" y2="17" />
-  </svg>
-);
 
 // Centered Georgian vine ornament
 const GeorgianDivider = () => (
@@ -105,13 +41,13 @@ const GeorgianDivider = () => (
   </div>
 );
 
-// Star rating row component
+// Star rating row component using emoji format
 function StarRating({ rating, count }: { rating: number; count: number }) {
   const full = Math.floor(rating);
-  const half = rating - full >= 0.3;
+  const hasHalf = rating - full >= 0.3;
   const stars = Array.from({ length: 5 }, (_, i) => {
     if (i < full) return 'full';
-    if (i === full && half) return 'half';
+    if (i === full && hasHalf) return 'half';
     return 'empty';
   });
   const formatted = count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count);
@@ -120,34 +56,13 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
       <span className="text-xs font-bold text-[#C4572A]">{rating.toFixed(1)}</span>
       <span className="flex items-center gap-[1px]">
         {stars.map((type, i) => (
-          <svg key={i} width="10" height="10" viewBox="0 0 24 24" aria-hidden="true">
-            {type === 'full' && (
-              <polygon
-                points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
-                fill="#C4572A"
-              />
-            )}
-            {type === 'half' && (
-              <>
-                <defs>
-                  <linearGradient id={`star-grad-${i}`} x1="0" x2="1" y1="0" y2="0">
-                    <stop offset="50%" stopColor="#C4572A" />
-                    <stop offset="50%" stopColor="#E8D5C8" />
-                  </linearGradient>
-                </defs>
-                <polygon
-                  points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
-                  fill={`url(#star-grad-${i})`}
-                />
-              </>
-            )}
-            {type === 'empty' && (
-              <polygon
-                points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
-                fill="#E8D5C8"
-              />
-            )}
-          </svg>
+          <EmojiIcon
+            key={i}
+            name="star"
+            className={`text-[10px] ${
+              type === 'full' ? 'opacity-100' : type === 'half' ? 'opacity-70' : 'opacity-25'
+            }`}
+          />
         ))}
       </span>
       <span className="text-[10px] text-[#9A7A68]">({formatted})</span>
@@ -197,15 +112,12 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
 
           {/* Floating frosted-glass badges */}
           <span className="absolute top-3 left-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs">
-            <svg className="w-3.5 h-3.5 text-[#F4B57A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
+            <EmojiIcon name="mapPin" size="xs" />
             {stop.neighborhood}
           </span>
 
           <span className="absolute top-3 right-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs">
-            <span style={{ color: '#F4B57A' }}>{CLOCK_ICON}</span>
+            <EmojiIcon name="clock" size="xs" />
             {stop.estimatedMinutes} {t('min')}
           </span>
         </div>
@@ -236,7 +148,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
           </div>
           {stop.bestTimeOfDay && (
             <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full border border-black/10 text-[#7A6552] bg-black/5">
-              ⏱️ {stop.bestTimeOfDay}
+              <EmojiIcon name="clock" size="xs" className="mr-1" /> {stop.bestTimeOfDay}
             </span>
           )}
         </div>
@@ -254,12 +166,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
             aria-label="Open in Google Maps"
           >
             <div className="flex items-center gap-1.5">
-              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335" />
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 2 .8 3.8 2.1 5.1L12 2z" fill="#FBBC04" />
-                <path d="M12 2v7l5.5-4.1A7 7 0 0 0 12 2z" fill="#34A853" />
-                <circle cx="12" cy="9" r="2.8" fill="white" />
-              </svg>
+              <EmojiIcon name="googleMaps" size="md" />
               <span className="text-[13px] font-semibold text-[#1C1008]">Google Maps</span>
             </div>
             <StarRating rating={rating} count={ratingCount} />
@@ -273,10 +180,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
             aria-label="Open in Yandex Maps"
           >
             <div className="flex items-center gap-1.5">
-              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
-                <circle cx="12" cy="12" r="10" fill="#FC3F1D" />
-                <path d="M13.4 7H11.6V13.5L8.5 7H6.7L10.4 15H9V17H13.4V15H12V9.2L15.3 17H17L13.4 7Z" fill="white" />
-              </svg>
+              <EmojiIcon name="yandexMaps" size="md" />
               <span className="text-[13px] font-semibold text-[#1C1008]">Yandex Maps</span>
             </div>
             <StarRating rating={rating} count={ratingCount} />
@@ -284,64 +188,30 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
         </div>
 
         {/* Olya's Tip Box */}
-        <div
-          className="rounded-2xl p-4 my-2 shadow-xs space-y-2"
-          style={{
-            background: '#FFF8F3',
-            border: '1px solid rgba(196,87,42,0.18)',
-          }}
-        >
-          <div className="flex items-center gap-2">
-            <span style={{ color: '#C4572A' }}>{CHAT_ICON}</span>
-            <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
-              {t('olyaTip')}
-            </span>
-          </div>
+        <Callout emoji="chat" title={t('olyaTip')} className="my-2">
           <p
             className="text-sm italic leading-relaxed text-[#4A3828]"
             style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
           >
             &ldquo;{stop.olyaTips}&rdquo;
           </p>
-        </div>
+        </Callout>
 
         {/* Photo Spot Recommendation Callout */}
         {stop.photoSpot && (
-          <div
-            data-testid="photo-spot"
-            className="rounded-2xl p-4 my-2 shadow-xs space-y-1.5"
-            style={{
-              background: '#FFF8F3',
-              border: '1px solid rgba(196,87,42,0.15)',
-            }}
-          >
-            <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs uppercase tracking-[0.16em]">
-              <span style={{ color: '#C4572A' }}>{CAMERA_ICON}</span>
-              <span>{t('photoSpotRec')}</span>
-            </div>
-            <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+          <div data-testid="photo-spot">
+            <Callout emoji="camera" title={t('photoSpotRec')} className="my-2">
               {stop.photoSpot}
-            </p>
+            </Callout>
           </div>
         )}
 
         {/* Logistics Warning Callout */}
         {stop.logisticsWarning && (
-          <div
-            data-testid="logistics-warning"
-            className="rounded-2xl p-4 my-2 shadow-xs space-y-1.5"
-            style={{
-              background: '#FFF8F3',
-              border: '1px solid rgba(196,87,42,0.3)',
-            }}
-          >
-            <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs uppercase tracking-[0.16em]">
-              <span style={{ color: '#C4572A' }}>{WARNING_ICON}</span>
-              <span>{t('logisticsWarning')}</span>
-            </div>
-            <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+          <div data-testid="logistics-warning">
+            <Callout emoji="warning" title={t('logisticsWarning')} variant="warning" className="my-2">
               {stop.logisticsWarning}
-            </p>
+            </Callout>
           </div>
         )}
       </div>
