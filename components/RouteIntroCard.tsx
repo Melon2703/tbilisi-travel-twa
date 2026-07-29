@@ -247,7 +247,179 @@ export default function RouteIntroCard({
           </div>
         </div>
 
-        {/* 5. Swipe Prompt */}
+        {/* 5. Route Overview Map SVG */}
+        {(() => {
+          const lats = sortedStops.map((s) => s.coordinates.lat);
+          const lngs = sortedStops.map((s) => s.coordinates.lng);
+          const minLat = Math.min(...lats);
+          const maxLat = Math.max(...lats);
+          const minLng = Math.min(...lngs);
+          const maxLng = Math.max(...lngs);
+          const deltaLat = maxLat - minLat || 0.001;
+          const deltaLng = maxLng - minLng || 0.001;
+
+          const svgW = 320;
+          const svgH = 120;
+          const padX = 28;
+          const padY = 20;
+
+          const points = sortedStops.map((stop) => ({
+            x: padX + ((stop.coordinates.lng - minLng) / deltaLng) * (svgW - 2 * padX),
+            y: (svgH - padY) - ((stop.coordinates.lat - minLat) / deltaLat) * (svgH - 2 * padY),
+            stop,
+          }));
+
+          const pathD = points.reduce(
+            (acc, p, idx) => `${acc} ${idx === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`,
+            ''
+          );
+
+          return (
+            <div
+              data-testid="route-overview-map"
+              className="rounded-2xl p-4 shadow-xs space-y-2 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/15"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A]">
+                  🗺️ {t('overviewMapTitle')}
+                </h3>
+                <span className="text-[11px] font-medium text-[#7A6552]">
+                  {sortedStops.length} {language === 'ru' ? 'точек' : 'stops'}
+                </span>
+              </div>
+              <div className="relative w-full h-32 bg-[#FAF7F2] rounded-xl border border-black/5 overflow-hidden flex items-center justify-center p-2">
+                <svg
+                  viewBox={`0 0 ${svgW} ${svgH}`}
+                  className="w-full h-full drop-shadow-xs"
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke="#C4572A"
+                    strokeWidth="3"
+                    strokeDasharray="4 2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {points.map(({ x, y, stop }, idx) => {
+                    const isStart = idx === 0;
+                    const isEnd = idx === points.length - 1;
+                    const color = isStart ? '#228255' : isEnd ? '#C4572A' : '#7A6552';
+                    const fill = isStart ? '#228255' : isEnd ? '#C4572A' : '#FFF8F3';
+
+                    return (
+                      <g key={stop.id}>
+                        <circle
+                          cx={x}
+                          cy={y}
+                          r={isStart || isEnd ? 9 : 6}
+                          fill={fill}
+                          stroke={color}
+                          strokeWidth="2"
+                        />
+                        <text
+                          x={x}
+                          y={y + 3.5}
+                          textAnchor="middle"
+                          fontSize="9"
+                          fontWeight="bold"
+                          fill={isStart || isEnd ? '#FFFFFF' : '#1C1008'}
+                        >
+                          {stop.order}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* 6. Step-by-Step Route Preview List */}
+        <div
+          data-testid="step-by-step-preview-list"
+          className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/15"
+        >
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A]">
+            📍 {t('stepByStepPreviewTitle')}
+          </h3>
+          <div className="space-y-2 max-h-60 overflow-y-auto pr-1 scrollbar-none">
+            {sortedStops.map((stop) => (
+              <div
+                key={stop.id}
+                className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#FAF7F2] border border-black/5 text-xs text-[#1C1008]"
+              >
+                <span className="w-5 h-5 rounded-full bg-[#C4572A] text-white font-bold flex items-center justify-center shrink-0 text-[10px]">
+                  {stop.order}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="font-bold text-[#1C1008] truncate">
+                      {language === 'ru' && stop.nameRu ? stop.nameRu : stop.name}
+                    </p>
+                    <span className="text-[10px] text-[#7A6552] font-semibold shrink-0">
+                      {stop.estimatedMinutes} {t('min')}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#7A6552] truncate">
+                    {language === 'ru' && stop.neighborhoodRu ? stop.neighborhoodRu : stop.neighborhood}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 7. Logistics & Terrain Highlights */}
+        <div
+          data-testid="logistics-terrain-highlights"
+          className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/15"
+        >
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A]">
+            🧗 {t('logisticsTerrainTitle')}
+          </h3>
+          <div className="flex flex-wrap gap-2 text-xs">
+            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium">
+              🏷️ {t(route.accessibility as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.accessibility.replace('-', ' ')}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium">
+              ⏱️ {t(route.durationCategory as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.durationCategory}
+            </span>
+            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium">
+              👟 ~{approxKm} km
+            </span>
+          </div>
+
+          {(() => {
+            const warnings = sortedStops
+              .map((s) => (language === 'ru' ? s.logisticsWarningRu || s.logisticsWarning : s.logisticsWarning))
+              .filter(Boolean);
+
+            if (warnings.length === 0) return null;
+
+            return (
+              <div
+                data-testid="logistics-notes-callout"
+                className="p-3 rounded-xl bg-[#FFF3EE] border border-[#C4572A]/20 space-y-1 text-xs text-[#8A3614]"
+              >
+                <p className="font-bold uppercase tracking-wide text-[10px] text-[#C4572A]">
+                  ⚠️ {t('logisticsWarning')}
+                </p>
+                <ul className="list-disc list-inside space-y-1">
+                  {warnings.map((w, idx) => (
+                    <li key={idx} className="leading-tight">
+                      {w}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })()}
+        </div>
+
+        {/* 8. Swipe Prompt */}
         <div className="text-center py-1 shrink-0" data-testid="swipe-prompt-container">
           <p className="text-xs font-semibold uppercase tracking-wider text-[#C4572A]/80">
             {t('swipePrompt')}

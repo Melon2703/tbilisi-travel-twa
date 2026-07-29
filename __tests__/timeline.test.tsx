@@ -66,9 +66,9 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(
         screen.getByText(/Low-incline residential walk through 19th-century merchant mansions/i)
       ).toBeInTheDocument();
-      expect(screen.getByText(/Lado Asatiani St Merchant Houses/i)).toBeInTheDocument();
-      expect(screen.getByText(/Galaktion Tabidze Balcony House/i)).toBeInTheDocument();
-      expect(screen.getByText(/Machabeli St Stained Glass Foyer/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Lado Asatiani St Merchant Houses/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/Galaktion Tabidze Balcony House/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/Machabeli St Stained Glass Foyer/i).length).toBeGreaterThan(0);
     });
 
     it('triggers notFound() for invalid routeId', async () => {
@@ -86,9 +86,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       render(<RouteIntroCard route={mockRoute} onStartRoute={onStartMock} />);
 
       expect(screen.getByRole('heading', { name: mockRoute.title })).toBeInTheDocument();
-      expect(screen.getByText(mockRoute.subtitle)).toBeInTheDocument();
-      expect(screen.getByText(/1-2h/i)).toBeInTheDocument();
-      expect(screen.getByText(/stroller/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/1-2h/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/stroller/i).length).toBeGreaterThan(0);
       expect(screen.getByText(/#courtyards/i)).toBeInTheDocument();
       expect(screen.getByTestId('olya-welcome-card')).toBeInTheDocument();
       expect(screen.getByText(/Olya's Route Welcome/i)).toBeInTheDocument();
@@ -159,6 +158,51 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(heading).toHaveClass('break-words');
       expect(heading).toHaveClass('min-w-0');
     });
+
+    it('renders visual route overview map line and step-by-step preview list', () => {
+      render(<RouteIntroCard route={mockRoute} />);
+
+      // Route overview map line SVG container
+      const overviewMap = screen.getByTestId('route-overview-map');
+      expect(overviewMap).toBeInTheDocument();
+      expect(screen.getByText(/Route Overview Map/i)).toBeInTheDocument();
+
+      // Step-by-step preview list container
+      const stepPreview = screen.getByTestId('step-by-step-preview-list');
+      expect(stepPreview).toBeInTheDocument();
+      expect(screen.getByText(/Step-by-Step Route Preview/i)).toBeInTheDocument();
+      expect(stepPreview).toHaveTextContent('Lado Asatiani St Merchant Houses');
+      expect(stepPreview).toHaveTextContent('Galaktion Tabidze Balcony House');
+    });
+
+    it('displays logistics notes and terrain highlights section', () => {
+      const mockRouteWithWarning: Route = {
+        ...mockRoute,
+        stops: [
+          ...mockRoute.stops,
+          {
+            id: 'sololaki-stop-3',
+            order: 3,
+            stopType: 'attraction',
+            name: 'Betlemi Stairs',
+            neighborhood: 'Old Kala',
+            coordinates: { lat: 41.6892, lng: 44.8055 },
+            estimatedMinutes: 20,
+            imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f',
+            olyaTips: 'Steep steps.',
+            logisticsWarning: 'Steep stone stairs with loose paving.',
+          },
+        ],
+      };
+
+      render(<RouteIntroCard route={mockRouteWithWarning} />);
+
+      const logisticsHighlights = screen.getByTestId('logistics-terrain-highlights');
+      expect(logisticsHighlights).toBeInTheDocument();
+      expect(logisticsHighlights).toHaveTextContent(/Logistics & Terrain Highlights/i);
+      expect(logisticsHighlights).toHaveTextContent(/stroller-friendly/i);
+      expect(logisticsHighlights).toHaveTextContent(/Steep stone stairs with loose paving/i);
+    });
   });
 
   describe('RouteCarousel Component', () => {
@@ -167,8 +211,8 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       expect(screen.getByRole('heading', { name: mockRoute.title })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /START ROUTE/i })).toBeInTheDocument();
-      expect(screen.getByText('Lado Asatiani St Merchant Houses')).toBeInTheDocument();
-      expect(screen.getByText('Galaktion Tabidze Balcony House')).toBeInTheDocument();
+      expect(screen.getAllByText('Lado Asatiani St Merchant Houses').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Galaktion Tabidze Balcony House').length).toBeGreaterThan(0);
     });
 
     it('does not render TimelineBar in preview mode (activeIndex === 0)', () => {

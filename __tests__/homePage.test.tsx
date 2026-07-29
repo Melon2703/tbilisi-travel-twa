@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import Home from '@/app/page';
 import { ROUTES } from '@/lib/data/routes';
 
@@ -53,6 +53,103 @@ describe('Home Root Page (Route Directory)', () => {
       const link = screen.getByRole('link', { name: new RegExp(route.title, 'i') });
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute('href', `/twa/${route.id}`);
+    });
+  });
+
+  describe('Route Filter Controls & Geo-Proximity Relative Sorting', () => {
+    it('renders duration category filter options (1-2h, 3-4h, half-day, full-day)', () => {
+      render(<Home />);
+
+      expect(screen.getByTestId('duration-filter-1-2h')).toBeInTheDocument();
+      expect(screen.getByTestId('duration-filter-3-4h')).toBeInTheDocument();
+      expect(screen.getByTestId('duration-filter-half-day')).toBeInTheDocument();
+      expect(screen.getByTestId('duration-filter-full-day')).toBeInTheDocument();
+    });
+
+    it('filters routes when duration category option is selected', () => {
+      render(<Home />);
+
+      const filterBtn = screen.getByTestId('duration-filter-1-2h');
+      fireEvent.click(filterBtn);
+
+      // Only 1-2h routes should be visible
+      const oneTwoHoursRoutes = ROUTES.filter((r) => r.durationCategory === '1-2h');
+      const nonOneTwoHoursRoutes = ROUTES.filter((r) => r.durationCategory !== '1-2h');
+
+      oneTwoHoursRoutes.forEach((route) => {
+        expect(screen.getByText(route.title)).toBeInTheDocument();
+      });
+      nonOneTwoHoursRoutes.forEach((route) => {
+        expect(screen.queryByText(route.title)).not.toBeInTheDocument();
+      });
+    });
+
+    it('renders vibe tag filter options (insta-locations, cultural, hiking) and filters catalog', () => {
+      render(<Home />);
+
+      const hikingBtn = screen.getByTestId('vibe-filter-hiking');
+      expect(hikingBtn).toBeInTheDocument();
+
+      fireEvent.click(hikingBtn);
+
+      const hikingRoutes = ROUTES.filter((r) => r.vibes.includes('hiking'));
+      const nonHikingRoutes = ROUTES.filter((r) => !r.vibes.includes('hiking'));
+
+      hikingRoutes.forEach((route) => {
+        expect(screen.getByText(route.title)).toBeInTheDocument();
+      });
+      nonHikingRoutes.forEach((route) => {
+        expect(screen.queryByText(route.title)).not.toBeInTheDocument();
+      });
+    });
+
+    it('filters routes when Easy Route accessibility filter toggle is active', () => {
+      render(<Home />);
+
+      const easyToggle = screen.getByTestId('easy-route-toggle');
+      expect(easyToggle).toBeInTheDocument();
+
+      fireEvent.click(easyToggle);
+
+      // Only stroller-friendly routes should be visible
+      const easyRoutes = ROUTES.filter((r) => r.accessibility === 'stroller-friendly');
+      const steepRoutes = ROUTES.filter((r) => r.accessibility === 'steep-stairs');
+
+      easyRoutes.forEach((route) => {
+        expect(screen.getByText(route.title)).toBeInTheDocument();
+      });
+      steepRoutes.forEach((route) => {
+        expect(screen.queryByText(route.title)).not.toBeInTheDocument();
+      });
+    });
+
+    it('triggers geolocation request and sorts routes by proximity when Nearest button is clicked', async () => {
+      const getCurrentPositionMock = vi.fn((success: (pos: { coords: { latitude: number; longitude: number } }) => void) => {
+        // User at Freedom Square (41.6934, 44.8015)
+        success({
+          coords: {
+            latitude: 41.6934,
+            longitude: 44.8015,
+          },
+        });
+      });
+
+      Object.defineProperty(global.navigator, 'geolocation', {
+        value: { getCurrentPosition: getCurrentPositionMock },
+        writable: true,
+        configurable: true,
+      });
+
+      render(<Home />);
+
+      const geoBtn = screen.getByTestId('geo-location-button');
+      expect(geoBtn).toBeInTheDocument();
+
+      fireEvent.click(geoBtn);
+
+      expect(getCurrentPositionMock).toHaveBeenCalledTimes(1);
+      // Check that distance badges appear on cards
+      expect(screen.getAllByTestId('route-distance-badge').length).toBeGreaterThan(0);
     });
   });
 });

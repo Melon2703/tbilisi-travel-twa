@@ -45,7 +45,9 @@ export const TRANSLATIONS = {
     // Durations
     '1-2h': '1-2h',
     '2-4h': '2-4h',
+    '3-4h': '3-4h',
     'half-day': 'half-day',
+    'full-day': 'full-day',
 
     // Accessibility
     'stroller-friendly': 'stroller-friendly',
@@ -57,6 +59,19 @@ export const TRANSLATIONS = {
     'courtyards': 'courtyards',
     'food-wine': 'food-wine',
     'architecture': 'architecture',
+    'cultural': 'cultural',
+    'insta-locations': 'insta-locations',
+    'hiking': 'hiking',
+
+    // Route Overview Map & Step Preview
+    overviewMapTitle: 'Route Overview Map',
+    stepByStepPreviewTitle: 'Step-by-Step Route Preview',
+    logisticsTerrainTitle: 'Logistics & Terrain Highlights',
+    easyRouteLabel: 'Easy Route Only',
+    useMyLocation: 'Nearest to Me',
+    locating: 'Locating...',
+    allDurations: 'All Durations',
+    allVibes: 'All Vibes',
 
     // Homepage catalog
     headerTitle: 'Tbilisi Travel Routes',
@@ -117,7 +132,9 @@ export const TRANSLATIONS = {
     // Durations
     '1-2h': '1-2 ч',
     '2-4h': '2-4 ч',
+    '3-4h': '3-4 ч',
     'half-day': 'полдня',
+    'full-day': 'весь день',
 
     // Accessibility
     'stroller-friendly': 'удобно с коляской',
@@ -129,6 +146,19 @@ export const TRANSLATIONS = {
     'courtyards': 'дворики',
     'food-wine': 'еда-и-вино',
     'architecture': 'архитектура',
+    'cultural': 'культура',
+    'insta-locations': 'инста-локации',
+    'hiking': 'хайкинг',
+
+    // Route Overview Map & Step Preview
+    overviewMapTitle: 'Карта маршрута',
+    stepByStepPreviewTitle: 'Пошаговый обзор маршрута',
+    logisticsTerrainTitle: 'Рельеф и логистика',
+    easyRouteLabel: 'Только легкие маршруты',
+    useMyLocation: 'Ближайшие ко мне',
+    locating: 'Определение...',
+    allDurations: 'Любая длительность',
+    allVibes: 'Все атмосферы',
 
     // Homepage catalog
     headerTitle: 'Пешие маршруты по Тбилиси',
