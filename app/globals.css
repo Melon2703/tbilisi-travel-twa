@@ -16,6 +16,14 @@
   --text-primary: #1C1008;
   --text-secondary: #7A6552;
 
+  /* High-Contrast Outdoor Theme Support Tokens */
+  --outdoor-text-primary: #1C1008;
+  --outdoor-terracotta: #C4572A;
+  --outdoor-[#228255]: #228255;
+  --outdoor-badge-bg: #1C1008;
+  --outdoor-badge-text: #FFFFFF;
+  --outdoor-border-contrast: rgba(28, 16, 8, 0.22);
+
   /* Telegram WebApp theme CSS variables */
   --twa-bg-color: var(--warm-stone);
   --twa-text-color: var(--tbilisi-slate);
@@ -25,6 +33,15 @@
   --twa-button-text-color: #FFFFFF;
   --twa-secondary-bg-color: var(--warm-stone);
   --twa-header-bg-color: var(--tbilisi-slate);
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --text-primary: #000000;
+    --text-secondary: #332211;
+    --terracotta-accent: #A83E1B;
+    --neutral-border: #B5B5B0;
+  }
 }
 
 

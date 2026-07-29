@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { matchRoute, sortRoutesByProximity, calculateDistance } from '../lib/engine/matcher';
+import { matchRoute, sortRoutesByProximity, calculateDistance, isAccessibilitySatisfied } from '../lib/engine/matcher';
 import { ROUTES, getRouteById, getAllRoutes } from '../lib/data/routes';
 import { Route, MatchCriteria, AttractionStop, VenueStop } from '../lib/types/route';
 
@@ -156,6 +156,16 @@ describe('matchRoute matcher engine', () => {
     expect(result).not.toBeNull();
     expect(result?.route.id).toBe('old-tbilisi-steep');
     expect(result?.relaxed).toBe(false);
+  });
+
+  it('correctly evaluates isAccessibilitySatisfied domain matching rules', () => {
+    expect(isAccessibilitySatisfied('stroller-friendly', 'stroller-friendly')).toBe(true);
+    expect(isAccessibilitySatisfied('moderate', 'stroller-friendly')).toBe(false);
+    expect(isAccessibilitySatisfied('steep-stairs', 'stroller-friendly')).toBe(false);
+    expect(isAccessibilitySatisfied('stroller-friendly', 'moderate')).toBe(true);
+    expect(isAccessibilitySatisfied('moderate', 'moderate')).toBe(true);
+    expect(isAccessibilitySatisfied('steep-stairs', 'moderate')).toBe(false);
+    expect(isAccessibilitySatisfied('steep-stairs', 'steep-stairs')).toBe(true);
   });
 });
 

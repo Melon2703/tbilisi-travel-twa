@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Route, DurationCategory, VibeCategory } from '@/lib/types/route';
-import { sortRoutesByProximity, calculateDistance } from '@/lib/engine/matcher';
+import { sortRoutesByProximity, calculateDistance, isAccessibilitySatisfied } from '@/lib/engine/matcher';
 import { getRouteDurationFormatted, formatAccessibilityLabel } from '@/lib/data/routes';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
@@ -22,7 +22,7 @@ const DURATIONS: { id: DurationCategory; label: string; labelRu: string }[] = [
 ];
 
 const VIBES: { id: VibeCategory; label: string; labelRu: string }[] = [
-  { id: 'insta-locations', label: 'Insta-Locations', labelRu: 'Инста-локации' },
+  { id: 'insta-locations', label: 'Insta-Spots', labelRu: 'Инста-места' },
   { id: 'cultural', label: 'Cultural', labelRu: 'Культура' },
   { id: 'hiking', label: 'Hiking', labelRu: 'Хайкинг' },
   { id: 'food-wine', label: 'Food & Wine', labelRu: 'Еда и вино' },
@@ -76,7 +76,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
     if (selectedVibe !== 'all' && !route.vibes.includes(selectedVibe)) {
       return false;
     }
-    if (easyRouteOnly && route.accessibility !== 'stroller-friendly') {
+    if (easyRouteOnly && !isAccessibilitySatisfied(route.accessibility, 'stroller-friendly')) {
       return false;
     }
     return true;
@@ -119,7 +119,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 ? t('locating')
                 : userLocation
                   ? language === 'ru'
-                    ? 'Сортировка по локации ON'
+                    ? 'Сортировка поблизости (Вкл)'
                     : 'Nearest First (Active)'
                   : t('useMyLocation')}
             </span>
@@ -166,10 +166,10 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
           </div>
         </div>
 
-        {/* Vibe Tags Filters Row */}
+        {/* Vibe Filters Row */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold text-[#7A6552] uppercase tracking-wide flex items-center gap-1">
-            <span>✨</span> {language === 'ru' ? 'Атмосфера (Vibe)' : 'Vibe Tag'}
+            <span>✨</span> {language === 'ru' ? 'Атмосфера' : 'Vibe'}
           </label>
           <div className="flex flex-wrap gap-2">
             <button

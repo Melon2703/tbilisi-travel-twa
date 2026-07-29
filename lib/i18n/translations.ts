@@ -60,12 +60,12 @@ export const TRANSLATIONS = {
     'food-wine': 'food-wine',
     'architecture': 'architecture',
     'cultural': 'cultural',
-    'insta-locations': 'insta-locations',
+    'insta-locations': 'insta-spots',
     'hiking': 'hiking',
 
     // Route Overview Map & Step Preview
     overviewMapTitle: 'Route Overview Map',
-    stepByStepPreviewTitle: 'Step-by-Step Route Preview',
+    stepByStepPreviewTitle: 'Route Sequence Preview',
     logisticsTerrainTitle: 'Logistics & Terrain Highlights',
     easyRouteLabel: 'Easy Route Only',
     useMyLocation: 'Nearest to Me',
@@ -147,12 +147,12 @@ export const TRANSLATIONS = {
     'food-wine': 'еда-и-вино',
     'architecture': 'архитектура',
     'cultural': 'культура',
-    'insta-locations': 'инста-локации',
+    'insta-locations': 'инста-места',
     'hiking': 'хайкинг',
 
     // Route Overview Map & Step Preview
     overviewMapTitle: 'Карта маршрута',
-    stepByStepPreviewTitle: 'Пошаговый обзор маршрута',
+    stepByStepPreviewTitle: 'Последовательность остановок',
     logisticsTerrainTitle: 'Рельеф и логистика',
     easyRouteLabel: 'Только легкие маршруты',
     useMyLocation: 'Ближайшие ко мне',

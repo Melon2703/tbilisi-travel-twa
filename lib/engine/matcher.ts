@@ -55,7 +55,7 @@ export function sortRoutesByProximity(
 /**
  * Helper to determine if a route's accessibility level satisfies the user's hard logistics constraint.
  */
-function isAccessibilitySatisfied(
+export function isAccessibilitySatisfied(
   routeAccessibility: AccessibilityLevel,
   requestedAccessibility: AccessibilityLevel
 ): boolean {

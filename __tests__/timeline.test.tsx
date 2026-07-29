@@ -170,7 +170,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       // Step-by-step preview list container
       const stepPreview = screen.getByTestId('step-by-step-preview-list');
       expect(stepPreview).toBeInTheDocument();
-      expect(screen.getByText(/Step-by-Step Route Preview/i)).toBeInTheDocument();
+      expect(screen.getByText(/Route Sequence Preview/i)).toBeInTheDocument();
       expect(stepPreview).toHaveTextContent('Lado Asatiani St Merchant Houses');
       expect(stepPreview).toHaveTextContent('Galaktion Tabidze Balcony House');
     });
