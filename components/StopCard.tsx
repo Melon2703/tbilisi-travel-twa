@@ -38,6 +38,43 @@ function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): s
   return categoryText;
 }
 
+function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: string }) {
+  const [selectedDishes, setSelectedDishes] = React.useState<Record<string, boolean>>({});
+
+  const toggleDish = (dish: string) => {
+    setSelectedDishes((prev) => ({ ...prev, [dish]: !prev[dish] }));
+  };
+
+  return (
+    <div data-testid="recommended-dishes" className="space-y-2 pt-1">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#C4572A] flex items-center gap-1.5">
+        <span>🍽️</span> {title}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {dishes.map((dish) => {
+          const isSelected = Boolean(selectedDishes[dish]);
+          return (
+            <button
+              type="button"
+              key={dish}
+              data-testid="dish-pill"
+              data-selected={isSelected ? 'true' : 'false'}
+              onClick={() => toggleDish(dish)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer select-none active:scale-95 ${
+                isSelected
+                  ? 'bg-[#C4572A] text-white border-[#C4572A] shadow-xs'
+                  : 'bg-[#FFF8EE] text-[#4A3828] border-[#E8DCCB] shadow-2xs hover:bg-[#FCEFD8]'
+              }`}
+            >
+              {dish}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProps) {
   const { t, getLocalizedStop } = useLanguage();
   const stop = getLocalizedStop(rawStop);
@@ -207,22 +244,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
 
         {/* Recommended Dishes for Venue Stop */}
         {venueStop && venueStop.venueDetails.recommendedDishes?.length > 0 && (
-          <div data-testid="recommended-dishes" className="space-y-2 pt-1">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#C4572A] flex items-center gap-1.5">
-              <span>🍽️</span> {t('recommendedDishes')}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {venueStop.venueDetails.recommendedDishes.map((dish, idx) => (
-                <span
-                  key={idx}
-                  data-testid="dish-pill"
-                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FFF8EE] text-[#4A3828] border border-[#E8DCCB] shadow-2xs hover:bg-[#FCEFD8] transition-colors cursor-pointer select-none"
-                >
-                  {dish}
-                </span>
-              ))}
-            </div>
-          </div>
+          <RecommendedDishesSection dishes={venueStop.venueDetails.recommendedDishes} title={t('recommendedDishes')} />
         )}
 
         {/* Venue Booking Advice Callout */}

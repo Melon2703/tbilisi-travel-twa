@@ -532,7 +532,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(veggieBadge).toHaveTextContent('🌱 Veggie Friendly');
     });
 
-    it('renders recommended dish pills for VenueStop', () => {
+    it('renders recommended dish pills for VenueStop and supports interactive selection', () => {
       render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
 
       const dishesContainer = screen.getByTestId('recommended-dishes');
@@ -542,6 +542,10 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       const pills = screen.getAllByTestId('dish-pill');
       expect(pills).toHaveLength(2);
+      expect(pills[0]).toHaveAttribute('data-selected', 'false');
+
+      fireEvent.click(pills[0]);
+      expect(pills[0]).toHaveAttribute('data-selected', 'true');
     });
 
     it('renders booking advice callout block when present on VenueStop', () => {

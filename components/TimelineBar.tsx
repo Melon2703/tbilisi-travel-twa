@@ -147,7 +147,7 @@ function TimelineBar({
             const stopOrder = stop.order ?? slideIndex;
             const isActive = activeIndex === slideIndex;
             const isVisited = visitedStopIds.includes(stop.id);
-            const isPitstop = stop.stopType === 'venue' || Boolean((stop as any).isOptional);
+            const isPitstop = stop.stopType === 'venue' && Boolean(stop.isOptional);
 
             return (
               <button
