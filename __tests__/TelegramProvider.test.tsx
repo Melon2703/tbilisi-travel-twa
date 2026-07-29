@@ -108,4 +108,67 @@ describe('TelegramProvider Component', () => {
 
     expect(mockBackButton.hide).toHaveBeenCalledTimes(1);
   });
+
+  describe('Telegram WebApp v6.0 Version Guards', () => {
+    const createMockWebAppV6 = (overrides = {}) => ({
+      version: '6.0',
+      ready: vi.fn(),
+      expand: vi.fn(),
+      isVersionAtLeast: vi.fn((ver: string) => {
+        if (ver === '6.1' || ver === '7.7') return false;
+        return true;
+      }),
+      ...overrides,
+    });
+
+    it('does NOT invoke disableVerticalSwipes on Telegram WebApp v6.0 (where isVersionAtLeast 7.7 is false)', () => {
+      const disableVerticalSwipesMock = vi.fn();
+      const mockWebAppV6 = createMockWebAppV6({ disableVerticalSwipes: disableVerticalSwipesMock });
+
+      (window as any).Telegram = { WebApp: mockWebAppV6 };
+
+      render(
+        <TelegramProvider>
+          <div>Child</div>
+        </TelegramProvider>
+      );
+
+      expect(mockWebAppV6.ready).toHaveBeenCalledTimes(1);
+      expect(disableVerticalSwipesMock).not.toHaveBeenCalled();
+    });
+
+    it('does NOT invoke BackButton.show() on Telegram WebApp v6.0 when isVersionAtLeast(6.1) is false', () => {
+      const mockBackButton = {
+        isVisible: false,
+        show: vi.fn(),
+        hide: vi.fn(),
+        onClick: vi.fn(),
+        offClick: vi.fn(),
+      };
+
+      const mockWebAppV6 = createMockWebAppV6({ BackButton: mockBackButton });
+
+      (window as any).Telegram = { WebApp: mockWebAppV6 };
+
+      function Consumer() {
+        const { showBackButton } = useTelegram();
+        return <button onClick={() => showBackButton()}>Show Back</button>;
+      }
+
+      render(
+        <TelegramProvider>
+          <Consumer />
+        </TelegramProvider>
+      );
+
+      const btn = screen.getByText('Show Back');
+      act(() => {
+        btn.click();
+      });
+
+      expect(mockBackButton.show).not.toHaveBeenCalled();
+    });
+  });
 });
+
+

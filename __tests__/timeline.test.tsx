@@ -236,7 +236,19 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(startBtnWrapper).toHaveClass('fixed');
       expect(startBtnWrapper).toHaveClass('bottom-0');
     });
+
+    it('initializes visitedStopIds safely to prevent SSR hydration mismatch when localStorage has saved stops', () => {
+      localStorage.setItem(
+        'tbilisi_visited_test-route-1',
+        JSON.stringify(['sololaki-stop-2'])
+      );
+
+      render(<RouteCarousel route={mockRoute} />);
+
+      expect(screen.getByText('Visited')).toBeInTheDocument();
+    });
   });
+
 
   describe('StopCard Component', () => {
     const mockStopWithWarning: Stop = {

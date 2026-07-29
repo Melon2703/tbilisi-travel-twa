@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import RoutePage from '../app/twa/[routeId]/page';
 import RouteIntroCard from '../components/RouteIntroCard';
@@ -99,3 +99,5 @@ describe('TWA Internationalization (Russian Support)', () => {
     expect(screen.getByRole('heading', { name: 'Сердце Старого Тбилиси: Главный маршрут' })).toBeInTheDocument();
   });
 });
+
+
