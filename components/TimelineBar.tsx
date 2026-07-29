@@ -147,6 +147,7 @@ function TimelineBar({
             const stopOrder = stop.order ?? slideIndex;
             const isActive = activeIndex === slideIndex;
             const isVisited = visitedStopIds.includes(stop.id);
+            const isPitstop = stop.stopType === 'venue' || Boolean((stop as any).isOptional);
 
             return (
               <button
@@ -154,8 +155,9 @@ function TimelineBar({
                 type="button"
                 ref={isActive ? activeStopRef : null}
                 data-testid={`timeline-stop-${stopOrder}`}
+                data-pitstop={isPitstop ? 'true' : undefined}
                 onClick={() => onStopClick(slideIndex)}
-                aria-label={t('jumpToStop', { order: stopOrder, name: stop.name })}
+                aria-label={`${t('jumpToStop', { order: stopOrder, name: stop.name })}${isPitstop ? ' (' + t('pitstop') + ')' : ''}`}
                 aria-current={isActive ? 'step' : undefined}
                 className={`relative flex items-center justify-center rounded-full text-xs font-bold transition-all duration-200 active:scale-90 select-none shrink-0 ${
                   isActive
@@ -172,23 +174,24 @@ function TimelineBar({
                   width: DOT,
                   height: DOT,
                   zIndex: 1,
+                  borderStyle: isPitstop ? 'dashed' : 'solid',
                   ...(isVisited
                     ? {
                         background: '#228255',
-                        border: '2px solid #228255',
+                        border: isPitstop ? '2px dashed #228255' : '2px solid #228255',
                         color: '#fff',
                         boxShadow: isActive ? '0 0 0 3px rgba(34,130,85,0.2)' : 'none',
                       }
                     : isActive
                       ? {
                           background: '#FAF7F2',
-                          border: '2.5px solid #C4572A',
+                          border: isPitstop ? '2.5px dashed #C4572A' : '2.5px solid #C4572A',
                           color: '#C4572A',
                           boxShadow: '0 0 0 3px rgba(196,87,42,0.15)',
                         }
                       : {
                           background: '#FAF7F2',
-                          border: '1.5px solid rgba(196,87,42,0.25)',
+                          border: isPitstop ? '1.5px dashed rgba(196,87,42,0.5)' : '1.5px solid rgba(196,87,42,0.25)',
                           color: 'rgba(28,16,8,0.3)',
                         }),
                 }}

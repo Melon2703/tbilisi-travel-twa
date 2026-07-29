@@ -481,6 +481,126 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(container).toHaveClass('px-3');
     });
   });
+
+  describe('Ticket 02: Venue Details, Pitstop UI & Continuous Scroll', () => {
+    const mockVenueStop = {
+      id: 'venue-stop-1',
+      order: 1,
+      stopType: 'venue' as const,
+      isOptional: true as const,
+      name: 'Café Minda',
+      neighborhood: 'Orbeliani',
+      coordinates: { lat: 41.6981, lng: 44.8032 },
+      estimatedMinutes: 60,
+      imageUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24',
+      olyaTips: 'Light-filled upper floor. Get fresh pastries & tea.',
+      venueDetails: {
+        category: 'cafe' as const,
+        cuisines: ['georgian' as const, 'european' as const],
+        isVegetarianFriendly: true,
+        recommendedDishes: ['Fresh pastries', 'Georgian tea'],
+        bookingAdvice: 'Light-filled upper floor. Walk-ins welcome for breakfast.',
+      },
+    };
+
+    const mockAttractionStopWithTransit = {
+      id: 'attraction-stop-1',
+      order: 2,
+      stopType: 'attraction' as const,
+      transitBadge: 'Cable Car Ride (~5 min)',
+      name: 'Cable Car to Mother of Georgia',
+      neighborhood: 'Sololaki Ridge',
+      coordinates: { lat: 41.688, lng: 44.8051 },
+      estimatedMinutes: 15,
+      imageUrl: 'https://images.unsplash.com/photo-1663785011617',
+      olyaTips: 'Tap TravelCard at turnstile and glide up ridge.',
+    };
+
+    it('renders VenueStop category and cuisine pills correctly', () => {
+      render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
+
+      const categoryCuisine = screen.getByTestId('venue-category-cuisine');
+      expect(categoryCuisine).toBeInTheDocument();
+      expect(categoryCuisine).toHaveTextContent('☕ Cafe • Georgian, European');
+    });
+
+    it('renders 🌱 Veggie Friendly badge when isVegetarianFriendly is true', () => {
+      render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
+
+      const veggieBadge = screen.getByTestId('veggie-friendly-badge');
+      expect(veggieBadge).toBeInTheDocument();
+      expect(veggieBadge).toHaveTextContent('🌱 Veggie Friendly');
+    });
+
+    it('renders recommended dish pills for VenueStop', () => {
+      render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
+
+      const dishesContainer = screen.getByTestId('recommended-dishes');
+      expect(dishesContainer).toBeInTheDocument();
+      expect(screen.getByText('Fresh pastries')).toBeInTheDocument();
+      expect(screen.getByText('Georgian tea')).toBeInTheDocument();
+
+      const pills = screen.getAllByTestId('dish-pill');
+      expect(pills).toHaveLength(2);
+    });
+
+    it('renders booking advice callout block when present on VenueStop', () => {
+      render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
+
+      const bookingAdvice = screen.getByTestId('booking-advice');
+      expect(bookingAdvice).toBeInTheDocument();
+      expect(bookingAdvice).toHaveTextContent('Light-filled upper floor. Walk-ins welcome for breakfast.');
+    });
+
+    it('renders Pitstop badge on StopCard for optional VenueStop', () => {
+      render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
+
+      const pitstopBadge = screen.getByTestId('pitstop-badge');
+      expect(pitstopBadge).toBeInTheDocument();
+      expect(pitstopBadge).toHaveTextContent('☕ Pitstop');
+    });
+
+    it('renders transit step badge on AttractionStop', () => {
+      render(<StopCard stop={mockAttractionStopWithTransit} isLast={false} totalStops={2} />);
+
+      const transitBadge = screen.getByTestId('transit-badge');
+      expect(transitBadge).toBeInTheDocument();
+      expect(transitBadge).toHaveTextContent('Cable Car Ride (~5 min)');
+    });
+
+    it('renders a single continuous scrolling container without collapsible accordions', () => {
+      render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
+
+      const scrollContainer = screen.getByTestId('stop-card-container');
+      expect(scrollContainer).toBeInTheDocument();
+
+      expect(screen.getByTestId('venue-category-cuisine')).toBeVisible();
+      expect(screen.getByTestId('recommended-dishes')).toBeVisible();
+      expect(screen.getByTestId('booking-advice')).toBeVisible();
+      expect(screen.getByTestId('map-pills-row')).toBeVisible();
+    });
+
+    it('styles VenueStop optional pitstop on timeline bar with dashed border', () => {
+      const mockRouteWithPitstop: Route = {
+        id: 'pitstop-route-1',
+        title: 'Test Pitstop Route',
+        subtitle: 'Route with venue pitstop',
+        durationCategory: '1-2h',
+        accessibility: 'stroller-friendly',
+        vibes: ['food-wine'],
+        heroImage: 'https://images.unsplash.com/photo-1554118811',
+        introCopy: 'Intro',
+        stops: [mockVenueStop],
+      };
+
+      render(<RouteCarousel route={mockRouteWithPitstop} />);
+      fireEvent.click(screen.getByRole('button', { name: /START ROUTE/i }));
+
+      const pitstopBtn = screen.getByTestId('timeline-stop-1');
+      expect(pitstopBtn).toBeInTheDocument();
+      expect(pitstopBtn).toHaveAttribute('data-pitstop', 'true');
+    });
+  });
 });
 
 

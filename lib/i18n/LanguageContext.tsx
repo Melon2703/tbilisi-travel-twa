@@ -37,7 +37,7 @@ interface LanguageProviderProps {
 
 export function getLocalizedStop(stop: Stop, lang: Language): Stop {
   if (lang === 'ru') {
-    return {
+    const localized: Stop = {
       ...stop,
       name: stop.nameRu || stop.name,
       neighborhood: stop.neighborhoodRu || stop.neighborhood,
@@ -46,6 +46,16 @@ export function getLocalizedStop(stop: Stop, lang: Language): Stop {
       photoSpot: stop.photoSpotRu || stop.photoSpot,
       bestTimeOfDay: stop.bestTimeOfDayRu || stop.bestTimeOfDay,
     };
+    if (stop.stopType === 'attraction' && stop.transitBadgeRu) {
+      (localized as any).transitBadge = stop.transitBadgeRu;
+    }
+    if (stop.stopType === 'venue' && stop.venueDetails) {
+      (localized as any).venueDetails = {
+        ...stop.venueDetails,
+        bookingAdvice: stop.venueDetails.bookingAdviceRu || stop.venueDetails.bookingAdvice,
+      };
+    }
+    return localized;
   }
   return stop;
 }

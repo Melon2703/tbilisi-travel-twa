@@ -18,6 +18,7 @@ export const EMOJI_ICONS = {
   georgiaFlag: '🇬🇪',
   sparkles: '✨',
   externalLink: '↗️',
+  calendar: '📅',
 } as const;
 
 export type EmojiIconName = keyof typeof EMOJI_ICONS | (string & {});

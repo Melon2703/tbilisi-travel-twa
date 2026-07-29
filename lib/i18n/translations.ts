@@ -13,7 +13,7 @@ export const TRANSLATIONS = {
     funicular: 'Funicular',
     swipePrompt: '👉 Swipe left or tap below to begin!',
 
-    // StopCard
+    // StopCard & Venue
     stopOf: 'STOP {order} OF {total}',
     stopNumber: 'STOP {order}',
     visited: 'Visited',
@@ -21,6 +21,20 @@ export const TRANSLATIONS = {
     photoSpotRec: 'Photo Spot Recommendation',
     logisticsWarning: 'Logistics Warning',
     min: 'min',
+    pitstop: 'Pitstop',
+    veggieFriendly: '🌱 Veggie Friendly',
+    recommendedDishes: 'Recommended Dishes',
+    bookingAdvice: 'Booking Advice',
+    transitStep: 'Transit Step',
+
+    cafe: '☕ Cafe',
+    restaurant: '🍽️ Restaurant',
+    bar: '🍸 Bar',
+    wine_bar: '🍷 Wine Bar',
+
+    georgian: 'Georgian',
+    european: 'European',
+    asian: 'Asian',
 
     // TimelineBar
     routeCompleted: 'Route completed! All stops visited!',
@@ -71,7 +85,7 @@ export const TRANSLATIONS = {
     funicular: 'Фуникулёр',
     swipePrompt: '👉 Смахните влево или нажмите ниже, чтобы начать!',
 
-    // StopCard
+    // StopCard & Venue
     stopOf: 'ОСТАНОВКА {order} ИЗ {total}',
     stopNumber: 'ОСТАНОВКА {order}',
     visited: 'Посещено',
@@ -79,6 +93,20 @@ export const TRANSLATIONS = {
     photoSpotRec: 'Лучшее место для фото',
     logisticsWarning: 'Предупреждение о рельефе',
     min: 'мин',
+    pitstop: 'Пит-стоп',
+    veggieFriendly: '🌱 Вегетарианское',
+    recommendedDishes: 'Рекомендуемые блюда',
+    bookingAdvice: 'Совет по бронированию',
+    transitStep: 'Транзитный шаг',
+
+    cafe: '☕ Кафе',
+    restaurant: '🍽️ Ресторан',
+    bar: '🍸 Бар',
+    wine_bar: '🍷 Винный бар',
+
+    georgian: 'Грузинская',
+    european: 'Европейская',
+    asian: 'Азиатская',
 
     // TimelineBar
     routeCompleted: 'Маршрут пройден! Все остановки посещены!',

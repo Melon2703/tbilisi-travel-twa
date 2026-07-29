@@ -2,14 +2,13 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Stop } from '@/lib/types/route';
+import { Stop, VenueStop, AttractionStop } from '@/lib/types/route';
 import { getMapUrl } from '@/lib/utils/maps';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
-
 import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
 
 export interface StopCardProps {
@@ -17,6 +16,26 @@ export interface StopCardProps {
   isLast?: boolean;
   totalStops?: number;
   isVisited?: boolean;
+}
+
+const CATEGORY_KEYS: Record<string, string> = {
+  cafe: 'cafe',
+  restaurant: 'restaurant',
+  bar: 'bar',
+  wine_bar: 'wine_bar',
+};
+
+function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): string {
+  const categoryKey = CATEGORY_KEYS[venueStop.venueDetails.category] || venueStop.venueDetails.category;
+  const categoryText = t(categoryKey as any) || venueStop.venueDetails.category;
+
+  if (venueStop.venueDetails.cuisines && venueStop.venueDetails.cuisines.length > 0) {
+    const cuisinesText = venueStop.venueDetails.cuisines
+      .map((c) => t(c as any) || c.charAt(0).toUpperCase() + c.slice(1))
+      .join(', ');
+    return `${categoryText} • ${cuisinesText}`;
+  }
+  return categoryText;
 }
 
 function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProps) {
@@ -48,6 +67,12 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
   const stopLabel = totalStops
     ? t('stopOf', { order: stop.order, total: totalStops })
     : t('stopNumber', { order: stop.order });
+
+  const isVenue = stop.stopType === 'venue';
+  const isAttraction = stop.stopType === 'attraction';
+  const venueStop = isVenue ? (stop as VenueStop) : null;
+  const attractionStop = isAttraction ? (stop as AttractionStop) : null;
+  const isPitstop = isVenue && (venueStop?.isOptional ?? false);
 
   return (
     <div
@@ -88,14 +113,21 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
         </div>
       )}
 
-      {/* ── Scrollable Card Content Body ── */}
+      {/* ── Scrollable Card Content Body (Continuous Scroll Surface) ── */}
       <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
         {/* Header & Order Badge */}
         <div className="flex items-start justify-between gap-3 min-w-0">
           <div className="min-w-0 flex-1 space-y-1">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
-              {stopLabel}
-            </p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
+                {stopLabel}
+              </p>
+              {isPitstop && (
+                <Badge variant="subtle" data-testid="pitstop-badge" className="normal-case tracking-normal">
+                  ☕ {t('pitstop')}
+                </Badge>
+              )}
+            </div>
             <h2
               className="text-2xl sm:text-3xl font-black text-[#1C1008] tracking-tight leading-tight break-words min-w-0 max-w-full"
               style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
@@ -109,6 +141,32 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
             </Badge>
           )}
         </div>
+
+        {/* Venue Category & Cuisine Pills + Veggie Badge */}
+        {venueStop && (
+          <div className="flex flex-wrap items-center gap-2 pt-0.5" data-testid="venue-details-header">
+            <span
+              data-testid="venue-category-cuisine"
+              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] border border-[#E8D5C4]"
+            >
+              {formatCategoryCuisine(venueStop, t)}
+            </span>
+            {venueStop.venueDetails.isVegetarianFriendly && (
+              <Badge variant="visited" data-testid="veggie-friendly-badge" className="normal-case tracking-normal text-xs font-semibold">
+                {t('veggieFriendly')}
+              </Badge>
+            )}
+          </div>
+        )}
+
+        {/* Transit Badge for Attraction Stop */}
+        {attractionStop && attractionStop.transitBadge && (
+          <div data-testid="transit-badge">
+            <Callout emoji="funicular" title={t('transitStep')}>
+              <p className="font-semibold text-[#1C1008]">{attractionStop.transitBadge}</p>
+            </Callout>
+          </div>
+        )}
 
         {/* Georgian Divider */}
         <GeorgianOrnament />
@@ -147,15 +205,46 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
           </a>
         </div>
 
+        {/* Recommended Dishes for Venue Stop */}
+        {venueStop && venueStop.venueDetails.recommendedDishes?.length > 0 && (
+          <div data-testid="recommended-dishes" className="space-y-2 pt-1">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#C4572A] flex items-center gap-1.5">
+              <span>🍽️</span> {t('recommendedDishes')}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {venueStop.venueDetails.recommendedDishes.map((dish, idx) => (
+                <span
+                  key={idx}
+                  data-testid="dish-pill"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FFF8EE] text-[#4A3828] border border-[#E8DCCB] shadow-2xs hover:bg-[#FCEFD8] transition-colors cursor-pointer select-none"
+                >
+                  {dish}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Venue Booking Advice Callout */}
+        {venueStop && venueStop.venueDetails.bookingAdvice && (
+          <div data-testid="booking-advice">
+            <Callout emoji="calendar" title={t('bookingAdvice')}>
+              {venueStop.venueDetails.bookingAdvice}
+            </Callout>
+          </div>
+        )}
+
         {/* Olya's Tip Box */}
-        <Callout emoji="chat" title={t('olyaTip')}>
-          <p
-            className="text-sm italic leading-relaxed text-[#4A3828]"
-            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
-          >
-            &ldquo;{stop.olyaTips}&rdquo;
-          </p>
-        </Callout>
+        {stop.olyaTips && (
+          <Callout emoji="chat" title={t('olyaTip')}>
+            <p
+              className="text-sm italic leading-relaxed text-[#4A3828]"
+              style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+            >
+              &ldquo;{stop.olyaTips}&rdquo;
+            </p>
+          </Callout>
+        )}
 
         {/* Photo Spot Recommendation Callout */}
         {stop.photoSpot && (
@@ -180,3 +269,4 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
 }
 
 export default React.memo(StopCard);
+
