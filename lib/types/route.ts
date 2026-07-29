@@ -1,6 +1,13 @@
-export type DurationCategory = '1-2h' | '2-4h' | 'half-day';
+export type DurationCategory = '1-2h' | '3-4h' | 'half-day' | 'full-day';
 export type AccessibilityLevel = 'stroller-friendly' | 'moderate' | 'steep-stairs';
-export type VibeCategory = 'photo-spots' | 'courtyards' | 'food-wine' | 'architecture';
+export type VibeCategory =
+  | 'cultural'
+  | 'insta-locations'
+  | 'hiking'
+  | 'photo-spots'
+  | 'courtyards'
+  | 'food-wine'
+  | 'architecture';
 
 // Domain glossary aliases (CONTEXT.md)
 export type LogisticsConstraint = AccessibilityLevel;
@@ -11,7 +18,19 @@ export interface ProviderRating {
   count: number;
 }
 
-export interface Stop {
+export type VenueCategory = 'cafe' | 'restaurant' | 'bar' | 'wine_bar';
+export type CuisineType = 'georgian' | 'european' | 'asian';
+
+export interface VenueDetails {
+  category: VenueCategory;
+  cuisines: CuisineType[];
+  isVegetarianFriendly: boolean;
+  recommendedDishes: string[];
+  bookingAdvice?: string;
+  bookingAdviceRu?: string;
+}
+
+export interface BaseStop {
   id: string;
   order: number;
   name: string;
@@ -31,15 +50,30 @@ export interface Stop {
   photoSpotRu?: string;
   ratings?: {
     google?: ProviderRating;
+    [key: string]: ProviderRating | undefined;
   };
   placeIds?: {
     google?: string;
     yandex?: string;
+    [key: string]: string | undefined;
   };
   rating?: number;
   ratingCount?: number;
 }
 
+export interface AttractionStop extends BaseStop {
+  stopType: 'attraction';
+  transitBadge?: string;
+  transitBadgeRu?: string;
+}
+
+export interface VenueStop extends BaseStop {
+  stopType: 'venue';
+  venueDetails: VenueDetails;
+  isOptional: true;
+}
+
+export type Stop = AttractionStop | VenueStop;
 
 export interface Route {
   id: string;
@@ -60,6 +94,7 @@ export interface MatchCriteria {
   durationCategory?: DurationCategory;
   accessibility: AccessibilityLevel;
   vibe?: VibeCategory;
+  userLocation?: { lat: number; lng: number } | { latitude: number; longitude: number };
   lang?: import('../i18n/types').Language;
 }
 
@@ -68,3 +103,4 @@ export interface MatchResult {
   relaxed: boolean;
   explanationNote?: string;
 }
+

@@ -31,6 +31,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       {
         id: 'sololaki-stop-1',
         order: 1,
+        stopType: 'attraction',
         name: 'Lado Asatiani St Merchant Houses',
         neighborhood: 'Sololaki',
         coordinates: { lat: 41.6918, lng: 44.7972 },
@@ -41,6 +42,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       {
         id: 'sololaki-stop-2',
         order: 2,
+        stopType: 'attraction',
         name: 'Galaktion Tabidze Balcony House',
         neighborhood: 'Sololaki',
         coordinates: { lat: 41.6931, lng: 44.7989 },
@@ -196,6 +198,7 @@ describe('TWA Timeline & Card Feed UI', () => {
     const mockStopWithWarning: Stop = {
       id: 'test-stop-1',
       order: 1,
+      stopType: 'attraction',
       name: 'Kiacheli St Art Nouveau Mansion',
       neighborhood: 'Vera',
       coordinates: { lat: 41.7042, lng: 44.7895 },
@@ -209,6 +212,7 @@ describe('TWA Timeline & Card Feed UI', () => {
     const mockStopWithoutWarning: Stop = {
       id: 'test-stop-2',
       order: 2,
+      stopType: 'attraction',
       name: 'Lado Asatiani St Merchant Houses',
       neighborhood: 'Sololaki',
       coordinates: { lat: 41.6918, lng: 44.7972 },

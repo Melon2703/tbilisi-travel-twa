@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { matchRoute } from '../lib/engine/matcher';
+import { matchRoute, sortRoutesByProximity, calculateDistance } from '../lib/engine/matcher';
 import { ROUTES, getRouteById, getAllRoutes } from '../lib/data/routes';
-import { Route, MatchCriteria } from '../lib/types/route';
+import { Route, MatchCriteria, AttractionStop, VenueStop } from '../lib/types/route';
 
 const MOCK_ROUTES: Route[] = [
   {
@@ -10,13 +10,14 @@ const MOCK_ROUTES: Route[] = [
     subtitle: 'Stained glass, carved balconies, and hidden residential gems',
     durationCategory: '1-2h',
     accessibility: 'stroller-friendly',
-    vibes: ['courtyards', 'photo-spots'],
+    vibes: ['courtyards', 'insta-locations'],
     heroImage: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f',
     introCopy: 'Discover hidden 19th-century Italianate courtyards of Sololaki.',
     stops: [
       {
         id: 'stop-1',
         order: 1,
+        stopType: 'attraction',
         name: 'Machabeli St Balcony House',
         neighborhood: 'Sololaki',
         coordinates: { lat: 41.6912, lng: 44.7981 },
@@ -30,15 +31,16 @@ const MOCK_ROUTES: Route[] = [
     id: 'old-tbilisi-steep',
     title: 'Old Town & Narikala Ridge Walk',
     subtitle: 'Panoramic views and ancient fortress walls',
-    durationCategory: '2-4h',
+    durationCategory: '3-4h',
     accessibility: 'steep-stairs',
-    vibes: ['photo-spots', 'architecture'],
+    vibes: ['cultural', 'hiking'],
     heroImage: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c',
     introCopy: 'Climb the historic cobblestone hills of Old Kala.',
     stops: [
       {
         id: 'stop-2',
         order: 1,
+        stopType: 'attraction',
         name: 'Narikala Fortress Steps',
         neighborhood: 'Old Kala',
         coordinates: { lat: 41.6881, lng: 44.8085 },
@@ -53,7 +55,7 @@ const MOCK_ROUTES: Route[] = [
     id: 'chugureti-food-wine',
     title: 'Fabrika & Chugureti Culinary Stroll',
     subtitle: 'Polyphonic dining and natural wine bars',
-    durationCategory: '2-4h',
+    durationCategory: '3-4h',
     accessibility: 'moderate',
     vibes: ['food-wine', 'courtyards'],
     heroImage: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3',
@@ -62,6 +64,15 @@ const MOCK_ROUTES: Route[] = [
       {
         id: 'stop-3',
         order: 1,
+        stopType: 'venue',
+        isOptional: true,
+        venueDetails: {
+          category: 'wine_bar',
+          cuisines: ['georgian'],
+          isVegetarianFriendly: true,
+          recommendedDishes: ['Qvevri Amber wine', 'Artisan cheeses'],
+          bookingAdvice: 'Reserve in advance for evening tastings.',
+        },
         name: 'Agmashenebeli Wine Cellar',
         neighborhood: 'Chugureti',
         coordinates: { lat: 41.7082, lng: 44.8021 },
@@ -91,9 +102,9 @@ describe('matchRoute matcher engine', () => {
 
   it('strictly enforces hard accessibility constraint and excludes inaccessible routes', () => {
     const criteria: MatchCriteria = {
-      durationCategory: '2-4h',
+      durationCategory: '3-4h',
       accessibility: 'stroller-friendly',
-      vibe: 'photo-spots',
+      vibe: 'cultural',
     };
 
     const result = matchRoute(MOCK_ROUTES, criteria);
@@ -108,7 +119,7 @@ describe('matchRoute matcher engine', () => {
 
   it('relaxes soft constraints (duration/vibe) while maintaining hard accessibility constraint', () => {
     const criteria: MatchCriteria = {
-      durationCategory: 'half-day',
+      durationCategory: 'full-day',
       accessibility: 'stroller-friendly',
       vibe: 'food-wine',
     };
@@ -133,9 +144,50 @@ describe('matchRoute matcher engine', () => {
 
     expect(result).toBeNull();
   });
+
+  it('matches routes with new duration options (3-4h, full-day) and new vibe categories (cultural, insta-locations, hiking)', () => {
+    const criteria: MatchCriteria = {
+      durationCategory: '3-4h',
+      accessibility: 'steep-stairs',
+      vibe: 'hiking',
+    };
+
+    const result = matchRoute(MOCK_ROUTES, criteria);
+    expect(result).not.toBeNull();
+    expect(result?.route.id).toBe('old-tbilisi-steep');
+    expect(result?.relaxed).toBe(false);
+  });
 });
 
-describe('Static Tbilisi Route Dataset', () => {
+describe('Geo-Proximity Sorting Engine', () => {
+  it('calculates distance between two geographical coordinates in km', () => {
+    // Freedom Square (41.6934, 44.8015) to Rustaveli Metro (41.7042, 44.7905)
+    const dist = calculateDistance(41.6934, 44.8015, 41.7042, 44.7905);
+    expect(dist).toBeGreaterThan(1.0);
+    expect(dist).toBeLessThan(2.0);
+  });
+
+  it('sorts routes by distance relative to current user coordinates', () => {
+    // User is at Freedom Square (41.6934, 44.8015)
+    const userPos = { lat: 41.6934, lng: 44.8015 };
+    const sorted = sortRoutesByProximity(MOCK_ROUTES, userPos);
+
+    // Machabeli St (sololaki-courtyards) is closest to Freedom Square
+    expect(sorted[0].id).toBe('sololaki-courtyards');
+    // Agmashenebeli (chugureti-food-wine) is furthest across the river (41.7082)
+    expect(sorted[sorted.length - 1].id).toBe('chugureti-food-wine');
+  });
+
+  it('supports userLocation in latitude/longitude key format', () => {
+    const userPos = { latitude: 41.7080, longitude: 44.8020 };
+    const sorted = sortRoutesByProximity(MOCK_ROUTES, userPos);
+
+    // Chugureti is closest to 41.7080, 44.8020
+    expect(sorted[0].id).toBe('chugureti-food-wine');
+  });
+});
+
+describe('Static Tbilisi Route Dataset with Polymorphic Stops', () => {
   it('contains valid routes with stops, coordinates, and tips', () => {
     const all = getAllRoutes();
     expect(all.length).toBeGreaterThanOrEqual(4);
@@ -145,9 +197,21 @@ describe('Static Tbilisi Route Dataset', () => {
       expect(route.title).toBeDefined();
       expect(route.stops.length).toBeGreaterThan(0);
       route.stops.forEach((stop) => {
+        expect(stop.stopType).toBeDefined();
+        expect(['attraction', 'venue']).toContain(stop.stopType);
         expect(stop.coordinates.lat).toBeGreaterThan(40);
         expect(stop.coordinates.lng).toBeGreaterThan(40);
         expect(stop.olyaTips.length).toBeGreaterThan(5);
+
+        if (stop.stopType === 'venue') {
+          const venue = stop as VenueStop;
+          expect(venue.isOptional).toBe(true);
+          expect(venue.venueDetails).toBeDefined();
+          expect(venue.venueDetails.category).toBeDefined();
+          expect(Array.isArray(venue.venueDetails.cuisines)).toBe(true);
+          expect(typeof venue.venueDetails.isVegetarianFriendly).toBe('boolean');
+          expect(Array.isArray(venue.venueDetails.recommendedDishes)).toBe(true);
+        }
       });
     });
   });
@@ -158,7 +222,7 @@ describe('Static Tbilisi Route Dataset', () => {
     expect(route?.id).toBe('sololaki-courtyards');
   });
 
-  it('contains the full 19-stop Old Tbilisi Heartbeat master dataset with complete metadata', () => {
+  it('contains the full 19-stop Old Tbilisi Heartbeat master dataset with complete polymorphic metadata', () => {
     const heartbeat = getRouteById('old-tbilisi-heartbeat');
     expect(heartbeat).toBeDefined();
     expect(heartbeat?.title).toContain('Old Tbilisi Heartbeat');
@@ -176,17 +240,21 @@ describe('Static Tbilisi Route Dataset', () => {
       expect(stop.olyaTips.length).toBeGreaterThan(10);
     });
 
-    // Check specific stops from spec
-    const puppetStop = heartbeat?.stops.find((s) => s.order === 4);
-    expect(puppetStop?.name).toContain('Gabriadze');
-    expect(puppetStop?.bestTimeOfDay).toContain('11:45 AM');
-    expect(puppetStop?.photoSpot).toBeDefined();
+    // Check specific venue stops
+    const cafeMinda = heartbeat?.stops.find((s) => s.order === 2) as VenueStop;
+    expect(cafeMinda.stopType).toBe('venue');
+    expect(cafeMinda.venueDetails.category).toBe('cafe');
+    expect(cafeMinda.isOptional).toBe(true);
 
-    const waterfallStop = heartbeat?.stops.find((s) => s.order === 15);
-    expect(waterfallStop?.name).toContain('Legvtakhevi Waterfall');
+    const lunchStop = heartbeat?.stops.find((s) => s.order === 13) as VenueStop;
+    expect(lunchStop.stopType).toBe('venue');
+    expect(lunchStop.venueDetails.category).toBe('restaurant');
+    expect(lunchStop.venueDetails.recommendedDishes.length).toBeGreaterThan(0);
 
-    const funicularStop = heartbeat?.stops.find((s) => s.order === 19);
-    expect(funicularStop?.name).toContain('Funicular Restaurant');
+    // Check attraction stop with transit badge
+    const cableCarStop = heartbeat?.stops.find((s) => s.order === 11) as AttractionStop;
+    expect(cableCarStop.stopType).toBe('attraction');
+    expect(cableCarStop.transitBadge).toBeDefined();
   });
 
   it('contains sub-route derivatives for duration, accessibility, and vibe matching', () => {
@@ -214,4 +282,5 @@ describe('Static Tbilisi Route Dataset', () => {
     expect(result?.route.id).not.toBe('mtatsminda-panoramic-trail');
   });
 });
+
 

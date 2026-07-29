@@ -5,6 +5,54 @@ const SCORE_VIBE_MATCH = 2;
 const SCORE_EXACT_ACCESSIBILITY = 1;
 
 /**
+ * Calculates the Haversine distance in kilometers between two geographical coordinates.
+ */
+export function calculateDistance(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+): number {
+  const R = 6371; // Earth radius in km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function extractCoords(userLocation: { lat?: number; lng?: number; latitude?: number; longitude?: number }): { lat: number; lng: number } {
+  const lat = userLocation.lat ?? userLocation.latitude ?? 0;
+  const lng = userLocation.lng ?? userLocation.longitude ?? 0;
+  return { lat, lng };
+}
+
+/**
+ * Sorts routes by geo-proximity relative to user location coordinates (nearest start stop first).
+ */
+export function sortRoutesByProximity(
+  routes: Route[],
+  userLocation: { lat?: number; lng?: number; latitude?: number; longitude?: number }
+): Route[] {
+  const { lat, lng } = extractCoords(userLocation);
+
+  return [...routes].sort((a, b) => {
+    const startA = a.stops[0]?.coordinates || { lat: 0, lng: 0 };
+    const startB = b.stops[0]?.coordinates || { lat: 0, lng: 0 };
+
+    const distA = calculateDistance(lat, lng, startA.lat, startA.lng);
+    const distB = calculateDistance(lat, lng, startB.lat, startB.lng);
+
+    return distA - distB;
+  });
+}
+
+/**
  * Helper to determine if a route's accessibility level satisfies the user's hard logistics constraint.
  */
 function isAccessibilitySatisfied(
@@ -27,12 +75,16 @@ function isAccessibilitySatisfied(
  */
 export function matchRoute(routes: Route[], criteria: MatchCriteria): MatchResult | null {
   // Step 1: Enforce Hard Constraint (Logistics / Accessibility)
-  const eligibleRoutes = routes.filter((route) =>
+  let eligibleRoutes = routes.filter((route) =>
     isAccessibilitySatisfied(route.accessibility, criteria.accessibility)
   );
 
   if (eligibleRoutes.length === 0) {
     return null;
+  }
+
+  if (criteria.userLocation) {
+    eligibleRoutes = sortRoutesByProximity(eligibleRoutes, criteria.userLocation);
   }
 
   // Step 2: Score Soft Constraints (Duration & Vibe)
@@ -100,3 +152,4 @@ export function matchRoute(routes: Route[], criteria: MatchCriteria): MatchResul
     explanationNote,
   };
 }
+

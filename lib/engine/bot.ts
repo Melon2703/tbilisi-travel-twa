@@ -8,9 +8,9 @@ import { matchRoute } from './matcher';
 import { ROUTES } from '../data/routes';
 import { Language } from '../i18n/types';
 
-const VALID_DURATIONS: DurationCategory[] = ['1-2h', '2-4h', 'half-day'];
+const VALID_DURATIONS: DurationCategory[] = ['1-2h', '3-4h', 'half-day', 'full-day'];
 const VALID_ACCESSIBILITIES: AccessibilityLevel[] = ['stroller-friendly', 'moderate', 'steep-stairs'];
-const VALID_VIBES: VibeCategory[] = ['photo-spots', 'courtyards', 'food-wine', 'architecture'];
+const VALID_VIBES: VibeCategory[] = ['cultural', 'insta-locations', 'hiking', 'photo-spots', 'courtyards', 'food-wine', 'architecture'];
 
 /**
  * Parses stateless callback_data parameter strings (e.g. "lang:ru|dur:1-2h|acc:stroller-friendly|vibe:photo-spots")

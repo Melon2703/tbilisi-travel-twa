@@ -8,6 +8,7 @@ describe('Places Ratings Service', () => {
   const mockStop: Stop = {
     id: 'test-stop-1',
     order: 1,
+    stopType: 'attraction',
     name: 'Fabrika Tbilisi',
     neighborhood: 'Marjanishvili',
     coordinates: { lat: 41.7096, lng: 44.8058 },

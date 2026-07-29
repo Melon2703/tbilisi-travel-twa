@@ -24,6 +24,7 @@ export function ProgressBar({
   const dummyStops: Stop[] = Array.from({ length: totalStops }, (_, i) => ({
     id: String(i + 1),
     order: i + 1,
+    stopType: 'attraction',
     name: `Stop ${i + 1}`,
     neighborhood: '',
     coordinates: { lat: 0, lng: 0 },

@@ -19,6 +19,7 @@ const sampleRoute: Route = {
     {
       id: 'hb-stop-1',
       order: 1,
+      stopType: 'attraction',
       name: 'Liberty Square',
       neighborhood: 'Sololaki',
       coordinates: { lat: 41.6934, lng: 44.8015 },
@@ -29,6 +30,7 @@ const sampleRoute: Route = {
     {
       id: 'hb-stop-2',
       order: 2,
+      stopType: 'attraction',
       name: 'Fresh Pomegranate Juice Stand',
       neighborhood: 'Old Town',
       coordinates: { lat: 41.6912, lng: 44.8061 },

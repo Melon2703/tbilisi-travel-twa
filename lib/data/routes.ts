@@ -4,6 +4,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-1',
     order: 1,
+    stopType: 'attraction',
     name: 'Freedom Square',
     nameRu: 'Площадь Свободы',
     neighborhood: 'Center',
@@ -21,6 +22,16 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-2',
     order: 2,
+    stopType: 'venue',
+    isOptional: true,
+    venueDetails: {
+      category: 'cafe',
+      cuisines: ['georgian', 'european'],
+      isVegetarianFriendly: true,
+      recommendedDishes: ['Fresh pastries', 'Georgian tea'],
+      bookingAdvice: 'Light-filled upper floor. Walk-ins welcome for breakfast.',
+      bookingAdviceRu: 'Светлый верхний этаж. Предварительное бронирование не требуется.',
+    },
     name: 'Café Minda ~ Orbeliani Bazaar',
     nameRu: 'Кафе Minda ~ Базар Орбелиани',
     neighborhood: 'Orbeliani',
@@ -38,6 +49,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-3',
     order: 3,
+    stopType: 'attraction',
     name: 'Orbeliani Flower Market',
     nameRu: 'Цветочный рынок Орбелиани',
     neighborhood: 'Orbeliani',
@@ -57,6 +69,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-4',
     order: 4,
+    stopType: 'attraction',
     name: 'Gabriadze Puppet Theater & Clock',
     nameRu: 'Театр кукол Габриадзе и Часы',
     neighborhood: 'Old Kala',
@@ -80,6 +93,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-5',
     order: 5,
+    stopType: 'attraction',
     name: 'Old Streets (Shavteli & Anchiskhati)',
     nameRu: 'Старинные улочки (Шавтели и Анчисхати)',
     neighborhood: 'Old Kala',
@@ -99,6 +113,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-6',
     order: 6,
+    stopType: 'attraction',
     name: 'Sioni Cathedral',
     nameRu: 'Сионский собор',
     neighborhood: 'Old Kala',
@@ -116,6 +131,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-7',
     order: 7,
+    stopType: 'attraction',
     name: 'Pardag Carpet Spot (Sioni Alley)',
     nameRu: 'Локация с коврами Пардаги (переулок Сиони)',
     neighborhood: 'Old Kala',
@@ -135,6 +151,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-8',
     order: 8,
+    stopType: 'attraction',
     name: 'Bridge of Peace',
     nameRu: 'Мост Мира',
     neighborhood: 'Rike',
@@ -154,6 +171,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-9',
     order: 9,
+    stopType: 'attraction',
     name: 'Rike Park',
     nameRu: 'Парк Рике',
     neighborhood: 'Rike',
@@ -173,6 +191,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-10',
     order: 10,
+    stopType: 'attraction',
     name: 'Metekhi & Gorgasali Monument View',
     nameRu: 'Вид на Метехи и памятник Горгасали',
     neighborhood: 'Metekhi',
@@ -192,6 +211,9 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-11',
     order: 11,
+    stopType: 'attraction',
+    transitBadge: 'Cable Car Ride (~5 min)',
+    transitBadgeRu: 'Канатная дорога (~5 мин)',
     name: 'Cable Car to Mother of Georgia',
     nameRu: 'Канатная дорога к Матери Грузии',
     neighborhood: 'Sololaki Ridge',
@@ -209,6 +231,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-12',
     order: 12,
+    stopType: 'attraction',
     name: 'Betlemi Church & Stairs Walk Down',
     nameRu: 'Церковь Бетлеми и спуск по лестнице',
     neighborhood: 'Old Kala',
@@ -230,6 +253,16 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-13',
     order: 13,
+    stopType: 'venue',
+    isOptional: true,
+    venueDetails: {
+      category: 'restaurant',
+      cuisines: ['georgian'],
+      isVegetarianFriendly: true,
+      recommendedDishes: ['Khachapuri', 'Cold lemonade'],
+      bookingAdvice: 'Reserve terrace tables for panoramic city views.',
+      bookingAdviceRu: 'Забронируйте столики на террасе для панорамного вида.',
+    },
     name: 'Lunch at 144 Stairs / See360',
     nameRu: 'Обед в 144 Stairs / See360',
     neighborhood: 'Old Kala',
@@ -247,6 +280,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-14',
     order: 14,
+    stopType: 'attraction',
     name: 'Abanotubani Sulfur Baths',
     nameRu: 'Серные бани Абанотубани',
     neighborhood: 'Abanotubani',
@@ -264,6 +298,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-15',
     order: 15,
+    stopType: 'attraction',
     name: 'Legvtakhevi Waterfall Canyon',
     nameRu: 'Каньон с водопадом Легвтахеви',
     neighborhood: 'Abanotubani',
@@ -283,6 +318,14 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-16',
     order: 16,
+    stopType: 'venue',
+    isOptional: true,
+    venueDetails: {
+      category: 'cafe',
+      cuisines: ['georgian'],
+      isVegetarianFriendly: true,
+      recommendedDishes: ['Freshly pressed ruby-red pomegranate juice'],
+    },
     name: 'Fresh Pomegranate Juice Stand',
     nameRu: 'Стойка со свежим гранатовым соком',
     neighborhood: 'Abanotubani',
@@ -300,6 +343,7 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-17',
     order: 17,
+    stopType: 'attraction',
     name: 'Zabron Sulfur Baths Facade',
     nameRu: 'Фасад серных бань Орбелиани',
     neighborhood: 'Abanotubani',
@@ -319,6 +363,9 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-18',
     order: 18,
+    stopType: 'attraction',
+    transitBadge: 'Funicular Tram Ride (~6 min)',
+    transitBadgeRu: 'Поездка на фуникулёре (~6 мин)',
     name: 'Taxi / Funicular to Mtatsminda',
     nameRu: 'Такси / Фуникулёр на Мтацминду',
     neighborhood: 'Mtatsminda',
@@ -338,6 +385,16 @@ const HEARTBEAT_STOPS: Stop[] = [
   {
     id: 'hb-stop-19',
     order: 19,
+    stopType: 'venue',
+    isOptional: true,
+    venueDetails: {
+      category: 'restaurant',
+      cuisines: ['georgian'],
+      isVegetarianFriendly: true,
+      recommendedDishes: ['Hot ponchiki (cream donuts)', 'Georgian wine'],
+      bookingAdvice: 'Book window tables in advance for sunset dining.',
+      bookingAdviceRu: 'Заранее бронируйте столики у окна для заката.',
+    },
     name: 'Funicular Restaurant',
     nameRu: 'Ресторан Фуникулёр',
     neighborhood: 'Mtatsminda',
@@ -372,7 +429,7 @@ export const ROUTES: Route[] = [
     subtitleRu: 'От Площади Свободы до фуникулёра Мтацминда — 19 отобранных остановок по Старому Тбилиси',
     durationCategory: 'half-day',
     accessibility: 'steep-stairs',
-    vibes: ['photo-spots', 'courtyards', 'food-wine', 'architecture'],
+    vibes: ['cultural', 'insta-locations', 'photo-spots', 'courtyards', 'food-wine', 'architecture'],
     heroImage: 'https://images.unsplash.com/photo-1707908884432-26832ebb2e12?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       "Hey! Ready to explore Tbilisi's iconic core? From puppet clock shows to sulfur bath waterfalls and funicular sunset views. Take your time!",
@@ -388,7 +445,7 @@ export const ROUTES: Route[] = [
     subtitleRu: 'Маршрут на 1 час без ступеней от Площади Свободы до Моста Мира',
     durationCategory: '1-2h',
     accessibility: 'stroller-friendly',
-    vibes: ['photo-spots', 'courtyards'],
+    vibes: ['cultural', 'photo-spots', 'courtyards'],
     heroImage: 'https://images.unsplash.com/photo-1555246050-8957960659b4?auto=format&fit=crop&w=1200&q=80',
     introCopy: 'A short, accessible walk through flat pedestrian avenues and historic spots.',
     introCopyRu: 'Короткая, удобная прогулка по ровным пешеходным улицам и историческим местам.',
@@ -398,11 +455,11 @@ export const ROUTES: Route[] = [
     id: 'heartbeat-old-kala-moderate',
     title: 'Old Kala & Abanotubani Highlights',
     titleRu: 'Сокровища Старой Калы и Абанотубани',
-    subtitle: '2-4h walking route through sulfur baths, waterfall canyon, and ancient alleys',
-    subtitleRu: 'Маршрут на 2–4 часа по серным баням, каньону с водопадом и древним улочкам',
-    durationCategory: '2-4h',
+    subtitle: '3-4h walking route through sulfur baths, waterfall canyon, and ancient alleys',
+    subtitleRu: 'Маршрут на 3–4 часа по серным баням, каньону с водопадом и древним улочкам',
+    durationCategory: '3-4h',
     accessibility: 'moderate',
-    vibes: ['architecture', 'photo-spots'],
+    vibes: ['cultural', 'architecture', 'photo-spots'],
     heroImage: 'https://images.unsplash.com/photo-1716671225845-d15fe51ae099?auto=format&fit=crop&w=1200&q=80',
     introCopy: 'Discover the ancient sulfur bath district and hidden waterfall in Old Tbilisi.',
     introCopyRu: 'Откройте для себя древний район серных бань и скрытый водопад в Старом Тбилиси.',
@@ -412,11 +469,11 @@ export const ROUTES: Route[] = [
     id: 'heartbeat-culinary-sunset',
     title: 'Tbilisi Culinary & Funicular Sunset',
     titleRu: 'Гастрономия Тбилиси и закат на Фуникулёре',
-    subtitle: '2-4h food, wine, and panoramic mountain summit dining',
-    subtitleRu: 'Еда, вино и ужин с панорамным видом на вершине горы на 2–4 часа',
-    durationCategory: '2-4h',
+    subtitle: '3-4h food, wine, and panoramic mountain summit dining',
+    subtitleRu: 'Еда, вино и ужин с панорамным видом на вершине горы на 3–4 часа',
+    durationCategory: '3-4h',
     accessibility: 'moderate',
-    vibes: ['food-wine', 'photo-spots'],
+    vibes: ['food-wine', 'insta-locations', 'photo-spots'],
     heroImage: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80',
     introCopy: 'Combine rooftop dining, fresh pomegranate juice, and sunset donuts high above the city.',
     introCopyRu: 'Совместите обед на крыше, свежий гранатовый сок и закатные пончики высоко над городом.',
@@ -430,7 +487,7 @@ export const ROUTES: Route[] = [
     subtitleRu: 'Неспешная прогулка у купеческих особняков XIX века',
     durationCategory: '1-2h',
     accessibility: 'stroller-friendly',
-    vibes: ['courtyards', 'photo-spots'],
+    vibes: ['courtyards', 'insta-locations', 'photo-spots'],
     heroImage: 'https://images.unsplash.com/photo-1580233015636-7ed8fd6ba328?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Explore the peaceful, flat avenues of Sololaki where 19th-century merchants built opulent European mansions around lush wooden courtyards.',
@@ -440,6 +497,7 @@ export const ROUTES: Route[] = [
       {
         id: 'sololaki-stop-1',
         order: 1,
+        stopType: 'attraction',
         name: 'Lado Asatiani St Merchant Houses',
         nameRu: 'Купеческие дома на ул. Ладо Асатиани',
         neighborhood: 'Sololaki',
@@ -459,6 +517,7 @@ export const ROUTES: Route[] = [
       {
         id: 'sololaki-stop-2',
         order: 2,
+        stopType: 'attraction',
         name: 'Galaktion Tabidze Balcony House',
         nameRu: 'Дом с балконами на ул. Галактиона Табидзе',
         neighborhood: 'Sololaki',
@@ -478,6 +537,7 @@ export const ROUTES: Route[] = [
       {
         id: 'sololaki-stop-3',
         order: 3,
+        stopType: 'attraction',
         name: 'Machabeli St Stained Glass Foyer',
         nameRu: 'Витражная парадная на ул. Мачабели',
         neighborhood: 'Sololaki',
@@ -500,9 +560,9 @@ export const ROUTES: Route[] = [
     titleRu: 'Богемная Вера: Модерн и секретные сады',
     subtitle: 'Shaded avenues, Art Nouveau facades, and hidden garden cafes',
     subtitleRu: 'Тенистые аллеи, фасады в стиле модерн и уютные садовые кафе',
-    durationCategory: '2-4h',
+    durationCategory: '3-4h',
     accessibility: 'moderate',
-    vibes: ['architecture', 'courtyards'],
+    vibes: ['architecture', 'courtyards', 'cultural'],
     heroImage: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Vera combines tree-lined residential tranquility with breathtaking turn-of-the-century architecture and leafy courtyard cafes.',
@@ -512,6 +572,7 @@ export const ROUTES: Route[] = [
       {
         id: 'vera-stop-1',
         order: 1,
+        stopType: 'attraction',
         name: 'Kiacheli St Art Nouveau Mansion',
         nameRu: 'Особняк в стиле модерн на ул. Киачели',
         neighborhood: 'Vera',
@@ -531,6 +592,16 @@ export const ROUTES: Route[] = [
       {
         id: 'vera-stop-2',
         order: 2,
+        stopType: 'venue',
+        isOptional: true,
+        venueDetails: {
+          category: 'cafe',
+          cuisines: ['georgian', 'european'],
+          isVegetarianFriendly: true,
+          recommendedDishes: ['Georgian thyme tea', 'Fresh garden pastries'],
+          bookingAdvice: 'Garden glasshouse seating fills quickly in the afternoon.',
+          bookingAdviceRu: 'Места в стеклянной оранжерее быстро заполняются.',
+        },
         name: 'Rooms Courtyard & Garden',
         nameRu: 'Двор и сад отеля Rooms',
         neighborhood: 'Vera',
@@ -548,6 +619,7 @@ export const ROUTES: Route[] = [
       {
         id: 'vera-stop-3',
         order: 3,
+        stopType: 'attraction',
         name: 'Tarkhnishvili Secret Passages',
         nameRu: 'Секретные проходы на ул. Тархнишвили',
         neighborhood: 'Vera',
@@ -570,9 +642,9 @@ export const ROUTES: Route[] = [
     titleRu: 'Брусчатка Старой Калы и крепость Нарикала',
     subtitle: 'Panoramic skyline vistas, sulfur bath domes, and citadel steps',
     subtitleRu: 'Панорамные виды на город, купола серных бань и крепостные ступени',
-    durationCategory: '2-4h',
+    durationCategory: '3-4h',
     accessibility: 'steep-stairs',
-    vibes: ['photo-spots', 'architecture'],
+    vibes: ['hiking', 'photo-spots', 'architecture'],
     heroImage: 'https://images.unsplash.com/photo-1663785011617-ffeea3d7dc49?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Step back into medieval Tbilisi along the ancient cliffside citadel of Narikala and the sulfur bath district of Abanotubani.',
@@ -582,6 +654,7 @@ export const ROUTES: Route[] = [
       {
         id: 'old-kala-stop-1',
         order: 1,
+        stopType: 'attraction',
         name: 'Abanotubani Sulfur Bath Domes',
         nameRu: 'Купола серных бань Абанотубани',
         neighborhood: 'Old Kala',
@@ -599,6 +672,7 @@ export const ROUTES: Route[] = [
       {
         id: 'old-kala-stop-2',
         order: 2,
+        stopType: 'attraction',
         name: 'Betlemi Street Rock Steps',
         nameRu: 'Каменная лестница Бетлеми',
         neighborhood: 'Old Kala',
@@ -618,6 +692,7 @@ export const ROUTES: Route[] = [
       {
         id: 'old-kala-stop-3',
         order: 3,
+        stopType: 'attraction',
         name: 'Narikala Citadel Panorama',
         nameRu: 'Панорама крепости Нарикала',
         neighborhood: 'Old Kala',
@@ -642,9 +717,9 @@ export const ROUTES: Route[] = [
     titleRu: 'Винные погреба Чугурети и арт-пространство Фабрика',
     subtitle: 'Qvevri wine tastings, street art, and polyphonic dining spots',
     subtitleRu: 'Дегустация вин из квеври, стритрат и гастрономия',
-    durationCategory: '2-4h',
+    durationCategory: '3-4h',
     accessibility: 'stroller-friendly',
-    vibes: ['food-wine', 'photo-spots'],
+    vibes: ['food-wine', 'cultural', 'photo-spots'],
     heroImage: 'https://images.unsplash.com/photo-1548747132-bab97231571a?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Cross the river into vibrant Chugureti for natural wines, modern street art murals, and historic German-style merchant avenues.',
@@ -654,6 +729,7 @@ export const ROUTES: Route[] = [
       {
         id: 'chugureti-stop-1',
         order: 1,
+        stopType: 'attraction',
         name: 'Agmashenebeli Pedestrian Avenue',
         nameRu: 'Пешеходный проспект Агмашенебели',
         neighborhood: 'Chugureti',
@@ -671,6 +747,7 @@ export const ROUTES: Route[] = [
       {
         id: 'chugureti-stop-2',
         order: 2,
+        stopType: 'attraction',
         name: 'Fabrika Courtyard & Murals',
         nameRu: 'Двор Фабрики и муралы',
         neighborhood: 'Chugureti',
@@ -688,6 +765,16 @@ export const ROUTES: Route[] = [
       {
         id: 'chugureti-stop-3',
         order: 3,
+        stopType: 'venue',
+        isOptional: true,
+        venueDetails: {
+          category: 'wine_bar',
+          cuisines: ['georgian'],
+          isVegetarianFriendly: true,
+          recommendedDishes: ['Amber Kisi Qvevri wine', 'Artisan cheeses'],
+          bookingAdvice: 'Sommelier tastings available on arrival.',
+          bookingAdviceRu: 'Дегустация с сомелье доступна на месте.',
+        },
         name: 'Marjanishvili Qvevri Wine Bar',
         nameRu: 'Винный бар Квеври на Марджанишвили',
         neighborhood: 'Chugureti',
@@ -712,7 +799,7 @@ export const ROUTES: Route[] = [
     subtitleRu: 'Прогулка по сосновому лесу с видом на всю долину Тбилиси',
     durationCategory: 'half-day',
     accessibility: 'steep-stairs',
-    vibes: ['photo-spots', 'food-wine'],
+    vibes: ['hiking', 'photo-spots', 'food-wine'],
     heroImage: 'https://images.unsplash.com/photo-1559684844-ec295fd647ed?auto=format&fit=crop&w=1200&q=80',
     introCopy:
       'Ascend the sacred mountain Mtatsminda for pine mountain air, historic pantheon tombs, famous cream doughnuts, and panoramic city views.',
@@ -722,6 +809,7 @@ export const ROUTES: Route[] = [
       {
         id: 'mtatsminda-stop-1',
         order: 1,
+        stopType: 'attraction',
         name: 'Vilnius Park & Funicular Base',
         nameRu: 'Сквер Вильнюса и нижняя станция Фуникулёра',
         neighborhood: 'Mtatsminda',
@@ -739,6 +827,7 @@ export const ROUTES: Route[] = [
       {
         id: 'mtatsminda-stop-2',
         order: 2,
+        stopType: 'attraction',
         name: 'Mama Daviti Church & Pantheon',
         nameRu: 'Церковь Мама Давити и Пантеон',
         neighborhood: 'Mtatsminda',
@@ -758,6 +847,16 @@ export const ROUTES: Route[] = [
       {
         id: 'mtatsminda-stop-3',
         order: 3,
+        stopType: 'venue',
+        isOptional: true,
+        venueDetails: {
+          category: 'restaurant',
+          cuisines: ['georgian'],
+          isVegetarianFriendly: true,
+          recommendedDishes: ['Hot cream-filled ponchiki', 'Tarragon Lagidze soda'],
+          bookingAdvice: 'Terrace seating on first-come basis.',
+          bookingAdviceRu: 'Посадка на террасе в порядке живой очереди.',
+        },
         name: 'Mtatsminda Peak Doughnut Pavilion',
         nameRu: 'Пончиковая павильона Мтацминда',
         neighborhood: 'Mtatsminda',
