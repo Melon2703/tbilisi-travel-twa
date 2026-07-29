@@ -29,8 +29,9 @@ A story slide element presenting either Route overview (Route Intro Card) or Sto
 _Avoid_: Step, item, node, detail view.
 
 **Route Intro Card**:
-The initial landing slide (Slide 0) presenting high-level route summary, terrain highlights, and entry CTA.
+The initial landing slide (Slide 0) presenting high-level route summary, visual overview of the entire route path, terrain highlights, and entry CTA.
 _Avoid_: Cover page, landing screen, route header.
+
 
 **Stop Card**:
 A slide (Slide 1..N) presenting details, tips, and navigation deep-links for a single Stop on a Route.
@@ -42,7 +43,21 @@ _Avoid_: Completion flag, checked status, history item.
 
 **Stop**:
 A designated geographic point of interest along a Route with coordinates, visual assets, timing, and recommendations.
-_Avoid_: Location, place, waypoint, station.
+_Avoid_: Location, place, waypoint, station, node.
+
+**Venue Stop**:
+A specialized Stop representing a food or beverage establishment (Cafe, Restaurant, Bar) containing cuisine type, vegetarian options, recommended dishes, and booking advice.
+_Avoid_: Venue node, establishment, dining spot.
+
+**Pitstop**:
+An optional Venue Stop along a Route designated for resting, dining, or refreshments, visually distinguished from landmark Attraction Stops.
+_Avoid_: Rest stop, break point, optional location.
+
+**Attraction Stop**:
+A Stop representing a landmark, monument, viewpoint, or transit point without dining features.
+_Avoid_: General location node, sight.
+
+
 
 **Map Provider**:
 An external navigation mapping service (Google Maps, Apple Maps, or Yandex Maps) launched via universal link.

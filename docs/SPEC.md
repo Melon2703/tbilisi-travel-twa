@@ -1,57 +1,82 @@
-# UI Refactor & Minimalist 2-Color Design System Spec
+# Product Specification: Curated Travel Route Guide & Establishment Integration
 
 ## Problem Statement
 
-The current Telegram Web App (TWA) route details and stop card UI layout significantly deviates from the architectural wireframes in `/docs/update.md`. The design features redundant vertical timeline lines on individual stop cards alongside the bottom timeline bar, buries external map provider links inside a bottom sheet modal, clutters text over hero images, and relies on an overly noisy multi-color scheme (emerald, amber, terracotta, slate, warm stone), causing an inconsistent and unpolished user experience for travelers in Tbilisi.
+Travelers using the Tbilisi Travel Telegram Web App (TWA) lack granular, curated details about food and beverage establishments along walking routes, such as cuisine types, dish recommendations, and personal booking tips from local curator Olya. Furthermore, non-food stops (viewpoints, monuments, cable cars) risk being cluttered by empty dining fields if a uniform schema is used, while general route discovery lacks clear duration filtering (`1-2h`, `3-4h`, `half-day`, `full-day`), vibe tags (`cultural`, `insta-locations`, `hiking`), geo-proximity matching, multi-photo swipe lightboxes, and stop-level deep-link sharing.
 
 ## Solution
 
-Refactor the Next.js TWA route carousel components ([`RouteIntroCard.tsx`](file:///Users/danilaalexeev/Desktop/Projects/tbilisi-travel-twa/components/RouteIntroCard.tsx), [`StopCard.tsx`](file:///Users/danilaalexeev/Desktop/Projects/tbilisi-travel-twa/components/StopCard.tsx), [`TimelineBar.tsx`](file:///Users/danilaalexeev/Desktop/Projects/tbilisi-travel-twa/components/TimelineBar.tsx), and [`globals.css`](file:///Users/danilaalexeev/Desktop/Projects/tbilisi-travel-twa/app/globals.css)) to strictly align with `/docs/update.md` wireframe layouts and establish a 2-color minimalist design system:
-- **Color Palette**: 2-Color Accent system using Off-White warm stone (`#FAFAF7`) / Charcoal Slate (`#1F2421`) base with a single Terracotta accent (`#E07A5F`). Uniform 1px bordered cards for callout blocks (Olya's Tips, Photo Spot, Logistics Warning) instead of multi-color fills.
-- **Route Intro Card (Slide 0)**: Uncluttered top hero cover photo, with pill tags, title, subtitle, Olya's Welcome quote card, Route At A Glance summary line, and sticky `[ START ROUTE ➔ ]` CTA button arranged sequentially below the photo.
-- **Stop Card (Slide 1..N)**: Full-width card layout without vertical timeline spine, embedding direct map deep link pills (`📍 Google Maps | 📍 Yandex Maps`) directly underneath the location head photo, followed by timing, Olya's Tip quote, Photo Spot, and Logistics & Terrain callout blocks.
-- **Sticky Timeline Bar**: Frosted backdrop navigation bar with line-connected progress nodes (`●━━━━━━━○━━━━━━━○`), terracotta active ring, checkmarks for visited stops, and a 56x56px circular Terracotta FAB `[ ✓ ]` with auto-swipe behavior.
+A refined polymorphic data architecture for walking route **Stops** (`AttractionStop` vs `VenueStop`) paired with an upgraded **Route Intro Card** (Slide 0) overview and continuous scrollable **Stop Cards** (Slides 1..N). Venues are integrated as optional **Pitstops** on the timeline, featuring Olya's personal tips, recommended dish pills, category badges (`☕ Cafe`, `🍷 Bar`, `🍽️ Restaurant`), and veggie indicators (`🌱 Veggie Friendly`). The UI features dynamic geo-proximity sorting, a full-screen multi-photo swipe lightbox, high-contrast light theme support, and native Telegram startapp deep links (`t.me/bot?startapp=route_X_stop_Y`) for stop-level sharing.
 
 ## User Stories
 
-1. As a Tbilisi traveler opening a TWA route, I want to see a clean, minimalist 2-color UI design system so that the interface feels calm, high-end, and easy to read on mobile devices.
-2. As a traveler viewing the Route Intro Card (Slide 0), I want an unobstructed top Hero Cover photo so that I can immediately visualize the landscape of the route without text overlapping the photo.
-3. As a traveler on the Route Intro Card, I want to see clear pill badges (duration, accessibility, vibes) positioned directly below the hero photo so that I can evaluate key route details at a glance.
-4. As a traveler on the Route Intro Card, I want a dedicated "Route Welcome" callout card containing Olya's warm local intro text so that I understand the thematic context of the route before starting.
-5. As a traveler on the Route Intro Card, I want a "Route At A Glance" summary bar highlighting the number of curated stops, total walking distance, and transit modes (e.g. Cable Car / Funicular) so that I know what to expect.
-6. As a traveler on the Route Intro Card, I want a sticky bottom CTA button ("START ROUTE ➔") that moves me to Slide 1 upon tapping or swiping left.
-7. As a traveler viewing a Stop Card (Slide 1..N), I want a full-width card layout without vertical spine lines on the left side so that card content is clutter-free and easy to digest.
-8. As a traveler on a Stop Card, I want map provider deep links (`📍 Google Maps | 📍 Yandex Maps`) placed directly beneath the location head photo so that I can instantly open my preferred mapping app without opening extra modals.
-9. As a traveler on a Stop Card, I want a clear header showing the stop sequence index (`STOP X OF N`), location name, and recommended timing window so that I stay on schedule.
-10. As a traveler on a Stop Card, I want an "Olya's Tip" callout box styled with a minimal terracotta accent line so that local expert recommendations stand out cleanly.
-11. As a traveler on a Stop Card, I want a dedicated "Photo Spot" callout section highlighting exact photo angles and lighting recommendations.
-12. As a traveler on a Stop Card, I want a "Logistics & Terrain" warning callout alerting me to steep cobblestone inclines or stairways.
-13. As a traveler navigating between stops, I want a sticky bottom timeline bar displaying connected progress nodes so that I can see my position along the route.
-14. As a traveler navigating between stops, I want tapping any progress node in the timeline bar to jump directly to that Stop Card slide.
-15. As a traveler at a stop, I want a 56x56px circular floating action button (FAB) marked `[ ✓ ]` so that I can toggle the Visited State for the current stop.
-16. As a traveler marking a stop as visited via the FAB, I want the carousel to automatically swipe to the next Stop Card slide so that navigation feels smooth and continuous.
-17. As a traveler completing all stops along a route, I want a route completion banner displayed on the bottom bar acknowledging that all stops have been visited.
-18. As a traveler returning to the TWA across sessions, I want my Visited State preserved in local storage so that my progress is retained.
+1. As a traveler browsing walking routes, I want to see a visual overview map and stop timeline on the initial landing slide (Route Intro Card), so that I can evaluate the entire walk before starting.
+2. As a traveler with limited time, I want to filter routes by explicit duration options (`1-2 Hours`, `3-4 Hours`, `Half-Day`, `Full-Day`), so that I can pick an itinerary matching my schedule.
+3. As a photography enthusiast, I want to filter routes by the `Insta-Locations` vibe tag, so that I can quickly find visually stunning viewpoints and courtyards.
+4. As a traveler interested in architecture and museums, I want to filter routes by the `Cultural` vibe tag, so that I can explore historical monuments.
+5. As an outdoor walker, I want to filter routes by the `Hiking` vibe tag, so that I can find scenic trails and hillside paths.
+6. As a traveler seeking an easy walk, I want to filter routes by the `Easy Route` accessibility level, so that I can avoid steep stairs and severe inclines.
+7. As a traveler standing in Old Tbilisi, I want routes to be sorted relative to my current geo-location, so that I can immediately start the nearest available route.
+8. As a traveler viewing a Stop Card, I want to tap any photo to open a full-screen swipeable lightbox modal, so that I can view high-resolution photography for that stop.
+9. As a traveler visiting a coffee shop or restaurant along a route, I want to see Olya's recommended dishes as interactive pills, so that I know what signature items to order.
+10. As a diner with dietary preferences, I want to see a clear `🌱 Veggie Friendly` badge on venue cards, so that I can quickly identify vegetarian-friendly stops.
+11. As a traveler planning a lunch or dinner stop, I want to see Olya's venue booking advice, so that I know whether to reserve a table in advance.
+12. As a traveler following a route, I want food and drink spots to be styled as optional "Pitstops", so that I can bypass them when I am not hungry without breaking route momentum.
+13. As a traveler navigating sequential stops, I want transit steps (such as the Cable Car from Rike Park to Mother of Georgia) to be clearly separated into distinct sequential nodes with transit duration badges, so that logistics remain clear.
+14. As a traveler exploring in bright sunlight, I want a high-contrast light theme option, so that screens are easy to read outdoors.
+15. As a traveler meeting friends on a route, I want to tap a "Share Stop" button to generate a Telegram deep link, so that my friends can open the TWA directly on that specific stop.
+16. As a traveler checking navigation, I want direct Map Links to Google Maps and Yandex Maps below the rating score, so that I can launch external directions in one tap.
+17. As a traveler scrolling a Stop Card, I want all details (Olya's tips, fun facts, dish picks, map links) to be rendered on a single continuous scrolling page, so that I do not have to toggle collapsible accordions.
 
 ## Implementation Decisions
 
-- **Design System & Tokens**: Update `app/globals.css` to define the 2-color minimalist CSS variables (`--twa-bg-color`, `--twa-text-color`, `--terracotta`, `--tbilisi-slate`, neutral borders).
-- **RouteIntroCard component**: Refactor structure to place `heroImage` clean at top, followed by tags row, title/subtitle block, `introCopy` callout box, `ROUTE AT A GLANCE` section, and sticky bottom `START ROUTE` CTA container.
-- **StopCard component**: Remove the vertical timeline line/node from the left side of individual stop cards. Place direct map link pills right below the head photo. Style `olyaTips`, `photoSpot`, and `logisticsWarning` blocks with clean white/off-white backgrounds, subtle 1px border lines, and crisp iconography.
-- **TimelineBar component**: Style progress nodes with a connecting line asset, active terracotta ring (`ring-2 ring-[var(--terracotta)]`), checkmarks for visited stops, and a 56x56px Terracotta FAB button (`[ ✓ ]`).
-- **RouteCarousel component**: Coordinate horizontal Swiper slide transitions, timeline bar visibility on `activeIndex > 0`, FAB toggle actions, and local storage state persistence.
+### Schema & Data Architecture
+- **Polymorphic Stop Model (`lib/types/route.ts`):** Defined a discriminated union `Stop = AttractionStop | VenueStop` with `stopType: 'attraction' | 'venue'`.
+- **Venue Details Block:** `VenueStop` includes an optional `venueDetails` object:
+  ```typescript
+  export interface VenueDetails {
+    category: 'cafe' | 'restaurant' | 'bar' | 'wine_bar';
+    cuisines: ('georgian' | 'european' | 'asian')[];
+    isVegetarianFriendly: boolean;
+    recommendedDishes: string[];
+    bookingAdvice?: string;
+  }
+  ```
+- **Pitstop Flag:** `VenueStop` items carry `isOptional: true` and are styled as optional Refuel Pitstops on the route timeline.
+- **Transit Node Metadata:** `AttractionStop` items support an optional `transitBadge?: string` (e.g. `" Cable Car Ride (~5 min)"`) to represent transit transitions.
+
+### UI & Layout Hierarchy
+- **Route Intro Card (Slide 0):** Upgraded to render an interactive route map line + step-by-step preview list.
+- **Stop Card Surface:** Uses Swiper.js for horizontal card navigation while allowing vertical scrolling inside each card.
+  - Header: Image Gallery Carousel + Title + Neighborhood + Duration Tag.
+  - Badges: Category & Cuisine pills for venues (`☕ Cafe • Georgian`).
+  - Olya's Tip Block: Highlighted warm accent container with Olya's personal advice.
+  - Story & Must-Try Dishes: Concise 2-sentence background / `💡 Fun Fact` for attractions; dish pills & booking advice for venues.
+  - Action Bar: `📍 Open Map` deep-link button + `↗️ Share Stop` button.
+- **Lightbox Modal:** Full-screen modal component with touch swipe gestures and photo index indicator (`1/N`).
+- **Telegram Startapp Deep Linking:** Uses Telegram WebApp start parameter encoding (`t.me/bot?startapp=route_<id>_stop_<id>`).
 
 ## Testing Decisions
 
-- **Testing Seam**: Component Integration Seam in `__tests__/timeline.test.tsx` using Vitest and `@testing-library/react`.
-- **Test Criteria**: Tests verify external behavior, DOM elements, aria attributes, user click events, local storage state persistence, and slide navigation. Implementation details (such as CSS class names or internal component state setters) are excluded from assertions.
+### Good Test Principles
+- Test external domain behavior and user interactions, not internal state setters or implementation details.
+- Verify matching algorithms against hard and soft constraint rules across edge-case combinations.
+- Test component rendering under both `AttractionStop` and `VenueStop` schemas.
+
+### Tested Modules
+- `lib/engine/matcher.ts`: Route matching with updated `DurationCategory` (`1-2h`, `3-4h`, `half-day`, `full-day`), `VibeCategory` (`cultural`, `insta-locations`, `hiking`), and geo-proximity distance calculations.
+- `components/timeline/TimelineSlide.tsx`: Continuous scrollable card rendering for both attraction and venue stops.
+- `components/timeline/LightboxModal.tsx`: Image gallery popup and swipe navigation.
+- `lib/utils/telegram.ts`: Startapp deep-link generation and payload decoding.
+
+### Prior Art
+- Existing Vitest suite in `__tests__/matcher.test.ts` and `__tests__/timeline.test.tsx`.
 
 ## Out of Scope
-
-- Backend API route changes (`/app/api/bot/route.ts`).
-- Server database schema mutations (Visited State is kept in client `localStorage` per spec).
-- Adding new map providers beyond Google Maps and Yandex Maps.
+- Direct in-app table reservation forms or third-party booking API integrations (outsource to Instagram/Website links).
+- In-app food ordering or payment processing.
+- Live GPS turn-by-turn navigation (outsource to Google Maps & Yandex Maps universal links).
 
 ## Further Notes
-
-- Follows the project domain glossary in [`CONTEXT.md`](file:///Users/danilaalexeev/Desktop/Projects/tbilisi-travel-twa/CONTEXT.md) (`Route`, `Route Intro Card`, `Stop Card`, `Visited State`, `Stop`, `Map Provider`, `Olya's Tips`, `Logistics Warning`).
+- All venue recommendations maintain Olya's warm, personal tone.
+- Static data files (`lib/data/routes.ts`) will be populated with Tbilisi route data matching this updated schema.
