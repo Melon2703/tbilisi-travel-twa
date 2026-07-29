@@ -41,7 +41,7 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
     const rawStartParam = getTelegramStartParam();
     if (rawStartParam) {
       const parsed = parseStartParam(rawStartParam);
-      if (parsed && parsed.stopId) {
+      if (parsed && parsed.stopId && parsed.routeId === route.id) {
         const foundIndex = sortedStops.findIndex((s) => s.id === parsed.stopId);
         if (foundIndex !== -1) {
           const targetSlide = foundIndex + 1;
