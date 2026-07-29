@@ -649,7 +649,133 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(pitstopBtn).toHaveAttribute('data-pitstop', 'true');
     });
   });
+
+  describe('Full-Screen Lightbox Modal & Deep-Link Sharing', () => {
+    const mockMultiPhotoStop: Stop = {
+      id: 'multi-photo-stop',
+      order: 1,
+      stopType: 'attraction',
+      name: 'Narikala Fortress Lookout',
+      neighborhood: 'Old Tbilisi',
+      coordinates: { lat: 41.6879, lng: 44.8091 },
+      estimatedMinutes: 30,
+      imageUrl: 'https://images.unsplash.com/photo-1555246050-1',
+      galleryImages: [
+        'https://images.unsplash.com/photo-1555246050-1',
+        'https://images.unsplash.com/photo-1555246050-2',
+        'https://images.unsplash.com/photo-1555246050-3',
+      ],
+      olyaTips: 'Panoramic sunrise spot over the Mtkvari river.',
+    };
+
+    it('displays photo count badge when galleryImages has multiple photos', () => {
+      render(<StopCard stop={mockMultiPhotoStop} isLast={false} totalStops={1} />);
+      const badge = screen.getByTestId('photo-count-badge');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('🖼️ 1/3');
+    });
+
+    it('opens full-screen LightboxModal when hero image is clicked', () => {
+      render(<StopCard stop={mockMultiPhotoStop} isLast={false} totalStops={1} />);
+
+      expect(screen.queryByTestId('lightbox-modal')).not.toBeInTheDocument();
+
+      const heroImageContainer = screen.getByTestId('hero-image-container');
+      fireEvent.click(heroImageContainer);
+
+      const modal = screen.getByTestId('lightbox-modal');
+      expect(modal).toBeInTheDocument();
+      expect(screen.getByTestId('lightbox-counter')).toHaveTextContent('1/3');
+    });
+
+    it('navigates next and previous photos using lightbox buttons and touch swipe gestures', () => {
+      render(<StopCard stop={mockMultiPhotoStop} isLast={false} totalStops={1} />);
+      fireEvent.click(screen.getByTestId('hero-image-container'));
+
+      const counter = screen.getByTestId('lightbox-counter');
+      expect(counter).toHaveTextContent('1/3');
+
+      // Click Next Button
+      const nextBtn = screen.getByTestId('lightbox-next');
+      fireEvent.click(nextBtn);
+      expect(counter).toHaveTextContent('2/3');
+
+      // Click Prev Button
+      const prevBtn = screen.getByTestId('lightbox-prev');
+      fireEvent.click(prevBtn);
+      expect(counter).toHaveTextContent('1/3');
+
+      // Touch Swipe Left -> Next
+      const swipeArea = screen.getByTestId('lightbox-swipe-area');
+      fireEvent.touchStart(swipeArea, { touches: [{ clientX: 200 }] });
+      fireEvent.touchMove(swipeArea, { touches: [{ clientX: 100 }] });
+      fireEvent.touchEnd(swipeArea);
+      expect(counter).toHaveTextContent('2/3');
+
+      // Touch Swipe Right -> Prev
+      fireEvent.touchStart(swipeArea, { touches: [{ clientX: 100 }] });
+      fireEvent.touchMove(swipeArea, { touches: [{ clientX: 200 }] });
+      fireEvent.touchEnd(swipeArea);
+      expect(counter).toHaveTextContent('1/3');
+    });
+
+    it('closes LightboxModal via close button, Escape key, and backdrop click', () => {
+      render(<StopCard stop={mockMultiPhotoStop} isLast={false} totalStops={1} />);
+      fireEvent.click(screen.getByTestId('hero-image-container'));
+      expect(screen.getByTestId('lightbox-modal')).toBeInTheDocument();
+
+      // Close via close button
+      fireEvent.click(screen.getByTestId('lightbox-close'));
+      expect(screen.queryByTestId('lightbox-modal')).not.toBeInTheDocument();
+
+      // Reopen and close via backdrop click
+      fireEvent.click(screen.getByTestId('hero-image-container'));
+      expect(screen.getByTestId('lightbox-modal')).toBeInTheDocument();
+      fireEvent.click(screen.getByTestId('lightbox-backdrop'));
+      expect(screen.queryByTestId('lightbox-modal')).not.toBeInTheDocument();
+
+      // Reopen and close via Escape key
+      fireEvent.click(screen.getByTestId('hero-image-container'));
+      expect(screen.getByTestId('lightbox-modal')).toBeInTheDocument();
+      fireEvent.keyDown(window, { key: 'Escape' });
+      expect(screen.queryByTestId('lightbox-modal')).not.toBeInTheDocument();
+    });
+
+    it('renders Share Stop button and executes share action on click', async () => {
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: vi.fn().mockResolvedValue(undefined) },
+        configurable: true,
+      });
+
+      render(<StopCard stop={mockMultiPhotoStop} routeId="test-route-1" isLast={false} totalStops={1} />);
+
+      const shareBtn = screen.getByTestId('share-stop-button');
+      expect(shareBtn).toBeInTheDocument();
+      expect(shareBtn).toHaveTextContent(/Share Stop/i);
+
+      fireEvent.click(shareBtn);
+
+      expect(await screen.findByText(/Link copied to clipboard!/i)).toBeInTheDocument();
+    });
+
+    it('auto-navigates RouteCarousel to target stop slide upon TWA startapp deep link launch', () => {
+      window.Telegram = {
+        WebApp: {
+          initDataUnsafe: {
+            start_param: 'route_test-route-1_stop_sololaki-stop-2',
+          },
+        } as any,
+      };
+
+      render(<RouteCarousel route={mockRoute} />);
+
+      // Verify deep link navigated directly to Slide 2 (sololaki-stop-2) showing timeline bar
+      expect(screen.getByTestId('timeline-bar-container')).toBeInTheDocument();
+      expect(screen.getByTestId('timeline-stop-2')).toHaveAttribute('aria-current', 'step');
+    });
+  });
 });
+
 
 
 

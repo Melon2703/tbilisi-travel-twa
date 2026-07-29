@@ -11,8 +11,12 @@ import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
 
+import LightboxModal from '@/components/timeline/LightboxModal';
+import { shareStopDeepLink } from '@/lib/utils/telegram';
+
 export interface StopCardProps {
   stop: Stop;
+  routeId?: string;
   isLast?: boolean;
   totalStops?: number;
   isVisited?: boolean;
@@ -75,7 +79,7 @@ function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: 
   );
 }
 
-function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProps) {
+function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: StopCardProps) {
   const { t, getLocalizedStop } = useLanguage();
   const stop = getLocalizedStop(rawStop);
 
@@ -84,6 +88,14 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
 
   const staticRatings = getStopRatings(stop);
   const [liveRatings, setLiveRatings] = React.useState<{ stopId: string; ratings: ResolvedRatings } | null>(null);
+
+  const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
+  const [lightboxIndex, setLightboxIndex] = React.useState(0);
+  const [isCopied, setIsCopied] = React.useState(false);
+
+  const galleryImages = (stop.galleryImages && stop.galleryImages.length > 0)
+    ? stop.galleryImages
+    : (stop.imageUrl ? [stop.imageUrl] : []);
 
   const ratings = (liveRatings && liveRatings.stopId === stop.id) ? liveRatings.ratings : staticRatings;
 
@@ -101,6 +113,15 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
     }
   }, [stop]);
 
+  const handleShareStop = async () => {
+    const activeRouteId = routeId || 'heartbeat-of-tbilisi';
+    const success = await shareStopDeepLink(activeRouteId, stop.id, stop.name);
+    if (success) {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  };
+
   const stopLabel = totalStops
     ? t('stopOf', { order: stop.order, total: totalStops })
     : t('stopNumber', { order: stop.order });
@@ -116,15 +137,31 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
       data-testid="stop-card-container"
       className="relative flex flex-col h-[100dvh] w-full bg-[#FAF7F2] text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
     >
-      {/* ── Hero image — full-bleed header section ── */}
+      {/* ── Hero image — full-bleed header section with Lightbox trigger ── */}
       {stop.imageUrl && (
-        <div className="relative w-full h-52 sm:h-60 shrink-0 bg-[#FAF7F2] overflow-hidden">
+        <div
+          data-testid="hero-image-container"
+          onClick={() => {
+            setLightboxIndex(0);
+            setIsLightboxOpen(true);
+          }}
+          className="relative w-full h-52 sm:h-60 shrink-0 bg-[#FAF7F2] overflow-hidden cursor-pointer group"
+          role="button"
+          tabIndex={0}
+          aria-label={`Open photo lightbox for ${stop.name}`}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setLightboxIndex(0);
+              setIsLightboxOpen(true);
+            }
+          }}
+        >
           <Image
             src={stop.imageUrl}
             alt={stop.name}
             fill
             sizes="(max-width: 640px) 100vw, 640px"
-            className="object-cover"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
             priority={stop.order === 1}
           />
 
@@ -143,10 +180,20 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
             {stop.neighborhood}
           </span>
 
-          <span className="absolute top-3 right-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs">
-            <EmojiIcon name="clock" size="xs" />
-            {stop.estimatedMinutes} {t('min')}
-          </span>
+          <div className="absolute top-3 right-3 flex items-center gap-2 z-20">
+            {galleryImages.length > 1 && (
+              <span
+                data-testid="photo-count-badge"
+                className="backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-white px-2.5 py-1.5 rounded-full font-semibold flex items-center gap-1 border border-white/20 shadow-xs"
+              >
+                🖼️ 1/{galleryImages.length}
+              </span>
+            )}
+            <span className="backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold flex items-center gap-1.5 border border-white/20 shadow-xs">
+              <EmojiIcon name="clock" size="xs" />
+              {stop.estimatedMinutes} {t('min')}
+            </span>
+          </div>
         </div>
       )}
 
@@ -164,6 +211,16 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
                   ☕ {t('pitstop')}
                 </Badge>
               )}
+              <button
+                type="button"
+                data-testid="share-stop-button"
+                onClick={handleShareStop}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] hover:bg-[#F2E5D5] border border-[#E8D5C4] transition-all cursor-pointer active:scale-95 shadow-2xs"
+                aria-label="Share Stop"
+              >
+                <span>↗️</span>
+                <span>{isCopied ? t('copiedToClipboard') : t('shareStop')}</span>
+              </button>
             </div>
             <h2
               className="text-2xl sm:text-3xl font-black text-[#1C1008] tracking-tight leading-tight break-words min-w-0 max-w-full"
@@ -227,7 +284,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
             aria-label="Open in Google Maps"
           >
             <EmojiIcon name="googleMaps" size="md" />
-            <span>Google Maps</span>
+            <span>📍 Google Maps</span>
           </a>
 
           <a
@@ -238,7 +295,7 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
             aria-label="Open in Yandex Maps"
           >
             <EmojiIcon name="yandexMaps" size="md" />
-            <span>Yandex Maps</span>
+            <span>📍 Yandex Maps</span>
           </a>
         </div>
 
@@ -286,9 +343,17 @@ function StopCard({ stop: rawStop, totalStops, isVisited = false }: StopCardProp
           </div>
         )}
       </div>
+
+      {/* Photo Lightbox Modal */}
+      <LightboxModal
+        isOpen={isLightboxOpen}
+        images={galleryImages}
+        initialIndex={lightboxIndex}
+        altText={stop.name}
+        onClose={() => setIsLightboxOpen(false)}
+      />
     </div>
   );
 }
 
 export default React.memo(StopCard);
-

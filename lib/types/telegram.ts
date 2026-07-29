@@ -33,6 +33,7 @@ export interface TelegramWebApp {
     user?: TelegramUser;
     auth_date?: string;
     hash?: string;
+    start_param?: string;
   };
   version: string;
   platform: string;
@@ -52,6 +53,8 @@ export interface TelegramWebApp {
   onEvent: (eventType: string, eventHandler: () => void) => void;
   offEvent: (eventType: string, eventHandler: () => void) => void;
   sendData: (data: string) => void;
+  openTelegramLink?: (url: string) => void;
+  openLink?: (url: string) => void;
 }
 
 declare global {

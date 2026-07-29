@@ -40,6 +40,7 @@ export interface BaseStop {
   coordinates: { lat: number; lng: number };
   estimatedMinutes: number;
   imageUrl: string;
+  galleryImages?: string[];
   olyaTips: string;
   olyaTipsRu?: string;
   logisticsWarning?: string;
