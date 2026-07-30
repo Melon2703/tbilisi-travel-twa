@@ -79,6 +79,14 @@ export const TRANSLATIONS = {
     locating: 'Locating...',
     allDurations: 'All Durations',
     allVibes: 'All Vibes',
+    startPoint: 'START',
+    finishPoint: 'FINISH',
+    tapPinToInspect: 'Tap any pin for details',
+    resetMap: 'Reset View',
+    expandMap: 'Expand Full Map',
+    closeMap: 'Close Map',
+    openInMap: 'Open in Map App',
+    interactiveMapModal: 'Interactive Route Map',
 
     // Homepage catalog
     headerTitle: 'Tbilisi Travel Routes',
@@ -173,6 +181,14 @@ export const TRANSLATIONS = {
     locating: 'Определение...',
     allDurations: 'Любая длительность',
     allVibes: 'Все атмосферы',
+    startPoint: 'НАЧАЛО',
+    finishPoint: 'ФИНИШ',
+    tapPinToInspect: 'Нажмите на точку для деталей',
+    resetMap: 'Сбросить вид',
+    expandMap: 'Открыть карту на весь экран',
+    closeMap: 'Закрыть карту',
+    openInMap: 'Открыть в навигаторе',
+    interactiveMapModal: 'Интерактивная карта маршрута',
 
     // Homepage catalog
     headerTitle: 'Пешие маршруты по Тбилиси',

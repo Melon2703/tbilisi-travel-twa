@@ -1,12 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import Button from '@/components/ui/Button';
+import RouteOverviewMap from '@/components/RouteOverviewMap';
+import RouteMapModal from '@/components/RouteMapModal';
 
 export interface RouteIntroCardProps {
   route: Route;
@@ -20,6 +22,7 @@ export default function RouteIntroCard({
   showStartButton = true,
 }: RouteIntroCardProps) {
   const { language, setLanguage, t } = useLanguage();
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
   const totalMinutes = sortedStops.reduce((acc, stop) => acc + stop.estimatedMinutes, 0);
@@ -154,7 +157,10 @@ export default function RouteIntroCard({
         {/* Georgian ornament divider */}
         <GeorgianOrnament />
 
-        {/* 3. Olya's Welcome Quote Card */}
+        {/* 3. Upfront Cartographic Visual Route Overview Map */}
+        <RouteOverviewMap route={route} onOpenModal={() => setIsMapModalOpen(true)} />
+
+        {/* 4. Olya's Welcome Quote Card */}
         {route.introCopy && (
           <div
             data-testid="olya-welcome-card"
@@ -187,7 +193,7 @@ export default function RouteIntroCard({
           </div>
         )}
 
-        {/* 4. Route At A Glance Summary Box */}
+        {/* 5. Route At A Glance Summary Box */}
         <div
           data-testid="route-at-a-glance"
           className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0"
@@ -246,96 +252,6 @@ export default function RouteIntroCard({
             </div>
           </div>
         </div>
-
-        {/* 5. Route Overview Map SVG */}
-        {(() => {
-          const lats = sortedStops.map((s) => s.coordinates.lat);
-          const lngs = sortedStops.map((s) => s.coordinates.lng);
-          const minLat = Math.min(...lats);
-          const maxLat = Math.max(...lats);
-          const minLng = Math.min(...lngs);
-          const maxLng = Math.max(...lngs);
-          const deltaLat = maxLat - minLat || 0.001;
-          const deltaLng = maxLng - minLng || 0.001;
-
-          const svgW = 320;
-          const svgH = 120;
-          const padX = 28;
-          const padY = 20;
-
-          const points = sortedStops.map((stop) => ({
-            x: padX + ((stop.coordinates.lng - minLng) / deltaLng) * (svgW - 2 * padX),
-            y: (svgH - padY) - ((stop.coordinates.lat - minLat) / deltaLat) * (svgH - 2 * padY),
-            stop,
-          }));
-
-          const pathD = points.reduce(
-            (acc, p, idx) => `${acc} ${idx === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`,
-            ''
-          );
-
-          return (
-            <div
-              data-testid="route-overview-map"
-              className="rounded-2xl p-4 shadow-xs space-y-2 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/15"
-            >
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A]">
-                  🗺️ {t('overviewMapTitle')}
-                </h3>
-                <span className="text-[11px] font-medium text-[#7A6552]">
-                  {sortedStops.length} {language === 'ru' ? 'точек' : 'stops'}
-                </span>
-              </div>
-              <div className="relative w-full h-32 bg-[#FAF7F2] rounded-xl border border-black/5 overflow-hidden flex items-center justify-center p-2">
-                <svg
-                  viewBox={`0 0 ${svgW} ${svgH}`}
-                  className="w-full h-full drop-shadow-xs"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <path
-                    d={pathD}
-                    fill="none"
-                    stroke="#C4572A"
-                    strokeWidth="3"
-                    strokeDasharray="4 2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  {points.map(({ x, y, stop }, idx) => {
-                    const isStart = idx === 0;
-                    const isEnd = idx === points.length - 1;
-                    const color = isStart ? '#228255' : isEnd ? '#C4572A' : '#7A6552';
-                    const fill = isStart ? '#228255' : isEnd ? '#C4572A' : '#FFF8F3';
-
-                    return (
-                      <g key={stop.id}>
-                        <circle
-                          cx={x}
-                          cy={y}
-                          r={isStart || isEnd ? 9 : 6}
-                          fill={fill}
-                          stroke={color}
-                          strokeWidth="2"
-                        />
-                        <text
-                          x={x}
-                          y={y + 3.5}
-                          textAnchor="middle"
-                          fontSize="9"
-                          fontWeight="bold"
-                          fill={isStart || isEnd ? '#FFFFFF' : '#1C1008'}
-                        >
-                          {stop.order}
-                        </text>
-                      </g>
-                    );
-                  })}
-                </svg>
-              </div>
-            </div>
-          );
-        })()}
 
         {/* 6. Step-by-Step Route Preview List */}
         <div
@@ -435,6 +351,13 @@ export default function RouteIntroCard({
           </Button>
         </div>
       )}
+
+      {/* Fullscreen Interactive Map Modal */}
+      <RouteMapModal
+        route={route}
+        isOpen={isMapModalOpen}
+        onClose={() => setIsMapModalOpen(false)}
+      />
     </div>
   );
 }
