@@ -12,6 +12,17 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6934, lng: 44.8015 },
     estimatedMinutes: 15,
     imageUrl: 'https://images.unsplash.com/photo-1555246050-8957960659b4?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Laid out in the early 19th century under Russian Imperial rule (originally Erivansky Square), Freedom Square has been the central stage of Georgia’s modern history. In 2006, the prominent 44-meter granite monument featuring St. George slaying the dragon by sculptor Zurab Tsereteli replaced the former Lenin statue.',
+    historicalSummaryRu:
+      'Заложенная в начале XIX века (первоначально Эриванская площадь), Площадь Свободы стала главным местом исторических событий Грузии. В 2006 году в центре площади был воздвигнут 44-метровый монумент Святого Георгия работы Зураба Церетели.',
+    funFact:
+      'In 1907, a famous Tiflis bank robbery took place right on this square, masterminded by early Bolshevik revolutionaries including Kamo and Stalin.',
+    funFactRu:
+      'В 1907 году прямо на этой площади произошло знаменитое Тифлисское экспроприационное ограбление банка, организованное Камо и Сталиным.',
+    workingHours: 'Open 24/7 (Public Square)',
+    workingHoursRu: 'Открыто круглосуточно (Общественная площадь)',
+    websiteUrl: 'https://tbilisi.gov.ge',
     olyaTips: 'Meet under St. George statue. Baseline orient point for Old Tbilisi.',
     olyaTipsRu: 'Встречаемся под статуей Св. Георгия. Главный ориентир Старого Тбилиси.',
     bestTimeOfDay: '09:00 AM',
@@ -28,7 +39,7 @@ const HEARTBEAT_STOPS: Stop[] = [
       category: 'cafe',
       cuisines: ['georgian', 'european'],
       isVegetarianFriendly: true,
-      recommendedDishes: ['Fresh pastries', 'Georgian tea'],
+      recommendedDishes: ['Fresh tarragon pastries', 'Artisan Georgian herbal tea', 'Matsoni parfait'],
       bookingAdvice: 'Light-filled upper floor. Walk-ins welcome for breakfast.',
       bookingAdviceRu: 'Светлый верхний этаж. Предварительное бронирование не требуется.',
     },
@@ -39,6 +50,10 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6981, lng: 44.8032 },
     estimatedMinutes: 60,
     imageUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+    workingHours: '09:00 AM - 11:00 PM',
+    workingHoursRu: '09:00 - 23:00',
+    websiteUrl: 'https://orbelianibazaar.ge',
+    instagramUrl: 'https://instagram.com/orbelianibazaar',
     olyaTips: 'Light-filled upper floor. Get fresh pastries & Georgian tea.',
     olyaTipsRu: 'Светлый верхний этаж. Возьмите свежую выпечку и грузинский чай.',
     bestTimeOfDay: '09:20 AM - 10:20 AM',
@@ -57,6 +72,16 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6975, lng: 44.8045 },
     estimatedMinutes: 20,
     imageUrl: 'https://images.unsplash.com/photo-1682005789653-d6311db860c9?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'A historic flower market operating for over a century along Alexander Park. Restored in 2019 into modern glass pavilions while keeping the vibrant street florists tradition alive.',
+    historicalSummaryRu:
+      'Исторический цветочный рынок, работающий более века у Александровского сада. Отреставрирован в 2019 году в современные стеклянные павильоны.',
+    funFact:
+      'Local florists create custom hand-bound Georgian wildflower bouquets here starting at sunrise every day.',
+    funFactRu:
+      'Местные флористы собирают букеты из грузинских полевых цветов каждый день прямо с рассветом.',
+    workingHours: '08:00 AM - 10:00 PM',
+    workingHoursRu: '08:00 - 22:00',
     olyaTips: 'Renovated street stalls. Great vibrant morning photos.',
     olyaTipsRu: 'Отреставрированные уличные прилавки. Отличные яркие утренние фото.',
     bestTimeOfDay: '10:25 AM - 10:45 AM',
@@ -77,6 +102,18 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6957, lng: 44.8066 },
     estimatedMinutes: 30,
     imageUrl: 'https://images.unsplash.com/photo-1611905998781-f21744fcad47?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Created by renowned Georgian artist, puppeteer, and screenwriter Rezo Gabriadze in 1981. The quirky leaning clock tower was built over thirty years using reclaimed stones from demolished historic Tbilisi buildings.',
+    historicalSummaryRu:
+      'Создан знаменитым грузинским художником, режиссером и сценаристом Резо Габриадзе в 1981 году. Падающая башня с часами строилась 30 лет из фрагментов старинных зданий.',
+    funFact:
+      'Inside the tower clockwork is a tiny mechanical puppet show called "The Circle of Life", featuring a bride and groom aging into grandparents.',
+    funFactRu:
+      'Внутри часового механизма башни скрыто маленькое кукольное шоу «Цикл жизни», показывающее путь жениха и невесты до глубокой старости.',
+    workingHours: '11:00 AM - 07:00 PM',
+    workingHoursRu: '11:00 - 19:00',
+    websiteUrl: 'https://gabriadze.com',
+    instagramUrl: 'https://instagram.com/gabriadzetheatre',
     olyaTips:
       'Be here by 11:50 AM! At exactly 12:00 PM, the tiny angel comes out to strike the bell, followed by "The Cycle of Life" puppet show.',
     olyaTipsRu:
@@ -101,6 +138,16 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6953, lng: 44.8063 },
     estimatedMinutes: 30,
     imageUrl: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Shavteli Street is home to the 6th-century Anchiskhati Basilica — the oldest surviving Christian church in Tbilisi, built by King Dachi of Iberia around 522 AD.',
+    historicalSummaryRu:
+      'Улица Шавтели известна базиликой Анчисхати VI века — старейшей сохранившейся христианской церковью Тбилиси, построенной царём Дачи в 522 году.',
+    funFact:
+      'Anchiskhati was named after the sacred icon of Ancha (Anchiskhati) which was brought here in 1664 to protect it from Ottoman invasions.',
+    funFactRu:
+      'Имя Анчисхати происходит от иконы Анчийского Спаса, перенесённой сюда в 1664 году для защиты от османских нашествий.',
+    workingHours: '08:30 AM - 07:00 PM',
+    workingHoursRu: '08:30 - 19:00',
     olyaTips: 'Peep into 6th-century Anchiskhati church along the alley — the oldest surviving church in Tbilisi.',
     olyaTipsRu: 'Загляните в церковь Анчисхати VI века в переулке — старейшую сохранившуюся церковь Тбилиси.',
     bestTimeOfDay: '12:15 PM - 12:45 PM',
@@ -118,9 +165,19 @@ const HEARTBEAT_STOPS: Stop[] = [
     nameRu: 'Сионский собор',
     neighborhood: 'Old Kala',
     neighborhoodRu: 'Старая Кала',
-    coordinates: { lat: 41.6914, lng: 44.8080 },
+    coordinates: { lat: 41.6914, lng: 44.808 },
     estimatedMinutes: 20,
     imageUrl: 'https://images.unsplash.com/photo-1777906626046-407d486d3e44?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Originally constructed in the 6th and 7th centuries, Sioni Cathedral served as the primary seat of the Georgian Orthodox Church for centuries and houses the sacred Grapevine Cross of Saint Nino.',
+    historicalSummaryRu:
+      'Построенный в VI–VII века Сионский собор веками являлся главным кафедральным собором и хранит святой Крест Святой Нино из виноградной лозы.',
+    funFact:
+      'According to tradition, Saint Nino bound her cross with her own hair when bringing Christianity to Iberia in the 4th century.',
+    funFactRu:
+      'По преданию, Святая Нино обвила свой крест собственными волосами, принеся христианство в Грузию в IV веке.',
+    workingHours: '08:00 AM - 08:00 PM',
+    workingHoursRu: '08:00 - 20:00',
     olyaTips: 'Step inside quietly. See Grapevine Cross of St. Nino.',
     olyaTipsRu: 'Зайдите тихо внутрь. Посмотрите на Крест Святой Нино из виноградной лозы.',
     bestTimeOfDay: '12:50 PM - 01:10 PM',
@@ -139,6 +196,16 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6908, lng: 44.8083 },
     estimatedMinutes: 15,
     imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Sioni Alley has been the carpet merchant quarter of Old Tbilisi since medieval trade caravans traversed the Silk Road into Kala.',
+    historicalSummaryRu:
+      'Переулок Сиони являлся купеческим ковровым кварталом Старого Тбилиси со времён Великого шёлкового пути.',
+    funFact:
+      'Pardag is a traditional flat-woven, double-sided Georgian carpet crafted without pile, renowned for geometric Caucasian patterns.',
+    funFactRu:
+      'Пардаги — традиционный безворсовый двусторонний грузинский ковёр с геометрическими кавказскими узорами.',
+    workingHours: '10:00 AM - 08:00 PM',
+    workingHoursRu: '10:00 - 20:00',
     olyaTips: 'Stand near hanging hand-woven carpets (pardags) for photos.',
     olyaTipsRu: 'Встаньте рядом с висящими ткаными коврами (пардаги) для фото.',
     bestTimeOfDay: '01:10 PM - 01:25 PM',
@@ -156,9 +223,19 @@ const HEARTBEAT_STOPS: Stop[] = [
     nameRu: 'Мост Мира',
     neighborhood: 'Rike',
     neighborhoodRu: 'Рике',
-    coordinates: { lat: 41.6930, lng: 44.8083 },
+    coordinates: { lat: 41.693, lng: 44.8083 },
     estimatedMinutes: 15,
     imageUrl: 'https://images.unsplash.com/photo-1707961372938-8b68e8472f52?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Designed by Italian architect Michele De Lucchi and illuminated by French lighting designer Philippe Martinaud, this bow-shaped pedestrian glass canopy bridge opened in 2010.',
+    historicalSummaryRu:
+      'Спроектированный итальянским архитектором Микеле де Лукки стеклянный пешеходный мост открылся в 2010 году.',
+    funFact:
+      'The LED canopy displays Morse code messages containing the periodic elements of the human body to celebrate peace and human unity.',
+    funFactRu:
+      'Светодиодный навес транслирует азбукой Морзе химические элементы человеческого тела в знак мира и единства.',
+    workingHours: 'Open 24/7',
+    workingHoursRu: 'Открыто круглосуточно',
     olyaTips: 'Glass canopy bridge toward Rike Park. Modern contrast.',
     olyaTipsRu: 'Стеклянный мост-навес в сторону парка Рике. Современный контраст.',
     bestTimeOfDay: '01:30 PM - 01:45 PM',
@@ -179,6 +256,12 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6922, lng: 44.8105 },
     estimatedMinutes: 15,
     imageUrl: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'A contemporary riverside public park opened in 2010 on the left bank of the Mtkvari River, connecting Old Kala to Avlabari.',
+    historicalSummaryRu:
+      'Современный прибрежный парк, открытый в 2010 году на левом берегу реки Куры.',
+    workingHours: 'Open 24/7',
+    workingHoursRu: 'Открыто круглосуточно',
     olyaTips: 'Park lawns leading toward cable car lower station.',
     olyaTipsRu: 'Газоны парка, ведущие к нижней станции канатной дороги.',
     bestTimeOfDay: '01:45 PM - 02:00 PM',
@@ -199,6 +282,16 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6902, lng: 44.8114 },
     estimatedMinutes: 15,
     imageUrl: 'https://images.unsplash.com/photo-1656415297286-537ae30069a7?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Perched atop a cliff above the Mtkvari River, Metekhi Church was built by King Demetre II in 1278 near the equestrian statue of King Vakhtang Gorgasali, the founder of Tbilisi.',
+    historicalSummaryRu:
+      'Церковь Метехи на скале построена царём Деметре II в 1278 году рядом с памятником основателю Тбилиси царю Вахтангу Горгасали.',
+    funFact:
+      'Tbilisi derives its name from "tbili" (warm), named after the hot thermal sulfur springs King Gorgasali discovered while hunting here.',
+    funFactRu:
+      'Название Тбилиси происходит от слова «тбили» (тёплый), из-за тёплых серных источников, найденных царём Горгасали на охоте.',
+    workingHours: '09:00 AM - 07:00 PM',
+    workingHoursRu: '09:00 - 19:00',
     olyaTips: 'Look back across river for classic postcard cliff shot.',
     olyaTipsRu: 'Взгляните назад через реку на классический вид со скалы.',
     bestTimeOfDay: '02:00 PM',
@@ -218,9 +311,15 @@ const HEARTBEAT_STOPS: Stop[] = [
     nameRu: 'Канатная дорога к Матери Грузии',
     neighborhood: 'Sololaki Ridge',
     neighborhoodRu: 'Сололакский хребет',
-    coordinates: { lat: 41.6880, lng: 44.8051 },
+    coordinates: { lat: 41.688, lng: 44.8051 },
     estimatedMinutes: 15,
     imageUrl: 'https://images.unsplash.com/photo-1663785011617-ffeea3d7dc49?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Built in 2012, the aerial tramway connects Rike Park to Narikala Fortress and the Sololaki ridge in just 5 minutes.',
+    historicalSummaryRu:
+      'Канатная дорога построена в 2012 году и соединяет парк Рике с крепостью Нарикала за 5 минут.',
+    workingHours: '10:00 AM - 10:00 PM',
+    workingHoursRu: '10:00 - 22:00',
     olyaTips: 'Tap TravelCard/bank card at turnstile; glide up ridge.',
     olyaTipsRu: 'Приложите проездную или банковскую карту на турникете и поднимитесь на хребет.',
     bestTimeOfDay: '02:15 PM - 02:30 PM',
@@ -239,6 +338,12 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6892, lng: 44.8055 },
     estimatedMinutes: 30,
     imageUrl: 'https://images.unsplash.com/photo-1618595016029-030692faf166?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'The Upper Betlemi Church sits atop 120 historic stone steps built in 1850 by architect Tativov to provide access to the hillside Armenian and Georgian quarters.',
+    historicalSummaryRu:
+      'Верхняя церковь Бетлеми расположена над 120 каменными ступенями, построенными в 1850 году архитектором Тативовым.',
+    workingHours: '09:00 AM - 07:00 PM',
+    workingHoursRu: '09:00 - 19:00',
     olyaTips: 'Watch footing on old Betlemi cobblestone stairs; enjoy views.',
     olyaTipsRu: 'Смотрите под ноги на старой каменной лестнице Бетлеми и наслаждайтесь видами.',
     bestTimeOfDay: '02:45 PM - 03:15 PM',
@@ -259,7 +364,7 @@ const HEARTBEAT_STOPS: Stop[] = [
       category: 'restaurant',
       cuisines: ['georgian'],
       isVegetarianFriendly: true,
-      recommendedDishes: ['Khachapuri', 'Cold lemonade'],
+      recommendedDishes: ['Fresh Imeretian Khachapuri', 'Chilled Badagoni Saperavi', 'Cold tarragon lemonade'],
       bookingAdvice: 'Reserve terrace tables for panoramic city views.',
       bookingAdviceRu: 'Забронируйте столики на террасе для панорамного вида.',
     },
@@ -270,6 +375,9 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6888, lng: 44.8062 },
     estimatedMinutes: 75,
     imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+    workingHours: '11:00 AM - 11:00 PM',
+    workingHoursRu: '11:00 - 23:00',
+    instagramUrl: 'https://instagram.com/144stairs',
     olyaTips: 'Panoramic rooftops. Try khachapuri and cold lemonade.',
     olyaTipsRu: 'Панорамные крыши. Попробуйте хачапури и холодный лимонад.',
     bestTimeOfDay: '03:15 PM - 04:30 PM',
@@ -288,6 +396,17 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6883, lng: 44.8094 },
     estimatedMinutes: 30,
     imageUrl: 'https://images.unsplash.com/photo-1716671225845-d15fe51ae099?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'The ancient sulfur bath quarter of Tbilisi, where thermal hot spring waters rich in sulfur bubble from the earth at 38°C to 42°C. Legendary figures from Alexander Pushkin to Alexandre Dumas bathed here.',
+    historicalSummaryRu:
+      'Древний район серных бань Тбилиси, где природная горячая минеральная вода выходит из земли с температурой 38–42°C. Здесь бывали Пушкин и Дюма.',
+    funFact:
+      'Pushkin wrote in 1829: "I have never encountered anything more luxurious than the Tiflis baths."',
+    funFactRu:
+      'Александр Пушкин писал в 1829 году: «Роднее и роскошнее тифлисских бань я ничего в жизни не встречал».',
+    workingHours: '08:00 AM - 11:00 PM',
+    workingHoursRu: '08:00 - 23:00',
+    websiteUrl: 'https://chreli-abano.ge',
     olyaTips: 'Brick domed bathhouses & warm sulfur vapors.',
     olyaTipsRu: 'Кирпичные купола бань и тёплые серные пары.',
     bestTimeOfDay: '04:45 PM - 05:15 PM',
@@ -306,6 +425,12 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6869, lng: 44.8087 },
     estimatedMinutes: 20,
     imageUrl: 'https://images.unsplash.com/photo-1693234969086-e6e662a89ff9?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'A natural gorge right in the heart of Old Tbilisi. Legvtakhevi ("Fig Tree Gorge") was buried under urban paving for decades before being excavated and restored in 2012.',
+    historicalSummaryRu:
+      'Натуральный каньон в самом центре Тбилиси. Каньон Легвтахеви («Фиговое ущелье») был раскрыт и отреставрирован в 2012 году.',
+    workingHours: 'Open 24/7',
+    workingHoursRu: 'Открыто круглосуточно',
     olyaTips: 'Wooden canyon boardwalk straight to the waterfall.',
     olyaTipsRu: 'Деревянный настил через каньон прямо к водопаду.',
     bestTimeOfDay: '05:15 PM - 05:35 PM',
@@ -324,7 +449,7 @@ const HEARTBEAT_STOPS: Stop[] = [
       category: 'cafe',
       cuisines: ['georgian'],
       isVegetarianFriendly: true,
-      recommendedDishes: ['Freshly pressed ruby-red pomegranate juice'],
+      recommendedDishes: ['Freshly pressed ruby-red pomegranate juice', 'Fresh citrus juice mix'],
     },
     name: 'Fresh Pomegranate Juice Stand',
     nameRu: 'Стойка со свежим гранатовым соком',
@@ -333,6 +458,8 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6875, lng: 44.8092 },
     estimatedMinutes: 15,
     imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+    workingHours: '10:00 AM - 09:00 PM',
+    workingHoursRu: '10:00 - 21:00',
     olyaTips: 'Buy freshly pressed ruby-red pomegranate juice at exit.',
     olyaTipsRu: 'Купите свежевыжатый рубиновый гранатовый сок на выходе.',
     bestTimeOfDay: '05:35 PM - 05:50 PM',
@@ -351,6 +478,14 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6886, lng: 44.8101 },
     estimatedMinutes: 25,
     imageUrl: 'https://images.unsplash.com/photo-1713545482961-2338c8919493?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'Chreli Abano (Orbeliani Baths) features a stunning Persian-style facade clad in royal blue mosaic tiles, built in 1893.',
+    historicalSummaryRu:
+      'Бани Чрели Абано (бани Орбелиани) известны своим персидским фасадом с синей изразцовой мозаикой 1893 года.',
+    workingHours: '08:00 AM - 11:00 PM',
+    workingHoursRu: '08:00 - 23:00',
+    websiteUrl: 'https://chreli-abano.ge',
+    instagramUrl: 'https://instagram.com/chreli_abano',
     olyaTips: 'Royal blue tile work facade of Zabron/Orbeliani baths.',
     olyaTipsRu: 'Королевский синий израсцовый фасад бань Орбелиани (Чрели Абано).',
     bestTimeOfDay: '05:50 PM - 06:15 PM',
@@ -373,6 +508,12 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6958, lng: 44.7901 },
     estimatedMinutes: 45,
     imageUrl: 'https://images.unsplash.com/photo-1559684844-ec295fd647ed?auto=format&fit=crop&w=800&q=80',
+    historicalSummary:
+      'The Mtatsminda Funicular opened in 1905, designed by French engineer Alphonse Roby. It travels up a 60° incline to Mtatsminda Park.',
+    historicalSummaryRu:
+      'Фуникулёр на гору Мтацминда открылся в 1905 году по проекту французского инженера Альфонса Роби.',
+    workingHours: '09:00 AM - 12:00 AM',
+    workingHoursRu: '09:00 - 00:00',
     olyaTips: 'Head to Chonkadze St, take steep Funicular tram up mountain.',
     olyaTipsRu: 'Поднимитесь на ул. Чонкадзе и сядьте на крутой фуникулёр на гору.',
     bestTimeOfDay: '06:30 PM - 07:15 PM',
@@ -391,7 +532,7 @@ const HEARTBEAT_STOPS: Stop[] = [
       category: 'restaurant',
       cuisines: ['georgian'],
       isVegetarianFriendly: true,
-      recommendedDishes: ['Hot ponchiki (cream donuts)', 'Georgian wine'],
+      recommendedDishes: ['Hot cream-filled ponchiki (donuts)', 'Tarragon Lagidze soda', 'Georgian Saperavi wine'],
       bookingAdvice: 'Book window tables in advance for sunset dining.',
       bookingAdviceRu: 'Заранее бронируйте столики у окна для заката.',
     },
@@ -402,6 +543,10 @@ const HEARTBEAT_STOPS: Stop[] = [
     coordinates: { lat: 41.6942, lng: 44.7842 },
     estimatedMinutes: 120,
     imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+    workingHours: '12:00 PM - 12:00 AM',
+    workingHoursRu: '12:00 - 00:00',
+    websiteUrl: 'https://funicular.ge',
+    instagramUrl: 'https://instagram.com/funicular.tbilisi',
     olyaTips: 'City night lights, hot ponchiki (cream donuts), Georgian wine.',
     olyaTipsRu: 'Ночные огни города, горячие пончики с кремом и грузинское вино.',
     bestTimeOfDay: '07:30 PM - 09:30 PM',
@@ -505,6 +650,16 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6918, lng: 44.7972 },
         estimatedMinutes: 25,
         imageUrl: 'https://images.unsplash.com/photo-1580233015636-7ed8fd6ba328?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Constructed in the late 19th century by wealthy merchant families of Tiflis, Lado Asatiani Street features eclectic Art Nouveau and neo-Gothic facades concealing inner wooden court galleries.',
+        historicalSummaryRu:
+          'Построенные в конце XIX века богатыми купеческими семьями Тифлиса, дома на улице Ладо Асатиани сочетают модерн и неоготику с деревянными двориками.',
+        funFact:
+          'Court #28 contains one of the rare surviving 19th-century oil-painted ceiling frescoes depicting classical European landscapes.',
+        funFactRu:
+          'Во дворе №28 сохранилась редкая роспись потолка маслом XIX века с классическими европейскими пейзажами.',
+        workingHours: 'Open 24/7 (Residential St.)',
+        workingHoursRu: 'Открыто круглосуточно (Жилая улица)',
         olyaTips:
           'Gently push through the wooden carriage doors into court #28. The original 1890s oil-painted ceiling is hidden right inside the foyer!',
         olyaTipsRu:
@@ -536,6 +691,9 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6925, lng: 44.798 },
         estimatedMinutes: 45,
         imageUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+        workingHours: '12:00 PM - 11:00 PM',
+        workingHoursRu: '12:00 - 23:00',
+        instagramUrl: 'https://instagram.com/linvilletbilisi',
         olyaTips:
           'Climb the creaky wooden staircase to a vintage living room cafe. Sip tea surrounded by antique pianos and tilted mirrors.',
         olyaTipsRu:
@@ -554,6 +712,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6908, lng: 44.7995 },
         estimatedMinutes: 20,
         imageUrl: 'https://images.unsplash.com/photo-1674128420882-6a35c563be2d?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Machabeli Street is named after Ivane Machabeli, the famed Georgian translator of Shakespeare. The avenue features magnificent 1900s mansions with imported stained glass entryways.',
+        historicalSummaryRu:
+          'Улица названа в честь Иване Мачабели, переводчика Шекспира. Известна особняками 1900-х годов с импортными витражами.',
+        workingHours: 'Open 24/7 (Residential St.)',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Resident Tbilisi street cats often sunbathe by the inner fountain. A cozy stop with flat, wide sidewalks.',
         olyaTipsRu:
@@ -572,6 +736,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6931, lng: 44.7989 },
         estimatedMinutes: 25,
         imageUrl: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Home to poet Galaktion Tabidze in the early 20th century. The building showcases hand-forged wrought iron spiral balconies crafted by local Tiflis blacksmiths.',
+        historicalSummaryRu:
+          'Дом поэта Галактиона Табидзе начала XX века с ажурными коваными балконами тифлисских кузнецов.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Look up at the spiral wrought-iron balcony. Afternoon light hits the turquoise stained glass windows around 4 PM.',
         olyaTipsRu:
@@ -592,6 +762,16 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6915, lng: 44.8005 },
         estimatedMinutes: 20,
         imageUrl: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'One of the oldest urban squares in Sololaki, named after Georgian painter Lado Gudiashvili. Restored to preserve authentic 19th-century carved wooden balcony architecture.',
+        historicalSummaryRu:
+          'Одна из старейших площадей Сололаки, названная в честь художника Ладо Гудиашвили. Отреставрирована с сохранением резных деревянных балконов XIX века.',
+        funFact:
+          'Literary salons and political debates of the early Georgian Republic were held in the wooden houses surrounding this square.',
+        funFactRu:
+          'В деревянных домах вокруг этой площади в начале XX века проходили литературные салоны и политические дискуссии.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'A tranquil cobblestone square flanked by pastel wooden balconies and shaded benches. Perfect photo spot for architecture lovers.',
         olyaTipsRu:
@@ -619,6 +799,10 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.691, lng: 44.7985 },
         estimatedMinutes: 60,
         imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+        workingHours: '01:00 PM - 11:00 PM',
+        workingHoursRu: '13:00 - 23:00',
+        websiteUrl: 'https://ezotbilisi.ge',
+        instagramUrl: 'https://instagram.com/ezotbilisi',
         olyaTips:
           '"Ezo" means courtyard in Georgian. Eat farm-to-table Georgian dishes served under strings of fairy lights in a real residential yard.',
         olyaTipsRu:
@@ -654,6 +838,16 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7042, lng: 44.7895 },
         estimatedMinutes: 30,
         imageUrl: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Built in 1905, this stone mansion is a celebrated masterpiece of Tbilisi Art Nouveau architecture, featuring ornate floral relief work and dragon gargoyles.',
+        historicalSummaryRu:
+          'Построенный в 1905 году особняк — шедевр тбилисского модерна с резными растительными рельефами и драконами.',
+        funFact:
+          'Tbilisi Modernism developed a unique national flavor by integrating oriental floral motifs into European Art Nouveau facades.',
+        funFactRu:
+          'Тбилисский модерн создал уникальный стиль, соединив восточные орнаменты с европейским ар-нуво.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Notice the subtle dragon and floral motifs carved on the stone lintel — a prime example of 1905 Tbilisi Modernism.',
         olyaTipsRu:
@@ -683,6 +877,10 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7065, lng: 44.7881 },
         estimatedMinutes: 40,
         imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+        workingHours: '08:00 AM - 12:00 AM',
+        workingHoursRu: '08:00 - 00:00',
+        websiteUrl: 'https://roomshotels.com',
+        instagramUrl: 'https://instagram.com/roomshotels',
         olyaTips:
           'Order a hot Georgian thyme tea under the century-old plane trees. The glass garden house is magic on rainy afternoons.',
         olyaTipsRu:
@@ -701,6 +899,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7089, lng: 44.7864 },
         estimatedMinutes: 30,
         imageUrl: 'https://images.unsplash.com/photo-1580233015636-7ed8fd6ba328?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Tarkhnishvili Street is renowned for its arched passageways ("italianskie dvoriki") leading to secluded inner courtyards framed by wooden galleries and ivy.',
+        historicalSummaryRu:
+          'Улица Тархнишвили славится арочными проходами в итальянские дворики с деревянными галереями и плющом.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Walk down the brick archway between #7 and #9 to enter a secluded courtyard with vintage carpets and wild ivy.',
         olyaTipsRu:
@@ -719,6 +923,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7072, lng: 44.7872 },
         estimatedMinutes: 25,
         imageUrl: 'https://images.unsplash.com/photo-1580233015636-7ed8fd6ba328?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'A quiet residential hillside avenue exhibiting traditional 19th-century timber fretwork balconies draped over stone basements.',
+        historicalSummaryRu:
+          'Тихий жилой проспект на холме с резными деревянными балконами XIX века над каменными цоколями.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'A quiet residential hillside street packed with delicate wooden fretwork balconies wrapped in grapevines.',
         olyaTipsRu:
@@ -746,6 +956,10 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.706, lng: 44.789 },
         estimatedMinutes: 40,
         imageUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+        workingHours: '08:00 AM - 12:00 AM',
+        workingHoursRu: '08:00 - 00:00',
+        websiteUrl: 'https://stambahotel.com',
+        instagramUrl: 'https://instagram.com/stamba.hotel',
         olyaTips:
           'Walk through the towering 5-story jungle atrium inside a former Soviet publishing house. Get specialty roasted coffee.',
         olyaTipsRu:
@@ -773,6 +987,10 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7095, lng: 44.785 },
         estimatedMinutes: 50,
         imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+        workingHours: '11:00 AM - 01:00 AM',
+        workingHoursRu: '11:00 - 01:00',
+        websiteUrl: 'https://winefactory1.ge',
+        instagramUrl: 'https://instagram.com/winefactory1',
         olyaTips:
           'Historic 1896 wine factory converted into an open-air brick courtyard filled with wine cellars, bars, and garden dining.',
         olyaTipsRu:
@@ -808,6 +1026,17 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6883, lng: 44.8094 },
         estimatedMinutes: 30,
         imageUrl: 'https://images.unsplash.com/photo-1716671225845-d15fe51ae099?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Dating back to the Persian era, these brick-domed bathhouses sit directly above natural thermal sulfur springs. The bath quarter was the social heart of old Tiflis.',
+        historicalSummaryRu:
+          'Кирпичные купола бань персидской эпохи стоят над естественными термальными источниками. Квартал бань был центром общественной жизни старого Тифлиса.',
+        funFact:
+          'The domed roofs feature open skylights ("erdo") that release steam while illuminating the bath halls below.',
+        funFactRu:
+          'Сводчатые крыши снабжены световыми окнами-эрдо для выхода пара и освещения бань.',
+        workingHours: '08:00 AM - 11:00 PM',
+        workingHoursRu: '08:00 - 23:00',
+        websiteUrl: 'https://chreli-abano.ge',
         olyaTips:
           'Walk over the brick bath domes for an iconic postcard photo of the Persian blue tile facade of Orbeliani Baths.',
         olyaTipsRu:
@@ -826,6 +1055,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6869, lng: 44.8087 },
         estimatedMinutes: 25,
         imageUrl: 'https://images.unsplash.com/photo-1693234969086-e6e662a89ff9?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'A natural canyon in the center of Old Tbilisi where the Tsavkisistskali stream drops 22 meters down a volcanic cliff.',
+        historicalSummaryRu:
+          'Природный каньон в центре Старого Тбилиси, где речка Цавкисисцкали низвергается с 22-метровой скалы.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Follow the wooden canyon boardwalk tucked behind the bathhouses directly to a hidden natural waterfall.',
         olyaTipsRu:
@@ -846,6 +1081,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6895, lng: 44.8051 },
         estimatedMinutes: 35,
         imageUrl: 'https://images.unsplash.com/photo-1618595016029-030692faf166?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Constructed in 1850 to connect the lower trade district to the upper Betlemi church quarter. The 120 stone steps wind through traditional wooden carved galleries.',
+        historicalSummaryRu:
+          'Построена в 1850 году для соединения Нижней Калы с верхним кварталом Бетлеми. 120 каменных ступеней виются вдоль резных галерей.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Catch your breath halfway up the 120 Betlemi stone stairs — the view of Metekhi cliff across the river is legendary.',
         olyaTipsRu:
@@ -866,6 +1107,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.689, lng: 44.8048 },
         estimatedMinutes: 25,
         imageUrl: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Upper Betlemi Church was founded in the 15th century. Its hillside terrace provides one of the most comprehensive panoramas over Old Kala.',
+        historicalSummaryRu:
+          'Верхняя церковь Бетлеми основана в XV веке. Ее терраса открывает захватывающую панораму Старого города.',
+        workingHours: '09:00 AM - 07:00 PM',
+        workingHoursRu: '09:00 - 19:00',
         olyaTips:
           'At the top of Betlemi stairs lies a tranquil church garden platform. Overlooks the red roofs of Old Kala and the Mtkvari river.',
         olyaTipsRu:
@@ -888,6 +1135,16 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6876, lng: 44.8055 },
         estimatedMinutes: 40,
         imageUrl: 'https://images.unsplash.com/photo-1663785011617-ffeea3d7dc49?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Established in the 4th century as Shuris-tsikhe ("Invidious Fortress"), Narikala was expanded by Arab emirs, King David the Builder, and the Mongols.',
+        historicalSummaryRu:
+          'Основанная в IV веке как Шурис-Цихе, Нарикала расширялась арабскими эмирами, Давидом Строителем и монголами.',
+        funFact:
+          'The giant aluminum monument of Kartlis Deda (Mother of Georgia) was erected in 1958 to mark Tbilisi’s 1500th anniversary.',
+        funFactRu:
+          'Монумент Мать Грузия был воздвигнут в 1958 году к 1500-летию Тбилиси.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Walk along the historic fortress ridge to the 20-meter aluminum statue of Mother of Georgia holding a bowl of wine for friends and a sword for enemies.',
         olyaTipsRu:
@@ -923,6 +1180,9 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6888, lng: 44.8062 },
         estimatedMinutes: 60,
         imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+        workingHours: '11:00 AM - 11:00 PM',
+        workingHoursRu: '11:00 - 23:00',
+        instagramUrl: 'https://instagram.com/144stairs',
         olyaTips:
           'Nestled right below Narikala fortress. Unwind on the cliffside balcony with wine as twilight illuminates the city below.',
         olyaTipsRu:
@@ -958,6 +1218,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7075, lng: 44.8018 },
         estimatedMinutes: 30,
         imageUrl: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Originally developed in the 19th century as a German colony (Neu-Tiflis), Agmashenebeli Avenue features grand neoclassical and Art Nouveau architecture.',
+        historicalSummaryRu:
+          'Заложенный в XIX веке как немецкая колония Ной-Тифлис, проспект Агмашенебели сочетает неоклассицизм и модерн.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Stroll the flat restored pedestrian zone and grab a fresh hot Adjarian khachapuri from the neighborhood bakery.',
         olyaTipsRu:
@@ -985,6 +1251,9 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7085, lng: 44.803 },
         estimatedMinutes: 60,
         imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80',
+        workingHours: '01:00 PM - 11:00 PM',
+        workingHoursRu: '13:00 - 23:00',
+        instagramUrl: 'https://instagram.com/shavilomi',
         olyaTips:
           '"Black Lion" in Georgian. Famous for its bohemian courtyard garden and Gobi — a traditional shared wooden bowl of dips and cheeses.',
         olyaTipsRu:
@@ -1003,6 +1272,14 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7102, lng: 44.8041 },
         estimatedMinutes: 45,
         imageUrl: 'https://images.unsplash.com/photo-1548747132-bab97231571a?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'A former Soviet sewing factory converted in 2016 into an open-air urban hub housing artist studios, cafes, and international street art murals.',
+        historicalSummaryRu:
+          'Бывшая советская швейная фабрика, преобразованная в 2016 году в урбан-пространство с арт-студиями и муралами.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
+        websiteUrl: 'https://fabrikatbilisi.com',
+        instagramUrl: 'https://instagram.com/fabrika_tbilisi',
         olyaTips:
           'Former Soviet garment factory turned urban hotspot. Head to the back alley for huge mural photo opportunities.',
         olyaTipsRu:
@@ -1030,6 +1307,8 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7091, lng: 44.7985 },
         estimatedMinutes: 45,
         imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+        workingHours: '12:00 PM - 11:00 PM',
+        workingHoursRu: '12:00 - 23:00',
         olyaTips:
           'Ask the sommelier for an unfiltered Amber Kisi wine made in ancient underground Qvevri clay vessels.',
         olyaTipsRu:
@@ -1048,6 +1327,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7012, lng: 44.8035 },
         estimatedMinutes: 45,
         imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Originating during the economic hardships of the early 1990s, Dry Bridge became the premier antique open-air market of the Caucasus.',
+        historicalSummaryRu:
+          'Возникший в 1990-е годы блошиный рынок на Сухом мосту стал главным антикварным рынком Кавказа.',
+        workingHours: '10:00 AM - 05:00 PM',
+        workingHoursRu: '10:00 - 17:00',
         olyaTips:
           'Open-air treasure hunt spread over the historic bridge park. Browse antique Soviet cameras, handmade daggers, and vintage vinyl.',
         olyaTipsRu:
@@ -1077,6 +1362,9 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.7005, lng: 44.802 },
         estimatedMinutes: 40,
         imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+        workingHours: '02:00 PM - 02:00 AM',
+        workingHoursRu: '14:00 - 02:00',
+        instagramUrl: 'https://instagram.com/dedaenabar',
         olyaTips:
           'End the walk by the Mtkvari riverbank in Dedaena Park. Grab a craft beer or fresh lemonade on the grass.',
         olyaTipsRu:
@@ -1112,6 +1400,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6975, lng: 44.7915 },
         estimatedMinutes: 30,
         imageUrl: 'https://images.unsplash.com/photo-1740920338982-4148774fd078?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Vilnius Park marks the lower terminus of the Mtatsminda Funicular at the base of Mount Mtatsminda.',
+        historicalSummaryRu:
+          'Сквер Вильнюса находится у нижней станции фуникулёра у подножия горы Мтацминда.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'Grab a rich Georgian espresso near Vilnius park before hopping onto the cable funicular train.',
         olyaTipsRu:
@@ -1132,6 +1426,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6965, lng: 44.7905 },
         estimatedMinutes: 15,
         imageUrl: 'https://images.unsplash.com/photo-1559684844-ec295fd647ed?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Built in 1905 by Belgian engineers, the Mtatsminda Funicular is one of the world’s steepest passenger rope railways.',
+        historicalSummaryRu:
+          'Построенный в 1905 году бельгийскими инженерами фуникулёр — один из самых крутых в мире.',
+        workingHours: '09:00 AM - 12:00 AM',
+        workingHoursRu: '09:00 - 00:00',
         olyaTips:
           'Board the 1905 funicular tram on Chonkadze St. Stand at the front window as the cable train glides up the steep 60° mountain incline.',
         olyaTipsRu:
@@ -1150,6 +1450,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6955, lng: 44.7891 },
         estimatedMinutes: 45,
         imageUrl: 'https://images.unsplash.com/photo-1638534146166-bbd81faf05f9?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Mama Daviti Church marks the 6th-century hermit cave of Saint David of Gareja. The surrounding pantheon holds graves of Georgia’s prominent writers and national heroes.',
+        historicalSummaryRu:
+          'Церковь Мама Давити построена на месте пещеры давида Гареджийского VI века. В пантеоне покоятся великие писатели и герои Грузии.',
+        workingHours: '09:00 AM - 07:00 PM',
+        workingHoursRu: '09:00 - 19:00',
         olyaTips:
           'Drink from the mountain holy spring tap inside the stone alcove. The air up here is always 3 degrees cooler.',
         olyaTipsRu:
@@ -1170,6 +1476,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.695, lng: 44.7865 },
         estimatedMinutes: 35,
         imageUrl: 'https://images.unsplash.com/photo-1638534146166-bbd81faf05f9?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'Planted in the mid-20th century to green the mountain slopes above Tbilisi, creating a fragrant pine microclimate.',
+        historicalSummaryRu:
+          'Высаженный в середине XX века сосновый лес создаёт освежающий микроклимат над городом.',
+        workingHours: 'Open 24/7',
+        workingHoursRu: 'Открыто круглосуточно',
         olyaTips:
           'A fragrant pine forest walking path running along the upper mountain ridge. Offers refreshing shade even in midsummer heat.',
         olyaTipsRu:
@@ -1190,6 +1502,12 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6938, lng: 44.7835 },
         estimatedMinutes: 30,
         imageUrl: 'https://images.unsplash.com/photo-1740920338982-4148774fd078?auto=format&fit=crop&w=800&q=80',
+        historicalSummary:
+          'At 770 meters altitude, Mtatsminda Park has served as Tbilisi’s hilltop recreation grounds since 1930.',
+        historicalSummaryRu:
+          'На высоте 770 метров парк Мтацминда является главной смотровой площадкой города с 1930 года.',
+        workingHours: '10:00 AM - 11:00 PM',
+        workingHoursRu: '10:00 - 23:00',
         olyaTips:
           'Standing 770 meters above sea level at the edge of the cliff. The giant Ferris wheel gives unbeatable 360° views across Georgia’s capital.',
         olyaTipsRu:
@@ -1219,6 +1537,10 @@ export const ROUTES: Route[] = [
         coordinates: { lat: 41.6942, lng: 44.7842 },
         estimatedMinutes: 60,
         imageUrl: 'https://images.unsplash.com/photo-1559684844-ec295fd647ed?auto=format&fit=crop&w=800&q=80',
+        workingHours: '11:00 AM - 11:00 PM',
+        workingHoursRu: '11:00 - 23:00',
+        websiteUrl: 'https://funicular.ge',
+        instagramUrl: 'https://instagram.com/funicular.tbilisi',
         olyaTips:
           'Do NOT leave without ordering hot cream-filled ponchiki doughnuts and cold tarragon Lagidze soda on the terrace balcony!',
         olyaTipsRu:

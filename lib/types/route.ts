@@ -41,6 +41,14 @@ export interface BaseStop {
   estimatedMinutes: number;
   imageUrl: string;
   galleryImages?: string[];
+  historicalSummary?: string;
+  historicalSummaryRu?: string;
+  funFact?: string;
+  funFactRu?: string;
+  workingHours?: string;
+  workingHoursRu?: string;
+  websiteUrl?: string;
+  instagramUrl?: string;
   olyaTips: string;
   olyaTipsRu?: string;
   logisticsWarning?: string;

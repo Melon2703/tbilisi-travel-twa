@@ -19,6 +19,10 @@ export const EMOJI_ICONS = {
   sparkles: '✨',
   externalLink: '↗️',
   calendar: '📅',
+  landmark: '🏛️',
+  bulb: '💡',
+  globe: '🌐',
+  instagram: '📸',
 } as const;
 
 export type EmojiIconName = keyof typeof EMOJI_ICONS | (string & {});

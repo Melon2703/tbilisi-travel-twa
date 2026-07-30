@@ -253,11 +253,41 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
           </div>
         )}
 
+        {/* Working Hours Badge */}
+        {stop.workingHours && (
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-[#7A6552]" data-testid="working-hours-badge">
+            <EmojiIcon name="clock" size="xs" />
+            <span>{t('workingHours')}: {stop.workingHours}</span>
+          </div>
+        )}
+
         {/* Transit Badge for Attraction Stop */}
         {attractionStop && attractionStop.transitBadge && (
           <div data-testid="transit-badge">
             <Callout emoji="funicular" title={t('transitStep')}>
               <p className="font-semibold text-[#1C1008]">{attractionStop.transitBadge}</p>
+            </Callout>
+          </div>
+        )}
+
+        {/* Historical Summary for Attraction Stop */}
+        {stop.historicalSummary && (
+          <div data-testid="historical-summary">
+            <Callout emoji="landmark" title={t('historicalSummary')}>
+              <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+                {stop.historicalSummary}
+              </p>
+            </Callout>
+          </div>
+        )}
+
+        {/* Fun Fact Callout */}
+        {stop.funFact && (
+          <div data-testid="fun-fact">
+            <Callout emoji="bulb" title={t('funFact')}>
+              <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+                {stop.funFact}
+              </p>
             </Callout>
           </div>
         )}
@@ -298,6 +328,38 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
             <span>📍 Yandex Maps</span>
           </a>
         </div>
+
+        {/* Website & Instagram Links */}
+        {(stop.websiteUrl || stop.instagramUrl) && (
+          <div className="flex flex-wrap gap-2 pt-1 justify-center" data-testid="external-links-row">
+            {stop.websiteUrl && (
+              <a
+                href={stop.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 py-2 px-4 rounded-full border transition-all active:scale-95 text-xs font-semibold bg-white border-[#E8EAF0] text-[#1C1008] hover:border-[#C4572A]/30 shadow-2xs"
+                aria-label="Visit Website"
+              >
+                <EmojiIcon name="globe" size="xs" />
+                <span>{t('website')}</span>
+                <EmojiIcon name="externalLink" size="xs" />
+              </a>
+            )}
+            {stop.instagramUrl && (
+              <a
+                href={stop.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 py-2 px-4 rounded-full border transition-all active:scale-95 text-xs font-semibold bg-white border-[#E8EAF0] text-[#1C1008] hover:border-[#C4572A]/30 shadow-2xs"
+                aria-label="Visit Instagram"
+              >
+                <EmojiIcon name="instagram" size="xs" />
+                <span>{t('instagram')}</span>
+                <EmojiIcon name="externalLink" size="xs" />
+              </a>
+            )}
+          </div>
+        )}
 
         {/* Recommended Dishes for Venue Stop */}
         {venueStop && venueStop.venueDetails.recommendedDishes?.length > 0 && (
