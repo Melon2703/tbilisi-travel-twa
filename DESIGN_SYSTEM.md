@@ -50,9 +50,12 @@ For bright sunlight outdoor visibility:
 
 ### 2.2 Typography
 
-- **Sans-Serif (Body & Navigation)**: `var(--font-sans)` (`Geist Sans`, `system-ui`, `-apple-system`, `sans-serif`)
-- **Serif / Display (Titles & Headers)**: `var(--font-serif)` / `var(--font-display)` (`Playfair Display`, `Georgia`, `serif`)
+- **Single Sans-Serif System**: 100% unified under Geist Sans (`var(--font-sans)`, `system-ui`, `-apple-system`, `sans-serif`) across all titles, headings, and body text.
 - **Monospace (Coordinates / Metadata)**: `var(--font-mono)` (`Geist Mono`, `monospace`)
+
+#### Sentence Case Headings & Status Badges
+- **Section Headers**: All section headers (e.g. "Historical overview", "Olya's recommendation", "Route filters & sorting", "Route at a glance") are rendered in standard **Sentence case**.
+- **ALL CAPS Usage**: ALL CAPS is used strictly for tiny status/order badges (11px, letter-spacing 0.06em, e.g. `STOP 1 OF 6`, `VISITED`, `1-2H`).
 
 #### Font Sizes & Scale
 - `xs`: `0.75rem` (12px)
@@ -70,8 +73,7 @@ For bright sunlight outdoor visibility:
 - `bold`: `700`
 
 #### Letter Spacing (Tracking)
-- `badge`: `0.14em` (`uppercase tracking-[0.14em]`)
-- `cta`: `0.18em` (`uppercase tracking-[0.18em]`)
+- `badge`: `0.06em` (`uppercase tracking-[0.06em]` for tiny 11px status/order badges)
 
 ---
 
@@ -120,7 +122,7 @@ Every **Stop Card** on the TWA timeline follows a strict, predictable 5-part ver
 ┌─────────────────────────────────────────────────────────┐
 │ 1. HEADER                                              │
 │    - Hero Image Gallery / Lightbox Trigger              │
-│    - Stop Title (Serif) + Neighborhood + Duration Tag   │
+│    - Stop Title (Sans-Serif) + Neighborhood + Duration │
 ├─────────────────────────────────────────────────────────┤
 │ 2. BADGES                                               │
 │    - Category & Cuisine Pills (e.g. ☕ Cafe • Georgian)  │
@@ -145,8 +147,8 @@ Every **Stop Card** on the TWA timeline follows a strict, predictable 5-part ver
 
 1. **Header Section**:
    - High-resolution hero image or swipeable image carousel.
-   - Stop title styled in Playfair Display serif typography.
-   - Metadata line displaying neighborhood, estimated time, and order badge.
+   - Stop title styled in Geist Sans sans-serif typography (`var(--font-sans)`).
+   - Metadata line displaying neighborhood, estimated time, and order badge (`STOP 1 OF N`).
 2. **Badges Section**:
    - Venue Category badge (`☕ Cafe`, `🍷 Bar`, `🍽️ Restaurant`).
    - Cuisine details (`Georgian`, `European`).

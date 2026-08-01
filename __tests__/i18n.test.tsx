@@ -75,7 +75,7 @@ describe('TWA Internationalization (Russian Support)', () => {
       </LanguageProvider>
     );
 
-    expect(screen.getByText('START ROUTE')).toBeInTheDocument();
+    expect(screen.getByText(/Start Route/i)).toBeInTheDocument();
 
     const ruButton = screen.getByLabelText('Переключить на русский');
     fireEvent.click(ruButton);
@@ -85,7 +85,7 @@ describe('TWA Internationalization (Russian Support)', () => {
     const enButton = screen.getByLabelText('Switch to English');
     fireEvent.click(enButton);
 
-    expect(screen.getByText('START ROUTE')).toBeInTheDocument();
+    expect(screen.getByText(/Start Route/i)).toBeInTheDocument();
   });
 
   it('renders RoutePage with searchParams lang=ru in Russian', async () => {

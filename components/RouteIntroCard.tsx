@@ -114,13 +114,13 @@ export default function RouteIntroCard({
             className="flex items-center gap-2 overflow-x-auto py-1 pl-0.5 pr-8 text-xs font-semibold scrollbar-none scroll-smooth whitespace-nowrap flex-nowrap touch-pan-x no-scrollbar"
           >
             <span
-              className="shrink-0 text-white px-3 py-1 rounded-full uppercase tracking-wide shadow-xs text-xs font-bold"
+              className="shrink-0 text-white px-3 py-1 rounded-full uppercase tracking-[0.06em] shadow-xs text-[11px] font-bold"
               style={{ background: '#C4572A' }}
             >
               {t(route.durationCategory as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.durationCategory}
             </span>
             <span
-              className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide border border-black/10"
+              className="shrink-0 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.06em] border border-black/10"
               style={{ background: 'rgba(28,16,8,0.08)', color: '#1C1008' }}
             >
               {t(route.accessibility as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.accessibility.replace('-', ' ')}
@@ -144,8 +144,7 @@ export default function RouteIntroCard({
         {/* 2. Title & Subtitle Block */}
         <div className="space-y-1 min-w-0 max-w-full shrink-0">
           <h1
-            className="text-2xl sm:text-3xl font-black tracking-tight leading-tight text-[#1C1008] break-words min-w-0 max-w-full"
-            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+            className="text-2xl sm:text-3xl font-black tracking-tight leading-tight text-[#1C1008] break-words min-w-0 max-w-full font-sans"
           >
             {route.title}
           </h1>
@@ -179,12 +178,11 @@ export default function RouteIntroCard({
                 O
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A] mb-1">
+                <h3 className="text-xs font-bold text-[#C4572A] mb-1">
                   {t('olyaWelcome')}
                 </h3>
                 <p
                   className="text-xs sm:text-sm text-[#4A3828] leading-relaxed italic"
-                  style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
                 >
                   &ldquo;{route.introCopy}&rdquo;
                 </p>
@@ -204,7 +202,7 @@ export default function RouteIntroCard({
         >
           <div className="flex items-center gap-3">
             <span className="h-px bg-[#C4572A]/20 flex-1" />
-            <h2 className="text-xs font-bold text-[#C4572A] uppercase tracking-wider">
+            <h2 className="text-xs font-bold text-[#C4572A]">
               {t('routeAtAGlance')}
             </h2>
             <span className="h-px bg-[#C4572A]/20 flex-1" />
@@ -258,7 +256,7 @@ export default function RouteIntroCard({
           data-testid="step-by-step-preview-list"
           className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/15"
         >
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A]">
+          <h3 className="text-xs font-bold text-[#C4572A]">
             📍 {t('stepByStepPreviewTitle')}
           </h3>
           <div className="space-y-2 max-h-60 overflow-y-auto pr-1 scrollbar-none">
@@ -293,7 +291,7 @@ export default function RouteIntroCard({
           data-testid="logistics-terrain-highlights"
           className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/15"
         >
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A]">
+          <h3 className="text-xs font-bold text-[#C4572A]">
             🧗 {t('logisticsTerrainTitle')}
           </h3>
           <div className="flex flex-wrap gap-2 text-xs">
@@ -320,7 +318,7 @@ export default function RouteIntroCard({
                 data-testid="logistics-notes-callout"
                 className="p-3 rounded-xl bg-[#FFF3EE] border border-[#C4572A]/20 space-y-1 text-xs text-[#8A3614]"
               >
-                <p className="font-bold uppercase tracking-wide text-[10px] text-[#C4572A]">
+                <p className="font-bold text-[10px] text-[#C4572A]">
                   ⚠️ {t('logisticsWarning')}
                 </p>
                 <ul className="list-disc list-inside space-y-1">
@@ -337,7 +335,7 @@ export default function RouteIntroCard({
 
         {/* 8. Swipe Prompt */}
         <div className="text-center py-1 shrink-0" data-testid="swipe-prompt-container">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#C4572A]/80">
+          <p className="text-xs font-semibold text-[#C4572A]/80">
             {t('swipePrompt')}
           </p>
         </div>

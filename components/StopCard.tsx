@@ -86,9 +86,7 @@ function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): s
     return `${categoryText} • ${cuisinesText}`;
   }
   return categoryText;
-}
-
-function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: string }) {
+}function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: string }) {
   const [selectedDishes, setSelectedDishes] = React.useState<Record<string, boolean>>({});
 
   const toggleDish = (dish: string) => {
@@ -98,8 +96,8 @@ function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: 
   return (
     <div data-testid="recommended-dishes" className="space-y-2 pt-1">
       <p
-        className="text-xs font-bold uppercase flex items-center gap-1.5"
-        style={{ letterSpacing: TYPOGRAPHY.tracking.badge, color: COLORS.terracottaAccent }}
+        className="text-xs font-bold flex items-center gap-1.5"
+        style={{ color: COLORS.terracottaAccent }}
       >
         <span>🍽️</span> {title}
       </p>
@@ -260,9 +258,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       <div className="min-w-0 flex-1 space-y-1">
         <div className="flex items-center gap-2 flex-wrap">
           <p
-            className="text-xs font-bold uppercase"
+            className="text-[11px] font-bold uppercase tracking-[0.06em]"
             style={{
-              letterSpacing: TYPOGRAPHY.tracking.cta,
               color: COLORS.terracottaAccent,
             }}
           >
@@ -290,8 +287,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           </button>
         </div>
         <h2
-          className="text-2xl sm:text-3xl font-black tracking-tight leading-tight break-words min-w-0 max-w-full"
-          style={{ fontFamily: TYPOGRAPHY.fonts.serif, color: COLORS.textPrimary }}
+          className="text-2xl sm:text-3xl font-black tracking-tight leading-tight break-words min-w-0 max-w-full font-sans"
+          style={{ color: COLORS.textPrimary }}
         >
           {stop.name}
         </h2>
@@ -327,8 +324,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         }}
       >
         <div
-          className="flex items-center gap-1.5 text-xs font-bold uppercase"
-          style={{ letterSpacing: TYPOGRAPHY.tracking.badge, color: COLORS.terracottaAccent }}
+          className="flex items-center gap-1.5 text-xs font-bold"
+          style={{ color: COLORS.terracottaAccent }}
         >
           <span>✨</span>
           <span>{t('olyaRecommendation')}</span>
@@ -338,7 +335,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           <Callout emoji="chat" title={t('olyaTip')}>
             <p
               className="text-sm italic leading-relaxed"
-              style={{ fontFamily: TYPOGRAPHY.fonts.serif, color: COLORS.dishText }}
+              style={{ color: COLORS.dishText }}
             >
               &ldquo;{stop.olyaTips}&rdquo;
             </p>

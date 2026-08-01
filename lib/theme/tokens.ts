@@ -51,8 +51,8 @@ export const COLORS = {
 export const TYPOGRAPHY = {
   fonts: {
     sans: 'var(--font-sans)',
-    serif: 'var(--font-serif)',
-    display: 'var(--font-display)',
+    serif: 'var(--font-sans)',
+    display: 'var(--font-sans)',
     mono: 'var(--font-mono)',
   },
   sizes: {

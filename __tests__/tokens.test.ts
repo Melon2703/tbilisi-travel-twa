@@ -50,8 +50,8 @@ describe('Design System Theme Tokens (Issue 30)', () => {
   describe('TYPOGRAPHY Token Module', () => {
     it('exports font families referencing CSS custom properties', () => {
       expect(TYPOGRAPHY.fonts.sans).toBe('var(--font-sans)');
-      expect(TYPOGRAPHY.fonts.serif).toBe('var(--font-serif)');
-      expect(TYPOGRAPHY.fonts.display).toBe('var(--font-display)');
+      expect(TYPOGRAPHY.fonts.serif).toBe('var(--font-sans)');
+      expect(TYPOGRAPHY.fonts.display).toBe('var(--font-sans)');
       expect(TYPOGRAPHY.fonts.mono).toBe('var(--font-mono)');
     });
 

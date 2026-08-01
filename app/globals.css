@@ -58,8 +58,8 @@
   --color-twa-button-text: var(--twa-button-text-color);
   --color-twa-secondary-bg: var(--twa-secondary-bg-color);
   --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
-  --font-serif: var(--font-playfair), Georgia, serif;
-  --font-display: var(--font-playfair), Georgia, serif;
+  --font-serif: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
 
@@ -98,7 +98,7 @@ body {
 }
 
 .journal-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   color: var(--text-primary);
 }
 
@@ -114,8 +114,6 @@ body {
   justify-content: center;
   gap: 0.75rem;
   font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
   transition: all 0.2s ease;
   min-height: 48px;
   cursor: pointer;

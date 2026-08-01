@@ -1,82 +1,68 @@
-# Product Specification: Curated Travel Route Guide & Establishment Integration
+# Product Specification: Radical UI Overhaul for Tbilisi Travel TWA
 
 ## Problem Statement
 
-Travelers using the Tbilisi Travel Telegram Web App (TWA) lack granular, curated details about food and beverage establishments along walking routes, such as cuisine types, dish recommendations, and personal booking tips from local curator Olya. Furthermore, non-food stops (viewpoints, monuments, cable cars) risk being cluttered by empty dining fields if a uniform schema is used, while general route discovery lacks clear duration filtering (`1-2h`, `3-4h`, `half-day`, `full-day`), vibe tags (`cultural`, `insta-locations`, `hiking`), geo-proximity matching, multi-photo swipe lightboxes, and stop-level deep-link sharing.
+The Tbilisi Travel Telegram Web App (TWA) suffers from visual noise, nested borders ("frames inside frames"), badge overload across route cards, decorative ASCII strings ("--- ~~~ ---"), a wavy progress tracker line, serif typography font mixing (`Playfair Display` mixed with `Geist Sans`), and detached map action buttons. These elements clutter the interface, increase cognitive load for mobile travelers browsing routes outdoors, and detract from a sleek, native app experience.
 
 ## Solution
 
-A refined polymorphic data architecture for walking route **Stops** (`AttractionStop` vs `VenueStop`) paired with an upgraded **Route Intro Card** (Slide 0) overview and continuous scrollable **Stop Cards** (Slides 1..N). Venues are integrated as optional **Pitstops** on the timeline, featuring Olya's personal tips, recommended dish pills, category badges (`☕ Cafe`, `🍷 Bar`, `🍽️ Restaurant`), and veggie indicators (`🌱 Veggie Friendly`). The UI features dynamic geo-proximity sorting, a full-screen multi-photo swipe lightbox, high-contrast light theme support, and native Telegram startapp deep links (`t.me/bot?startapp=route_X_stop_Y`) for stop-level sharing.
+Perform a radical UI/UX refactoring across the entire application (both catalog/home pages and route step detail pages). Eliminate all inner nested borders in favor of whitespace and subtle background tinting (`#F3EFEA`). Cap route catalog tags to a maximum of 2 essential badges per card. Replace food item pill buttons with a clean, unbordered bulleted text list. Unify typography 100% under `Geist Sans` (`var(--font-sans)`), converting headings to standard Sentence case. Straighten the step tracker line in `TimelineBar.tsx`, replace decorative ornaments with ultra-thin 1px dividers with 10% opacity, and group map provider buttons directly underneath location titles for immediate accessibility.
 
 ## User Stories
 
-1. As a traveler browsing walking routes, I want to see a visual overview map and stop timeline on the initial landing slide (Route Intro Card), so that I can evaluate the entire walk before starting.
-2. As a traveler with limited time, I want to filter routes by explicit duration options (`1-2 Hours`, `3-4 Hours`, `Half-Day`, `Full-Day`), so that I can pick an itinerary matching my schedule.
-3. As a photography enthusiast, I want to filter routes by the `Insta-Locations` vibe tag, so that I can quickly find visually stunning viewpoints and courtyards.
-4. As a traveler interested in architecture and museums, I want to filter routes by the `Cultural` vibe tag, so that I can explore historical monuments.
-5. As an outdoor walker, I want to filter routes by the `Hiking` vibe tag, so that I can find scenic trails and hillside paths.
-6. As a traveler seeking an easy walk, I want to filter routes by the `Easy Route` accessibility level, so that I can avoid steep stairs and severe inclines.
-7. As a traveler standing in Old Tbilisi, I want routes to be sorted relative to my current geo-location, so that I can immediately start the nearest available route.
-8. As a traveler viewing a Stop Card, I want to tap any photo to open a full-screen swipeable lightbox modal, so that I can view high-resolution photography for that stop.
-9. As a traveler visiting a coffee shop or restaurant along a route, I want to see Olya's recommended dishes as interactive pills, so that I know what signature items to order.
-10. As a diner with dietary preferences, I want to see a clear `🌱 Veggie Friendly` badge on venue cards, so that I can quickly identify vegetarian-friendly stops.
-11. As a traveler planning a lunch or dinner stop, I want to see Olya's venue booking advice, so that I know whether to reserve a table in advance.
-12. As a traveler following a route, I want food and drink spots to be styled as optional "Pitstops", so that I can bypass them when I am not hungry without breaking route momentum.
-13. As a traveler navigating sequential stops, I want transit steps (such as the Cable Car from Rike Park to Mother of Georgia) to be clearly separated into distinct sequential nodes with transit duration badges, so that logistics remain clear.
-14. As a traveler exploring in bright sunlight, I want a high-contrast light theme option, so that screens are easy to read outdoors.
-15. As a traveler meeting friends on a route, I want to tap a "Share Stop" button to generate a Telegram deep link, so that my friends can open the TWA directly on that specific stop.
-16. As a traveler checking navigation, I want direct Map Links to Google Maps and Yandex Maps below the rating score, so that I can launch external directions in one tap.
-17. As a traveler scrolling a Stop Card, I want all details (Olya's tips, fun facts, dish picks, map links) to be rendered on a single continuous scrolling page, so that I do not have to toggle collapsible accordions.
+1. As a traveler browsing walking routes on a mobile screen, I want route cards to display a maximum of 2 essential badges (duration and difficulty), so that I can evaluate options without tag clutter.
+2. As a traveler viewing route summaries, I want long rows of hashtags (#Cultural, #Insta-Locations) removed from catalog cards, so that the card layout remains visually clean and lightweight.
+3. As a traveler navigating a route step card, I want food recommendations to appear as a clean bulleted text list rather than clickable pill buttons, so that I can read menu recommendations effortlessly without border overload.
+4. As a traveler reading curator callouts (Olya's recommendations, photo spots, logistics warnings, and route at a glance), I want inner borders ("frames inside frames") removed and replaced with soft background tinting (`#F3EFEA`), so that content sections are separated smoothly by whitespace.
+5. As a traveler using the app in mobile webview, I want all headers and titles to use a single modern Sans-serif font (`Geist Sans`), so that the interface feels cohesive and natively integrated with Telegram.
+6. As a traveler reading section headings, I want titles formatted in standard Sentence case ("Historical overview", "Olya's recommendation", "Route filters") rather than ALL CAPS, so that reading feels natural and less jarring.
+7. As a traveler checking route progress, I want a straight, sleek horizontal step tracker line instead of a wavy/zigzag path, so that I can easily gauge my step location at a glance.
+8. As a traveler navigating a stop card, I want Map links (Google Maps, Yandex Maps) positioned directly below the location title and address, so that I can launch directions immediately.
+9. As a traveler reviewing a stop card, I want the "Share Stop" button and "Visited" status badge aligned into a single top header toolbar row, so that status actions are grouped logically.
+10. As a traveler reading through cards, I want decorative ASCII strings ("--- ~~~ ---", "· ~~~ ·") replaced with ultra-thin 1px 10% opacity line dividers, so that visual noise is minimized.
+11. As a traveler browsing secondary section headers, I want decorative emojis stripped from section titles, so that the editorial layout remains clean and uncluttered.
+12. As a traveler using the TWA outdoors, I want high contrast and generous padding (`p-4` / `p-5`) around callout blocks, so that information is easily readable under bright sunlight.
 
 ## Implementation Decisions
 
-### Schema & Data Architecture
-- **Polymorphic Stop Model (`lib/types/route.ts`):** Defined a discriminated union `Stop = AttractionStop | VenueStop` with `stopType: 'attraction' | 'venue'`.
-- **Venue Details Block:** `VenueStop` includes an optional `venueDetails` object:
-  ```typescript
-  export interface VenueDetails {
-    category: 'cafe' | 'restaurant' | 'bar' | 'wine_bar';
-    cuisines: ('georgian' | 'european' | 'asian')[];
-    isVegetarianFriendly: boolean;
-    recommendedDishes: string[];
-    bookingAdvice?: string;
-  }
-  ```
-- **Pitstop Flag:** `VenueStop` items carry `isOptional: true` and are styled as optional Refuel Pitstops on the route timeline.
-- **Transit Node Metadata:** `AttractionStop` items support an optional `transitBadge?: string` (e.g. `" Cable Car Ride (~5 min)"`) to represent transit transitions.
+### Typography & Formatting
+- **100% Sans-Serif Unification**: Deprecate `Playfair Display` (`var(--font-serif)`) across `app/page.tsx`, `RouteCatalog.tsx`, `RouteIntroCard.tsx`, and `StopCard.tsx`. Enforce `var(--font-sans)` (`Geist Sans`) for all titles, headings, and body text. Update `DESIGN_SYSTEM.md`.
+- **Sentence Case Headings**: Convert ALL CAPS headings ("HISTORICAL OVERVIEW", "OLYA'S RECOMMENDATION", "ROUTE FILTERS & SORTING", "ROUTE AT A GLANCE") to Sentence case ("Historical overview", "Olya's recommendation", "Route filters", "Route at a glance"). Retain ALL CAPS strictly for tiny 1-2 word status badges (11px, letter-spacing 0.06em).
 
-### UI & Layout Hierarchy
-- **Route Intro Card (Slide 0):** Upgraded to render an interactive route map line + step-by-step preview list.
-- **Stop Card Surface:** Uses Swiper.js for horizontal card navigation while allowing vertical scrolling inside each card.
-  - Header: Image Gallery Carousel + Title + Neighborhood + Duration Tag.
-  - Badges: Category & Cuisine pills for venues (`☕ Cafe • Georgian`).
-  - Olya's Tip Block: Highlighted warm accent container with Olya's personal advice.
-  - Story & Must-Try Dishes: Concise 2-sentence background / `💡 Fun Fact` for attractions; dish pills & booking advice for venues.
-  - Action Bar: `📍 Open Map` deep-link button + `↗️ Share Stop` button.
-- **Lightbox Modal:** Full-screen modal component with touch swipe gestures and photo index indicator (`1/N`).
-- **Telegram Startapp Deep Linking:** Uses Telegram WebApp start parameter encoding (`t.me/bot?startapp=route_<id>_stop_<id>`).
+### Container Borders & Background Architecture
+- **Zero Nested Borders**: Remove `border` and `outline` styles from all nested inner container blocks (`Olya's Recommendation`, `Photo Spot`, `Logistics Warning`, `Route at a Glance`, `Route Filters`).
+- **Subtle Background Tinting**: Apply `#F3EFEA` background tint with `rounded-2xl` and `p-4`/`p-5` spacing on nested callouts against `#FAF7F2` canvas and `#FFFFFF` top-level cards.
+
+### Badges & Content Lists
+- **Catalog Route Cards**: Limit tags to max 2 essential badges per route card (`Duration` and `Difficulty`/`Logistics`). Remove hashtag arrays from catalog card displays.
+- **Stop Detail Cards**: Convert `recommendedDishes` pill buttons (`<button className="rounded-full border ...">`) into an unbordered vertical bulleted text list (`• Item 1`).
+
+### Geometry, Progress Tracker & Header Toolbar
+- **Straight Step Tracker**: Replace `GEORGIAN_WAVE_PATH` SVG in `TimelineBar.tsx` with a straight horizontal progress track line (`bg-[#C4572A]` filled / `bg-[#1C1008]/10` track).
+- **Clean Dividers**: Replace ASCII decorative strings with 1px solid dividers with 10% opacity (`border-[#1C1008]/10` or `bg-[#1C1008]/10`).
+- **Emoji Reduction**: Remove non-essential decorative emojis from section headings in favor of clean Sentence case text headers.
+- **Proximity & Action Bar Placement**: Align `Share Stop` button and `Visited` status badge into a single top header toolbar row in `StopCard.tsx`. Move Google Maps and Yandex Maps provider buttons directly underneath location titles and address metadata.
 
 ## Testing Decisions
 
 ### Good Test Principles
-- Test external domain behavior and user interactions, not internal state setters or implementation details.
-- Verify matching algorithms against hard and soft constraint rules across edge-case combinations.
-- Test component rendering under both `AttractionStop` and `VenueStop` schemas.
+- Test external component DOM structure, rendered text, and visual hierarchy attributes without binding to fragile private state.
+- Ensure all 165+ existing unit tests pass cleanly after refactoring component markup and styling.
 
 ### Tested Modules
-- `lib/engine/matcher.ts`: Route matching with updated `DurationCategory` (`1-2h`, `3-4h`, `half-day`, `full-day`), `VibeCategory` (`cultural`, `insta-locations`, `hiking`), and geo-proximity distance calculations.
-- `components/timeline/TimelineSlide.tsx`: Continuous scrollable card rendering for both attraction and venue stops.
-- `components/timeline/LightboxModal.tsx`: Image gallery popup and swipe navigation.
-- `lib/utils/telegram.ts`: Startapp deep-link generation and payload decoding.
+- `components/RouteCatalog.tsx`: Verify max 2 badges per card, removal of hashtag rows, and Sentence case section headers.
+- `components/RouteIntroCard.tsx`: Verify unbordered `Route at a Glance` callout block (`#F3EFEA`), zero nested borders, and ultra-thin line dividers.
+- `components/StopCard.tsx`: Verify top toolbar alignment (`Share Stop` & `Visited`), map buttons under title, unbordered callout containers (`#F3EFEA`), bulleted dish text list (`• Item`), and single Sans-Serif font usage.
+- `components/TimelineBar.tsx`: Verify straight horizontal step tracker line without SVG wave path.
+- `lib/theme/tokens.ts` & `app/globals.css`: Verify typography token definitions and container styling tokens.
 
 ### Prior Art
-- Existing Vitest suite in `__tests__/matcher.test.ts` and `__tests__/timeline.test.tsx`.
+- Vitest suite in `__tests__/homePage.test.tsx`, `__tests__/timeline.test.tsx`, `__tests__/ui.test.tsx`, `__tests__/tokens.test.ts`.
 
 ## Out of Scope
-- Direct in-app table reservation forms or third-party booking API integrations (outsource to Instagram/Website links).
-- In-app food ordering or payment processing.
-- Live GPS turn-by-turn navigation (outsource to Google Maps & Yandex Maps universal links).
+- Backend route matching logic changes in `lib/engine/matcher.ts`.
+- Routing structure or URL scheme changes under `app/twa/[routeId]`.
+- Map coordinate calculations or universal link parameter formats in `lib/utils/maps.ts`.
 
 ## Further Notes
-- All venue recommendations maintain Olya's warm, personal tone.
-- Static data files (`lib/data/routes.ts`) will be populated with Tbilisi route data matching this updated schema.
+- The Georgia travel journal warmth is preserved through warm stone tinting (`#F3EFEA`), terracotta accents (`#C4572A`), and clean geometry.

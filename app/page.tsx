@@ -18,8 +18,7 @@ export default function Home() {
             </span>
             <div>
               <h1
-                className="text-lg sm:text-xl font-black tracking-tight text-[#1C1008]"
-                style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+                className="text-lg sm:text-xl font-black tracking-tight text-[#1C1008] font-sans"
               >
                 Tbilisi Travel Routes
               </h1>
@@ -43,8 +42,7 @@ export default function Home() {
         >
           <div className="relative z-10 space-y-3 max-w-2xl">
             <h2
-              className="text-2xl sm:text-4xl font-black tracking-tight text-[#1C1008] leading-tight"
-              style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+              className="text-2xl sm:text-4xl font-black tracking-tight text-[#1C1008] leading-tight font-sans"
             >
               Explore Tbilisi on Foot with Local Knowledge
             </h2>

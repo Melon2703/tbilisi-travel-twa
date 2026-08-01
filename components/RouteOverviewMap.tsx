@@ -143,7 +143,7 @@ export default function RouteOverviewMap({
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="text-sm">🗺️</span>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#C4572A]">
+          <h3 className="text-xs font-bold text-[#C4572A]">
             {t('overviewMapTitle')}
           </h3>
         </div>

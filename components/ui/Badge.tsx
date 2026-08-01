@@ -14,11 +14,11 @@ export default function Badge({
   className = '',
   ...props
 }: BadgeProps) {
-  const baseClasses = 'inline-flex items-center gap-1.5 rounded-full font-bold uppercase tracking-wide shrink-0 transition-all';
+  const baseClasses = 'inline-flex items-center gap-1.5 rounded-full font-bold uppercase tracking-[0.06em] shrink-0 transition-all';
 
   const sizeClasses = {
     sm: 'px-2.5 py-0.5 text-[11px]',
-    md: 'px-3 py-1 text-xs',
+    md: 'px-3 py-1 text-[11px]',
   };
 
   const variantClasses = {

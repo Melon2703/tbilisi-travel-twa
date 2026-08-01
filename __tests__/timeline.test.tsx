@@ -126,9 +126,9 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       const summaryCard = screen.getByTestId('route-at-a-glance');
       expect(summaryCard).toBeInTheDocument();
-      expect(summaryCard).toHaveTextContent('2 Curated Stops');
+      expect(summaryCard).toHaveTextContent(/2 curated stops/i);
       expect(summaryCard).toHaveTextContent('50m');
-      expect(summaryCard).toHaveTextContent('Pedestrian Walkway');
+      expect(summaryCard).toHaveTextContent(/Pedestrian Walkway/i);
     });
 
     it('renders vibe and duration tags in a single horizontal scroll row with visual scroll indicator', () => {

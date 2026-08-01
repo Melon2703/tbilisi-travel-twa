@@ -91,8 +91,8 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
       >
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#C4572A]/12 pb-3">
           <div className="flex items-center gap-2">
-            <h3 className="font-bold text-sm text-[#1C1008] uppercase tracking-wider">
-              {language === 'ru' ? 'Фильтры и сортировки' : 'Route Filters & Sorting'}
+            <h3 className="font-bold text-sm text-[#1C1008]">
+              {language === 'ru' ? 'Фильтры и сортировки' : 'Route filters & sorting'}
             </h3>
           </div>
 
@@ -126,7 +126,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
 
         {/* Duration Filters Row */}
         <div className="space-y-1.5">
-          <label className="text-xs font-bold text-[#7A6552] uppercase tracking-wide flex items-center gap-1">
+          <label className="text-xs font-bold text-[#7A6552] flex items-center gap-1">
             <span>⏱️</span> {language === 'ru' ? 'Длительность' : 'Duration'}
           </label>
           <div className="flex flex-wrap gap-2">
@@ -160,7 +160,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
 
         {/* Vibe Filters Row */}
         <div className="space-y-1.5">
-          <label className="text-xs font-bold text-[#7A6552] uppercase tracking-wide flex items-center gap-1">
+          <label className="text-xs font-bold text-[#7A6552] flex items-center gap-1">
             <span>✨</span> {language === 'ru' ? 'Атмосфера' : 'Vibe'}
           </label>
           <div className="flex flex-wrap gap-2">
@@ -204,8 +204,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
       {/* ── Catalog Section Header ── */}
       <div className="flex items-center justify-between">
         <h2
-          className="text-xl font-black tracking-tight text-[#1C1008]"
-          style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+          className="text-xl font-black tracking-tight text-[#1C1008] font-sans"
         >
           {t('catalogTitle')}
         </h2>
@@ -271,12 +270,12 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10 gap-1.5">
                     <div className="flex flex-wrap gap-1.5">
                       <span
-                        className="text-white text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full shadow-xs tracking-wider"
+                        className="text-white text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full shadow-xs tracking-[0.06em]"
                         style={{ background: '#C4572A' }}
                       >
                         {route.durationCategory}
                       </span>
-                      <span className="bg-black/60 text-[#FAF7F2] text-[11px] font-bold uppercase px-2.5 py-1 rounded-full border border-white/20 backdrop-blur-xs">
+                      <span className="bg-black/60 text-[#FAF7F2] text-[11px] font-bold uppercase px-2.5 py-1 rounded-full border border-white/20 backdrop-blur-xs tracking-[0.06em]">
                         {accessibilityText}
                       </span>
                     </div>
@@ -285,7 +284,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                     {distanceKm !== null && (
                       <span
                         data-testid="route-distance-badge"
-                        className="px-2.5 py-1 rounded-full bg-[#228255] text-white text-[11px] font-bold shadow-xs tracking-wide shrink-0"
+                        className="px-2.5 py-1 rounded-full bg-[#228255] text-white text-[11px] font-bold shadow-xs tracking-[0.06em] shrink-0"
                       >
                         📍 {distanceKm} km
                       </span>
@@ -297,8 +296,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
                     <h3
-                      className="text-lg font-black text-[#1C1008] group-hover:text-[#C4572A] transition-colors leading-snug"
-                      style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+                      className="text-lg font-black text-[#1C1008] group-hover:text-[#C4572A] transition-colors leading-snug font-sans"
                     >
                       {route.title}
                     </h3>

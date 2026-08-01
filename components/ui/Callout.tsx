@@ -22,7 +22,7 @@ export default function Callout({
 
   return (
     <Card variant={cardVariant} className={`space-y-1.5 ${className}`} {...props}>
-      <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs uppercase tracking-[0.16em]">
+      <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs">
         <EmojiIcon name={emoji} />
         <span>{title}</span>
       </div>

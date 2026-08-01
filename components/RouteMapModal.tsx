@@ -436,7 +436,7 @@ export default function RouteMapModal({
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[11px] font-extrabold uppercase tracking-wide text-[#C4572A]">
+                    <span className="text-[11px] font-extrabold tracking-wide text-[#C4572A]">
                       {language === 'ru' && selectedStop.neighborhoodRu
                         ? selectedStop.neighborhoodRu
                         : selectedStop.neighborhood}
