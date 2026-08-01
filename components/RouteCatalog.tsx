@@ -227,7 +227,6 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
             onClick={() => {
               setSelectedDuration('all');
               setSelectedVibe('all');
-              setEasyRouteOnly(false);
             }}
             className="mt-2 px-4 py-2 bg-[#C4572A] text-white text-xs font-bold rounded-full shadow-xs"
           >
