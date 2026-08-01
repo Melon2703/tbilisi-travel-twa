@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import StopCard from '../components/StopCard';
-import { Stop } from '../lib/types/route';
-import { LanguageProvider } from '../lib/i18n/LanguageContext';
+import StopCard from '@/components/StopCard';
+import { Stop } from '@/lib/types/route';
+import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 
 describe('StopCard Data Enrichment & Tailored Type Rendering', () => {
   const attractionStop: Stop = {
@@ -35,6 +35,7 @@ describe('StopCard Data Enrichment & Tailored Type Rendering', () => {
     id: 'test-venue-1',
     order: 2,
     stopType: 'venue',
+    isOptional: true,
     venueDetails: {
       category: 'cafe',
       cuisines: ['georgian', 'european'],
@@ -63,7 +64,7 @@ describe('StopCard Data Enrichment & Tailored Type Rendering', () => {
   it('renders historical summary, fun fact, working hours, and website/instagram links for attraction stops', () => {
     render(
       <LanguageProvider initialLanguage="en">
-        <StopCard stop={attractionStop} currentStepOrder={1} totalSteps={6} isVisited={false} />
+        <StopCard stop={attractionStop} totalStops={6} isVisited={false} />
       </LanguageProvider>
     );
 
@@ -84,7 +85,7 @@ describe('StopCard Data Enrichment & Tailored Type Rendering', () => {
   it('renders category, cuisine, veggie friendly badge, dishes, booking advice, and website/instagram for venue stops', () => {
     render(
       <LanguageProvider initialLanguage="en">
-        <StopCard stop={venueStop} currentStepOrder={2} totalSteps={6} isVisited={false} />
+        <StopCard stop={venueStop} totalStops={6} isVisited={false} />
       </LanguageProvider>
     );
 
@@ -100,10 +101,10 @@ describe('StopCard Data Enrichment & Tailored Type Rendering', () => {
     expect(screen.getByLabelText('Visit Instagram')).toHaveAttribute('href', 'https://instagram.com/orbelianibazaar');
   });
 
-  it('localizes historical summary, fun fact, and working hours in Russian', () => {
+  it('renders russian translation values when Russian language context is selected', () => {
     render(
       <LanguageProvider initialLanguage="ru">
-        <StopCard stop={attractionStop} currentStepOrder={1} totalSteps={6} isVisited={false} />
+        <StopCard stop={attractionStop} totalStops={6} isVisited={false} />
       </LanguageProvider>
     );
 
