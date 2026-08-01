@@ -18,3 +18,7 @@ Standard triage label mapping (`needs-triage`, `needs-info`, `ready-for-agent`, 
 
 Single-context repository layout (`CONTEXT.md` at root). See `docs/agents/domain.md`.
 
+## Mandatory Visual Verification
+- Whenever modifying any frontend UI/CSS component, the agent MUST run a headless browser screenshot at 390x844px (Telegram WebApp viewport), inspect the image with `view_file`, and visually audit the layout before completing the task, calling `/code-review`, or committing code.
+
+
