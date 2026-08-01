@@ -37,20 +37,20 @@ describe('Issue 42: MapLauncher Seam Integration in StopCard & RouteIntroCard', 
     localStorage.clear();
   });
 
-  it('1. StopCard primary map button links directly to getLaunchUrl (preferred provider)', () => {
+  it('1. StopCard Google Maps action link consumes getLaunchUrl (preferred provider)', () => {
     render(
       <LanguageProvider initialLanguage="en">
         <StopCard stop={mockStop} totalStops={1} />
       </LanguageProvider>
     );
 
-    const primaryMapBtn = screen.getByLabelText('Open Map Launcher');
-    expect(primaryMapBtn).toBeInTheDocument();
-    expect(primaryMapBtn.tagName.toLowerCase()).toBe('a');
-    expect(primaryMapBtn).toHaveAttribute('target', '_blank');
-    expect(primaryMapBtn).toHaveAttribute('rel', 'noopener noreferrer');
+    const googleBtn = screen.getByLabelText('Open in Google Maps');
+    expect(googleBtn).toBeInTheDocument();
+    expect(googleBtn.tagName.toLowerCase()).toBe('a');
+    expect(googleBtn).toHaveAttribute('target', '_blank');
+    expect(googleBtn).toHaveAttribute('rel', 'noopener noreferrer');
     // Default preferred provider is google
-    expect(primaryMapBtn).toHaveAttribute('href', expect.stringContaining('google.com/maps'));
+    expect(googleBtn).toHaveAttribute('href', expect.stringContaining('google.com/maps'));
   });
 
   it('2. StopCard Google and Yandex map action links consume getLaunchUrl', () => {

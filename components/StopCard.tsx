@@ -122,7 +122,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     closeMapLauncher,
   } = useMapLauncher();
 
-  const primaryMapUrl = getLaunchUrl(stop.coordinates);
   const googleMapsUrl = getLaunchUrl(stop.coordinates, 'google');
   const yandexMapsUrl = getLaunchUrl(stop.coordinates, 'yandex');
 
@@ -284,23 +283,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
       {/* Map Provider Action Buttons directly underneath location title and neighborhood metadata */}
       <div className="flex items-center gap-3 pt-1" data-testid="map-pills-row">
-        <a
-          href={primaryMapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-12 h-12 min-h-[48px] min-w-[48px] rounded-2xl bg-white shadow-xs flex items-center justify-center transition-all active:scale-95 text-xs font-bold"
-          style={{
-            borderWidth: '1px',
-            borderStyle: 'solid',
-            borderColor: COLORS.actionBorder,
-            color: COLORS.terracottaAccent,
-          }}
-          aria-label="Open Map Launcher"
-          title="Open in Maps"
-        >
-          <EmojiIcon name="mapPin" size="xs" />
-        </a>
-
         <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
           <GoogleMapsIcon />
         </ActionButtonLink>
