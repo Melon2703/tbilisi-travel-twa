@@ -139,7 +139,6 @@ Every **Stop Card** on the TWA timeline follows a strict, predictable 5-part ver
 ├─────────────────────────────────────────────────────────┤
 │ 5. ACTION BAR                                           │
 │    - Google Maps / Yandex Maps deep-link CTA           │
-│    - ↗️ Share Stop button                               │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -162,7 +161,6 @@ Every **Stop Card** on the TWA timeline follows a strict, predictable 5-part ver
    - **Venue Stops**: Interactive `Recommended Dishes` pills (selectable for travelers) and reservation/booking advice.
 5. **Action Bar Section**:
    - Primary `📍 Open Map` CTA button launching Google Maps / Yandex Maps universal links.
-   - Secondary `↗️ Share Stop` deep-linking action to share the exact stop via Telegram startapp links (`t.me/bot?startapp=route_X_stop_Y`).
 
 ---
 

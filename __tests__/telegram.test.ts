@@ -4,7 +4,6 @@ import {
   parseStartParam,
   parseDeepLinkParam,
   getTelegramStartParam,
-  shareStopDeepLink,
 } from '@/lib/utils/telegram';
 
 describe('Telegram Deep Linking Utils', () => {
@@ -86,38 +85,6 @@ describe('Telegram Deep Linking Utils', () => {
 
       const startParam = getTelegramStartParam();
       expect(startParam).toBe('route_test_stop_stop-5');
-    });
-  });
-
-  describe('shareStopDeepLink', () => {
-    it('calls Telegram WebApp openTelegramLink when available', async () => {
-      const openTelegramLinkMock = vi.fn();
-      window.Telegram = {
-        WebApp: {
-          openTelegramLink: openTelegramLinkMock,
-        } as any,
-      };
-
-      const result = await shareStopDeepLink('heartbeat-of-tbilisi', 'hb-stop-3', 'Freedom Square');
-      expect(result).toBe(true);
-      expect(openTelegramLinkMock).toHaveBeenCalledWith(
-        expect.stringContaining('https://t.me/share/url?url=')
-      );
-    });
-
-    it('falls back to navigator.clipboard.writeText when Telegram WebApp SDK is not present', async () => {
-      delete (window as any).Telegram;
-      const writeTextMock = vi.fn().mockResolvedValue(undefined);
-      Object.defineProperty(navigator, 'clipboard', {
-        value: { writeText: writeTextMock },
-        configurable: true,
-      });
-
-      const result = await shareStopDeepLink('heartbeat-of-tbilisi', 'hb-stop-3');
-      expect(result).toBe(true);
-      expect(writeTextMock).toHaveBeenCalledWith(
-        'https://t.me/bot?startapp=route_heartbeat-of-tbilisi_stop_hb-stop-3'
-      );
     });
   });
 });

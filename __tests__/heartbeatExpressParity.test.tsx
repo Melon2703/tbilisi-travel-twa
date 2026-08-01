@@ -35,7 +35,7 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
     expect(expressRoute?.accessibility).toBe('stroller-friendly');
   });
 
-  it('2. Verifies header status labels (STOP 1 OF 6 through STOP 6 OF 6) and Share Stop action links on all 6 stops', () => {
+  it('2. Verifies header status labels (STOP 1 OF 6 through STOP 6 OF 6) on all 6 stops', () => {
     expect(expressRoute).toBeDefined();
     expressRoute!.stops.forEach((stop, index) => {
       const stopOrder = index + 1;
@@ -47,11 +47,6 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
 
       // Verify header status label (STOP 1 OF 6 ... STOP 6 OF 6)
       expect(screen.getByText(`STOP ${stopOrder} OF 6`)).toBeInTheDocument();
-
-      // Verify Share Stop action link
-      const shareAction = screen.getByTestId('share-stop-button');
-      expect(shareAction).toBeInTheDocument();
-      expect(shareAction).toHaveTextContent(/Share Stop/i);
 
       unmount();
     });
@@ -67,10 +62,9 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
         </LanguageProvider>
       );
 
-      // Part 1: Header Bar with Status Label, Title, & Share Stop
+      // Part 1: Header Bar with Status Label & Title
       expect(screen.getByText(`STOP ${stopOrder} OF 6`)).toBeInTheDocument();
       expect(screen.getByRole('heading', { name: stop.name })).toBeInTheDocument();
-      expect(screen.getByTestId('share-stop-button')).toBeInTheDocument();
 
       // Part 2: Visual Cover with Hero Image & Floating Badges
       expect(screen.getByTestId('hero-image-container')).toBeInTheDocument();
@@ -190,7 +184,7 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
 
   it('7. Verifies touch targets meet minimum 44px / 48px bounds across all interactive action links', () => {
     expect(expressRoute).toBeDefined();
-    // Stop 6 has Share Stop, Google Maps, Yandex Maps, and Website action links
+    // Stop 6 has Google Maps, Yandex Maps, and Website action links
     const stop6 = expressRoute!.stops[5];
 
     render(
@@ -199,13 +193,11 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
       </LanguageProvider>
     );
 
-    const shareAction = screen.getByTestId('share-stop-button');
     const googleMapLink = screen.getByLabelText('Open in Google Maps');
     const yandexMapLink = screen.getByLabelText('Open in Yandex Maps');
     const websiteLink = screen.getByLabelText('Visit Website');
 
     // Assert minimum 44px / 48px touch target size classes
-    expect(shareAction.className).toMatch(/min-h-\[(44|48)px\]/);
     expect(googleMapLink.className).toMatch(/min-h-\[(44|48)px\]/);
     expect(googleMapLink.className).toMatch(/min-w-\[(44|48)px\]/);
     expect(yandexMapLink.className).toMatch(/min-h-\[(44|48)px\]/);

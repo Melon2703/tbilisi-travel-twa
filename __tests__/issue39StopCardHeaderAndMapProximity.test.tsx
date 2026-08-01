@@ -20,7 +20,7 @@ describe('Issue 39: Re-architect Stop Card Header Toolbar & Map Proximity Layout
     ratings: { google: { rating: 4.8, count: 5400 } },
   };
 
-  it('1. Top header toolbar row places stop order on the left, and aligns Share Stop button + Visited status badge together on the right', () => {
+  it('1. Top header toolbar row places stop order on the left, and aligns Visited status badge on the right', () => {
     render(
       <LanguageProvider initialLanguage="en">
         <StopCard stop={mockAttractionStop} totalStops={6} isVisited={true} />
@@ -33,11 +33,9 @@ describe('Issue 39: Re-architect Stop Card Header Toolbar & Map Proximity Layout
     // Verify stop order is present in the top row
     expect(topRow).toHaveTextContent('STOP 1 OF 6');
 
-    // Verify Share Stop button and Visited badge are inside the top row
-    const shareBtn = screen.getByTestId('share-stop-button');
+    // Verify Visited badge is inside the top row
     const visitedBadge = screen.getByText('Visited');
 
-    expect(topRow).toContainElement(shareBtn);
     expect(topRow).toContainElement(visitedBadge);
   });
 

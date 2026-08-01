@@ -748,23 +748,6 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(screen.queryByTestId('lightbox-modal')).not.toBeInTheDocument();
     });
 
-    it('renders Share Stop button and executes share action on click', async () => {
-      Object.defineProperty(navigator, 'clipboard', {
-        value: { writeText: vi.fn().mockResolvedValue(undefined) },
-        configurable: true,
-      });
-
-      render(<StopCard stop={mockMultiPhotoStop} routeId="test-route-1" isLast={false} totalStops={1} />);
-
-      const shareBtn = screen.getByTestId('share-stop-button');
-      expect(shareBtn).toBeInTheDocument();
-      expect(shareBtn).toHaveTextContent(/Share Stop/i);
-
-      fireEvent.click(shareBtn);
-
-      expect(await screen.findByText(/Link copied to clipboard!/i)).toBeInTheDocument();
-    });
-
     it('auto-navigates RouteCarousel to target stop slide upon TWA startapp deep link launch', () => {
       window.Telegram = {
         WebApp: {

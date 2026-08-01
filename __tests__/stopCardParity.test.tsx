@@ -55,13 +55,9 @@ describe('StopCard 5-Part Layout & Component Parity (Issue 32)', () => {
     expect(cardContainer).toBeInTheDocument();
     expect(cardContainer).toHaveStyle({ backgroundColor: COLORS.canvasBg });
     expect(cardContainer).toHaveStyle({ color: COLORS.textPrimary });
-
-    const shareBtn = screen.getByTestId('share-stop-button');
-    expect(shareBtn).toBeInTheDocument();
-    expect(shareBtn).toHaveStyle({ backgroundColor: COLORS.badgeBg });
   });
 
-  it('2. Displays STOP X OF 6 header badge and Share Stop button for steps 1 through 6', () => {
+  it('2. Displays STOP X OF 6 header badge for steps 1 through 6', () => {
     const steps = [1, 2, 3, 4, 5, 6];
     steps.forEach((order) => {
       const stop: Stop = { ...attractionStep1, order };
@@ -72,7 +68,6 @@ describe('StopCard 5-Part Layout & Component Parity (Issue 32)', () => {
       );
 
       expect(screen.getByText(`STOP ${order} OF 6`)).toBeInTheDocument();
-      expect(screen.getByTestId('share-stop-button')).toBeInTheDocument();
       unmount();
     });
   });
@@ -128,13 +123,11 @@ describe('StopCard 5-Part Layout & Component Parity (Issue 32)', () => {
       </LanguageProvider>
     );
 
-    const shareBtn = screen.getByTestId('share-stop-button');
     const googleMapBtn = screen.getByLabelText('Open in Google Maps');
     const yandexMapBtn = screen.getByLabelText('Open in Yandex Maps');
     const websiteBtn = screen.getByLabelText('Visit Website');
 
     // Verify touch target size classes (min-h-[44px] or min-h-[48px])
-    expect(shareBtn.className).toMatch(/min-h-\[(44|48)px\]/);
     expect(googleMapBtn.className).toMatch(/min-h-\[(44|48)px\]/);
     expect(yandexMapBtn.className).toMatch(/min-h-\[(44|48)px\]/);
     expect(websiteBtn.className).toMatch(/min-h-\[(44|48)px\]/);

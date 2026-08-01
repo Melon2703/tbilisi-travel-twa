@@ -11,7 +11,6 @@ import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
 import LightboxModal from '@/components/timeline/LightboxModal';
-import { shareStopDeepLink } from '@/lib/utils/telegram';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaInstagram, FaGlobe } from 'react-icons/fa6';
 import { COLORS, TYPOGRAPHY, COMPONENT_TOKENS } from '@/lib/theme/tokens';
@@ -127,7 +126,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
   const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
   const [lightboxIndex, setLightboxIndex] = React.useState(0);
-  const [isCopied, setIsCopied] = React.useState(false);
 
   const galleryImages = (stop.galleryImages && stop.galleryImages.length > 0)
     ? stop.galleryImages
@@ -153,15 +151,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       };
     }
   }, [stop]);
-
-  const handleShareStop = async () => {
-    const activeRouteId = routeId || 'heartbeat-of-tbilisi';
-    const success = await shareStopDeepLink(activeRouteId, stop.id, stop.name);
-    if (success) {
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    }
-  };
 
   const stopLabel = t('stopOf', { order: stop.order, total: totalStops });
 
@@ -259,21 +248,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            type="button"
-            data-testid="share-stop-button"
-            onClick={handleShareStop}
-            className="inline-flex items-center gap-1 min-h-[48px] px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer active:scale-95 shadow-2xs"
-            style={{
-              backgroundColor: COLORS.badgeBg,
-              color: COLORS.badgeText,
-              borderColor: COLORS.badgeBorder,
-            }}
-            aria-label="Share Stop"
-          >
-            <span>↗️</span>
-            <span>{isCopied ? t('copiedToClipboard') : t('shareStop')}</span>
-          </button>
           {isVisited && (
             <Badge variant="visited">
               {t('visited')}
