@@ -590,7 +590,6 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       const dishesContainer = screen.getByTestId('recommended-dishes');
       expect(dishesContainer).toBeInTheDocument();
-      expect(dishesContainer.className).toMatch(/border-0|bg-transparent/);
       expect(screen.getByText('Fresh pastries')).toBeInTheDocument();
       expect(screen.getByText('Georgian tea')).toBeInTheDocument();
 

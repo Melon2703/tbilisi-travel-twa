@@ -88,19 +88,19 @@ function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): s
   return categoryText;
 }function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: string }) {
   return (
-    <div data-testid="recommended-dishes" className="space-y-1.5 pt-1 border-0 bg-transparent">
+    <div data-testid="recommended-dishes" className="space-y-1.5 pt-1">
       <p
         className="text-xs font-bold flex items-center gap-1.5"
         style={{ color: COLORS.terracottaAccent }}
       >
         <span>🍽️</span> {title}
       </p>
-      <ul data-testid="recommended-dishes-list" className="space-y-1 pl-1 border-0 bg-transparent">
-        {dishes.map((dish) => (
+      <ul data-testid="recommended-dishes-list" className="space-y-1 pl-1">
+        {dishes.map((dish, index) => (
           <li
-            key={dish}
+            key={`${dish}-${index}`}
             data-testid="dish-item"
-            className="text-xs font-medium flex items-start gap-2 border-0 bg-transparent"
+            className="text-xs font-medium flex items-start gap-2"
             style={{ color: COLORS.dishText }}
           >
             <span style={{ color: COLORS.terracottaAccent }} className="font-bold shrink-0">•</span>

@@ -91,7 +91,7 @@ describe('Issue 37: Catalog Badges Refactoring & Food Items Bulleted List', () =
       expect(dishItems[2]).toHaveTextContent('Matsoni parfait');
     });
 
-    it('ensures food list container has zero borders and zero pill backgrounds', () => {
+    it('ensures food list container has zero pill button elements and renders text list items', () => {
       render(
         <LanguageProvider initialLanguage="en">
           <StopCard stop={mockVenueStop} totalStops={1} />
@@ -102,23 +102,17 @@ describe('Issue 37: Catalog Badges Refactoring & Food Items Bulleted List', () =
       const dishList = screen.getByTestId('recommended-dishes-list');
       const dishItems = screen.getAllByTestId('dish-item');
 
-      // Zero borders on container and list
-      expect(dishesContainer.className).toContain('border-0');
-      expect(dishList.className).toContain('border-0');
-
-      // Zero pill backgrounds
-      expect(dishesContainer.className).toContain('bg-transparent');
-      expect(dishList.className).toContain('bg-transparent');
+      expect(dishesContainer).toBeInTheDocument();
+      expect(dishList).toBeInTheDocument();
 
       dishItems.forEach((item) => {
-        expect(item.className).toContain('border-0');
-        expect(item.className).toContain('bg-transparent');
-        // No rounded-full pill buttons
-        expect(item.className).not.toContain('rounded-full');
+        expect(item.tagName.toLowerCase()).toBe('li');
+        expect(item.querySelector('button')).toBeNull();
       });
 
       // Confirm no button pill elements exist within recommended dishes
       expect(screen.queryByTestId('dish-pill')).not.toBeInTheDocument();
+      expect(dishesContainer.querySelectorAll('button')).toHaveLength(0);
     });
   });
 });

@@ -269,26 +269,13 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                   {/* Top Badges (Max 2 essential badges: Duration and Difficulty/Accessibility) */}
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10 gap-1.5">
                     <div className="flex flex-wrap gap-1.5" data-testid="essential-badges">
-                      <span
-                        className="text-white text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full shadow-xs tracking-[0.06em]"
-                        style={{ background: '#C4572A' }}
-                      >
+                      <span className="bg-[#C4572A] text-white text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full shadow-xs tracking-[0.06em]">
                         {route.durationCategory}
                       </span>
                       <span className="bg-black/60 text-[#FAF7F2] text-[11px] font-bold uppercase px-2.5 py-1 rounded-full border border-white/20 backdrop-blur-xs tracking-[0.06em]">
                         {accessibilityText}
                       </span>
                     </div>
-
-                    {/* Geo-Proximity Distance Badge */}
-                    {distanceKm !== null && (
-                      <span
-                        data-testid="route-distance-badge"
-                        className="px-2.5 py-1 rounded-full bg-[#228255] text-white text-[11px] font-bold shadow-xs tracking-[0.06em] shrink-0"
-                      >
-                        📍 {distanceKm} km
-                      </span>
-                    )}
                   </div>
                 </div>
 
@@ -309,7 +296,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
 
                   {/* Card Footer Meta & CTA */}
                   <div className="pt-3 border-t border-[#C4572A]/12 flex items-center justify-between text-xs font-semibold text-[#7A6552]">
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-3">
                       <span className="flex items-center gap-1">
                         <EmojiIcon name="mapPin" size="xs" />{' '}
                         <span className="text-[#1C1008] font-bold">{route.stops.length} stops</span>
@@ -318,6 +305,14 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                         <EmojiIcon name="clock" size="xs" />{' '}
                         <span className="text-[#1C1008] font-bold">{formattedTime}</span>
                       </span>
+                      {distanceKm !== null && (
+                        <span
+                          data-testid="route-distance-badge"
+                          className="flex items-center gap-0.5 text-[#228255] font-bold"
+                        >
+                          📍 {distanceKm} km
+                        </span>
+                      )}
                     </div>
                     <span className="text-[#C4572A] group-hover:translate-x-1 transition-transform flex items-center gap-1 font-bold min-h-[44px]">
                       {t('viewRoute')}
