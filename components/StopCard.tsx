@@ -145,17 +145,13 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
     : t('stopNumber', { order: stop.order });
 
   const isVenue = stop.stopType === 'venue';
-  const isAttraction = stop.stopType === 'attraction';
   const venueStop = isVenue ? (stop as VenueStop) : null;
-  const attractionStop = isAttraction ? (stop as AttractionStop) : null;
+  const attractionStop = !isVenue ? (stop as AttractionStop) : null;
   const isPitstop = isVenue && (venueStop?.isOptional ?? false);
 
-  return (
-    <div
-      data-testid="stop-card-container"
-      className="relative flex flex-col h-[100dvh] w-full bg-[#FAF7F2] text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
-    >
-      {/* ── Hero image — full-bleed header section with Lightbox trigger ── */}
+  /* Shared header & title block across stop cards */
+  const renderCardHeader = () => (
+    <>
       {stop.imageUrl && (
         <div
           data-testid="hero-image-container"
@@ -214,212 +210,261 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
           </div>
         </div>
       )}
+    </>
+  );
 
-      {/* ── Scrollable Card Content Body (Continuous Scroll Surface) ── */}
-      <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
-        {/* Header & Order Badge */}
-        <div className="flex items-start justify-between gap-3 min-w-0">
-          <div className="min-w-0 flex-1 space-y-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
-                {stopLabel}
-              </p>
-              {isPitstop && (
-                <Badge variant="subtle" data-testid="pitstop-badge" className="normal-case tracking-normal">
-                  ☕ {t('pitstop')}
-                </Badge>
-              )}
-              <button
-                type="button"
-                data-testid="share-stop-button"
-                onClick={handleShareStop}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] hover:bg-[#F2E5D5] border border-[#E8D5C4] transition-all cursor-pointer active:scale-95 shadow-2xs"
-                aria-label="Share Stop"
-              >
-                <span>↗️</span>
-                <span>{isCopied ? t('copiedToClipboard') : t('shareStop')}</span>
-              </button>
-            </div>
-            <h2
-              className="text-2xl sm:text-3xl font-black text-[#1C1008] tracking-tight leading-tight break-words min-w-0 max-w-full"
-              style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
-            >
-              {stop.name}
-            </h2>
-          </div>
-          {isVisited && (
-            <Badge variant="visited">
-              {t('visited')}
+  const renderTitleRow = () => (
+    <div className="flex items-start justify-between gap-3 min-w-0">
+      <div className="min-w-0 flex-1 space-y-1">
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
+            {stopLabel}
+          </p>
+          {isPitstop && (
+            <Badge variant="subtle" data-testid="pitstop-badge" className="normal-case tracking-normal">
+              ☕ {t('pitstop')}
             </Badge>
           )}
+          <button
+            type="button"
+            data-testid="share-stop-button"
+            onClick={handleShareStop}
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] hover:bg-[#F2E5D5] border border-[#E8D5C4] transition-all cursor-pointer active:scale-95 shadow-2xs"
+            aria-label="Share Stop"
+          >
+            <span>↗️</span>
+            <span>{isCopied ? t('copiedToClipboard') : t('shareStop')}</span>
+          </button>
         </div>
+        <h2
+          className="text-2xl sm:text-3xl font-black text-[#1C1008] tracking-tight leading-tight break-words min-w-0 max-w-full"
+          style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+        >
+          {stop.name}
+        </h2>
+      </div>
+      {isVisited && (
+        <Badge variant="visited">
+          {t('visited')}
+        </Badge>
+      )}
+    </div>
+  );
 
-        {/* Venue Category & Cuisine Pills + Veggie Badge */}
-        {venueStop && (
-          <div className="flex flex-wrap items-center gap-2 pt-0.5" data-testid="venue-details-header">
-            <span
-              data-testid="venue-category-cuisine"
-              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] border border-[#E8D5C4]"
-            >
-              {formatCategoryCuisine(venueStop, t)}
-            </span>
-            {venueStop.venueDetails.isVegetarianFriendly && (
-              <Badge variant="visited" data-testid="veggie-friendly-badge" className="normal-case tracking-normal text-xs font-semibold">
-                {t('veggieFriendly')}
-              </Badge>
-            )}
-          </div>
+  const renderActionsFooter = () => (
+    <div data-testid="last-actions-block" className="pt-2 space-y-3">
+      {/* Georgian Divider */}
+      <GeorgianOrnament />
+
+      {/* Standalone Google Rating Badge */}
+      <div
+        data-testid="google-rating-badge"
+        className="flex items-center justify-center gap-1.5 text-xs text-[#5C4D42] font-medium"
+      >
+        <span className="text-[#C4572A] font-bold text-sm">★ {ratings.google.rating.toFixed(1)}</span>
+        <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
+      </div>
+
+      {/* Single Row Icon-Only Action Buttons */}
+      <div className="flex items-center justify-center gap-3 pt-1" data-testid="map-pills-row">
+        <a
+          href={googleMapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
+          aria-label="Open in Google Maps"
+          title="Google Maps"
+        >
+          <GoogleMapsIcon className="w-6 h-6" />
+        </a>
+
+        <a
+          href={yandexMapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
+          aria-label="Open in Yandex Maps"
+          title="Yandex Maps"
+        >
+          <YandexMapsIcon className="w-6 h-6" />
+        </a>
+
+        {stop.websiteUrl && (
+          <a
+            href={stop.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
+            aria-label="Visit Website"
+            title="Website"
+          >
+            <GlobeIcon className="w-6 h-6 text-[#5C4D42]" />
+          </a>
         )}
 
-        {/* Working Hours Badge */}
-        {stop.workingHours && (
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-[#7A6552]" data-testid="working-hours-badge">
-            <EmojiIcon name="clock" size="xs" />
-            <span>{t('workingHours')}: {stop.workingHours}</span>
-          </div>
+        {stop.instagramUrl && (
+          <a
+            href={stop.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
+            aria-label="Visit Instagram"
+            title="Instagram"
+          >
+            <InstagramIcon className="w-6 h-6" />
+          </a>
         )}
+      </div>
+    </div>
+  );
 
-        {/* Transit Badge for Attraction Stop */}
-        {attractionStop && attractionStop.transitBadge && (
-          <div data-testid="transit-badge">
-            <Callout emoji="funicular" title={t('transitStep')}>
-              <p className="font-semibold text-[#1C1008]">{attractionStop.transitBadge}</p>
-            </Callout>
-          </div>
-        )}
+  /* Specific layout for AttractionStop */
+  const renderAttractionLayout = (attraction: AttractionStop) => (
+    <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
+      {renderTitleRow()}
 
-        {/* Historical Summary for Attraction Stop */}
-        {stop.historicalSummary && (
-          <div data-testid="historical-summary">
-            <Callout emoji="landmark" title={t('historicalSummary')}>
-              <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
-                {stop.historicalSummary}
-              </p>
-            </Callout>
-          </div>
-        )}
+      {stop.workingHours && (
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#7A6552]" data-testid="working-hours-badge">
+          <EmojiIcon name="clock" size="xs" />
+          <span>{t('workingHours')}: {stop.workingHours}</span>
+        </div>
+      )}
 
-        {/* Fun Fact Callout */}
-        {stop.funFact && (
-          <div data-testid="fun-fact">
-            <Callout emoji="bulb" title={t('funFact')}>
-              <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
-                {stop.funFact}
-              </p>
-            </Callout>
-          </div>
-        )}
+      {attraction.transitBadge && (
+        <div data-testid="transit-badge">
+          <Callout emoji="funicular" title={t('transitStep')}>
+            <p className="font-semibold text-[#1C1008]">{attraction.transitBadge}</p>
+          </Callout>
+        </div>
+      )}
 
-        {/* Recommended Dishes for Venue Stop */}
-        {venueStop && venueStop.venueDetails.recommendedDishes?.length > 0 && (
-          <RecommendedDishesSection dishes={venueStop.venueDetails.recommendedDishes} title={t('recommendedDishes')} />
-        )}
-
-        {/* Venue Booking Advice Callout */}
-        {venueStop && venueStop.venueDetails.bookingAdvice && (
-          <div data-testid="booking-advice">
-            <Callout emoji="calendar" title={t('bookingAdvice')}>
-              {venueStop.venueDetails.bookingAdvice}
-            </Callout>
-          </div>
-        )}
-
-        {/* Olya's Tip Box */}
-        {stop.olyaTips && (
-          <Callout emoji="chat" title={t('olyaTip')}>
-            <p
-              className="text-sm italic leading-relaxed text-[#4A3828]"
-              style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
-            >
-              &ldquo;{stop.olyaTips}&rdquo;
+      {stop.historicalSummary && (
+        <div data-testid="historical-summary">
+          <Callout emoji="landmark" title={t('historicalSummary')}>
+            <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+              {stop.historicalSummary}
             </p>
           </Callout>
-        )}
-
-        {/* Photo Spot Recommendation Callout */}
-        {stop.photoSpot && (
-          <div data-testid="photo-spot">
-            <Callout emoji="camera" title={t('photoSpotRec')}>
-              {stop.photoSpot}
-            </Callout>
-          </div>
-        )}
-
-        {/* Logistics Warning Callout */}
-        {stop.logisticsWarning && (
-          <div data-testid="logistics-warning">
-            <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
-              {stop.logisticsWarning}
-            </Callout>
-          </div>
-        )}
-
-        {/* ── LAST BLOCK: Google Rating & Icon-Only Platform Links Row ── */}
-        <div data-testid="last-actions-block" className="pt-2 space-y-3">
-          {/* Georgian Divider */}
-          <GeorgianOrnament />
-
-          {/* Standalone Google Rating Badge */}
-          <div
-            data-testid="google-rating-badge"
-            className="flex items-center justify-center gap-1.5 text-xs text-[#5C4D42] font-medium"
-          >
-            <span className="text-[#C4572A] font-bold text-sm">★ {ratings.google.rating.toFixed(1)}</span>
-            <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
-          </div>
-
-          {/* Single Row Icon-Only Action Buttons */}
-          <div className="flex items-center justify-center gap-3 pt-1" data-testid="map-pills-row">
-            <a
-              href={googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
-              aria-label="Open in Google Maps"
-              title="Google Maps"
-            >
-              <GoogleMapsIcon className="w-6 h-6" />
-            </a>
-
-            <a
-              href={yandexMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
-              aria-label="Open in Yandex Maps"
-              title="Yandex Maps"
-            >
-              <YandexMapsIcon className="w-6 h-6" />
-            </a>
-
-            {stop.websiteUrl && (
-              <a
-                href={stop.websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
-                aria-label="Visit Website"
-                title="Website"
-              >
-                <GlobeIcon className="w-6 h-6 text-[#5C4D42]" />
-              </a>
-            )}
-
-            {stop.instagramUrl && (
-              <a
-                href={stop.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
-                aria-label="Visit Instagram"
-                title="Instagram"
-              >
-                <InstagramIcon className="w-6 h-6" />
-              </a>
-            )}
-          </div>
         </div>
+      )}
+
+      {stop.funFact && (
+        <div data-testid="fun-fact">
+          <Callout emoji="bulb" title={t('funFact')}>
+            <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+              {stop.funFact}
+            </p>
+          </Callout>
+        </div>
+      )}
+
+      {stop.olyaTips && (
+        <Callout emoji="chat" title={t('olyaTip')}>
+          <p
+            className="text-sm italic leading-relaxed text-[#4A3828]"
+            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+          >
+            &ldquo;{stop.olyaTips}&rdquo;
+          </p>
+        </Callout>
+      )}
+
+      {stop.photoSpot && (
+        <div data-testid="photo-spot">
+          <Callout emoji="camera" title={t('photoSpotRec')}>
+            {stop.photoSpot}
+          </Callout>
+        </div>
+      )}
+
+      {stop.logisticsWarning && (
+        <div data-testid="logistics-warning">
+          <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
+            {stop.logisticsWarning}
+          </Callout>
+        </div>
+      )}
+
+      {renderActionsFooter()}
+    </div>
+  );
+
+  /* Specific layout for VenueStop */
+  const renderVenueLayout = (venue: VenueStop) => (
+    <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
+      {renderTitleRow()}
+
+      <div className="flex flex-wrap items-center gap-2 pt-0.5" data-testid="venue-details-header">
+        <span
+          data-testid="venue-category-cuisine"
+          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] border border-[#E8D5C4]"
+        >
+          {formatCategoryCuisine(venue, t)}
+        </span>
+        {venue.venueDetails.isVegetarianFriendly && (
+          <Badge variant="visited" data-testid="veggie-friendly-badge" className="normal-case tracking-normal text-xs font-semibold">
+            {t('veggieFriendly')}
+          </Badge>
+        )}
       </div>
+
+      {stop.workingHours && (
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#7A6552]" data-testid="working-hours-badge">
+          <EmojiIcon name="clock" size="xs" />
+          <span>{t('workingHours')}: {stop.workingHours}</span>
+        </div>
+      )}
+
+      {venue.venueDetails.recommendedDishes?.length > 0 && (
+        <RecommendedDishesSection dishes={venue.venueDetails.recommendedDishes} title={t('recommendedDishes')} />
+      )}
+
+      {venue.venueDetails.bookingAdvice && (
+        <div data-testid="booking-advice">
+          <Callout emoji="calendar" title={t('bookingAdvice')}>
+            {venue.venueDetails.bookingAdvice}
+          </Callout>
+        </div>
+      )}
+
+      {stop.olyaTips && (
+        <Callout emoji="chat" title={t('olyaTip')}>
+          <p
+            className="text-sm italic leading-relaxed text-[#4A3828]"
+            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+          >
+            &ldquo;{stop.olyaTips}&rdquo;
+          </p>
+        </Callout>
+      )}
+
+      {stop.photoSpot && (
+        <div data-testid="photo-spot">
+          <Callout emoji="camera" title={t('photoSpotRec')}>
+            {stop.photoSpot}
+          </Callout>
+        </div>
+      )}
+
+      {stop.logisticsWarning && (
+        <div data-testid="logistics-warning">
+          <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
+            {stop.logisticsWarning}
+          </Callout>
+        </div>
+      )}
+
+      {renderActionsFooter()}
+    </div>
+  );
+
+  return (
+    <div
+      data-testid="stop-card-container"
+      className="relative flex flex-col h-[100dvh] w-full bg-[#FAF7F2] text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
+    >
+      {renderCardHeader()}
+      {venueStop ? renderVenueLayout(venueStop) : renderAttractionLayout(attractionStop!)}
 
       {/* Photo Lightbox Modal */}
       <LightboxModal
@@ -434,3 +479,4 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
 }
 
 export default React.memo(StopCard);
+
