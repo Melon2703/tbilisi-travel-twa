@@ -20,6 +20,16 @@ export const COLORS = {
   textPrimary: '#1C1008',
   textSecondary: '#7A6552',
 
+  // Additional Component & Badge Tokens
+  badgeBg: '#FAF3E8',
+  badgeText: '#8C4A27',
+  badgeBorder: '#E8D5C4',
+  dishBg: '#FFF8EE',
+  dishText: '#4A3828',
+  dishBorder: '#E8DCCB',
+  actionBorder: '#E8EAF0',
+  iconMuted: '#5C4D42',
+
   // High-Contrast Outdoor Theme Tokens
   outdoor: {
     textPrimary: '#1C1008',

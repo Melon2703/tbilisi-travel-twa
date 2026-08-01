@@ -21,6 +21,14 @@ describe('Design System Theme Tokens (Issue 30)', () => {
       expect(COLORS.successAccent).toBe('#228255');
       expect(COLORS.textPrimary).toBe('#1C1008');
       expect(COLORS.textSecondary).toBe('#7A6552');
+      expect(COLORS.badgeBg).toBe('#FAF3E8');
+      expect(COLORS.badgeText).toBe('#8C4A27');
+      expect(COLORS.badgeBorder).toBe('#E8D5C4');
+      expect(COLORS.dishBg).toBe('#FFF8EE');
+      expect(COLORS.dishText).toBe('#4A3828');
+      expect(COLORS.dishBorder).toBe('#E8DCCB');
+      expect(COLORS.actionBorder).toBe('#E8EAF0');
+      expect(COLORS.iconMuted).toBe('#5C4D42');
     });
 
     it('exports outdoor high-contrast theme tokens', () => {

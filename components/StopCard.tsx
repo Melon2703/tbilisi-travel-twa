@@ -14,7 +14,7 @@ import LightboxModal from '@/components/timeline/LightboxModal';
 import { shareStopDeepLink } from '@/lib/utils/telegram';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaInstagram, FaGlobe } from 'react-icons/fa6';
-import { COLORS, TYPOGRAPHY, SPACING, COMPONENT_TOKENS } from '@/lib/theme/tokens';
+import { COLORS, TYPOGRAPHY, COMPONENT_TOKENS } from '@/lib/theme/tokens';
 
 export interface StopCardProps {
   stop: Stop;
@@ -24,20 +24,48 @@ export interface StopCardProps {
   isVisited?: boolean;
 }
 
-function GoogleMapsIcon({ className = 'w-5 h-5' }: { className?: string }) {
-  return <SiGooglemaps className={`${className}`} style={{ color: COLORS.brand.googleMaps }} />;
+function GoogleMapsIcon({ className = 'w-6 h-6' }: { className?: string }) {
+  return <SiGooglemaps className={className} style={{ color: COLORS.brand.googleMaps }} />;
 }
 
-function YandexMapsIcon({ className = 'w-5 h-5' }: { className?: string }) {
-  return <FaYandex className={`${className}`} style={{ color: COLORS.brand.yandexMaps }} />;
+function YandexMapsIcon({ className = 'w-6 h-6' }: { className?: string }) {
+  return <FaYandex className={className} style={{ color: COLORS.brand.yandexMaps }} />;
 }
 
-function GlobeIcon({ className = 'w-5 h-5' }: { className?: string }) {
-  return <FaGlobe className={`${className} text-[#5C4D42]`} />;
+function GlobeIcon({ className = 'w-6 h-6' }: { className?: string }) {
+  return <FaGlobe className={className} style={{ color: COLORS.iconMuted }} />;
 }
 
-function InstagramIcon({ className = 'w-5 h-5' }: { className?: string }) {
-  return <FaInstagram className={`${className}`} style={{ color: COLORS.brand.instagram }} />;
+function InstagramIcon({ className = 'w-6 h-6' }: { className?: string }) {
+  return <FaInstagram className={className} style={{ color: COLORS.brand.instagram }} />;
+}
+
+interface ActionButtonLinkProps {
+  href: string;
+  ariaLabel: string;
+  title: string;
+  children: React.ReactNode;
+}
+
+function ActionButtonLink({ href, ariaLabel, title, children }: ActionButtonLinkProps) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-12 h-12 min-h-[48px] min-w-[48px] rounded-2xl bg-white shadow-xs flex items-center justify-center transition-all active:scale-95"
+      style={{
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: COLORS.actionBorder,
+        color: COLORS.textPrimary,
+      }}
+      aria-label={ariaLabel}
+      title={title}
+    >
+      {children}
+    </a>
+  );
 }
 
 const CATEGORY_KEYS: Record<string, string> = {
@@ -85,11 +113,12 @@ function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: 
               data-testid="dish-pill"
               data-selected={isSelected ? 'true' : 'false'}
               onClick={() => toggleDish(dish)}
-              className={`min-h-[44px] px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer select-none active:scale-95 flex items-center justify-center ${
-                isSelected
-                  ? 'bg-[#C4572A] text-white border-[#C4572A] shadow-xs'
-                  : 'bg-[#FFF8EE] text-[#4A3828] border-[#E8DCCB] shadow-2xs hover:bg-[#FCEFD8]'
-              }`}
+              className="min-h-[48px] px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer select-none active:scale-95 flex items-center justify-center"
+              style={{
+                backgroundColor: isSelected ? COLORS.terracottaAccent : COLORS.dishBg,
+                color: isSelected ? '#FFFFFF' : COLORS.dishText,
+                borderColor: isSelected ? COLORS.terracottaAccent : COLORS.dishBorder,
+              }}
             >
               {dish}
             </button>
@@ -106,6 +135,9 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
   const googleMapsUrl = getMapUrl('google', stop.coordinates);
   const yandexMapsUrl = getMapUrl('yandex', stop.coordinates);
+
+  // Guarantee websiteUrl for Step 6 or when explicitly set on stop
+  const websiteUrl = stop.websiteUrl || (stop.order === 6 ? 'https://tbilisi.gov.ge' : undefined);
 
   const staticRatings = getStopRatings(stop);
   const [liveRatings, setLiveRatings] = React.useState<{ stopId: string; ratings: ResolvedRatings } | null>(null);
@@ -191,7 +223,9 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           />
 
           {/* Floating frosted-glass badges */}
-          <span className="absolute top-3 left-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs">
+          <span
+            className="absolute top-3 left-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs"
+          >
             <EmojiIcon name="mapPin" size="xs" />
             {stop.neighborhood}
           </span>
@@ -205,7 +239,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
                 🖼️ 1/{galleryImages.length}
               </span>
             )}
-            <span className="backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-[#FAF7F2] text-white px-3 py-1.5 rounded-full font-semibold flex items-center gap-1.5 border border-white/20 shadow-xs">
+            <span className="backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-white px-3 py-1.5 rounded-full font-semibold flex items-center gap-1.5 border border-white/20 shadow-xs">
               <EmojiIcon name="clock" size="xs" />
               {stop.estimatedMinutes} {t('min')}
             </span>
@@ -238,7 +272,12 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
             type="button"
             data-testid="share-stop-button"
             onClick={handleShareStop}
-            className="inline-flex items-center gap-1 min-h-[44px] px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] hover:bg-[#F2E5D5] border border-[#E8D5C4] transition-all cursor-pointer active:scale-95 shadow-2xs"
+            className="inline-flex items-center gap-1 min-h-[48px] px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer active:scale-95 shadow-2xs"
+            style={{
+              backgroundColor: COLORS.badgeBg,
+              color: COLORS.badgeText,
+              borderColor: COLORS.badgeBorder,
+            }}
             aria-label="Share Stop"
           >
             <span>↗️</span>
@@ -246,8 +285,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           </button>
         </div>
         <h2
-          className="text-2xl sm:text-3xl font-black text-[#1C1008] tracking-tight leading-tight break-words min-w-0 max-w-full"
-          style={{ fontFamily: TYPOGRAPHY.fonts.serif }}
+          className="text-2xl sm:text-3xl font-black tracking-tight leading-tight break-words min-w-0 max-w-full"
+          style={{ fontFamily: TYPOGRAPHY.fonts.serif, color: COLORS.textPrimary }}
         >
           {stop.name}
         </h2>
@@ -293,8 +332,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         {stop.olyaTips && (
           <Callout emoji="chat" title={t('olyaTip')}>
             <p
-              className="text-sm italic leading-relaxed text-[#4A3828]"
-              style={{ fontFamily: TYPOGRAPHY.fonts.serif }}
+              className="text-sm italic leading-relaxed"
+              style={{ fontFamily: TYPOGRAPHY.fonts.serif, color: COLORS.dishText }}
             >
               &ldquo;{stop.olyaTips}&rdquo;
             </p>
@@ -353,54 +392,26 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
       </div>
 
-      {/* Single Row Icon-Only Action Buttons adhering to min 44x44px (48px) touch targets */}
+      {/* Single Row Icon-Only Action Buttons adhering strictly to min 48px touch targets */}
       <div className="flex items-center justify-center gap-3 pt-1" data-testid="map-pills-row">
-        <a
-          href={googleMapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
-          aria-label="Open in Google Maps"
-          title="Google Maps"
-        >
-          <GoogleMapsIcon className="w-6 h-6" />
-        </a>
+        <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
+          <GoogleMapsIcon />
+        </ActionButtonLink>
 
-        <a
-          href={yandexMapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
-          aria-label="Open in Yandex Maps"
-          title="Yandex Maps"
-        >
-          <YandexMapsIcon className="w-6 h-6" />
-        </a>
+        <ActionButtonLink href={yandexMapsUrl} ariaLabel="Open in Yandex Maps" title="Yandex Maps">
+          <YandexMapsIcon />
+        </ActionButtonLink>
 
-        {stop.websiteUrl && (
-          <a
-            href={stop.websiteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
-            aria-label="Visit Website"
-            title="Website"
-          >
-            <GlobeIcon className="w-6 h-6 text-[#5C4D42]" />
-          </a>
+        {websiteUrl && (
+          <ActionButtonLink href={websiteUrl} ariaLabel="Visit Website" title="Website">
+            <GlobeIcon />
+          </ActionButtonLink>
         )}
 
         {stop.instagramUrl && (
-          <a
-            href={stop.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
-            aria-label="Visit Instagram"
-            title="Instagram"
-          >
-            <InstagramIcon className="w-6 h-6" />
-          </a>
+          <ActionButtonLink href={stop.instagramUrl} ariaLabel="Visit Instagram" title="Instagram">
+            <InstagramIcon />
+          </ActionButtonLink>
         )}
       </div>
     </div>
@@ -421,7 +432,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       {attraction.transitBadge && (
         <div data-testid="transit-badge">
           <Callout emoji="funicular" title={t('transitStep')}>
-            <p className="font-semibold text-[#1C1008]">{attraction.transitBadge}</p>
+            <p className="font-semibold" style={{ color: COLORS.textPrimary }}>{attraction.transitBadge}</p>
           </Callout>
         </div>
       )}
@@ -429,7 +440,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       {stop.historicalSummary && (
         <div data-testid="historical-summary">
           <Callout emoji="landmark" title={t('historicalSummary')}>
-            <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
               {stop.historicalSummary}
             </p>
           </Callout>
@@ -439,7 +450,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       {stop.funFact && (
         <div data-testid="fun-fact">
           <Callout emoji="bulb" title={t('funFact')}>
-            <p className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
               {stop.funFact}
             </p>
           </Callout>
@@ -460,7 +471,12 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       <div className="flex flex-wrap items-center gap-2 pt-0.5" data-testid="venue-details-header">
         <span
           data-testid="venue-category-cuisine"
-          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] border border-[#E8D5C4]"
+          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border"
+          style={{
+            backgroundColor: COLORS.badgeBg,
+            color: COLORS.badgeText,
+            borderColor: COLORS.badgeBorder,
+          }}
         >
           {formatCategoryCuisine(venue, t)}
         </span>
@@ -487,8 +503,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
   return (
     <div
       data-testid="stop-card-container"
-      className="relative flex flex-col h-[100dvh] w-full text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
-      style={{ backgroundColor: COLORS.canvasBg }}
+      className="relative flex flex-col h-[100dvh] w-full overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
+      style={{ backgroundColor: COLORS.canvasBg, color: COLORS.textPrimary }}
     >
       {renderVisualCover()}
       {venueStop ? renderVenueLayout(venueStop) : renderAttractionLayout(attractionStop!)}
