@@ -144,7 +144,7 @@ export default function RouteIntroCard({
         {/* 2. Title & Subtitle Block */}
         <div className="space-y-1 min-w-0 max-w-full shrink-0">
           <h1
-            className="text-2xl sm:text-3xl font-black tracking-tight leading-tight text-[#1C1008] break-words min-w-0 max-w-full font-sans"
+            className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight leading-tight text-[#1C1008] break-words min-w-0 max-w-full font-sans"
           >
             {route.title}
           </h1>

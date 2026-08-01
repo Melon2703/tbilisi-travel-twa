@@ -159,7 +159,7 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
       {activeIndex === 0 && (
         <div
           data-testid="sticky-start-container"
-          className="fixed bottom-0 left-0 right-0 p-4 pt-6 max-w-2xl mx-auto z-30 pointer-events-auto bg-gradient-to-t from-[#FAF7F2] via-[#FAF7F2]/90 to-transparent"
+          className="fixed bottom-0 left-0 right-0 p-4 pt-6 max-w-2xl mx-auto z-[99999] pointer-events-auto bg-gradient-to-t from-[#FAF7F2] via-[#FAF7F2]/90 to-transparent"
         >
           <Button onClick={handleStartRoute} emoji="arrowRight">
             {t('startRoute')}
