@@ -60,53 +60,55 @@ export default function RouteIntroCard({
 
   return (
     <div className="relative flex flex-col h-[100dvh] w-full bg-[#FAF7F2] text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y">
-      {/* ── Full-bleed hero image — fixed height ── */}
-      <div className="relative w-full h-44 sm:h-52 shrink-0 bg-[#FAF7F2] overflow-hidden">
-        {route.heroImage && (
-          <Image
-            src={route.heroImage}
-            alt={route.title}
-            fill
-            priority
-            className="w-full h-full object-cover"
+      {/* ── Unified Scrollable Container ── */}
+      <div className="w-full flex-1 overflow-y-auto pb-28 sm:pb-32 scrollbar-none">
+        {/* ── Full-bleed hero image header ── */}
+        <div className="relative w-full h-44 sm:h-56 shrink-0 bg-[#FAF7F2] overflow-hidden">
+          {route.heroImage && (
+            <Image
+              src={route.heroImage}
+              alt={route.title}
+              fill
+              priority
+              className="w-full h-full object-cover"
+            />
+          )}
+          {/* Soft bottom fade into cream */}
+          <div
+            className="absolute inset-0 z-10"
+            style={{
+              background:
+                'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(250,247,242,0.6) 85%, rgba(250,247,242,1) 100%)',
+            }}
           />
-        )}
-        {/* Soft bottom fade into cream */}
-        <div
-          className="absolute inset-0 z-10"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(250,247,242,0.6) 85%, rgba(250,247,242,1) 100%)',
-          }}
-        />
 
-        {/* Top Language Toggle Switch */}
-        <div className="absolute top-3 right-3 z-20 flex items-center bg-black/60 backdrop-blur-md rounded-full p-1 border border-white/20 shadow-md">
-          <button
-            type="button"
-            onClick={() => setLanguage('en')}
-            className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
-              language === 'en' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
-            }`}
-            aria-label="Switch to English"
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            onClick={() => setLanguage('ru')}
-            className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
-              language === 'ru' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
-            }`}
-            aria-label="Переключить на русский"
-          >
-            RU
-          </button>
+          {/* Top Language Toggle Switch */}
+          <div className="absolute top-3 right-3 z-20 flex items-center bg-black/60 backdrop-blur-md rounded-full p-1 border border-white/20 shadow-md">
+            <button
+              type="button"
+              onClick={() => setLanguage('en')}
+              className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
+                language === 'en' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
+              }`}
+              aria-label="Switch to English"
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => setLanguage('ru')}
+              className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
+                language === 'ru' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
+              }`}
+              aria-label="Переключить на русский"
+            >
+              RU
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* ── Scrollable content body ── */}
-      <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full flex-1 flex flex-col justify-between overflow-y-auto pb-28 sm:pb-32 scrollbar-none">
+        {/* ── Scrollable content body ── */}
+        <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full flex flex-col justify-between">
         {/* 1. Pill Badges Row */}
         <div className="relative w-full overflow-hidden shrink-0">
           <div
@@ -296,6 +298,7 @@ export default function RouteIntroCard({
           <p className="text-xs font-semibold text-[#C4572A]/80">
             {t('swipePrompt')}
           </p>
+        </div>
         </div>
       </div>
 

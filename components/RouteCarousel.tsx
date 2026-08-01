@@ -3,7 +3,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Mousewheel } from 'swiper/modules';
 import 'swiper/css';
 import { Route } from '@/lib/types/route';
 import { getVisitedStops, toggleVisitedStop } from '@/lib/utils/visited';
@@ -102,8 +101,6 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
   return (
     <div className="w-full h-[100dvh] relative overflow-hidden bg-[#FAF7F2] transform-gpu text-[#1C1008]">
       <Swiper
-        modules={[Mousewheel]}
-        mousewheel={{ forceToAxis: true, releaseOnEdges: true }}
         speed={300}
         resistanceRatio={0.65}
         watchSlidesProgress={true}

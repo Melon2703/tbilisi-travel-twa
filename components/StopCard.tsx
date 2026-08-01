@@ -411,7 +411,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
   /* Part 3: Short Overview Layout for AttractionStop */
   const renderAttractionLayout = (attraction: AttractionStop) => (
-    <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
+    <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full">
       {renderHeaderBar()}
 
       {stop.workingHours && (
@@ -457,7 +457,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
   /* Part 3: Short Overview Layout for VenueStop */
   const renderVenueLayout = (venue: VenueStop) => (
-    <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
+    <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full">
       {renderHeaderBar()}
 
       <div className="flex flex-wrap items-center gap-2 pt-0.5" data-testid="venue-details-header">
@@ -498,8 +498,10 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       className="relative flex flex-col h-[100dvh] w-full overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
       style={{ backgroundColor: COLORS.canvasBg, color: COLORS.textPrimary }}
     >
-      {renderVisualCover()}
-      {venueStop ? renderVenueLayout(venueStop) : renderAttractionLayout(attractionStop!)}
+      <div className="w-full flex-1 overflow-y-auto scrollbar-none pb-24 sm:pb-28">
+        {renderVisualCover()}
+        {venueStop ? renderVenueLayout(venueStop) : renderAttractionLayout(attractionStop!)}
+      </div>
 
       {/* Photo Lightbox Modal */}
       <LightboxModal
