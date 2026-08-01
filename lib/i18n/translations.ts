@@ -33,6 +33,7 @@ export const TRANSLATIONS = {
     transitStep: 'Transit Step',
     shareStop: 'Share Stop',
     copiedToClipboard: 'Link copied to clipboard!',
+    olyaRecommendation: "Olya's Recommendation",
 
     cafe: '☕ Cafe',
     restaurant: '🍽️ Restaurant',
@@ -135,6 +136,7 @@ export const TRANSLATIONS = {
     transitStep: 'Транзитный шаг',
     shareStop: 'Поделиться',
     copiedToClipboard: 'Ссылка скопирована в буфер!',
+    olyaRecommendation: 'Рекомендация Оли',
 
     cafe: '☕ Кафе',
     restaurant: '🍽️ Ресторан',

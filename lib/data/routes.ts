@@ -178,6 +178,7 @@ const HEARTBEAT_STOPS: Stop[] = [
       'По преданию, Святая Нино обвила свой крест собственными волосами, принеся христианство в Грузию в IV веке.',
     workingHours: '08:00 AM - 08:00 PM',
     workingHoursRu: '08:00 - 20:00',
+    websiteUrl: 'https://tbilisi.gov.ge',
     olyaTips: 'Step inside quietly. See Grapevine Cross of St. Nino.',
     olyaTipsRu: 'Зайдите тихо внутрь. Посмотрите на Крест Святой Нино из виноградной лозы.',
     bestTimeOfDay: '12:50 PM - 01:10 PM',

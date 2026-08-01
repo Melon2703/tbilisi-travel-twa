@@ -10,11 +10,11 @@ import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
-
 import LightboxModal from '@/components/timeline/LightboxModal';
 import { shareStopDeepLink } from '@/lib/utils/telegram';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaInstagram, FaGlobe } from 'react-icons/fa6';
+import { COLORS, TYPOGRAPHY, SPACING, COMPONENT_TOKENS } from '@/lib/theme/tokens';
 
 export interface StopCardProps {
   stop: Stop;
@@ -25,11 +25,11 @@ export interface StopCardProps {
 }
 
 function GoogleMapsIcon({ className = 'w-5 h-5' }: { className?: string }) {
-  return <SiGooglemaps className={`${className} text-[#EA4335]`} />;
+  return <SiGooglemaps className={`${className}`} style={{ color: COLORS.brand.googleMaps }} />;
 }
 
 function YandexMapsIcon({ className = 'w-5 h-5' }: { className?: string }) {
-  return <FaYandex className={`${className} text-[#FC3F1D]`} />;
+  return <FaYandex className={`${className}`} style={{ color: COLORS.brand.yandexMaps }} />;
 }
 
 function GlobeIcon({ className = 'w-5 h-5' }: { className?: string }) {
@@ -37,7 +37,7 @@ function GlobeIcon({ className = 'w-5 h-5' }: { className?: string }) {
 }
 
 function InstagramIcon({ className = 'w-5 h-5' }: { className?: string }) {
-  return <FaInstagram className={`${className} text-[#E4405F]`} />;
+  return <FaInstagram className={`${className}`} style={{ color: COLORS.brand.instagram }} />;
 }
 
 const CATEGORY_KEYS: Record<string, string> = {
@@ -69,7 +69,10 @@ function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: 
 
   return (
     <div data-testid="recommended-dishes" className="space-y-2 pt-1">
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#C4572A] flex items-center gap-1.5">
+      <p
+        className="text-xs font-bold uppercase flex items-center gap-1.5"
+        style={{ letterSpacing: TYPOGRAPHY.tracking.badge, color: COLORS.terracottaAccent }}
+      >
         <span>🍽️</span> {title}
       </p>
       <div className="flex flex-wrap gap-2">
@@ -82,7 +85,7 @@ function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: 
               data-testid="dish-pill"
               data-selected={isSelected ? 'true' : 'false'}
               onClick={() => toggleDish(dish)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer select-none active:scale-95 ${
+              className={`min-h-[44px] px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer select-none active:scale-95 flex items-center justify-center ${
                 isSelected
                   ? 'bg-[#C4572A] text-white border-[#C4572A] shadow-xs'
                   : 'bg-[#FFF8EE] text-[#4A3828] border-[#E8DCCB] shadow-2xs hover:bg-[#FCEFD8]'
@@ -97,7 +100,7 @@ function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: 
   );
 }
 
-function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: StopCardProps) {
+function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }: StopCardProps) {
   const { t, getLocalizedStop } = useLanguage();
   const stop = getLocalizedStop(rawStop);
 
@@ -140,17 +143,15 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
     }
   };
 
-  const stopLabel = totalStops
-    ? t('stopOf', { order: stop.order, total: totalStops })
-    : t('stopNumber', { order: stop.order });
+  const stopLabel = t('stopOf', { order: stop.order, total: totalStops });
 
   const isVenue = stop.stopType === 'venue';
   const venueStop = isVenue ? (stop as VenueStop) : null;
   const attractionStop = !isVenue ? (stop as AttractionStop) : null;
   const isPitstop = isVenue && (venueStop?.isOptional ?? false);
 
-  /* Shared header & title block across stop cards */
-  const renderCardHeader = () => (
+  /* Part 1 & Part 2: Visual Cover with Floating Header Bar & Overlay Badges */
+  const renderVisualCover = () => (
     <>
       {stop.imageUrl && (
         <div
@@ -159,7 +160,8 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
             setLightboxIndex(0);
             setIsLightboxOpen(true);
           }}
-          className="relative w-full h-52 sm:h-60 shrink-0 bg-[#FAF7F2] overflow-hidden cursor-pointer group"
+          className="relative w-full h-52 sm:h-60 shrink-0 overflow-hidden cursor-pointer group"
+          style={{ backgroundColor: COLORS.canvasBg }}
           role="button"
           tabIndex={0}
           aria-label={`Open photo lightbox for ${stop.name}`}
@@ -213,11 +215,18 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
     </>
   );
 
-  const renderTitleRow = () => (
+  /* Part 1: Header Bar */
+  const renderHeaderBar = () => (
     <div className="flex items-start justify-between gap-3 min-w-0">
       <div className="min-w-0 flex-1 space-y-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#C4572A]">
+          <p
+            className="text-xs font-bold uppercase"
+            style={{
+              letterSpacing: TYPOGRAPHY.tracking.cta,
+              color: COLORS.terracottaAccent,
+            }}
+          >
             {stopLabel}
           </p>
           {isPitstop && (
@@ -229,7 +238,7 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
             type="button"
             data-testid="share-stop-button"
             onClick={handleShareStop}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] hover:bg-[#F2E5D5] border border-[#E8D5C4] transition-all cursor-pointer active:scale-95 shadow-2xs"
+            className="inline-flex items-center gap-1 min-h-[44px] px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FAF3E8] text-[#8C4A27] hover:bg-[#F2E5D5] border border-[#E8D5C4] transition-all cursor-pointer active:scale-95 shadow-2xs"
             aria-label="Share Stop"
           >
             <span>↗️</span>
@@ -238,7 +247,7 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
         </div>
         <h2
           className="text-2xl sm:text-3xl font-black text-[#1C1008] tracking-tight leading-tight break-words min-w-0 max-w-full"
-          style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+          style={{ fontFamily: TYPOGRAPHY.fonts.serif }}
         >
           {stop.name}
         </h2>
@@ -251,6 +260,82 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
     </div>
   );
 
+  /* Part 4: Unified Consolidated "Olya's Recommendation" Card */
+  const renderConsolidatedRecommendationCard = () => {
+    const hasVenueDishes = venueStop?.venueDetails.recommendedDishes && venueStop.venueDetails.recommendedDishes.length > 0;
+    const hasBookingAdvice = Boolean(venueStop?.venueDetails.bookingAdvice);
+    const hasOlyaTips = Boolean(stop.olyaTips);
+    const hasPhotoSpot = Boolean(stop.photoSpot);
+    const hasLogisticsWarning = Boolean(stop.logisticsWarning);
+
+    const hasAnyRecommendation = hasVenueDishes || hasBookingAdvice || hasOlyaTips || hasPhotoSpot || hasLogisticsWarning;
+
+    if (!hasAnyRecommendation) return null;
+
+    return (
+      <div
+        data-testid="olya-recommendation-card"
+        className="rounded-xl p-4 border space-y-3 shadow-xs"
+        style={{
+          backgroundColor: COLORS.cardBg,
+          borderColor: COLORS.tipBoxBorder,
+          borderRadius: COMPONENT_TOKENS.borderRadius.xl,
+        }}
+      >
+        <div
+          className="flex items-center gap-1.5 text-xs font-bold uppercase"
+          style={{ letterSpacing: TYPOGRAPHY.tracking.badge, color: COLORS.terracottaAccent }}
+        >
+          <span>✨</span>
+          <span>{t('olyaRecommendation')}</span>
+        </div>
+
+        {stop.olyaTips && (
+          <Callout emoji="chat" title={t('olyaTip')}>
+            <p
+              className="text-sm italic leading-relaxed text-[#4A3828]"
+              style={{ fontFamily: TYPOGRAPHY.fonts.serif }}
+            >
+              &ldquo;{stop.olyaTips}&rdquo;
+            </p>
+          </Callout>
+        )}
+
+        {hasVenueDishes && (
+          <RecommendedDishesSection
+            dishes={venueStop!.venueDetails.recommendedDishes}
+            title={t('recommendedDishes')}
+          />
+        )}
+
+        {hasBookingAdvice && (
+          <div data-testid="booking-advice">
+            <Callout emoji="calendar" title={t('bookingAdvice')}>
+              {venueStop!.venueDetails.bookingAdvice}
+            </Callout>
+          </div>
+        )}
+
+        {stop.photoSpot && (
+          <div data-testid="photo-spot">
+            <Callout emoji="camera" title={t('photoSpotRec')}>
+              {stop.photoSpot}
+            </Callout>
+          </div>
+        )}
+
+        {stop.logisticsWarning && (
+          <div data-testid="logistics-warning">
+            <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
+              {stop.logisticsWarning}
+            </Callout>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  /* Part 5: Action Bar Section */
   const renderActionsFooter = () => (
     <div data-testid="last-actions-block" className="pt-2 space-y-3">
       {/* Georgian Divider */}
@@ -259,13 +344,16 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
       {/* Standalone Google Rating Badge */}
       <div
         data-testid="google-rating-badge"
-        className="flex items-center justify-center gap-1.5 text-xs text-[#5C4D42] font-medium"
+        className="flex items-center justify-center gap-1.5 text-xs font-medium"
+        style={{ color: COLORS.textSecondary }}
       >
-        <span className="text-[#C4572A] font-bold text-sm">★ {ratings.google.rating.toFixed(1)}</span>
+        <span className="font-bold text-sm" style={{ color: COLORS.terracottaAccent }}>
+          ★ {ratings.google.rating.toFixed(1)}
+        </span>
         <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
       </div>
 
-      {/* Single Row Icon-Only Action Buttons */}
+      {/* Single Row Icon-Only Action Buttons adhering to min 44x44px (48px) touch targets */}
       <div className="flex items-center justify-center gap-3 pt-1" data-testid="map-pills-row">
         <a
           href={googleMapsUrl}
@@ -318,13 +406,13 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
     </div>
   );
 
-  /* Specific layout for AttractionStop */
+  /* Part 3: Short Overview Layout for AttractionStop */
   const renderAttractionLayout = (attraction: AttractionStop) => (
     <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
-      {renderTitleRow()}
+      {renderHeaderBar()}
 
       {stop.workingHours && (
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#7A6552]" data-testid="working-hours-badge">
+        <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: COLORS.textSecondary }} data-testid="working-hours-badge">
           <EmojiIcon name="clock" size="xs" />
           <span>{t('workingHours')}: {stop.workingHours}</span>
         </div>
@@ -358,41 +446,16 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
         </div>
       )}
 
-      {stop.olyaTips && (
-        <Callout emoji="chat" title={t('olyaTip')}>
-          <p
-            className="text-sm italic leading-relaxed text-[#4A3828]"
-            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
-          >
-            &ldquo;{stop.olyaTips}&rdquo;
-          </p>
-        </Callout>
-      )}
-
-      {stop.photoSpot && (
-        <div data-testid="photo-spot">
-          <Callout emoji="camera" title={t('photoSpotRec')}>
-            {stop.photoSpot}
-          </Callout>
-        </div>
-      )}
-
-      {stop.logisticsWarning && (
-        <div data-testid="logistics-warning">
-          <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
-            {stop.logisticsWarning}
-          </Callout>
-        </div>
-      )}
+      {renderConsolidatedRecommendationCard()}
 
       {renderActionsFooter()}
     </div>
   );
 
-  /* Specific layout for VenueStop */
+  /* Part 3: Short Overview Layout for VenueStop */
   const renderVenueLayout = (venue: VenueStop) => (
     <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 pb-24 sm:pb-28 scrollbar-none max-w-2xl mx-auto w-full">
-      {renderTitleRow()}
+      {renderHeaderBar()}
 
       <div className="flex flex-wrap items-center gap-2 pt-0.5" data-testid="venue-details-header">
         <span
@@ -409,50 +472,13 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
       </div>
 
       {stop.workingHours && (
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#7A6552]" data-testid="working-hours-badge">
+        <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: COLORS.textSecondary }} data-testid="working-hours-badge">
           <EmojiIcon name="clock" size="xs" />
           <span>{t('workingHours')}: {stop.workingHours}</span>
         </div>
       )}
 
-      {venue.venueDetails.recommendedDishes?.length > 0 && (
-        <RecommendedDishesSection dishes={venue.venueDetails.recommendedDishes} title={t('recommendedDishes')} />
-      )}
-
-      {venue.venueDetails.bookingAdvice && (
-        <div data-testid="booking-advice">
-          <Callout emoji="calendar" title={t('bookingAdvice')}>
-            {venue.venueDetails.bookingAdvice}
-          </Callout>
-        </div>
-      )}
-
-      {stop.olyaTips && (
-        <Callout emoji="chat" title={t('olyaTip')}>
-          <p
-            className="text-sm italic leading-relaxed text-[#4A3828]"
-            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
-          >
-            &ldquo;{stop.olyaTips}&rdquo;
-          </p>
-        </Callout>
-      )}
-
-      {stop.photoSpot && (
-        <div data-testid="photo-spot">
-          <Callout emoji="camera" title={t('photoSpotRec')}>
-            {stop.photoSpot}
-          </Callout>
-        </div>
-      )}
-
-      {stop.logisticsWarning && (
-        <div data-testid="logistics-warning">
-          <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
-            {stop.logisticsWarning}
-          </Callout>
-        </div>
-      )}
+      {renderConsolidatedRecommendationCard()}
 
       {renderActionsFooter()}
     </div>
@@ -461,9 +487,10 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
   return (
     <div
       data-testid="stop-card-container"
-      className="relative flex flex-col h-[100dvh] w-full bg-[#FAF7F2] text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
+      className="relative flex flex-col h-[100dvh] w-full text-[#1C1008] overflow-hidden justify-between touch-pan-x touch-pan-y overscroll-y-contain transform-gpu"
+      style={{ backgroundColor: COLORS.canvasBg }}
     >
-      {renderCardHeader()}
+      {renderVisualCover()}
       {venueStop ? renderVenueLayout(venueStop) : renderAttractionLayout(attractionStop!)}
 
       {/* Photo Lightbox Modal */}
@@ -479,4 +506,3 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
 }
 
 export default React.memo(StopCard);
-
