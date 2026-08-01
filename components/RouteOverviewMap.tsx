@@ -376,7 +376,7 @@ export default function RouteOverviewMap({
 
             <div className="flex items-center gap-1.5 shrink-0">
               <a
-                href={getLaunchUrl(selectedStop.coordinates)}
+                href={getLaunchUrl(selectedStop.coordinates, undefined, selectedStop.name)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#C4572A] text-white hover:bg-[#A8451E] transition-all flex items-center gap-1 shadow-2xs active:scale-95"

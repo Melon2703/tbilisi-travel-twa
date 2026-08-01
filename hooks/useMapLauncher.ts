@@ -20,7 +20,7 @@ export interface UseMapLauncherOptions {
 export interface UseMapLauncherReturn {
   preferredProvider: MapProvider;
   setPreferredProvider: (provider: MapProvider) => void;
-  getLaunchUrl: (coords?: { lat: number; lng: number } | null, provider?: MapProvider) => string;
+  getLaunchUrl: (coords?: { lat: number; lng: number } | null, provider?: MapProvider, stopName?: string) => string;
   isOpen: boolean;
   openMapLauncher: (coords?: { lat: number; lng: number }, stopName?: string) => void;
   closeMapLauncher: () => void;
@@ -59,12 +59,13 @@ export function useMapLauncher(options: UseMapLauncherOptions = {}): UseMapLaunc
   }, []);
 
   const getLaunchUrl = useCallback(
-    (coords?: { lat: number; lng: number } | null, provider?: MapProvider) => {
+    (coords?: { lat: number; lng: number } | null, provider?: MapProvider, stopName?: string) => {
       const targetCoords = coords || selectedCoordinates || { lat: 0, lng: 0 };
       const targetProvider = provider || preferredProvider || defaultProvider;
-      return getMapUrl(targetProvider, targetCoords);
+      const targetName = stopName !== undefined ? stopName : selectedStopName;
+      return getMapUrl(targetProvider, targetCoords, targetName);
     },
-    [preferredProvider, defaultProvider, selectedCoordinates]
+    [preferredProvider, defaultProvider, selectedCoordinates, selectedStopName]
   );
 
   const openMapLauncher = useCallback(

@@ -90,7 +90,7 @@ export default function MapProviderBottomSheet({
         <div className="space-y-2.5 pt-1">
           {providers.map((provider) => {
             const isPreferred = preferredProvider === provider.id;
-            const url = getLaunchUrl(coordinates, provider.id);
+            const url = getLaunchUrl(coordinates, provider.id, stopName);
 
             return (
               <a

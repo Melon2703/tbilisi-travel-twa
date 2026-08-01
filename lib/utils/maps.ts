@@ -34,14 +34,29 @@ export const MAP_PROVIDERS: MapProviderOption[] = [
  * Low-level map URL resolver.
  * @deprecated Prefer using `getLaunchUrl` from `useMapLauncher()` hook.
  */
-export function getMapUrl(provider: MapProvider, coords: { lat: number; lng: number }): string {
+export function getMapUrl(
+  provider: MapProvider,
+  coords: { lat: number; lng: number },
+  name?: string
+): string {
   const { lat, lng } = coords;
+  const trimmedName = name?.trim();
+
   switch (provider) {
     case 'google':
+      if (trimmedName) {
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trimmedName)}`;
+      }
       return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
     case 'apple':
+      if (trimmedName) {
+        return `https://maps.apple.com/?q=${encodeURIComponent(trimmedName)}&sll=${lat},${lng}`;
+      }
       return `https://maps.apple.com/?q=${lat},${lng}`;
     case 'yandex':
+      if (trimmedName) {
+        return `https://yandex.com/maps/?text=${encodeURIComponent(trimmedName)}&pt=${lng},${lat}&z=17`;
+      }
       return `https://yandex.com/maps/?pt=${lng},${lat}&z=17`;
   }
 }

@@ -14,11 +14,18 @@ describe('MapLauncher Seam Contract & Integration', () => {
 
   describe('getLaunchUrl navigation link resolution', () => {
     const coords = { lat: 41.6918, lng: 44.7972 };
+    const stopName = 'Liberty Square';
 
     it('generates correct Google Maps universal link', () => {
       const { result } = renderHook(() => useMapLauncher());
       const url = result.current.getLaunchUrl(coords, 'google');
       expect(url).toBe('https://www.google.com/maps/search/?api=1&query=41.6918,44.7972');
+    });
+
+    it('generates correct Google Maps link with place name', () => {
+      const { result } = renderHook(() => useMapLauncher());
+      const url = result.current.getLaunchUrl(coords, 'google', stopName);
+      expect(url).toBe('https://www.google.com/maps/search/?api=1&query=Liberty%20Square');
     });
 
     it('generates correct Apple Maps universal link', () => {
@@ -27,10 +34,22 @@ describe('MapLauncher Seam Contract & Integration', () => {
       expect(url).toBe('https://maps.apple.com/?q=41.6918,44.7972');
     });
 
+    it('generates correct Apple Maps link with place name', () => {
+      const { result } = renderHook(() => useMapLauncher());
+      const url = result.current.getLaunchUrl(coords, 'apple', stopName);
+      expect(url).toBe('https://maps.apple.com/?q=Liberty%20Square&sll=41.6918,44.7972');
+    });
+
     it('generates correct Yandex Maps universal link with lng,lat coordinate order', () => {
       const { result } = renderHook(() => useMapLauncher());
       const url = result.current.getLaunchUrl(coords, 'yandex');
       expect(url).toBe('https://yandex.com/maps/?pt=44.7972,41.6918&z=17');
+    });
+
+    it('generates correct Yandex Maps link with place name and point focus', () => {
+      const { result } = renderHook(() => useMapLauncher());
+      const url = result.current.getLaunchUrl(coords, 'yandex', stopName);
+      expect(url).toBe('https://yandex.com/maps/?text=Liberty%20Square&pt=44.7972,41.6918&z=17');
     });
   });
 

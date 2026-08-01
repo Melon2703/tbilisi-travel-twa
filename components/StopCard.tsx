@@ -122,8 +122,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     closeMapLauncher,
   } = useMapLauncher();
 
-  const googleMapsUrl = getLaunchUrl(stop.coordinates, 'google');
-  const yandexMapsUrl = getLaunchUrl(stop.coordinates, 'yandex');
+  const googleMapsUrl = getLaunchUrl(stop.coordinates, 'google', stop.name);
+  const yandexMapsUrl = getLaunchUrl(stop.coordinates, 'yandex', stop.name);
 
   // Website link if defined on stop
   const websiteUrl = stop.websiteUrl;

@@ -479,7 +479,7 @@ export default function RouteMapModal({
                 {sortedStops.length} {t('stopsCount')}
               </span>
               <a
-                href={getLaunchUrl(selectedStop.coordinates)}
+                href={getLaunchUrl(selectedStop.coordinates, mapProvider, selectedStop.name)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#C4572A] text-white hover:bg-[#A8451E] transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"

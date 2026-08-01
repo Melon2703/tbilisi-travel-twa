@@ -108,7 +108,7 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       expect(openInMapBtn).toBeInTheDocument();
       expect(openInMapBtn).toHaveAttribute(
         'href',
-        expect.stringContaining('google.com/maps/search/?api=1&query=41.7095,44.8048')
+        expect.stringContaining('google.com/maps/search/?api=1&query=Fabrika%20Tbilisi')
       );
     });
 
@@ -136,7 +136,7 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       const openInMapBtn = screen.getByTestId('modal-stop-card').querySelector('a')!;
       expect(openInMapBtn).toHaveAttribute(
         'href',
-        expect.stringContaining('yandex.com/maps/?pt=44.8048,41.7095&z=17')
+        expect.stringContaining('yandex.com/maps/?text=Fabrika%20Tbilisi&pt=44.8048,41.7095&z=17')
       );
     });
 
@@ -159,7 +159,7 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       const openInMapBtn = screen.getByTestId('modal-stop-card').querySelector('a')!;
       expect(openInMapBtn).toHaveAttribute(
         'href',
-        expect.stringContaining('google.com/maps/search/?api=1&query=41.7081,44.7989')
+        expect.stringContaining('google.com/maps/search/?api=1&query=Marjanishvili%20Theater')
       );
     });
   });
