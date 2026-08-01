@@ -18,10 +18,10 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const variantClasses = {
-    primary: 'journal-btn-cta w-full hover:bg-[#b04b22]',
-    secondary: 'bg-[rgba(28,16,8,0.08)] text-[#1C1008] hover:bg-[rgba(28,16,8,0.12)] font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm',
-    outline: 'border border-[#C4572A]/30 text-[#C4572A] bg-transparent hover:bg-[#C4572A]/5 font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm',
-    visited: 'bg-[#228255] text-white shadow-md font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm',
+    primary: 'journal-btn-cta w-full min-h-[48px] hover:bg-[#b04b22]',
+    secondary: 'bg-[rgba(28,16,8,0.08)] text-[#1C1008] hover:bg-[rgba(28,16,8,0.12)] font-bold py-3.5 px-6 min-h-[48px] rounded-2xl flex items-center justify-center gap-2 text-sm',
+    outline: 'border border-[#C4572A]/30 text-[#C4572A] bg-transparent hover:bg-[#C4572A]/5 font-bold py-3.5 px-6 min-h-[48px] rounded-2xl flex items-center justify-center gap-2 text-sm',
+    visited: 'bg-[#228255] text-white shadow-md font-bold py-3.5 px-6 min-h-[48px] rounded-2xl flex items-center justify-center gap-2 text-sm',
   };
 
   return (

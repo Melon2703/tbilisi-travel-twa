@@ -166,7 +166,7 @@ function TimelineBar({
           onClick={onToggleVisited}
           aria-label={isCurrentVisited ? t('markAsUnvisited') : t('markAsVisited')}
           title={isCurrentVisited ? t('markAsUnvisited') : t('markAsVisited')}
-          className="shrink-0 flex items-center justify-center w-[56px] h-[56px] min-w-[44px] min-h-[44px] rounded-full transition-all duration-300 active:scale-90 cursor-pointer"
+          className="shrink-0 flex items-center justify-center w-[56px] h-[56px] min-w-[48px] min-h-[48px] rounded-full transition-all duration-300 active:scale-90 cursor-pointer"
           style={
             isCurrentVisited
               ? {

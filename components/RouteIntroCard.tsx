@@ -85,7 +85,7 @@ export default function RouteIntroCard({
           <button
             type="button"
             onClick={() => setLanguage('en')}
-            className={`px-2.5 py-0.5 rounded-full text-xs font-bold transition-all ${
+            className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
               language === 'en' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
             }`}
             aria-label="Switch to English"
@@ -95,7 +95,7 @@ export default function RouteIntroCard({
           <button
             type="button"
             onClick={() => setLanguage('ru')}
-            className={`px-2.5 py-0.5 rounded-full text-xs font-bold transition-all ${
+            className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
               language === 'ru' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
             }`}
             aria-label="Переключить на русский"
@@ -106,7 +106,7 @@ export default function RouteIntroCard({
       </div>
 
       {/* ── Scrollable content body ── */}
-      <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full flex-1 flex flex-col justify-between overflow-y-auto pb-24 sm:pb-28 scrollbar-none">
+      <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full flex-1 flex flex-col justify-between overflow-y-auto pb-28 sm:pb-32 scrollbar-none">
         {/* 1. Pill Badges Row */}
         <div className="relative w-full overflow-hidden shrink-0">
           <div
@@ -125,6 +125,15 @@ export default function RouteIntroCard({
             >
               {t(route.accessibility as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.accessibility.replace('-', ' ')}
             </span>
+            {route.vibes && route.vibes.map((vibe) => (
+              <span
+                key={vibe}
+                className="shrink-0 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.06em] border border-black/10"
+                style={{ background: 'rgba(196,87,42,0.08)', color: '#C4572A' }}
+              >
+                {t(vibe as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || vibe.replace('-', ' ')}
+              </span>
+            ))}
           </div>
           <div
             data-testid="pill-badges-scroll-indicator"
