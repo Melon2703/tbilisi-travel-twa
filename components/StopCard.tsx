@@ -11,6 +11,7 @@ import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
 import LightboxModal from '@/components/timeline/LightboxModal';
+import MapProviderBottomSheet from '@/components/MapProviderBottomSheet';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaInstagram, FaGlobe } from 'react-icons/fa6';
 import { COLORS, TYPOGRAPHY, COMPONENT_TOKENS } from '@/lib/theme/tokens';
@@ -126,6 +127,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
   const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
   const [lightboxIndex, setLightboxIndex] = React.useState(0);
+  const [isMapBottomSheetOpen, setIsMapBottomSheetOpen] = React.useState(false);
 
   const galleryImages = (stop.galleryImages && stop.galleryImages.length > 0)
     ? stop.galleryImages
@@ -276,6 +278,22 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
       {/* Map Provider Action Buttons directly underneath location title and neighborhood metadata */}
       <div className="flex items-center gap-3 pt-1" data-testid="map-pills-row">
+        <button
+          type="button"
+          onClick={() => setIsMapBottomSheetOpen(true)}
+          className="w-12 h-12 min-h-[48px] min-w-[48px] rounded-2xl bg-white shadow-xs flex items-center justify-center transition-all active:scale-95 text-xs font-bold"
+          style={{
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: COLORS.actionBorder,
+            color: COLORS.terracottaAccent,
+          }}
+          aria-label="Open Map Launcher"
+          title="Open in Maps"
+        >
+          <EmojiIcon name="mapPin" size="xs" />
+        </button>
+
         <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
           <GoogleMapsIcon />
         </ActionButtonLink>
@@ -490,6 +508,14 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         initialIndex={lightboxIndex}
         altText={stop.name}
         onClose={() => setIsLightboxOpen(false)}
+      />
+
+      {/* Map Provider Selection Bottom Sheet */}
+      <MapProviderBottomSheet
+        isOpen={isMapBottomSheetOpen}
+        onClose={() => setIsMapBottomSheetOpen(false)}
+        coordinates={stop.coordinates}
+        stopName={stop.name}
       />
     </div>
   );

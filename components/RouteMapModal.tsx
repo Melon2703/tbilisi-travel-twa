@@ -103,14 +103,17 @@ export default function RouteMapModal({
   const centerWorldX = useMemo(() => lngToWorldX(centerCoords.lng, zoom), [centerCoords.lng, zoom]);
   const centerWorldY = useMemo(() => latToWorldY(centerCoords.lat, zoom), [centerCoords.lat, zoom]);
 
+  // Helper to round coordinates to 3 decimal places to prevent float precision hydration mismatches
+  const roundCoord = (val: number) => Math.round(val * 1000) / 1000;
+
   // Projected Screen Coordinates for all Stops
   const projectedStops = useMemo(() => {
     return sortedStops.map((stop) => {
       const worldX = lngToWorldX(stop.coordinates.lng, zoom);
       const worldY = latToWorldY(stop.coordinates.lat, zoom);
 
-      const screenX = worldX - centerWorldX + viewportSize.width / 2 + panOffset.x;
-      const screenY = worldY - centerWorldY + viewportSize.height / 2 + panOffset.y;
+      const screenX = roundCoord(worldX - centerWorldX + viewportSize.width / 2 + panOffset.x);
+      const screenY = roundCoord(worldY - centerWorldY + viewportSize.height / 2 + panOffset.y);
 
       return {
         stop,
@@ -149,8 +152,8 @@ export default function RouteMapModal({
 
     for (let tx = startTileX; tx <= endTileX; tx++) {
       for (let ty = startTileY; ty <= endTileY; ty++) {
-        const left = tx * 256 - centerWorldX + viewportSize.width / 2 + panOffset.x;
-        const top = ty * 256 - centerWorldY + viewportSize.height / 2 + panOffset.y;
+        const left = roundCoord(tx * 256 - centerWorldX + viewportSize.width / 2 + panOffset.x);
+        const top = roundCoord(ty * 256 - centerWorldY + viewportSize.height / 2 + panOffset.y);
         const url = `https://a.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${tx}/${ty}@2x.png`;
         tileList.push({ key: `${zoom}-${tx}-${ty}`, url, left, top });
       }
