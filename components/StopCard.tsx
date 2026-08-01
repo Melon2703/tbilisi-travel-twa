@@ -281,7 +281,19 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         </div>
       </div>
 
-      {/* Map Provider Action Buttons directly underneath location title and neighborhood metadata */}
+      {/* Google Rating Badge */}
+      <div
+        data-testid="google-rating-badge"
+        className="flex items-center gap-1.5 text-xs font-medium pt-0.5"
+        style={{ color: COLORS.textSecondary }}
+      >
+        <span className="font-bold text-sm" style={{ color: COLORS.terracottaAccent }}>
+          ★ {ratings.google.rating.toFixed(1)}
+        </span>
+        <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
+      </div>
+
+      {/* Map Provider Action Buttons directly underneath location title, neighborhood metadata, and rating */}
       <div className="flex items-center gap-3 pt-1" data-testid="map-pills-row">
         <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
           <GoogleMapsIcon />
@@ -383,18 +395,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     <div data-testid="last-actions-block" className="pt-2 space-y-3">
       {/* Georgian Divider */}
       <GeorgianOrnament />
-
-      {/* Standalone Google Rating Badge */}
-      <div
-        data-testid="google-rating-badge"
-        className="flex items-center justify-center gap-1.5 text-xs font-medium"
-        style={{ color: COLORS.textSecondary }}
-      >
-        <span className="font-bold text-sm" style={{ color: COLORS.terracottaAccent }}>
-          ★ {ratings.google.rating.toFixed(1)}
-        </span>
-        <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
-      </div>
     </div>
   );
 

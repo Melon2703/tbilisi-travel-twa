@@ -100,20 +100,29 @@ describe('StopCard Component', () => {
       expect(yandexBtn).toHaveAttribute('href', expect.stringContaining('yandex.com/maps'));
     });
 
-    it('positions map provider buttons directly underneath location title and neighborhood metadata', () => {
+    it('positions map provider buttons directly underneath location title, neighborhood metadata, and google rating badge', () => {
       render(
         <LanguageProvider initialLanguage="en">
           <StopCard stop={attractionStep1} totalStops={6} />
         </LanguageProvider>
       );
 
+      const headerContainer = screen.getByTestId('stop-card-header-container');
       const heading = screen.getByRole('heading', { name: 'Freedom Square' });
       const neighborhoodMeta = screen.getByTestId('stop-neighborhood-metadata');
+      const ratingBadge = screen.getByTestId('google-rating-badge');
       const mapPillsRow = screen.getByTestId('map-pills-row');
 
       expect(heading).toBeInTheDocument();
       expect(neighborhoodMeta).toBeInTheDocument();
+      expect(ratingBadge).toBeInTheDocument();
       expect(mapPillsRow).toBeInTheDocument();
+
+      expect(headerContainer).toContainElement(ratingBadge);
+      expect(headerContainer).toContainElement(mapPillsRow);
+
+      // Verify DOM order: ratingBadge comes before mapPillsRow inside headerContainer
+      expect(ratingBadge.compareDocumentPosition(mapPillsRow)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     });
 
     it('renders Globe website link button when websiteUrl is present', () => {

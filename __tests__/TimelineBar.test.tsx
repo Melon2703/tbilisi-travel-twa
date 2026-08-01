@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import TimelineBar from '@/components/TimelineBar';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 import { Stop } from '@/lib/types/route';
@@ -144,7 +144,7 @@ describe('TimelineBar Component', () => {
 
     it('invokes onStopClick when tapping continuation ellipsis buttons', () => {
       const stops = createStops(8);
-      const handleStopClick = vitest.fn();
+      const handleStopClick = vi.fn();
 
       render(
         <LanguageProvider initialLanguage="en">
