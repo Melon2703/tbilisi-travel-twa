@@ -118,22 +118,15 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       );
     });
 
-    it('updates action bar launch URL when changing preferred provider select dropdown', () => {
-      renderModal();
+    it('renders close button in right-side floating controls which triggers onClose', () => {
+      const { mockOnClose } = renderModal();
 
-      const providerSelect = screen.getByTestId('map-provider-select');
-      expect(providerSelect).toHaveValue('google');
+      const closeBtn = screen.getByTestId('close-map-modal');
+      expect(closeBtn).toBeInTheDocument();
+      expect(closeBtn).toHaveClass('w-9', 'h-9', 'rounded-xl');
 
-      fireEvent.change(providerSelect, { target: { value: 'yandex' } });
-
-      expect(providerSelect).toHaveValue('yandex');
-      expect(localStorage.getItem(MAP_STORAGE_KEY)).toBe('yandex');
-
-      const openInMapBtn = screen.getByTestId('modal-stop-card').querySelector('a')!;
-      expect(openInMapBtn).toHaveAttribute(
-        'href',
-        expect.stringContaining('yandex.com/maps/?text=Fabrika%20Tbilisi&pt=44.8048,41.7095&z=17')
-      );
+      fireEvent.click(closeBtn);
+      expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
 
     it('updates stop card coordinates when switching selected map pin', () => {
@@ -169,6 +162,18 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       fireEvent.click(reset);
 
       expect(screen.getByTestId('modal-map-pin-1')).toBeInTheDocument();
+    });
+
+    it('locks body overflow and touch-action when open and restores on unmount', () => {
+      const { unmount } = renderModal();
+
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(document.body.style.touchAction).toBe('none');
+
+      unmount();
+
+      expect(document.body.style.overflow).toBe('');
+      expect(document.body.style.touchAction).toBe('');
     });
   });
 });

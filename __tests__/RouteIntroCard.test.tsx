@@ -78,7 +78,7 @@ describe('RouteIntroCard Component', () => {
     expect(scrollIndicator).toBeInTheDocument();
   });
 
-  it('3. Renders overview map near top, tile layer, start/finish badges, and expand button', () => {
+  it('3. Renders overview map near top, tile layer, and does not render expand button or start/finish callout badges on preview', () => {
     render(
       <LanguageProvider>
         <RouteIntroCard route={mockRoute} />
@@ -91,12 +91,12 @@ describe('RouteIntroCard Component', () => {
     const tileContainer = screen.getByTestId('map-tile-container');
     expect(tileContainer).toBeInTheDocument();
 
-    expect(screen.getByTestId('map-start-badge')).toHaveTextContent(/Kalantarov Mansion/i);
-    expect(screen.getByTestId('map-finish-badge')).toHaveTextContent(/Betlemi Church/i);
-    expect(screen.getByTestId('expand-map-button')).toBeInTheDocument();
+    expect(screen.queryByTestId('map-start-badge')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('map-finish-badge')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('expand-map-button')).not.toBeInTheDocument();
   });
 
-  it('4. Opens map modal when expand map button is clicked', () => {
+  it('4. Map header is unclickable, while clicking preview map tile container opens map modal', () => {
     render(
       <LanguageProvider>
         <RouteIntroCard route={mockRoute} />
@@ -105,9 +105,14 @@ describe('RouteIntroCard Component', () => {
 
     expect(screen.queryByTestId('close-map-modal')).not.toBeInTheDocument();
 
-    const expandBtn = screen.getByTestId('expand-map-button');
-    fireEvent.click(expandBtn);
+    // Clicking header title should not open modal
+    const headerTitle = screen.getByRole('heading', { name: /Route overview map/i });
+    fireEvent.click(headerTitle);
+    expect(screen.queryByTestId('close-map-modal')).not.toBeInTheDocument();
 
+    // Clicking map tile container opens modal
+    const tileContainer = screen.getByTestId('map-tile-container');
+    fireEvent.click(tileContainer);
     expect(screen.getByTestId('close-map-modal')).toBeInTheDocument();
   });
 

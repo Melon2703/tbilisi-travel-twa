@@ -113,9 +113,6 @@ export default function RouteOverviewMap({
     return tileList;
   }, [zoom, centerWorldX, centerWorldY, viewportSize]);
 
-  const startStop = sortedStops[0];
-  const finishStop = sortedStops[sortedStops.length - 1];
-
   const handleContainerClick = () => {
     if (onOpenModal) {
       onOpenModal();
@@ -132,13 +129,9 @@ export default function RouteOverviewMap({
   return (
     <div
       data-testid="route-overview-map"
-      role="button"
-      tabIndex={0}
-      onClick={handleContainerClick}
-      onKeyDown={handleKeyDown}
-      className="rounded-2xl p-4 shadow-sm space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/20 transition-all overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C4572A]/50"
+      className="rounded-2xl p-4 shadow-sm space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/20 transition-all overflow-hidden"
     >
-      {/* ── Header Bar with Expand Button ── */}
+      {/* ── Header Bar ── */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="text-sm">🗺️</span>
@@ -151,20 +144,6 @@ export default function RouteOverviewMap({
           <span className="text-[11px] font-semibold text-[#7A6552]">
             {t('stopsCount', { count: sortedStops.length })}
           </span>
-          {onOpenModal && (
-            <button
-              type="button"
-              data-testid="expand-map-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onOpenModal();
-              }}
-              className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-[#C4572A] text-white hover:bg-[#A8451E] transition-all flex items-center gap-1 shadow-2xs active:scale-95 cursor-pointer"
-            >
-              <span>🔍</span>
-              <span>{t('expandMap')}</span>
-            </button>
-          )}
         </div>
       </div>
 
@@ -172,7 +151,11 @@ export default function RouteOverviewMap({
       <div
         ref={containerRef}
         data-testid="map-tile-container"
-        className="relative w-full h-60 sm:h-72 bg-[#EAE5D9] rounded-xl border border-black/10 overflow-hidden shadow-inner flex flex-col justify-between select-none cursor-pointer group active:scale-[0.98] transition-all duration-200"
+        role={onOpenModal ? 'button' : undefined}
+        tabIndex={onOpenModal ? 0 : undefined}
+        onClick={handleContainerClick}
+        onKeyDown={handleKeyDown}
+        className="relative w-full h-60 sm:h-72 bg-[#EAE5D9] rounded-xl border border-black/10 overflow-hidden shadow-inner flex flex-col justify-between select-none cursor-pointer group active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#C4572A]/50"
       >
         {/* Seamless Sub-Pixel Mercator Tile Backdrop */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -195,44 +178,6 @@ export default function RouteOverviewMap({
 
         {/* Backdrop Gradient Overlay */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/5 z-0" />
-
-        {/* ── Start Point Callout Badge ── */}
-        {projectedStops[0] && (
-          <div
-            data-testid="map-start-badge"
-            className="absolute z-20 transform -translate-x-1/2 -translate-y-full mb-2 pointer-events-none whitespace-nowrap"
-            style={{
-              left: `${projectedStops[0].screenX}px`,
-              top: `${projectedStops[0].screenY}px`,
-            }}
-          >
-            <div className="flex items-center gap-1 bg-[#228255] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white/40">
-              <span>🏁</span>
-              <span className="truncate max-w-[110px]">
-                {t('startPoint')}: {language === 'ru' && startStop.nameRu ? startStop.nameRu : startStop.name}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* ── Finish Point Callout Badge ── */}
-        {projectedStops.length > 1 && (
-          <div
-            data-testid="map-finish-badge"
-            className="absolute z-20 transform -translate-x-1/2 -translate-y-full mb-2 pointer-events-none whitespace-nowrap"
-            style={{
-              left: `${projectedStops[projectedStops.length - 1].screenX}px`,
-              top: `${projectedStops[projectedStops.length - 1].screenY}px`,
-            }}
-          >
-            <div className="flex items-center gap-1 bg-[#C4572A] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white/40">
-              <span>🎯</span>
-              <span className="truncate max-w-[110px]">
-                {t('finishPoint')}: {language === 'ru' && finishStop.nameRu ? finishStop.nameRu : finishStop.name}
-              </span>
-            </div>
-          </div>
-        )}
 
         {/* ── Numbered Stop Pin Markers (Without connecting lines) ── */}
         {projectedStops.map(({ stop, screenX, screenY }) => {

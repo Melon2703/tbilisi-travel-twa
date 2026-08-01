@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { Route, Stop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
@@ -28,10 +29,16 @@ export default function RouteMapModal({
   );
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const modalRootRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState<boolean>(false);
   const [viewportSize, setViewportSize] = useState<{ width: number; height: number }>({
     width: 800,
     height: 600,
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [selectedStopId, setSelectedStopId] = useState<string | null>(
     sortedStops.find((s) => s.order === initialStopOrder)?.id || sortedStops[0]?.id || null
@@ -92,6 +99,76 @@ export default function RouteMapModal({
     }
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  // Lock body scroll & Swiper swiping when map modal is open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const originalTouchAction = document.body.style.touchAction;
+
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+
+    // Disable all Swiper instances while modal is open to prevent page swiping
+    const swiperElements = document.querySelectorAll('.swiper');
+    const disabledSwipers: { el: any; prevAllow: boolean }[] = [];
+
+    swiperElements.forEach((el: any) => {
+      if (el.swiper) {
+        disabledSwipers.push({ el, prevAllow: el.swiper.allowTouchMove });
+        el.swiper.allowTouchMove = false;
+      }
+    });
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.touchAction = originalTouchAction;
+
+      disabledSwipers.forEach(({ el, prevAllow }) => {
+        if (el.swiper) {
+          el.swiper.allowTouchMove = prevAllow;
+        }
+      });
+    };
+  }, [isOpen]);
+
+  // Native capture-phase touch event interceptor to prevent touch bubbling to Swiper
+  useEffect(() => {
+    if (!isOpen || !mounted || !modalRootRef.current) return;
+    const el = modalRootRef.current;
+
+    const stopNative = (e: Event) => {
+      e.stopPropagation();
+      if ('stopImmediatePropagation' in e) {
+        (e as any).stopImmediatePropagation();
+      }
+    };
+
+    const events = [
+      'touchstart',
+      'touchmove',
+      'touchend',
+      'touchcancel',
+      'pointerdown',
+      'pointermove',
+      'pointerup',
+      'pointercancel',
+      'mousedown',
+      'mousemove',
+      'mouseup',
+    ];
+
+    events.forEach((evt) => {
+      el.addEventListener(evt, stopNative, { capture: true, passive: false });
+    });
+
+    return () => {
+      events.forEach((evt) => {
+        el.removeEventListener(evt, stopNative, { capture: true });
+      });
+    };
+  }, [isOpen, mounted]);
 
   // Exact Web Mercator Projection Functions
   const lngToWorldX = (lng: number, z: number) => ((lng + 180) / 360) * 256 * Math.pow(2, z);
@@ -177,6 +254,7 @@ export default function RouteMapModal({
   const handleMouseUp = () => setIsDragging(false);
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
     if (e.touches.length === 1) {
       setIsDragging(true);
       dragStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -185,6 +263,7 @@ export default function RouteMapModal({
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
+    e.stopPropagation();
     if (!isDragging || e.touches.length !== 1) return;
     const dx = e.touches[0].clientX - dragStartRef.current.x;
     const dy = e.touches[0].clientY - dragStartRef.current.y;
@@ -194,7 +273,10 @@ export default function RouteMapModal({
     });
   };
 
-  const handleTouchEnd = () => setIsDragging(false);
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    setIsDragging(false);
+  };
 
   const resetView = () => {
     setZoom(15);
@@ -209,56 +291,18 @@ export default function RouteMapModal({
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <div
+      ref={modalRootRef}
       data-testid="route-map-modal"
-      className="fixed inset-0 z-50 bg-[#FAF7F2] text-[#1C1008] flex flex-col overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 bg-[#FAF7F2] text-[#1C1008] flex flex-col overflow-hidden animate-in fade-in duration-200 touch-none select-none"
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+      onTouchEnd={(e) => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
+      onPointerMove={(e) => e.stopPropagation()}
+      onPointerUp={(e) => e.stopPropagation()}
     >
-      {/* ── Top Header Navigation Bar ── */}
-      <div className="shrink-0 bg-white/95 backdrop-blur-md px-4 py-3 border-b border-black/10 flex items-center justify-between z-30 shadow-xs">
-        <div className="min-w-0 flex-1 pr-2">
-          <div className="flex items-center gap-2">
-            <span className="text-base">🗺️</span>
-            <h2 className="text-sm sm:text-base font-black text-[#1C1008] truncate">
-              {route.title}
-            </h2>
-          </div>
-          <p className="text-xs text-[#7A6552] font-semibold truncate mt-0.5">
-            {t('interactiveMapModal')} • {sortedStops.length} {t('curatedStops')}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Provider Selection */}
-          <select
-            data-testid="map-provider-select"
-            value={mapProvider}
-            onChange={(e) => {
-              const p = e.target.value as MapProvider;
-              setPreferredProvider(p);
-            }}
-            className="text-xs font-bold bg-[#FAF3E8] text-[#8C4A27] border border-[#E8D5C4] rounded-lg px-2 py-1.5 focus:outline-none cursor-pointer"
-          >
-            {MAP_PROVIDERS.map((provider) => (
-              <option key={provider.id} value={provider.id}>
-                {provider.name}
-              </option>
-            ))}
-          </select>
-
-          {/* Close Button */}
-          <button
-            type="button"
-            data-testid="close-map-modal"
-            onClick={onClose}
-            className="w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 text-[#1C1008] font-extrabold flex items-center justify-center transition-all cursor-pointer active:scale-95 text-sm"
-            aria-label="Close map modal"
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-
       {/* ── Main Canvas Viewport ── */}
       <div
         ref={containerRef}
@@ -353,8 +397,17 @@ export default function RouteMapModal({
           );
         })}
 
-        {/* ── Floating Controls (Zoom & Reset) ── */}
+        {/* ── Floating Controls (Close, Zoom & Reset) ── */}
         <div className="absolute top-4 right-4 z-40 flex flex-col gap-2 pointer-events-auto">
+          <button
+            type="button"
+            data-testid="close-map-modal"
+            onClick={onClose}
+            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all cursor-pointer"
+            aria-label="Close map modal"
+          >
+            ✕
+          </button>
           <button
             type="button"
             data-testid="modal-map-zoom-in"
@@ -462,4 +515,10 @@ export default function RouteMapModal({
       </div>
     </div>
   );
+
+  if (mounted && typeof document !== 'undefined') {
+    return createPortal(modalContent, document.body);
+  }
+
+  return modalContent;
 }
