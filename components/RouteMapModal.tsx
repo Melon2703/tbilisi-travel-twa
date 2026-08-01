@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { Route, Stop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
-import { getMapUrl, getPreferredMapProvider, setPreferredMapProvider, MAP_PROVIDERS, MapProvider } from '@/lib/utils/maps';
+import { MapProvider } from '@/lib/utils/maps';
+import { useMapLauncher } from '@/hooks/useMapLauncher';
 
 export interface RouteMapModalProps {
   route: Route;
@@ -36,12 +37,12 @@ export default function RouteMapModal({
     sortedStops.find((s) => s.order === initialStopOrder)?.id || sortedStops[0]?.id || null
   );
 
-  const [mapProvider, setMapProvider] = useState<MapProvider>('google');
-
-  useEffect(() => {
-    const saved = getPreferredMapProvider();
-    if (saved) setMapProvider(saved);
-  }, []);
+  const {
+    preferredProvider: mapProvider,
+    setPreferredProvider,
+    getLaunchUrl,
+    providers: MAP_PROVIDERS,
+  } = useMapLauncher();
 
   // Map center bounds
   const centerCoords = useMemo(() => {
@@ -240,8 +241,7 @@ export default function RouteMapModal({
             value={mapProvider}
             onChange={(e) => {
               const p = e.target.value as MapProvider;
-              setMapProvider(p);
-              setPreferredMapProvider(p);
+              setPreferredProvider(p);
             }}
             className="text-xs font-bold bg-[#FAF3E8] text-[#8C4A27] border border-[#E8D5C4] rounded-lg px-2 py-1.5 focus:outline-none cursor-pointer"
           >
@@ -479,7 +479,7 @@ export default function RouteMapModal({
                 {sortedStops.length} {t('stopsCount')}
               </span>
               <a
-                href={getMapUrl(mapProvider, selectedStop.coordinates)}
+                href={getLaunchUrl(selectedStop.coordinates)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#C4572A] text-white hover:bg-[#A8451E] transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"

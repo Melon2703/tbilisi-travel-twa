@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
-import { getMapUrl, getPreferredMapProvider } from '@/lib/utils/maps';
+import { useMapLauncher } from '@/hooks/useMapLauncher';
 
 export interface RouteOverviewMapProps {
   route: Route;
@@ -135,7 +135,7 @@ export default function RouteOverviewMap({
 
   const startStop = sortedStops[0];
   const finishStop = sortedStops[sortedStops.length - 1];
-  const preferredProvider = getPreferredMapProvider() || 'google';
+  const { getLaunchUrl } = useMapLauncher();
 
   return (
     <div
@@ -376,7 +376,7 @@ export default function RouteOverviewMap({
 
             <div className="flex items-center gap-1.5 shrink-0">
               <a
-                href={getMapUrl(preferredProvider, selectedStop.coordinates)}
+                href={getLaunchUrl(selectedStop.coordinates)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#C4572A] text-white hover:bg-[#A8451E] transition-all flex items-center gap-1 shadow-2xs active:scale-95"

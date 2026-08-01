@@ -1,17 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaApple, FaXmark } from 'react-icons/fa6';
-import {
-  MapProvider,
-  MAP_PROVIDERS,
-  getMapUrl,
-  getPreferredMapProvider,
-  setPreferredMapProvider,
-} from '@/lib/utils/maps';
+import { MapProvider } from '@/lib/utils/maps';
 import { COLORS } from '@/lib/theme/tokens';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useMapLauncher } from '@/hooks/useMapLauncher';
 
 export interface MapProviderBottomSheetProps {
   isOpen: boolean;
@@ -27,20 +22,12 @@ export default function MapProviderBottomSheet({
   stopName,
 }: MapProviderBottomSheetProps) {
   const { t } = useLanguage();
-  const [preferredProvider, setPreferredProviderState] = useState<MapProvider | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      const saved = getPreferredMapProvider();
-      setPreferredProviderState(saved);
-    }
-  }, [isOpen]);
+  const { preferredProvider, setPreferredProvider, getLaunchUrl, providers } = useMapLauncher();
 
   if (!isOpen) return null;
 
   const handleSelectProvider = (providerId: MapProvider) => {
-    setPreferredMapProvider(providerId);
-    setPreferredProviderState(providerId);
+    setPreferredProvider(providerId);
   };
 
   const getProviderIcon = (providerId: MapProvider) => {
@@ -101,9 +88,9 @@ export default function MapProviderBottomSheet({
 
         {/* Map Provider List */}
         <div className="space-y-2.5 pt-1">
-          {MAP_PROVIDERS.map((provider) => {
+          {providers.map((provider) => {
             const isPreferred = preferredProvider === provider.id;
-            const url = getMapUrl(provider.id, coordinates);
+            const url = getLaunchUrl(coordinates, provider.id);
 
             return (
               <a
@@ -157,3 +144,4 @@ export default function MapProviderBottomSheet({
     </div>
   );
 }
+
