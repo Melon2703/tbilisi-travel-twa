@@ -88,7 +88,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(screen.getByRole('heading', { name: mockRoute.title })).toBeInTheDocument();
       expect(screen.getAllByText(/1-2h/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/stroller/i).length).toBeGreaterThan(0);
-      expect(screen.getByText(/#courtyards/i)).toBeInTheDocument();
+      expect(screen.queryByText(/#courtyards/i)).not.toBeInTheDocument();
       expect(screen.getByTestId('olya-welcome-card')).toBeInTheDocument();
       expect(screen.getByText(/Olya's Route Welcome/i)).toBeInTheDocument();
       expect(screen.getByTestId('route-at-a-glance')).toBeInTheDocument();
@@ -131,7 +131,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(summaryCard).toHaveTextContent(/Pedestrian Walkway/i);
     });
 
-    it('renders vibe and duration tags in a single horizontal scroll row with visual scroll indicator', () => {
+    it('renders duration and accessibility tags in a single horizontal scroll row without hashtag vibe pills', () => {
       render(<RouteIntroCard route={mockRoute} />);
 
       const badgesRow = screen.getByTestId('pill-badges-row');
@@ -139,6 +139,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(badgesRow).toHaveClass('whitespace-nowrap');
       expect(badgesRow).toHaveClass('flex-nowrap');
 
+      expect(screen.queryByText(/#courtyards/i)).not.toBeInTheDocument();
       const scrollIndicator = screen.getByTestId('pill-badges-scroll-indicator');
       expect(scrollIndicator).toBeInTheDocument();
     });
@@ -159,7 +160,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(heading).toHaveClass('min-w-0');
     });
 
-    it('renders visual route overview map line and step-by-step preview list', () => {
+    it('renders visual route overview map line and ensures step-by-step preview list is removed', () => {
       render(<RouteIntroCard route={mockRoute} />);
 
       // Route overview map line SVG container
@@ -167,12 +168,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(overviewMap).toBeInTheDocument();
       expect(screen.getByText(/Route Overview Map/i)).toBeInTheDocument();
 
-      // Step-by-step preview list container
-      const stepPreview = screen.getByTestId('step-by-step-preview-list');
-      expect(stepPreview).toBeInTheDocument();
-      expect(screen.getByText(/Route Sequence Preview/i)).toBeInTheDocument();
-      expect(stepPreview).toHaveTextContent('Lado Asatiani St Merchant Houses');
-      expect(stepPreview).toHaveTextContent('Galaktion Tabidze Balcony House');
+      // Step-by-step preview list container should be removed
+      expect(screen.queryByTestId('step-by-step-preview-list')).not.toBeInTheDocument();
     });
 
     it('displays logistics notes and terrain highlights section', () => {

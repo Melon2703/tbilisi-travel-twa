@@ -125,15 +125,6 @@ export default function RouteIntroCard({
             >
               {t(route.accessibility as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.accessibility.replace('-', ' ')}
             </span>
-            {route.vibes.map((vibe) => (
-              <span
-                key={vibe}
-                className="shrink-0 text-xs font-medium px-3 py-1 rounded-full border border-black/10 capitalize"
-                style={{ background: 'rgba(28,16,8,0.05)', color: '#7A6552' }}
-              >
-                #{t(vibe as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || vibe}
-              </span>
-            ))}
           </div>
           <div
             data-testid="pill-badges-scroll-indicator"
@@ -243,40 +234,6 @@ export default function RouteIntroCard({
           </div>
         </div>
 
-        {/* 6. Step-by-Step Route Preview List */}
-        <div
-          data-testid="step-by-step-preview-list"
-          className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/10"
-        >
-          <h3 className="text-xs font-bold text-[#C4572A]">
-            {t('stepByStepPreviewTitle')}
-          </h3>
-          <div className="space-y-2 max-h-60 overflow-y-auto pr-1 scrollbar-none">
-            {sortedStops.map((stop) => (
-              <div
-                key={stop.id}
-                className="flex items-start gap-2.5 p-3 rounded-2xl bg-[#F3EFEA] border-0 text-xs text-[#1C1008]"
-              >
-                <span className="w-5 h-5 rounded-full bg-[#C4572A] text-white font-bold flex items-center justify-center shrink-0 text-[10px]">
-                  {stop.order}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-1">
-                    <p className="font-bold text-[#1C1008] truncate">
-                      {language === 'ru' && stop.nameRu ? stop.nameRu : stop.name}
-                    </p>
-                    <span className="text-[10px] text-[#7A6552] font-semibold shrink-0">
-                      {stop.estimatedMinutes} {t('min')}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-[#7A6552] truncate">
-                    {language === 'ru' && stop.neighborhoodRu ? stop.neighborhoodRu : stop.neighborhood}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* 7. Logistics & Terrain Highlights */}
         <div

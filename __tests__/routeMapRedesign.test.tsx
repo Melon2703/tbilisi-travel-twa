@@ -52,18 +52,15 @@ const mockRoute: Route = {
 };
 
 describe('Route Overview Map & Interactive Modal UX/UI Redesign', () => {
-  it('renders route overview map near top of RouteIntroCard before textual stop list', () => {
+  it('renders route overview map near top of RouteIntroCard without textual step preview list', () => {
     render(<RouteIntroCard route={mockRoute} />);
 
     const overviewMap = screen.getByTestId('route-overview-map');
     const welcomeCard = screen.queryByTestId('olya-welcome-card');
-    const stepPreviewList = screen.getByTestId('step-by-step-preview-list');
+    const stepPreviewList = screen.queryByTestId('step-by-step-preview-list');
 
     expect(overviewMap).toBeInTheDocument();
-
-    // Verify overviewMap appears before step-by-step preview list in DOM order
-    const overviewPosition = overviewMap.compareDocumentPosition(stepPreviewList);
-    expect(overviewPosition & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(stepPreviewList).not.toBeInTheDocument();
 
     if (welcomeCard) {
       const welcomePosition = overviewMap.compareDocumentPosition(welcomeCard);
