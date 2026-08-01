@@ -53,7 +53,12 @@ describe('StopCard 5-Part Layout & Component Parity (Issue 32)', () => {
 
     const cardContainer = screen.getByTestId('stop-card-container');
     expect(cardContainer).toBeInTheDocument();
-    // Verification of token usage in container style or child elements
+    expect(cardContainer).toHaveStyle({ backgroundColor: COLORS.canvasBg });
+    expect(cardContainer).toHaveStyle({ color: COLORS.textPrimary });
+
+    const shareBtn = screen.getByTestId('share-stop-button');
+    expect(shareBtn).toBeInTheDocument();
+    expect(shareBtn).toHaveStyle({ backgroundColor: COLORS.badgeBg });
   });
 
   it('2. Displays STOP X OF 6 header badge and Share Stop button for steps 1 through 6', () => {

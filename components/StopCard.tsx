@@ -136,8 +136,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
   const googleMapsUrl = getMapUrl('google', stop.coordinates);
   const yandexMapsUrl = getMapUrl('yandex', stop.coordinates);
 
-  // Guarantee websiteUrl for Step 6 or when explicitly set on stop
-  const websiteUrl = stop.websiteUrl || (stop.order === 6 ? 'https://tbilisi.gov.ge' : undefined);
+  // Website link if defined on stop
+  const websiteUrl = stop.websiteUrl;
 
   const staticRatings = getStopRatings(stop);
   const [liveRatings, setLiveRatings] = React.useState<{ stopId: string; ratings: ResolvedRatings } | null>(null);
@@ -155,8 +155,13 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
   React.useEffect(() => {
     if (stop.placeIds?.google) {
       let isMounted = true;
+      const initial = getStopRatings(stop);
       fetchPlaceRatingsFromAPI(stop).then((fetchedRatings) => {
-        if (isMounted) {
+        if (
+          isMounted &&
+          (fetchedRatings.google.rating !== initial.google.rating ||
+            fetchedRatings.google.count !== initial.google.count)
+        ) {
           setLiveRatings({ stopId: stop.id, ratings: fetchedRatings });
         }
       });
