@@ -91,18 +91,24 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
   });
 
   describe('RouteMapModal', () => {
-    it('launches map navigation using getLaunchUrl with selected stop coordinates', () => {
+    const renderModal = (props?: Partial<React.ComponentProps<typeof RouteMapModal>>) => {
       const mockOnClose = vi.fn();
-      render(
+      const result = render(
         <LanguageProvider initialLanguage="en">
           <RouteMapModal
             route={mockRoute}
             isOpen={true}
             onClose={mockOnClose}
             initialStopOrder={1}
+            {...props}
           />
         </LanguageProvider>
       );
+      return { ...result, mockOnClose };
+    };
+
+    it('launches map navigation using getLaunchUrl with selected stop coordinates', () => {
+      renderModal();
 
       const openInMapBtn = screen.getByTestId('modal-stop-card').querySelector('a')!;
       expect(openInMapBtn).toBeInTheDocument();
@@ -113,17 +119,7 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
     });
 
     it('updates action bar launch URL when changing preferred provider select dropdown', () => {
-      const mockOnClose = vi.fn();
-      render(
-        <LanguageProvider initialLanguage="en">
-          <RouteMapModal
-            route={mockRoute}
-            isOpen={true}
-            onClose={mockOnClose}
-            initialStopOrder={1}
-          />
-        </LanguageProvider>
-      );
+      renderModal();
 
       const providerSelect = screen.getByTestId('map-provider-select');
       expect(providerSelect).toHaveValue('google');
@@ -141,17 +137,7 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
     });
 
     it('updates stop card coordinates when switching selected map pin', () => {
-      const mockOnClose = vi.fn();
-      render(
-        <LanguageProvider initialLanguage="en">
-          <RouteMapModal
-            route={mockRoute}
-            isOpen={true}
-            onClose={mockOnClose}
-            initialStopOrder={1}
-          />
-        </LanguageProvider>
-      );
+      renderModal();
 
       const pin2 = screen.getByTestId('modal-map-pin-2');
       fireEvent.click(pin2);
@@ -162,5 +148,29 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
         expect.stringContaining('google.com/maps/search/?api=1&query=Marjanishvili%20Theater')
       );
     });
+
+    it('renders numbered pin markers for all stops without SVG route connecting lines', () => {
+      const { container } = renderModal();
+
+      expect(screen.getByTestId('modal-map-pin-1')).toBeInTheDocument();
+      expect(screen.getByTestId('modal-map-pin-2')).toBeInTheDocument();
+      expect(container.querySelector('svg path')).not.toBeInTheDocument();
+    });
+
+    it('supports map zoom in, zoom out, and reset controls', () => {
+      renderModal();
+
+      const zoomIn = screen.getByTestId('modal-map-zoom-in');
+      const zoomOut = screen.getByTestId('modal-map-zoom-out');
+      const reset = screen.getByTestId('modal-map-reset');
+
+      fireEvent.click(zoomIn);
+      fireEvent.click(zoomOut);
+      fireEvent.click(reset);
+
+      expect(screen.getByTestId('modal-map-pin-1')).toBeInTheDocument();
+    });
   });
 });
+
+

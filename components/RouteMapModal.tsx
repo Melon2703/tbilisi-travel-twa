@@ -124,13 +124,7 @@ export default function RouteMapModal({
     });
   }, [sortedStops, centerWorldX, centerWorldY, viewportSize, panOffset, zoom]);
 
-  // SVG Polyline Path
-  const pathD = useMemo(() => {
-    return projectedStops.reduce(
-      (acc, p, idx) => `${acc} ${idx === 0 ? 'M' : 'L'} ${p.screenX.toFixed(1)} ${p.screenY.toFixed(1)}`,
-      ''
-    );
-  }, [projectedStops]);
+
 
   // Calculate CartoDB Voyager Tile Grid
   const tiles = useMemo(() => {
@@ -300,32 +294,7 @@ export default function RouteMapModal({
           ))}
         </div>
 
-        {/* ── SVG Path Overlay Layer ── */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none z-10"
-          style={{ width: '100%', height: '100%' }}
-        >
-          {/* Path underlay for outline */}
-          <path
-            d={pathD}
-            fill="none"
-            stroke="#FFFFFF"
-            strokeWidth="5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.9"
-          />
-          {/* Main glowing route polyline */}
-          <path
-            d={pathD}
-            fill="none"
-            stroke="#C4572A"
-            strokeWidth="3.5"
-            strokeDasharray="6 3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+
 
         {/* ── Numbered Stop Pin Markers ── */}
         {projectedStops.map(({ stop, screenX, screenY }) => {
