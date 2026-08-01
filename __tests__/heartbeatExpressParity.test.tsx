@@ -84,8 +84,7 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
       expect(recommendationCard).toBeInTheDocument();
       expect(screen.getByText(/Olya's Recommendation/i)).toBeInTheDocument();
 
-      // Part 5: Action Bar with Rating Badge & Map/Website Action Pills
-      expect(screen.getByTestId('last-actions-block')).toBeInTheDocument();
+      // Part 5: Rating Badge & Map/Website Action Pills
       expect(screen.getByTestId('google-rating-badge')).toBeInTheDocument();
       expect(screen.getByTestId('map-pills-row')).toBeInTheDocument();
       expect(screen.getByLabelText('Open in Google Maps')).toBeInTheDocument();

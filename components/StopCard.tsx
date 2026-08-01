@@ -6,7 +6,6 @@ import { Stop, VenueStop, AttractionStop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { useMapLauncher } from '@/hooks/useMapLauncher';
 import EmojiIcon from '@/components/ui/EmojiIcon';
-import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
@@ -390,14 +389,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     );
   };
 
-  /* Part 5: Action Bar Section */
-  const renderActionsFooter = () => (
-    <div data-testid="last-actions-block" className="pt-2 space-y-3">
-      {/* Georgian Divider */}
-      <GeorgianOrnament />
-    </div>
-  );
-
   /* Part 3: Short Overview Layout for AttractionStop */
   const renderAttractionLayout = (attraction: AttractionStop) => (
     <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full">
@@ -439,8 +430,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       )}
 
       {renderConsolidatedRecommendationCard()}
-
-      {renderActionsFooter()}
     </div>
   );
 
@@ -476,8 +465,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       )}
 
       {renderConsolidatedRecommendationCard()}
-
-      {renderActionsFooter()}
     </div>
   );
 
