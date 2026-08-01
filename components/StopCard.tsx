@@ -3,8 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { Stop, VenueStop, AttractionStop } from '@/lib/types/route';
-import { getMapUrl } from '@/lib/utils/maps';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useMapLauncher } from '@/hooks/useMapLauncher';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 import Badge from '@/components/ui/Badge';
@@ -116,8 +116,15 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
   const { t, getLocalizedStop } = useLanguage();
   const stop = getLocalizedStop(rawStop);
 
-  const googleMapsUrl = getMapUrl('google', stop.coordinates);
-  const yandexMapsUrl = getMapUrl('yandex', stop.coordinates);
+  const {
+    getLaunchUrl,
+    isOpen: isMapBottomSheetOpen,
+    closeMapLauncher,
+  } = useMapLauncher();
+
+  const primaryMapUrl = getLaunchUrl(stop.coordinates);
+  const googleMapsUrl = getLaunchUrl(stop.coordinates, 'google');
+  const yandexMapsUrl = getLaunchUrl(stop.coordinates, 'yandex');
 
   // Website link if defined on stop
   const websiteUrl = stop.websiteUrl;
@@ -127,7 +134,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
   const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
   const [lightboxIndex, setLightboxIndex] = React.useState(0);
-  const [isMapBottomSheetOpen, setIsMapBottomSheetOpen] = React.useState(false);
 
   const galleryImages = (stop.galleryImages && stop.galleryImages.length > 0)
     ? stop.galleryImages
@@ -278,9 +284,10 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
       {/* Map Provider Action Buttons directly underneath location title and neighborhood metadata */}
       <div className="flex items-center gap-3 pt-1" data-testid="map-pills-row">
-        <button
-          type="button"
-          onClick={() => setIsMapBottomSheetOpen(true)}
+        <a
+          href={primaryMapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           className="w-12 h-12 min-h-[48px] min-w-[48px] rounded-2xl bg-white shadow-xs flex items-center justify-center transition-all active:scale-95 text-xs font-bold"
           style={{
             borderWidth: '1px',
@@ -292,7 +299,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           title="Open in Maps"
         >
           <EmojiIcon name="mapPin" size="xs" />
-        </button>
+        </a>
 
         <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
           <GoogleMapsIcon />
@@ -515,7 +522,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       {/* Map Provider Selection Bottom Sheet */}
       <MapProviderBottomSheet
         isOpen={isMapBottomSheetOpen}
-        onClose={() => setIsMapBottomSheetOpen(false)}
+        onClose={closeMapLauncher}
         coordinates={stop.coordinates}
         stopName={stop.name}
       />
