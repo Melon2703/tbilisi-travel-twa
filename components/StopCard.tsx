@@ -237,11 +237,12 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     </>
   );
 
-  /* Part 1: Header Bar */
+  /* Part 1: Header Bar & Map Proximity Layout */
   const renderHeaderBar = () => (
-    <div className="flex items-start justify-between gap-3 min-w-0">
-      <div className="min-w-0 flex-1 space-y-1">
-        <div className="flex items-center gap-2 flex-wrap">
+    <div className="space-y-3" data-testid="stop-card-header-container">
+      {/* Top Header Toolbar Row */}
+      <div className="flex items-center justify-between gap-2 min-w-0 w-full" data-testid="stop-card-header-top-row">
+        <div className="flex items-center gap-2 flex-wrap min-w-0">
           <p
             className="text-[11px] font-bold uppercase tracking-[0.06em]"
             style={{
@@ -255,6 +256,9 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
               ☕ {t('pitstop')}
             </Badge>
           )}
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             data-testid="share-stop-button"
@@ -270,19 +274,54 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
             <span>↗️</span>
             <span>{isCopied ? t('copiedToClipboard') : t('shareStop')}</span>
           </button>
+          {isVisited && (
+            <Badge variant="visited">
+              {t('visited')}
+            </Badge>
+          )}
         </div>
+      </div>
+
+      {/* Location Title & Neighborhood Metadata */}
+      <div className="space-y-1">
         <h2
           className="text-2xl sm:text-3xl font-black tracking-tight leading-tight break-words min-w-0 max-w-full font-sans"
           style={{ color: COLORS.textPrimary }}
         >
           {stop.name}
         </h2>
+        <div
+          data-testid="stop-neighborhood-metadata"
+          className="flex items-center gap-1.5 text-xs font-medium"
+          style={{ color: COLORS.textSecondary }}
+        >
+          <EmojiIcon name="mapPin" size="xs" />
+          <span>{stop.neighborhood}</span>
+        </div>
       </div>
-      {isVisited && (
-        <Badge variant="visited">
-          {t('visited')}
-        </Badge>
-      )}
+
+      {/* Map Provider Action Buttons directly underneath location title and neighborhood metadata */}
+      <div className="flex items-center gap-3 pt-1" data-testid="map-pills-row">
+        <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
+          <GoogleMapsIcon />
+        </ActionButtonLink>
+
+        <ActionButtonLink href={yandexMapsUrl} ariaLabel="Open in Yandex Maps" title="Yandex Maps">
+          <YandexMapsIcon />
+        </ActionButtonLink>
+
+        {websiteUrl && (
+          <ActionButtonLink href={websiteUrl} ariaLabel="Visit Website" title="Website">
+            <GlobeIcon />
+          </ActionButtonLink>
+        )}
+
+        {stop.instagramUrl && (
+          <ActionButtonLink href={stop.instagramUrl} ariaLabel="Visit Instagram" title="Instagram">
+            <InstagramIcon />
+          </ActionButtonLink>
+        )}
+      </div>
     </div>
   );
 
@@ -374,29 +413,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           ★ {ratings.google.rating.toFixed(1)}
         </span>
         <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
-      </div>
-
-      {/* Single Row Icon-Only Action Buttons adhering strictly to min 48px touch targets */}
-      <div className="flex items-center justify-center gap-3 pt-1" data-testid="map-pills-row">
-        <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
-          <GoogleMapsIcon />
-        </ActionButtonLink>
-
-        <ActionButtonLink href={yandexMapsUrl} ariaLabel="Open in Yandex Maps" title="Yandex Maps">
-          <YandexMapsIcon />
-        </ActionButtonLink>
-
-        {websiteUrl && (
-          <ActionButtonLink href={websiteUrl} ariaLabel="Visit Website" title="Website">
-            <GlobeIcon />
-          </ActionButtonLink>
-        )}
-
-        {stop.instagramUrl && (
-          <ActionButtonLink href={stop.instagramUrl} ariaLabel="Visit Instagram" title="Instagram">
-            <InstagramIcon />
-          </ActionButtonLink>
-        )}
       </div>
     </div>
   );

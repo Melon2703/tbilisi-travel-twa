@@ -282,7 +282,7 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       expect(screen.getByText('STOP 2 OF 2')).toBeInTheDocument();
       expect(screen.getByText('Lado Asatiani St Merchant Houses')).toBeInTheDocument();
-      expect(screen.getByText('Sololaki')).toBeInTheDocument();
+      expect(screen.getAllByText('Sololaki').length).toBeGreaterThan(0);
       expect(screen.getByText('25 min')).toBeInTheDocument();
       expect(screen.getByText(/Gently push through the wooden carriage doors/i)).toBeInTheDocument();
       expect(screen.getByRole('link', { name: /Google Maps/i })).toBeInTheDocument();
@@ -292,7 +292,7 @@ describe('TWA Timeline & Card Feed UI', () => {
 
     it('renders step card image badges with high-contrast dark overlay and white text', () => {
       render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
-      const locationBadge = screen.getByText('Sololaki');
+      const locationBadge = screen.getAllByText('Sololaki')[0];
       const durationBadge = screen.getByText('25 min');
 
       expect(locationBadge).toHaveClass('bg-slate-900/80');

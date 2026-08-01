@@ -74,7 +74,7 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
 
       // Part 2: Visual Cover with Hero Image & Floating Badges
       expect(screen.getByTestId('hero-image-container')).toBeInTheDocument();
-      expect(screen.getByText(stop.neighborhood)).toBeInTheDocument();
+      expect(screen.getAllByText(stop.neighborhood).length).toBeGreaterThan(0);
       expect(screen.getByText(`${stop.estimatedMinutes} min`)).toBeInTheDocument();
 
       // Part 3: Short Overview Layout (working hours, transit, historical summary, or venue details)
