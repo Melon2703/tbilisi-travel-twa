@@ -25,7 +25,7 @@ describe('Home Root Page (Route Directory)', () => {
     });
   });
 
-  it('renders route details including duration, accessibility, stop count, and vibes', () => {
+  it('renders route details including duration, accessibility, and stop count without hashtag badge rows on card summaries', () => {
     render(<Home />);
 
     const firstRoute = ROUTES[0];
@@ -40,10 +40,10 @@ describe('Home Root Page (Route Directory)', () => {
     // Stop count
     expect(screen.getAllByText(new RegExp(`${firstRoute.stops.length}\\s*stops`, 'i')).length).toBeGreaterThan(0);
 
-    // Vibe tags
-    firstRoute.vibes.forEach((vibe) => {
-      expect(screen.getAllByText(new RegExp(`#?${vibe}`, 'i')).length).toBeGreaterThan(0);
-    });
+    // Verify essential top badges are rendered and hashtag badge summary row is absent
+    const essentialBadgesContainers = screen.getAllByTestId('essential-badges');
+    expect(essentialBadgesContainers.length).toBeGreaterThan(0);
+    expect(essentialBadgesContainers[0].children).toHaveLength(2);
   });
 
   it('renders links to /twa/[routeId] for every route', () => {

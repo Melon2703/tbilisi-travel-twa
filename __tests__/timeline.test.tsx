@@ -585,20 +585,19 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(veggieBadge).toHaveTextContent('🌱 Veggie Friendly');
     });
 
-    it('renders recommended dish pills for VenueStop and supports interactive selection', () => {
+    it('renders recommended food items for VenueStop as unbordered vertical bulleted text list', () => {
       render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
 
       const dishesContainer = screen.getByTestId('recommended-dishes');
       expect(dishesContainer).toBeInTheDocument();
+      expect(dishesContainer.className).toMatch(/border-0|bg-transparent/);
       expect(screen.getByText('Fresh pastries')).toBeInTheDocument();
       expect(screen.getByText('Georgian tea')).toBeInTheDocument();
 
-      const pills = screen.getAllByTestId('dish-pill');
-      expect(pills).toHaveLength(2);
-      expect(pills[0]).toHaveAttribute('data-selected', 'false');
-
-      fireEvent.click(pills[0]);
-      expect(pills[0]).toHaveAttribute('data-selected', 'true');
+      const items = screen.getAllByTestId('dish-item');
+      expect(items).toHaveLength(2);
+      expect(items[0]).toHaveTextContent('•');
+      expect(items[0]).toHaveTextContent('Fresh pastries');
     });
 
     it('renders booking advice callout block when present on VenueStop', () => {

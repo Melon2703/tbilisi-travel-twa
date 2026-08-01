@@ -266,9 +266,9 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
-                  {/* Top Badges */}
+                  {/* Top Badges (Max 2 essential badges: Duration and Difficulty/Accessibility) */}
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10 gap-1.5">
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1.5" data-testid="essential-badges">
                       <span
                         className="text-white text-[11px] font-extrabold uppercase px-2.5 py-1 rounded-full shadow-xs tracking-[0.06em]"
                         style={{ background: '#C4572A' }}
@@ -306,18 +306,6 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                   </div>
 
                   <GeorgianOrnament />
-
-                  {/* Vibes Row */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {route.vibes.map((vibe) => (
-                      <span
-                        key={vibe}
-                        className="bg-[#FAF7F2] text-[#7A6552] text-[11px] font-semibold px-2.5 py-1 rounded-md border border-[#C4572A]/15 capitalize"
-                      >
-                        #{vibe}
-                      </span>
-                    ))}
-                  </div>
 
                   {/* Card Footer Meta & CTA */}
                   <div className="pt-3 border-t border-[#C4572A]/12 flex items-center justify-between text-xs font-semibold text-[#7A6552]">

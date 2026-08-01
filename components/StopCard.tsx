@@ -87,42 +87,27 @@ function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): s
   }
   return categoryText;
 }function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: string }) {
-  const [selectedDishes, setSelectedDishes] = React.useState<Record<string, boolean>>({});
-
-  const toggleDish = (dish: string) => {
-    setSelectedDishes((prev) => ({ ...prev, [dish]: !prev[dish] }));
-  };
-
   return (
-    <div data-testid="recommended-dishes" className="space-y-2 pt-1">
+    <div data-testid="recommended-dishes" className="space-y-1.5 pt-1 border-0 bg-transparent">
       <p
         className="text-xs font-bold flex items-center gap-1.5"
         style={{ color: COLORS.terracottaAccent }}
       >
         <span>🍽️</span> {title}
       </p>
-      <div className="flex flex-wrap gap-2">
-        {dishes.map((dish) => {
-          const isSelected = Boolean(selectedDishes[dish]);
-          return (
-            <button
-              type="button"
-              key={dish}
-              data-testid="dish-pill"
-              data-selected={isSelected ? 'true' : 'false'}
-              onClick={() => toggleDish(dish)}
-              className="min-h-[48px] px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer select-none active:scale-95 flex items-center justify-center"
-              style={{
-                backgroundColor: isSelected ? COLORS.terracottaAccent : COLORS.dishBg,
-                color: isSelected ? '#FFFFFF' : COLORS.dishText,
-                borderColor: isSelected ? COLORS.terracottaAccent : COLORS.dishBorder,
-              }}
-            >
-              {dish}
-            </button>
-          );
-        })}
-      </div>
+      <ul data-testid="recommended-dishes-list" className="space-y-1 pl-1 border-0 bg-transparent">
+        {dishes.map((dish) => (
+          <li
+            key={dish}
+            data-testid="dish-item"
+            className="text-xs font-medium flex items-start gap-2 border-0 bg-transparent"
+            style={{ color: COLORS.dishText }}
+          >
+            <span style={{ color: COLORS.terracottaAccent }} className="font-bold shrink-0">•</span>
+            <span>{dish}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
