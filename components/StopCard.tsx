@@ -93,7 +93,7 @@ function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): s
         className="text-xs font-bold flex items-center gap-1.5"
         style={{ color: COLORS.terracottaAccent }}
       >
-        <span>🍽️</span> {title}
+        {title}
       </p>
       <ul data-testid="recommended-dishes-list" className="space-y-1 pl-1">
         {dishes.map((dish, index) => (
@@ -301,7 +301,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     return (
       <div
         data-testid="olya-recommendation-card"
-        className="rounded-2xl p-4 sm:p-5 border border-[#C4572A]/15 space-y-3 shadow-xs"
+        className="rounded-2xl p-4 sm:p-5 border border-[#C4572A]/10 space-y-3 shadow-xs"
         style={{
           backgroundColor: COLORS.cardBg,
         }}
@@ -310,12 +310,11 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           className="flex items-center gap-1.5 text-xs font-bold"
           style={{ color: COLORS.terracottaAccent }}
         >
-          <span>✨</span>
           <span>{t('olyaRecommendation')}</span>
         </div>
 
         {stop.olyaTips && (
-          <Callout emoji="chat" title={t('olyaTip')}>
+          <Callout title={t('olyaTip')}>
             <p
               className="text-sm italic leading-relaxed"
               style={{ color: COLORS.dishText }}
@@ -334,7 +333,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
         {hasBookingAdvice && (
           <div data-testid="booking-advice">
-            <Callout emoji="calendar" title={t('bookingAdvice')}>
+            <Callout title={t('bookingAdvice')}>
               {venueStop!.venueDetails.bookingAdvice}
             </Callout>
           </div>
@@ -342,7 +341,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
         {stop.photoSpot && (
           <div data-testid="photo-spot">
-            <Callout emoji="camera" title={t('photoSpotRec')}>
+            <Callout title={t('photoSpotRec')}>
               {stop.photoSpot}
             </Callout>
           </div>
@@ -350,7 +349,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
         {stop.logisticsWarning && (
           <div data-testid="logistics-warning">
-            <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
+            <Callout title={t('logisticsWarning')} variant="warning">
               {stop.logisticsWarning}
             </Callout>
           </div>

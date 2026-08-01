@@ -13,9 +13,6 @@ export interface TimelineBarProps {
   isCompleted?: boolean;
 }
 
-const GEORGIAN_WAVE_PATH =
-  'M0,8 C10,4 15,12 25,8 C35,4 40,12 50,8 C60,4 65,12 75,8 C85,4 90,12 100,8 C110,4 115,12 125,8 C135,4 140,12 150,8 C160,4 165,12 175,8 C185,4 190,12 200,8 C210,4 215,12 225,8 C235,4 240,12 250,8 C260,4 265,12 275,8 C285,4 290,12 300,8';
-
 function TimelineBar({
   stops,
   activeIndex,
@@ -73,62 +70,25 @@ function TimelineBar({
           className="relative flex items-center justify-between flex-1 overflow-x-auto py-1.5 px-3 scrollbar-none scroll-smooth"
           style={{ minHeight: 46 }}
         >
-          {/* Georgian ornament track line (repeating wave SVG) */}
+          {/* Straight 2px horizontal progress track line */}
           <div
-            className="absolute overflow-hidden pointer-events-none"
+            className="absolute overflow-hidden pointer-events-none rounded-full"
             style={{
               top: '50%',
               transform: 'translateY(-50%)',
               left: DOT / 2,
               right: DOT / 2,
-              height: 16,
+              height: 2,
               zIndex: 0,
+              background: 'rgba(196,87,42,0.15)',
             }}
             aria-hidden="true"
           >
-            {/* Unfilled track line */}
-            <svg
-              className="absolute inset-0 w-full h-full"
-              preserveAspectRatio="none"
-              viewBox="0 0 300 16"
-            >
-              <path
-                d={GEORGIAN_WAVE_PATH}
-                stroke="rgba(196,87,42,0.15)"
-                strokeWidth="1.5"
-                fill="none"
-                strokeLinecap="round"
-              />
-            </svg>
-
-            {/* Filled progress track line with clip */}
+            {/* Filled progress track line */}
             <div
-              className="absolute inset-0 overflow-hidden transition-all duration-700 ease-out"
+              className="h-full transition-all duration-700 ease-out bg-[#C4572A] rounded-full"
               style={{ width: `${filledFraction * 100}%` }}
-            >
-              <svg
-                className="w-full h-full"
-                preserveAspectRatio="none"
-                viewBox="0 0 300 16"
-              >
-                {/* Glow behind colored line */}
-                <path
-                  d={GEORGIAN_WAVE_PATH}
-                  stroke="rgba(196,87,42,0.25)"
-                  strokeWidth="5"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                {/* Main colored line */}
-                <path
-                  d={GEORGIAN_WAVE_PATH}
-                  stroke="#C4572A"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
+            />
           </div>
 
           {/* Stop dots */}
@@ -195,7 +155,7 @@ function TimelineBar({
         {/* Vertical Divider */}
         <div
           className="w-px self-stretch shrink-0"
-          style={{ background: 'rgba(196,87,42,0.18)', minHeight: 30 }}
+          style={{ background: 'rgba(196,87,42,0.10)', minHeight: 30 }}
           aria-hidden="true"
         />
 

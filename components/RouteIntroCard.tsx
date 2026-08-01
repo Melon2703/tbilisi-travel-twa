@@ -193,11 +193,11 @@ export default function RouteIntroCard({
           className="rounded-2xl p-4 sm:p-5 shadow-xs space-y-3 shrink-0 bg-[#F3EFEA] border-0"
         >
           <div className="flex items-center gap-3">
-            <span className="h-px bg-[#C4572A]/20 flex-1" />
+            <span className="h-px bg-[#C4572A]/10 flex-1" />
             <h2 className="text-xs font-bold text-[#C4572A]">
               {t('routeAtAGlance')}
             </h2>
-            <span className="h-px bg-[#C4572A]/20 flex-1" />
+            <span className="h-px bg-[#C4572A]/10 flex-1" />
           </div>
           <div className="grid grid-cols-2 gap-y-3 gap-x-3 text-xs font-medium text-[#7A6552]">
             <div className="flex items-center gap-2.5">
@@ -246,10 +246,10 @@ export default function RouteIntroCard({
         {/* 6. Step-by-Step Route Preview List */}
         <div
           data-testid="step-by-step-preview-list"
-          className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/15"
+          className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/10"
         >
           <h3 className="text-xs font-bold text-[#C4572A]">
-            📍 {t('stepByStepPreviewTitle')}
+            {t('stepByStepPreviewTitle')}
           </h3>
           <div className="space-y-2 max-h-60 overflow-y-auto pr-1 scrollbar-none">
             {sortedStops.map((stop) => (
@@ -281,10 +281,10 @@ export default function RouteIntroCard({
         {/* 7. Logistics & Terrain Highlights */}
         <div
           data-testid="logistics-terrain-highlights"
-          className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/15"
+          className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0 bg-[#FFF8F3] border border-[#C4572A]/10"
         >
           <h3 className="text-xs font-bold text-[#C4572A]">
-            🧗 {t('logisticsTerrainTitle')}
+            {t('logisticsTerrainTitle')}
           </h3>
           <div className="flex flex-wrap gap-2 text-xs">
             <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium">
@@ -311,7 +311,7 @@ export default function RouteIntroCard({
                 className="p-4 sm:p-5 rounded-2xl bg-[#F3EFEA] border-0 space-y-1 text-xs text-[#8A3614]"
               >
                 <p className="font-bold text-[10px] text-[#C4572A]">
-                  ⚠️ {t('logisticsWarning')}
+                  {t('logisticsWarning')}
                 </p>
                 <ul className="list-disc list-inside space-y-1">
                   {warnings.map((w, idx) => (
