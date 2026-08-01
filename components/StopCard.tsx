@@ -316,11 +316,9 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     return (
       <div
         data-testid="olya-recommendation-card"
-        className="rounded-xl p-4 border space-y-3 shadow-xs"
+        className="rounded-2xl p-4 sm:p-5 border border-[#C4572A]/15 space-y-3 shadow-xs"
         style={{
           backgroundColor: COLORS.cardBg,
-          borderColor: COLORS.tipBoxBorder,
-          borderRadius: COMPONENT_TOKENS.borderRadius.xl,
         }}
       >
         <div

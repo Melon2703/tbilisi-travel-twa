@@ -89,7 +89,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
         data-testid="filter-controls-panel"
         className="bg-[#FFF8F3] rounded-3xl p-5 border border-[#C4572A]/15 shadow-xs space-y-4 text-[#1C1008]"
       >
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#C4572A]/12 pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-1">
           <div className="flex items-center gap-2">
             <h3 className="font-bold text-sm text-[#1C1008]">
               {language === 'ru' ? 'Фильтры и сортировки' : 'Route filters & sorting'}
@@ -136,7 +136,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               onClick={() => setSelectedDuration('all')}
               className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedDuration === 'all'
                   ? 'bg-[#1C1008] text-white shadow-xs'
-                  : 'bg-[#FAF7F2] text-[#7A6552] border border-black/10 hover:text-[#1C1008]'
+                  : 'bg-[#F3EFEA] text-[#7A6552] border-0 hover:text-[#1C1008]'
                 }`}
             >
               {t('allDurations')}
@@ -149,7 +149,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 onClick={() => setSelectedDuration(d.id)}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedDuration === d.id
                     ? 'bg-[#C4572A] text-white shadow-xs'
-                    : 'bg-[#FAF7F2] text-[#7A6552] border border-black/10 hover:text-[#1C1008]'
+                    : 'bg-[#F3EFEA] text-[#7A6552] border-0 hover:text-[#1C1008]'
                   }`}
               >
                 {language === 'ru' ? d.labelRu : d.label}
@@ -170,7 +170,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               onClick={() => setSelectedVibe('all')}
               className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedVibe === 'all'
                   ? 'bg-[#1C1008] text-white shadow-xs'
-                  : 'bg-[#FAF7F2] text-[#7A6552] border border-black/10 hover:text-[#1C1008]'
+                  : 'bg-[#F3EFEA] text-[#7A6552] border-0 hover:text-[#1C1008]'
                 }`}
             >
               {t('allVibes')}
@@ -183,7 +183,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 onClick={() => setSelectedVibe(v.id)}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedVibe === v.id
                     ? 'bg-[#C4572A] text-white shadow-xs'
-                    : 'bg-[#FAF7F2] text-[#7A6552] border border-black/10 hover:text-[#1C1008]'
+                    : 'bg-[#F3EFEA] text-[#7A6552] border-0 hover:text-[#1C1008]'
                   }`}
               >
                 #{language === 'ru' ? v.labelRu : v.label}
@@ -193,7 +193,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
         </div>
 
         {filteredRoutes.length !== initialRoutes.length && (
-          <div className="pt-2 border-t border-[#C4572A]/10 flex justify-end">
+          <div className="pt-2 flex justify-end">
             <span className="text-[11px] font-semibold text-[#C4572A]">
               {filteredRoutes.length} / {initialRoutes.length} {language === 'ru' ? 'маршрутов' : 'routes'}
             </span>

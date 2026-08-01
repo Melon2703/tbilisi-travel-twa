@@ -163,11 +163,7 @@ export default function RouteIntroCard({
         {route.introCopy && (
           <div
             data-testid="olya-welcome-card"
-            className="rounded-2xl p-4 shadow-xs relative shrink-0 space-y-1.5"
-            style={{
-              background: '#FFF8F3',
-              border: '1px solid rgba(196,87,42,0.18)',
-            }}
+            className="rounded-2xl p-4 sm:p-5 shadow-xs relative shrink-0 space-y-1.5 bg-[#F3EFEA] border-0"
           >
             <div className="flex items-start gap-3">
               <div
@@ -194,11 +190,7 @@ export default function RouteIntroCard({
         {/* 5. Route At A Glance Summary Box */}
         <div
           data-testid="route-at-a-glance"
-          className="rounded-2xl p-4 shadow-xs space-y-3 shrink-0"
-          style={{
-            background: '#FFF8F3',
-            border: '1px solid rgba(196,87,42,0.15)',
-          }}
+          className="rounded-2xl p-4 sm:p-5 shadow-xs space-y-3 shrink-0 bg-[#F3EFEA] border-0"
         >
           <div className="flex items-center gap-3">
             <span className="h-px bg-[#C4572A]/20 flex-1" />
@@ -263,7 +255,7 @@ export default function RouteIntroCard({
             {sortedStops.map((stop) => (
               <div
                 key={stop.id}
-                className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#FAF7F2] border border-black/5 text-xs text-[#1C1008]"
+                className="flex items-start gap-2.5 p-3 rounded-2xl bg-[#F3EFEA] border-0 text-xs text-[#1C1008]"
               >
                 <span className="w-5 h-5 rounded-full bg-[#C4572A] text-white font-bold flex items-center justify-center shrink-0 text-[10px]">
                   {stop.order}
@@ -316,7 +308,7 @@ export default function RouteIntroCard({
             return (
               <div
                 data-testid="logistics-notes-callout"
-                className="p-3 rounded-xl bg-[#FFF3EE] border border-[#C4572A]/20 space-y-1 text-xs text-[#8A3614]"
+                className="p-4 sm:p-5 rounded-2xl bg-[#F3EFEA] border-0 space-y-1 text-xs text-[#8A3614]"
               >
                 <p className="font-bold text-[10px] text-[#C4572A]">
                   ⚠️ {t('logisticsWarning')}
