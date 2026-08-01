@@ -11,6 +11,7 @@ export interface TimelineBarProps {
   onStopClick: (slideIndex: number) => void;
   onToggleVisited: () => void;
   isCompleted?: boolean;
+  maxVisibleDots?: number;
 }
 
 function TimelineBar({
@@ -20,10 +21,34 @@ function TimelineBar({
   onStopClick,
   onToggleVisited,
   isCompleted = false,
+  maxVisibleDots = 4,
 }: TimelineBarProps) {
   const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeStopRef = useRef<HTMLButtonElement | null>(null);
+
+  const currentStopIndex = activeIndex > 0 ? activeIndex - 1 : 0;
+  const currentStop = currentStopIndex < stops.length ? stops[currentStopIndex] : null;
+  const isCurrentVisited = currentStop ? visitedStopIds.includes(currentStop.id) : false;
+
+  const totalStops = stops.length;
+  const MAX_VISIBLE = maxVisibleDots;
+
+  let startIndex = 0;
+  let endIndex = totalStops - 1;
+
+  if (totalStops > MAX_VISIBLE) {
+    const half = Math.floor(MAX_VISIBLE / 2);
+    startIndex = Math.max(0, currentStopIndex - half);
+    if (startIndex + MAX_VISIBLE > totalStops) {
+      startIndex = totalStops - MAX_VISIBLE;
+    }
+    endIndex = startIndex + MAX_VISIBLE - 1;
+  }
+
+  const visibleStops = stops.slice(startIndex, endIndex + 1);
+  const hasLeftContinuation = startIndex > 0;
+  const hasRightContinuation = endIndex < totalStops - 1;
 
   // Auto-center active stop indicator smoothly inside timeline container
   useEffect(() => {
@@ -40,14 +65,14 @@ function TimelineBar({
         container.scrollLeft = targetLeft;
       }
     }
-  }, [activeIndex]);
+  }, [activeIndex, startIndex]);
 
-  const currentStopIndex = activeIndex > 0 ? activeIndex - 1 : 0;
-  const currentStop = currentStopIndex < stops.length ? stops[currentStopIndex] : null;
-  const isCurrentVisited = currentStop ? visitedStopIds.includes(currentStop.id) : false;
-
-  const totalStops = stops.length;
-  const filledFraction = totalStops > 1 ? Math.min(1, Math.max(0, currentStopIndex / (totalStops - 1))) : 0;
+  const visibleCount = visibleStops.length;
+  const activePositionInVisible = currentStopIndex - startIndex;
+  const filledFraction =
+    visibleCount > 1
+      ? Math.min(1, Math.max(0, activePositionInVisible / (visibleCount - 1)))
+      : 0;
 
   const DOT = 38;
 
@@ -91,9 +116,30 @@ function TimelineBar({
             />
           </div>
 
-          {/* Stop dots */}
-          {stops.map((stop, index) => {
-            const slideIndex = index + 1;
+          {/* Left continuation indicator */}
+          {hasLeftContinuation && (
+            <button
+              type="button"
+              data-testid="timeline-ellipsis-left"
+              onClick={() => onStopClick(startIndex)}
+              aria-label={t('previousStops')}
+              title={t('previousStops')}
+              className="relative flex items-center justify-center rounded-full text-xs font-bold transition-all duration-200 active:scale-90 select-none shrink-0 bg-[#FAF7F2] text-[#C4572A]"
+              style={{
+                width: 28,
+                height: 28,
+                zIndex: 1,
+                border: '1.5px dashed rgba(196,87,42,0.4)',
+              }}
+            >
+              •••
+            </button>
+          )}
+
+          {/* Visible Stop dots */}
+          {visibleStops.map((stop, vIndex) => {
+            const realIndex = startIndex + vIndex;
+            const slideIndex = realIndex + 1;
             const stopOrder = stop.order ?? slideIndex;
             const isActive = activeIndex === slideIndex;
             const isVisited = visitedStopIds.includes(stop.id);
@@ -150,6 +196,26 @@ function TimelineBar({
               </button>
             );
           })}
+
+          {/* Right continuation indicator */}
+          {hasRightContinuation && (
+            <button
+              type="button"
+              data-testid="timeline-ellipsis-right"
+              onClick={() => onStopClick(endIndex + 2)}
+              aria-label={t('moreStops')}
+              title={t('moreStops')}
+              className="relative flex items-center justify-center rounded-full text-xs font-bold transition-all duration-200 active:scale-90 select-none shrink-0 bg-[#FAF7F2] text-[#C4572A]"
+              style={{
+                width: 28,
+                height: 28,
+                zIndex: 1,
+                border: '1.5px dashed rgba(196,87,42,0.4)',
+              }}
+            >
+              •••
+            </button>
+          )}
         </div>
 
         {/* Vertical Divider */}

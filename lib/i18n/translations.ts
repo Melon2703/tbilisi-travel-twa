@@ -47,6 +47,8 @@ export const TRANSLATIONS = {
     jumpToStop: 'Jump to stop {order}: {name}',
     markAsVisited: 'Mark as visited',
     markAsUnvisited: 'Mark as unvisited',
+    previousStops: 'Previous stops',
+    moreStops: 'More stops',
 
     // Durations
     '1-2h': '1-2h',
@@ -149,6 +151,8 @@ export const TRANSLATIONS = {
     jumpToStop: 'Перейти к остановке {order}: {name}',
     markAsVisited: 'Отметить как посещённую',
     markAsUnvisited: 'Снять отметку',
+    previousStops: 'Предыдущие остановки',
+    moreStops: 'Следующие остановки',
 
     // Durations
     '1-2h': '1-2 ч',

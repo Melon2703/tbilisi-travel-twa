@@ -54,4 +54,120 @@ describe('TimelineBar Component', () => {
     expect(trackContainer).toBeInTheDocument();
     expect(trackContainer).toHaveStyle({ height: '2px' });
   });
+
+  describe('Maximum visible dots & sliding window continuation', () => {
+    const createStops = (count: number): Stop[] =>
+      Array.from({ length: count }, (_, i) => ({
+        id: `stop-${i + 1}`,
+        order: i + 1,
+        stopType: 'attraction',
+        name: `Stop ${i + 1}`,
+        neighborhood: 'Tbilisi',
+        coordinates: { lat: 41.7, lng: 44.8 },
+        estimatedMinutes: 20,
+        imageUrl: 'https://images.unsplash.com/photo',
+        olyaTips: `Tip ${i + 1}`,
+      }));
+
+    it('caps visible dots to maxVisibleDots (5) and renders right continuation ellipsis when activeIndex is 1', () => {
+      const stops = createStops(8);
+      render(
+        <LanguageProvider initialLanguage="en">
+          <TimelineBar
+            stops={stops}
+            activeIndex={1}
+            visitedStopIds={[]}
+            onStopClick={() => {}}
+            onToggleVisited={() => {}}
+            maxVisibleDots={5}
+          />
+        </LanguageProvider>
+      );
+
+      // Visible stops should be 1 to 5
+      expect(screen.getByTestId('timeline-stop-1')).toBeInTheDocument();
+      expect(screen.getByTestId('timeline-stop-5')).toBeInTheDocument();
+      expect(screen.queryByTestId('timeline-stop-6')).not.toBeInTheDocument();
+
+      // Right ellipsis should be present, left should not
+      expect(screen.getByTestId('timeline-ellipsis-right')).toBeInTheDocument();
+      expect(screen.queryByTestId('timeline-ellipsis-left')).not.toBeInTheDocument();
+    });
+
+    it('slides window and shows both left and right ellipsis when activeIndex is in middle', () => {
+      const stops = createStops(8);
+      render(
+        <LanguageProvider initialLanguage="en">
+          <TimelineBar
+            stops={stops}
+            activeIndex={4}
+            visitedStopIds={[]}
+            onStopClick={() => {}}
+            onToggleVisited={() => {}}
+            maxVisibleDots={5}
+          />
+        </LanguageProvider>
+      );
+
+      // Active is stop 4 -> window should be stops 2..6
+      expect(screen.queryByTestId('timeline-stop-1')).not.toBeInTheDocument();
+      expect(screen.getByTestId('timeline-stop-2')).toBeInTheDocument();
+      expect(screen.getByTestId('timeline-stop-4')).toBeInTheDocument();
+      expect(screen.getByTestId('timeline-stop-6')).toBeInTheDocument();
+      expect(screen.queryByTestId('timeline-stop-7')).not.toBeInTheDocument();
+
+      // Both ellipsis should be rendered
+      expect(screen.getByTestId('timeline-ellipsis-left')).toBeInTheDocument();
+      expect(screen.getByTestId('timeline-ellipsis-right')).toBeInTheDocument();
+    });
+
+    it('defaults to 4 visible dots when maxVisibleDots is omitted', () => {
+      const stops = createStops(8);
+      render(
+        <LanguageProvider initialLanguage="en">
+          <TimelineBar
+            stops={stops}
+            activeIndex={1}
+            visitedStopIds={[]}
+            onStopClick={() => {}}
+            onToggleVisited={() => {}}
+          />
+        </LanguageProvider>
+      );
+
+      // Visible stops should be 1 to 4
+      expect(screen.getByTestId('timeline-stop-1')).toBeInTheDocument();
+      expect(screen.getByTestId('timeline-stop-4')).toBeInTheDocument();
+      expect(screen.queryByTestId('timeline-stop-5')).not.toBeInTheDocument();
+      expect(screen.getByTestId('timeline-ellipsis-right')).toBeInTheDocument();
+    });
+
+    it('invokes onStopClick when tapping continuation ellipsis buttons', () => {
+      const stops = createStops(8);
+      const handleStopClick = vitest.fn();
+
+      render(
+        <LanguageProvider initialLanguage="en">
+          <TimelineBar
+            stops={stops}
+            activeIndex={4}
+            visitedStopIds={[]}
+            onStopClick={handleStopClick}
+            onToggleVisited={() => {}}
+            maxVisibleDots={5}
+          />
+        </LanguageProvider>
+      );
+
+      const leftEllipsis = screen.getByTestId('timeline-ellipsis-left');
+      leftEllipsis.click();
+      // Left window start was index 1 (stop 2), so tapping left jumps to stop 1 (slide index 1)
+      expect(handleStopClick).toHaveBeenCalledWith(1);
+
+      const rightEllipsis = screen.getByTestId('timeline-ellipsis-right');
+      rightEllipsis.click();
+      // Right window end was index 5 (stop 6), so tapping right jumps to stop 7 (slide index 7)
+      expect(handleStopClick).toHaveBeenCalledWith(7);
+    });
+  });
 });
