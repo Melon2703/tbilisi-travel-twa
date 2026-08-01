@@ -141,4 +141,55 @@ describe('RouteIntroCard Component', () => {
     expect(warningHeader).toHaveTextContent('Logistics warning');
     expect(warningHeader?.textContent).not.toContain('⚠️');
   });
+
+  it('6. RouteOverviewMap renders glassmorphism bottom bar with EN and RU translations', () => {
+    const { rerender } = render(
+      <LanguageProvider initialLanguage="en">
+        <RouteIntroCard route={mockRoute} />
+      </LanguageProvider>
+    );
+
+    const bottomBarEn = screen.getByTestId('tap-to-view-full-map-bar');
+    expect(bottomBarEn).toBeInTheDocument();
+    expect(bottomBarEn).toHaveTextContent('Tap to view full map 🗺️');
+    expect(bottomBarEn.className).toContain('backdrop-blur-md');
+
+    rerender(
+      <LanguageProvider initialLanguage="ru">
+        <RouteIntroCard route={mockRoute} />
+      </LanguageProvider>
+    );
+
+    const bottomBarRu = screen.getByTestId('tap-to-view-full-map-bar');
+    expect(bottomBarRu).toHaveTextContent('Нажмите, чтобы открыть карту 🗺️');
+  });
+
+  it('7. Tapping anywhere on preview map container triggers full map modal', () => {
+    render(
+      <LanguageProvider>
+        <RouteIntroCard route={mockRoute} />
+      </LanguageProvider>
+    );
+
+    expect(screen.queryByTestId('close-map-modal')).not.toBeInTheDocument();
+
+    const tileContainer = screen.getByTestId('map-tile-container');
+    fireEvent.click(tileContainer);
+
+    expect(screen.getByTestId('close-map-modal')).toBeInTheDocument();
+  });
+
+  it('8. RouteOverviewMap does not render inline zoom controls, popover tooltips, or SVG path lines', () => {
+    const { container } = render(
+      <LanguageProvider>
+        <RouteIntroCard route={mockRoute} />
+      </LanguageProvider>
+    );
+
+    expect(screen.queryByTestId('map-control-zoom-in')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('map-control-zoom-out')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('map-control-reset')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('map-stop-popover')).not.toBeInTheDocument();
+    expect(container.querySelector('svg path')).not.toBeInTheDocument();
+  });
 });
