@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Route, DurationCategory, VibeCategory } from '@/lib/types/route';
-import { sortRoutesByProximity, calculateDistance, isAccessibilitySatisfied } from '@/lib/engine/matcher';
+import { sortRoutesByProximity, calculateDistance } from '@/lib/engine/matcher';
 import { getRouteDurationFormatted, formatAccessibilityLabel } from '@/lib/data/routes';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
@@ -36,7 +36,6 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
 
   const [selectedDuration, setSelectedDuration] = useState<DurationCategory | 'all'>('all');
   const [selectedVibe, setSelectedVibe] = useState<VibeCategory | 'all'>('all');
-  const [easyRouteOnly, setEasyRouteOnly] = useState<boolean>(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState<boolean>(false);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -76,9 +75,6 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
     if (selectedVibe !== 'all' && !route.vibes.includes(selectedVibe)) {
       return false;
     }
-    if (easyRouteOnly && !isAccessibilitySatisfied(route.accessibility, 'stroller-friendly')) {
-      return false;
-    }
     return true;
   });
 
@@ -95,7 +91,6 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
       >
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#C4572A]/12 pb-3">
           <div className="flex items-center gap-2">
-            <span className="text-base">🎛️</span>
             <h3 className="font-bold text-sm text-[#1C1008] uppercase tracking-wider">
               {language === 'ru' ? 'Фильтры и сортировки' : 'Route Filters & Sorting'}
             </h3>
@@ -107,11 +102,10 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
             data-testid="geo-location-button"
             onClick={handleRequestLocation}
             disabled={isLocating}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs min-h-[36px] ${
-              userLocation
+            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs min-h-[36px] ${userLocation
                 ? 'bg-[#228255] text-white ring-2 ring-[#228255]/30'
                 : 'bg-[#C4572A] text-white hover:bg-[#a84720] active:scale-95'
-            }`}
+              }`}
           >
             <span>📍</span>
             <span>
@@ -140,11 +134,10 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               type="button"
               data-testid="duration-filter-all"
               onClick={() => setSelectedDuration('all')}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${
-                selectedDuration === 'all'
+              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedDuration === 'all'
                   ? 'bg-[#1C1008] text-white shadow-xs'
                   : 'bg-[#FAF7F2] text-[#7A6552] border border-black/10 hover:text-[#1C1008]'
-              }`}
+                }`}
             >
               {t('allDurations')}
             </button>
@@ -154,11 +147,10 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 type="button"
                 data-testid={`duration-filter-${d.id}`}
                 onClick={() => setSelectedDuration(d.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${
-                  selectedDuration === d.id
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedDuration === d.id
                     ? 'bg-[#C4572A] text-white shadow-xs'
                     : 'bg-[#FAF7F2] text-[#7A6552] border border-black/10 hover:text-[#1C1008]'
-                }`}
+                  }`}
               >
                 {language === 'ru' ? d.labelRu : d.label}
               </button>
@@ -176,11 +168,10 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               type="button"
               data-testid="vibe-filter-all"
               onClick={() => setSelectedVibe('all')}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${
-                selectedVibe === 'all'
+              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedVibe === 'all'
                   ? 'bg-[#1C1008] text-white shadow-xs'
                   : 'bg-[#FAF7F2] text-[#7A6552] border border-black/10 hover:text-[#1C1008]'
-              }`}
+                }`}
             >
               {t('allVibes')}
             </button>
@@ -190,11 +181,10 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 type="button"
                 data-testid={`vibe-filter-${v.id}`}
                 onClick={() => setSelectedVibe(v.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${
-                  selectedVibe === v.id
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedVibe === v.id
                     ? 'bg-[#C4572A] text-white shadow-xs'
                     : 'bg-[#FAF7F2] text-[#7A6552] border border-black/10 hover:text-[#1C1008]'
-                }`}
+                  }`}
               >
                 #{language === 'ru' ? v.labelRu : v.label}
               </button>
@@ -202,28 +192,13 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
           </div>
         </div>
 
-        {/* Easy Route Accessibility Toggle */}
-        <div className="pt-2 border-t border-[#C4572A]/10 flex items-center justify-between">
-          <label
-            htmlFor="easy-route-toggle"
-            className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#1C1008]"
-          >
-            <input
-              type="checkbox"
-              id="easy-route-toggle"
-              data-testid="easy-route-toggle"
-              checked={easyRouteOnly}
-              onChange={(e) => setEasyRouteOnly(e.target.checked)}
-              className="w-4 h-4 accent-[#C4572A] rounded cursor-pointer"
-            />
-            <span>♿ {t('easyRouteLabel')}</span>
-          </label>
-          {filteredRoutes.length !== initialRoutes.length && (
+        {filteredRoutes.length !== initialRoutes.length && (
+          <div className="pt-2 border-t border-[#C4572A]/10 flex justify-end">
             <span className="text-[11px] font-semibold text-[#C4572A]">
               {filteredRoutes.length} / {initialRoutes.length} {language === 'ru' ? 'маршрутов' : 'routes'}
             </span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* ── Catalog Section Header ── */}
@@ -234,9 +209,6 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
         >
           {t('catalogTitle')}
         </h2>
-        <span className="text-xs text-[#7A6552] font-medium">
-          {t('catalogSub')}
-        </span>
       </div>
 
       {/* ── Route Grid ── */}
@@ -270,11 +242,11 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
 
             const distanceKm = userLocation
               ? calculateDistance(
-                  userLocation.lat,
-                  userLocation.lng,
-                  route.stops[0]?.coordinates?.lat || 0,
-                  route.stops[0]?.coordinates?.lng || 0
-                ).toFixed(1)
+                userLocation.lat,
+                userLocation.lng,
+                route.stops[0]?.coordinates?.lat || 0,
+                route.stops[0]?.coordinates?.lng || 0
+              ).toFixed(1)
               : null;
 
             return (

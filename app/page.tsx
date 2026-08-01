@@ -28,9 +28,6 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-[#C4572A] text-white border border-[#C4572A] shadow-xs">
-            {routes.length} Curated Routes
-          </span>
         </div>
       </header>
 
@@ -45,12 +42,6 @@ export default function Home() {
           }}
         >
           <div className="relative z-10 space-y-3 max-w-2xl">
-            <div
-              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold text-white uppercase tracking-wider shadow-xs"
-              style={{ background: '#C4572A' }}
-            >
-              ✨ Interactive Catalog
-            </div>
             <h2
               className="text-2xl sm:text-4xl font-black tracking-tight text-[#1C1008] leading-tight"
               style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}

@@ -13,6 +13,8 @@ import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib
 
 import LightboxModal from '@/components/timeline/LightboxModal';
 import { shareStopDeepLink } from '@/lib/utils/telegram';
+import { SiGooglemaps } from 'react-icons/si';
+import { FaYandex, FaInstagram, FaGlobe } from 'react-icons/fa6';
 
 export interface StopCardProps {
   stop: Stop;
@@ -20,6 +22,22 @@ export interface StopCardProps {
   isLast?: boolean;
   totalStops?: number;
   isVisited?: boolean;
+}
+
+function GoogleMapsIcon({ className = 'w-5 h-5' }: { className?: string }) {
+  return <SiGooglemaps className={`${className} text-[#EA4335]`} />;
+}
+
+function YandexMapsIcon({ className = 'w-5 h-5' }: { className?: string }) {
+  return <FaYandex className={`${className} text-[#FC3F1D]`} />;
+}
+
+function GlobeIcon({ className = 'w-5 h-5' }: { className?: string }) {
+  return <FaGlobe className={`${className} text-[#5C4D42]`} />;
+}
+
+function InstagramIcon({ className = 'w-5 h-5' }: { className?: string }) {
+  return <FaInstagram className={`${className} text-[#E4405F]`} />;
 }
 
 const CATEGORY_KEYS: Record<string, string> = {
@@ -292,75 +310,6 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
           </div>
         )}
 
-        {/* Georgian Divider */}
-        <GeorgianOrnament />
-
-        {/* Standalone Google Rating Badge */}
-        <div
-          data-testid="google-rating-badge"
-          className="flex items-center justify-center gap-1.5 text-xs text-[#5C4D42] font-medium"
-        >
-          <span className="text-[#C4572A] font-bold text-sm">★ {ratings.google.rating.toFixed(1)}</span>
-          <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
-        </div>
-
-        {/* Branded Map Provider Deep Link Buttons */}
-        <div className="grid grid-cols-2 gap-3" data-testid="map-pills-row">
-          <a
-            href={googleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/30 text-sm font-semibold text-[#1C1008]"
-            aria-label="Open in Google Maps"
-          >
-            <EmojiIcon name="googleMaps" size="md" />
-            <span>📍 Google Maps</span>
-          </a>
-
-          <a
-            href={yandexMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border transition-all active:scale-[0.97] min-h-[48px] bg-white border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/30 text-sm font-semibold text-[#1C1008]"
-            aria-label="Open in Yandex Maps"
-          >
-            <EmojiIcon name="yandexMaps" size="md" />
-            <span>📍 Yandex Maps</span>
-          </a>
-        </div>
-
-        {/* Website & Instagram Links */}
-        {(stop.websiteUrl || stop.instagramUrl) && (
-          <div className="flex flex-wrap gap-2 pt-1 justify-center" data-testid="external-links-row">
-            {stop.websiteUrl && (
-              <a
-                href={stop.websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 py-2 px-4 rounded-full border transition-all active:scale-95 text-xs font-semibold bg-white border-[#E8EAF0] text-[#1C1008] hover:border-[#C4572A]/30 shadow-2xs"
-                aria-label="Visit Website"
-              >
-                <EmojiIcon name="globe" size="xs" />
-                <span>{t('website')}</span>
-                <EmojiIcon name="externalLink" size="xs" />
-              </a>
-            )}
-            {stop.instagramUrl && (
-              <a
-                href={stop.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 py-2 px-4 rounded-full border transition-all active:scale-95 text-xs font-semibold bg-white border-[#E8EAF0] text-[#1C1008] hover:border-[#C4572A]/30 shadow-2xs"
-                aria-label="Visit Instagram"
-              >
-                <EmojiIcon name="instagram" size="xs" />
-                <span>{t('instagram')}</span>
-                <EmojiIcon name="externalLink" size="xs" />
-              </a>
-            )}
-          </div>
-        )}
-
         {/* Recommended Dishes for Venue Stop */}
         {venueStop && venueStop.venueDetails.recommendedDishes?.length > 0 && (
           <RecommendedDishesSection dishes={venueStop.venueDetails.recommendedDishes} title={t('recommendedDishes')} />
@@ -404,6 +353,72 @@ function StopCard({ stop: rawStop, routeId, totalStops, isVisited = false }: Sto
             </Callout>
           </div>
         )}
+
+        {/* ── LAST BLOCK: Google Rating & Icon-Only Platform Links Row ── */}
+        <div data-testid="last-actions-block" className="pt-2 space-y-3">
+          {/* Georgian Divider */}
+          <GeorgianOrnament />
+
+          {/* Standalone Google Rating Badge */}
+          <div
+            data-testid="google-rating-badge"
+            className="flex items-center justify-center gap-1.5 text-xs text-[#5C4D42] font-medium"
+          >
+            <span className="text-[#C4572A] font-bold text-sm">★ {ratings.google.rating.toFixed(1)}</span>
+            <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
+          </div>
+
+          {/* Single Row Icon-Only Action Buttons */}
+          <div className="flex items-center justify-center gap-3 pt-1" data-testid="map-pills-row">
+            <a
+              href={googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
+              aria-label="Open in Google Maps"
+              title="Google Maps"
+            >
+              <GoogleMapsIcon className="w-6 h-6" />
+            </a>
+
+            <a
+              href={yandexMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
+              aria-label="Open in Yandex Maps"
+              title="Yandex Maps"
+            >
+              <YandexMapsIcon className="w-6 h-6" />
+            </a>
+
+            {stop.websiteUrl && (
+              <a
+                href={stop.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
+                aria-label="Visit Website"
+                title="Website"
+              >
+                <GlobeIcon className="w-6 h-6 text-[#5C4D42]" />
+              </a>
+            )}
+
+            {stop.instagramUrl && (
+              <a
+                href={stop.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-2xl bg-white border border-[#E8EAF0] shadow-xs hover:border-[#C4572A]/40 flex items-center justify-center transition-all active:scale-95 text-[#1C1008] min-h-[48px] min-w-[48px]"
+                aria-label="Visit Instagram"
+                title="Instagram"
+              >
+                <InstagramIcon className="w-6 h-6" />
+              </a>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Photo Lightbox Modal */}

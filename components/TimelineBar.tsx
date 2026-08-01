@@ -64,16 +64,6 @@ function TimelineBar({
         borderTop: '1px solid rgba(196,87,42,0.12)',
       }}
     >
-      {/* Route Completion Banner */}
-      {isCompleted && (
-        <div
-          data-testid="completion-feedback"
-          className="absolute -top-11 left-0 right-0 mx-auto w-max px-3 py-1 bg-[#228255] border border-white/20 text-[#FAF7F2] rounded-full text-xs text-center font-bold shadow-lg flex items-center justify-center gap-1.5 backdrop-blur-md pointer-events-auto z-10"
-        >
-          <span>🎉</span>
-          <span>{t('routeCompleted')}</span>
-        </div>
-      )}
 
       <div className="flex items-center gap-3 px-4 py-3.5 max-w-2xl mx-auto w-full">
         {/* Track + dots container */}

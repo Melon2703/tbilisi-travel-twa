@@ -103,26 +103,6 @@ describe('Home Root Page (Route Directory)', () => {
       });
     });
 
-    it('filters routes when Easy Route accessibility filter toggle is active', () => {
-      render(<Home />);
-
-      const easyToggle = screen.getByTestId('easy-route-toggle');
-      expect(easyToggle).toBeInTheDocument();
-
-      fireEvent.click(easyToggle);
-
-      // Only stroller-friendly routes should be visible
-      const easyRoutes = ROUTES.filter((r) => r.accessibility === 'stroller-friendly');
-      const steepRoutes = ROUTES.filter((r) => r.accessibility === 'steep-stairs');
-
-      easyRoutes.forEach((route) => {
-        expect(screen.getByText(route.title)).toBeInTheDocument();
-      });
-      steepRoutes.forEach((route) => {
-        expect(screen.queryByText(route.title)).not.toBeInTheDocument();
-      });
-    });
-
     it('triggers geolocation request and sorts routes by proximity when Nearest button is clicked', async () => {
       const getCurrentPositionMock = vi.fn((success: (pos: { coords: { latitude: number; longitude: number } }) => void) => {
         // User at Freedom Square (41.6934, 44.8015)

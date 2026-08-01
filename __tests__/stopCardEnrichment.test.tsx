@@ -76,7 +76,7 @@ describe('StopCard Data Enrichment & Tailored Type Rendering', () => {
     expect(screen.getByTestId('working-hours-badge')).toBeInTheDocument();
     expect(screen.getByText(/Open 24\/7/)).toBeInTheDocument();
 
-    expect(screen.getByTestId('external-links-row')).toBeInTheDocument();
+    expect(screen.getByTestId('map-pills-row')).toBeInTheDocument();
     expect(screen.getByLabelText('Visit Website')).toHaveAttribute('href', 'https://tbilisi.gov.ge');
     expect(screen.getByLabelText('Visit Instagram')).toHaveAttribute('href', 'https://instagram.com/tbilisi_official');
   });
@@ -95,7 +95,7 @@ describe('StopCard Data Enrichment & Tailored Type Rendering', () => {
     expect(screen.getByTestId('booking-advice')).toBeInTheDocument();
     expect(screen.getByText('Reserve upper balcony seats.')).toBeInTheDocument();
 
-    expect(screen.getByTestId('external-links-row')).toBeInTheDocument();
+    expect(screen.getByTestId('map-pills-row')).toBeInTheDocument();
     expect(screen.getByLabelText('Visit Website')).toHaveAttribute('href', 'https://orbelianibazaar.ge');
     expect(screen.getByLabelText('Visit Instagram')).toHaveAttribute('href', 'https://instagram.com/orbelianibazaar');
   });

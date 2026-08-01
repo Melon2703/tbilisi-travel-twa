@@ -104,7 +104,7 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
       <Swiper
         modules={[Mousewheel]}
         mousewheel={{ forceToAxis: true, releaseOnEdges: true }}
-        speed={250}
+        speed={300}
         resistanceRatio={0.65}
         watchSlidesProgress={true}
         onSwiper={(swiper) => {
@@ -126,8 +126,9 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
         preventClicks={false}
         preventClicksPropagation={false}
         touchStartPreventDefault={false}
-        threshold={8}
-        touchAngle={45}
+        touchReleaseOnEdges={true}
+        threshold={25}
+        touchAngle={25}
         touchEventsTarget="container"
         className="w-full h-[100dvh]"
       >

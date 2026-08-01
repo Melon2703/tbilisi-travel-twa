@@ -332,12 +332,12 @@ describe('TWA Timeline & Card Feed UI', () => {
       const googleLink = screen.getByRole('link', { name: /Google Maps/i });
       const yandexLink = screen.getByRole('link', { name: /Yandex Maps/i });
 
-      // Minimalist map buttons contain label text but no rating numbers or star icons inside
-      expect(googleLink).toHaveTextContent('Google Maps');
+      // Minimalist icon-only map buttons have title/aria-label but no rating numbers or star icons inside
+      expect(googleLink).toHaveAttribute('aria-label', 'Open in Google Maps');
       expect(googleLink).not.toHaveTextContent('4.7');
       expect(googleLink).not.toHaveTextContent('★');
 
-      expect(yandexLink).toHaveTextContent('Yandex Maps');
+      expect(yandexLink).toHaveAttribute('aria-label', 'Open in Yandex Maps');
       expect(yandexLink).not.toHaveTextContent('4.7');
       expect(yandexLink).not.toHaveTextContent('★');
     });
@@ -478,9 +478,6 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(parsedData).toContain('sololaki-stop-1');
       expect(parsedData).toContain('sololaki-stop-2');
 
-      // Completion feedback should be visible
-      expect(screen.getByTestId('completion-feedback')).toBeInTheDocument();
-      expect(screen.getByText(/Route completed! All stops visited!/i)).toBeInTheDocument();
     });
 
     it('persists checked-off visited state when re-rendering component', () => {
