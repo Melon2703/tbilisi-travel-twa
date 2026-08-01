@@ -30,6 +30,10 @@ export const MAP_PROVIDERS: MapProviderOption[] = [
   },
 ];
 
+/**
+ * Low-level map URL resolver.
+ * @deprecated Prefer using `getLaunchUrl` from `useMapLauncher()` hook.
+ */
 export function getMapUrl(provider: MapProvider, coords: { lat: number; lng: number }): string {
   const { lat, lng } = coords;
   switch (provider) {
@@ -42,6 +46,10 @@ export function getMapUrl(provider: MapProvider, coords: { lat: number; lng: num
   }
 }
 
+/**
+ * Low-level reader for preferred map provider in localStorage.
+ * @deprecated Prefer using the MapLauncher seam via `useMapLauncher()` hook.
+ */
 export function getPreferredMapProvider(): MapProvider | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -55,6 +63,10 @@ export function getPreferredMapProvider(): MapProvider | null {
   return null;
 }
 
+/**
+ * Low-level writer for preferred map provider in localStorage.
+ * @deprecated Prefer using the MapLauncher seam via `useMapLauncher()` hook.
+ */
 export function setPreferredMapProvider(provider: MapProvider): void {
   if (typeof window === 'undefined') return;
   try {
@@ -63,3 +75,4 @@ export function setPreferredMapProvider(provider: MapProvider): void {
     console.error('Failed to save map provider preference to localStorage:', e);
   }
 }
+

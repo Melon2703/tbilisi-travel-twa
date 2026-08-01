@@ -5,7 +5,7 @@ import MapProviderBottomSheet from '@/components/MapProviderBottomSheet';
 import RouteMapModal from '@/components/RouteMapModal';
 import { Route } from '@/lib/types/route';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
-import { getPreferredMapProvider, setPreferredMapProvider } from '@/lib/utils/maps';
+import { MAP_STORAGE_KEY } from '@/lib/utils/maps';
 
 const mockRoute: Route = {
   id: 'issue-43-test-route',
@@ -69,11 +69,11 @@ describe('Issue 43: MapLauncher Seam Migration for RouteMapModal and MapProvider
     fireEvent.click(yandexLink);
 
     // Preferred provider state in localStorage should be updated to yandex
-    expect(getPreferredMapProvider()).toBe('yandex');
+    expect(localStorage.getItem(MAP_STORAGE_KEY)).toBe('yandex');
   });
 
   it('2. Active and preferred provider badges highlight correctly in MapProviderBottomSheet upon preference change', () => {
-    setPreferredMapProvider('apple');
+    localStorage.setItem(MAP_STORAGE_KEY, 'apple');
     const mockOnClose = vi.fn();
 
     render(
@@ -134,7 +134,7 @@ describe('Issue 43: MapLauncher Seam Migration for RouteMapModal and MapProvider
 
     // Verify select value updated
     expect(providerSelect).toHaveValue('yandex');
-    expect(getPreferredMapProvider()).toBe('yandex');
+    expect(localStorage.getItem(MAP_STORAGE_KEY)).toBe('yandex');
 
     // Action bar link should now be updated to Yandex maps URL
     const openInMapBtn = screen.getByTestId('modal-stop-card').querySelector('a')!;

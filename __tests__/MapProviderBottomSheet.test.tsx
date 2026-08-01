@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import MapProviderBottomSheet from '@/components/MapProviderBottomSheet';
-import { getPreferredMapProvider, setPreferredMapProvider } from '@/lib/utils/maps';
+import { MAP_STORAGE_KEY } from '@/lib/utils/maps';
 
 describe('MapProviderBottomSheet Component', () => {
   const mockCoords = { lat: 41.6918, lng: 44.7972 };
@@ -83,11 +83,11 @@ describe('MapProviderBottomSheet Component', () => {
     const appleLink = screen.getByRole('link', { name: /Apple Maps/i });
     fireEvent.click(appleLink);
 
-    expect(getPreferredMapProvider()).toBe('apple');
+    expect(localStorage.getItem(MAP_STORAGE_KEY)).toBe('apple');
   });
 
   it('restores and indicates the preferred map provider from localStorage', () => {
-    setPreferredMapProvider('yandex');
+    localStorage.setItem(MAP_STORAGE_KEY, 'yandex');
 
     render(
       <MapProviderBottomSheet
