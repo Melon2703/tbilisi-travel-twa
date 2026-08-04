@@ -87,26 +87,22 @@ function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): s
   return categoryText;
 }function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: string }) {
   return (
-    <div data-testid="recommended-dishes" className="space-y-1.5 pt-1">
-      <p
-        className="text-xs font-bold flex items-center gap-1.5"
-        style={{ color: COLORS.terracottaAccent }}
-      >
-        {title}
-      </p>
-      <ul data-testid="recommended-dishes-list" className="space-y-1 pl-1">
-        {dishes.map((dish, index) => (
-          <li
-            key={`${dish}-${index}`}
-            data-testid="dish-item"
-            className="text-xs font-medium flex items-start gap-2"
-            style={{ color: COLORS.dishText }}
-          >
-            <span style={{ color: COLORS.terracottaAccent }} className="font-bold shrink-0">•</span>
-            <span>{dish}</span>
-          </li>
-        ))}
-      </ul>
+    <div data-testid="recommended-dishes">
+      <Callout emoji="utensils" title={title}>
+        <ul data-testid="recommended-dishes-list" className="space-y-1 pl-1 pt-0.5">
+          {dishes.map((dish, index) => (
+            <li
+              key={`${dish}-${index}`}
+              data-testid="dish-item"
+              className="text-xs sm:text-sm font-medium flex items-start gap-2"
+              style={{ color: COLORS.dishText }}
+            >
+              <span style={{ color: COLORS.terracottaAccent }} className="font-bold shrink-0">•</span>
+              <span>{dish}</span>
+            </li>
+          ))}
+        </ul>
+      </Callout>
     </div>
   );
 }
@@ -317,42 +313,41 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     </div>
   );
 
-  /* Part 4: Unified Consolidated "Olya's Recommendation" Card */
-  const renderConsolidatedRecommendationCard = () => {
-    const hasVenueDishes = venueStop?.venueDetails.recommendedDishes && venueStop.venueDetails.recommendedDishes.length > 0;
+  /* Unified Content Blocks in Standard Hierarchy */
+  const renderContentBlocks = () => {
+    const hasVenueDishes = Boolean(venueStop?.venueDetails.recommendedDishes && venueStop.venueDetails.recommendedDishes.length > 0);
     const hasBookingAdvice = Boolean(venueStop?.venueDetails.bookingAdvice);
-    const hasOlyaTips = Boolean(stop.olyaTips);
-    const hasPhotoSpot = Boolean(stop.photoSpot);
-    const hasLogisticsWarning = Boolean(stop.logisticsWarning);
-
-    const hasAnyRecommendation = hasVenueDishes || hasBookingAdvice || hasOlyaTips || hasPhotoSpot || hasLogisticsWarning;
-
-    if (!hasAnyRecommendation) return null;
 
     return (
-      <div
-        data-testid="olya-recommendation-card"
-        className="rounded-2xl p-4 sm:p-5 border border-[#C4572A]/10 space-y-3 shadow-xs"
-        style={{
-          backgroundColor: COLORS.cardBg,
-        }}
-      >
-        <div
-          className="flex items-center gap-1.5 text-xs font-bold"
-          style={{ color: COLORS.terracottaAccent }}
-        >
-          <span>{t('olyaRecommendation')}</span>
-        </div>
+      <>
+        {stop.historicalSummary && (
+          <div data-testid="historical-summary">
+            <Callout emoji="landmark" title={t('historicalSummary')}>
+              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
+                {stop.historicalSummary}
+              </p>
+            </Callout>
+          </div>
+        )}
+
+        {stop.funFact && (
+          <div data-testid="fun-fact">
+            <Callout emoji="bulb" title={t('funFact')}>
+              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
+                {stop.funFact}
+              </p>
+            </Callout>
+          </div>
+        )}
 
         {stop.olyaTips && (
-          <Callout title={t('olyaTip')}>
-            <p
-              className="text-sm italic leading-relaxed"
-              style={{ color: COLORS.dishText }}
-            >
-              &ldquo;{stop.olyaTips}&rdquo;
-            </p>
-          </Callout>
+          <div data-testid="olya-tip">
+            <Callout emoji="chat" title={t('olyaTip')}>
+              <p className="text-xs sm:text-sm italic leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
+                &ldquo;{stop.olyaTips}&rdquo;
+              </p>
+            </Callout>
+          </div>
         )}
 
         {hasVenueDishes && (
@@ -364,28 +359,34 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
         {hasBookingAdvice && (
           <div data-testid="booking-advice">
-            <Callout title={t('bookingAdvice')}>
-              {venueStop!.venueDetails.bookingAdvice}
+            <Callout emoji="calendar" title={t('bookingAdvice')}>
+              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
+                {venueStop!.venueDetails.bookingAdvice}
+              </p>
             </Callout>
           </div>
         )}
 
         {stop.photoSpot && (
           <div data-testid="photo-spot">
-            <Callout title={t('photoSpotRec')}>
-              {stop.photoSpot}
+            <Callout emoji="camera" title={t('photoSpotRec')}>
+              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
+                {stop.photoSpot}
+              </p>
             </Callout>
           </div>
         )}
 
         {stop.logisticsWarning && (
           <div data-testid="logistics-warning">
-            <Callout title={t('logisticsWarning')} variant="warning">
-              {stop.logisticsWarning}
+            <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
+              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
+                {stop.logisticsWarning}
+              </p>
             </Callout>
           </div>
         )}
-      </div>
+      </>
     );
   };
 
@@ -409,27 +410,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         </div>
       )}
 
-      {stop.historicalSummary && (
-        <div data-testid="historical-summary">
-          <Callout emoji="landmark" title={t('historicalSummary')}>
-            <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
-              {stop.historicalSummary}
-            </p>
-          </Callout>
-        </div>
-      )}
-
-      {stop.funFact && (
-        <div data-testid="fun-fact">
-          <Callout emoji="bulb" title={t('funFact')}>
-            <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
-              {stop.funFact}
-            </p>
-          </Callout>
-        </div>
-      )}
-
-      {renderConsolidatedRecommendationCard()}
+      {renderContentBlocks()}
     </div>
   );
 
@@ -464,7 +445,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         </div>
       )}
 
-      {renderConsolidatedRecommendationCard()}
+      {renderContentBlocks()}
     </div>
   );
 

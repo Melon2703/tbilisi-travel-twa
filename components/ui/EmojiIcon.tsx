@@ -21,6 +21,7 @@ export const EMOJI_ICONS = {
   calendar: '📅',
   landmark: '🏛️',
   bulb: '💡',
+  utensils: '🍽️',
   globe: '🌐',
   instagram: '📸',
 } as const;

@@ -183,50 +183,50 @@ describe('StopCard Component', () => {
     });
   });
 
-  describe('Olya Recommendation Card & Secondary Headers', () => {
-    it('renders recommendation blocks inside consolidated Olya Recommendation card with clean section titles', () => {
+  describe('Flat Callout Recommendation Blocks & Headers', () => {
+    it('renders recommendation blocks as standalone flat Callout cards with clean section titles', () => {
       render(
         <LanguageProvider initialLanguage="en">
           <StopCard stop={venueStep6} totalStops={6} />
         </LanguageProvider>
       );
 
-      const recommendationCard = screen.getByTestId('olya-recommendation-card');
-      expect(recommendationCard).toBeInTheDocument();
-
-      // Recommendation title checks
-      const recHeader = recommendationCard.firstElementChild;
-      expect(recHeader).toHaveTextContent("Olya's recommendation");
-      expect(recHeader?.textContent).not.toContain('✨');
-      expect(recHeader?.className).not.toContain('uppercase');
+      // Olya's tip section check
+      const olyaTipSection = screen.getByTestId('olya-tip');
+      expect(olyaTipSection).toBeInTheDocument();
+      expect(olyaTipSection).toHaveTextContent("Olya's tip");
 
       // Recommended dishes section title check
       const dishesSection = screen.getByTestId('recommended-dishes');
       expect(dishesSection.firstElementChild).toHaveTextContent('Recommended dishes');
-      expect(dishesSection.firstElementChild?.textContent).not.toContain('🍽️');
+
+      // Booking advice section check
+      const bookingSection = screen.getByTestId('booking-advice');
+      expect(bookingSection).toHaveTextContent('Booking & seating advice');
 
       // Photo spot section title check
       const photoSpotSection = screen.getByTestId('photo-spot');
       expect(photoSpotSection).toHaveTextContent('Photo spot recommendation');
-      expect(photoSpotSection.textContent).not.toContain('📷');
 
       // Logistics warning section title check
       const logisticsSection = screen.getByTestId('logistics-warning');
       expect(logisticsSection).toHaveTextContent('Logistics warning');
-      expect(logisticsSection.textContent).not.toContain('⚠️');
     });
 
-    it('uses soft background tinting bg-[#F3EFEA] and border-0 on inner recommendation callouts', () => {
+    it('uses soft background tinting bg-[#F3EFEA] and border-0 on flat callout cards', () => {
       render(
         <LanguageProvider initialLanguage="en">
           <StopCard stop={venueStep6} totalStops={6} />
         </LanguageProvider>
       );
 
+      const olyaTipCallout = screen.getByTestId('olya-tip').firstElementChild;
       const photoSpotCallout = screen.getByTestId('photo-spot').firstElementChild;
       const logisticsCallout = screen.getByTestId('logistics-warning').firstElementChild;
       const bookingCallout = screen.getByTestId('booking-advice').firstElementChild;
 
+      expect(olyaTipCallout?.className).toContain('border-0');
+      expect(olyaTipCallout?.className).toContain('bg-[#F3EFEA]');
       expect(photoSpotCallout?.className).toContain('border-0');
       expect(photoSpotCallout?.className).toContain('bg-[#F3EFEA]');
       expect(logisticsCallout?.className).toContain('border-0');

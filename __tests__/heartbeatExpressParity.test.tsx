@@ -79,10 +79,10 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
         expect(screen.getByTestId('venue-details-header')).toBeInTheDocument();
       }
 
-      // Part 4: Unified Consolidated "Olya's Recommendation" Card
-      const recommendationCard = screen.getByTestId('olya-recommendation-card');
-      expect(recommendationCard).toBeInTheDocument();
-      expect(screen.getByText(/Olya's Recommendation/i)).toBeInTheDocument();
+      // Part 4: Flat Callouts (Olya's Tip, Historical summary, etc.)
+      if (stop.olyaTips) {
+        expect(screen.getByTestId('olya-tip')).toBeInTheDocument();
+      }
 
       // Part 5: Rating Badge & Map/Website Action Pills
       expect(screen.getByTestId('google-rating-badge')).toBeInTheDocument();
@@ -172,9 +172,8 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
     expect(cardContainer).toBeInTheDocument();
     expect(cardContainer).toHaveStyle({ backgroundColor: COLORS.canvasBg, color: COLORS.textPrimary });
 
-    const recommendationCard = screen.getByTestId('olya-recommendation-card');
-    expect(recommendationCard).toBeInTheDocument();
-    expect(recommendationCard).toHaveStyle({ backgroundColor: COLORS.cardBg });
+    const olyaTipCallout = screen.getByTestId('olya-tip');
+    expect(olyaTipCallout).toBeInTheDocument();
 
     const heading = screen.getByRole('heading', { name: stop1.name });
     expect(heading).toBeInTheDocument();
