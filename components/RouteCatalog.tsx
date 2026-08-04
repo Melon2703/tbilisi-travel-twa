@@ -299,7 +299,9 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="flex items-center gap-1">
                         <EmojiIcon name="mapPin" size="xs" />{' '}
-                        <span className="text-[#1C1008] font-bold">{route.stops.length} stops</span>
+                        <span className="text-[#1C1008] font-bold">
+                          {t('stopsCount', { count: route.stops.length })}
+                        </span>
                       </span>
                       <span className="flex items-center gap-1">
                         <EmojiIcon name="clock" size="xs" />{' '}

@@ -118,6 +118,12 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       );
     });
 
+    it('renders stops count correctly without unparsed placeholders', () => {
+      renderModal();
+      expect(screen.getByText('2 stops')).toBeInTheDocument();
+      expect(screen.queryByText('{count}')).not.toBeInTheDocument();
+    });
+
     it('renders close button in right-side floating controls which triggers onClose', () => {
       const { mockOnClose } = renderModal();
 

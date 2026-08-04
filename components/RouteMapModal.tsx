@@ -498,7 +498,7 @@ export default function RouteMapModal({
             {/* Action Bar */}
             <div className="mt-3 pt-3 border-t border-black/5 flex items-center justify-between gap-2">
               <span className="text-[11px] font-semibold text-[#A0876E]">
-                {sortedStops.length} {t('stopsCount')}
+                {t('stopsCount', { count: sortedStops.length })}
               </span>
               <a
                 href={getLaunchUrl(selectedStop.coordinates, mapProvider, selectedStop.name)}
