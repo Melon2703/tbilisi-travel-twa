@@ -48,7 +48,6 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
 
   return (
     <main className="min-h-screen bg-[var(--twa-bg-color,#f7f4ef)] text-[var(--twa-text-color,#1f2421)] antialiased">
-      <TelegramBackButtonController />
       <LanguageProvider initialLanguage={initialLang}>
         <RouteCarousel route={route} />
       </LanguageProvider>

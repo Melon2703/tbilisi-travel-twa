@@ -38,10 +38,15 @@ describe('TelegramBackButtonController', () => {
     expect(mockHideBackButton).toHaveBeenCalledTimes(1);
   });
 
-  it('navigates with router.push("/") when history.length <= 1 and no custom onBack is provided', () => {
+  it('closes Telegram WebApp with webApp.close() when history.length <= 1 and no custom onBack is provided', () => {
     let capturedHandler: (() => void) | undefined;
-    mockShowBackButton.mockImplementation((handler: () => void) => {
-      capturedHandler = handler;
+    const mockClose = vi.fn();
+    (useTelegram as any).mockReturnValue({
+      webApp: { close: mockClose } as any,
+      showBackButton: mockShowBackButton.mockImplementation((handler: () => void) => {
+        capturedHandler = handler;
+      }),
+      hideBackButton: mockHideBackButton,
     });
 
     render(<TelegramBackButtonController />);
@@ -51,7 +56,42 @@ describe('TelegramBackButtonController', () => {
       capturedHandler?.();
     });
 
-    expect(mockPush).toHaveBeenCalledWith('/');
+    expect(mockClose).toHaveBeenCalledTimes(1);
+    expect(mockPush).not.toHaveBeenCalled();
+  });
+
+  it('navigates with router.back() when history.length > 1 and no custom onBack is provided', () => {
+    let capturedHandler: (() => void) | undefined;
+    (useTelegram as any).mockReturnValue({
+      webApp: { close: vi.fn() } as any,
+      showBackButton: mockShowBackButton.mockImplementation((handler: () => void) => {
+        capturedHandler = handler;
+      }),
+      hideBackButton: mockHideBackButton,
+    });
+
+    const originalHistoryLength = window.history.length;
+    Object.defineProperty(window, 'history', {
+      value: { length: 2, back: vi.fn() },
+      writable: true,
+      configurable: true,
+    });
+
+    render(<TelegramBackButtonController />);
+
+    expect(capturedHandler).toBeDefined();
+    act(() => {
+      capturedHandler?.();
+    });
+
+    expect(mockBack).toHaveBeenCalledTimes(1);
+    expect(mockPush).not.toHaveBeenCalled();
+
+    Object.defineProperty(window, 'history', {
+      value: { length: originalHistoryLength },
+      writable: true,
+      configurable: true,
+    });
   });
 
   it('executes custom onBack callback when provided', () => {

@@ -81,12 +81,40 @@ export function TelegramProvider({ children }: TelegramProviderProps) {
       if (app.onEvent) {
         app.onEvent('themeChanged', handleThemeChange);
       }
+      setIsReady(true);
+      return true;
     }
     setIsReady(true);
+    return false;
   }, [applyTheme]);
 
   useEffect(() => {
-    initTelegram();
+    if (initTelegram()) return;
+
+    const handleInit = () => {
+      initTelegram();
+    };
+
+    window.addEventListener('DOMContentLoaded', handleInit);
+    window.addEventListener('load', handleInit);
+
+    const timer = setInterval(() => {
+      if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+        initTelegram();
+        clearInterval(timer);
+      }
+    }, 100);
+
+    const timeout = setTimeout(() => {
+      clearInterval(timer);
+    }, 3000);
+
+    return () => {
+      window.removeEventListener('DOMContentLoaded', handleInit);
+      window.removeEventListener('load', handleInit);
+      clearInterval(timer);
+      clearTimeout(timeout);
+    };
   }, [initTelegram]);
 
   const isBackButtonSupported = useCallback(() => {

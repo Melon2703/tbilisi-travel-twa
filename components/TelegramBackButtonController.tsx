@@ -9,13 +9,15 @@ interface TelegramBackButtonControllerProps {
 }
 
 export default function TelegramBackButtonController({ onBack }: TelegramBackButtonControllerProps) {
-  const { showBackButton, hideBackButton } = useTelegram();
+  const { webApp, showBackButton, hideBackButton } = useTelegram();
   const router = useRouter();
 
   useEffect(() => {
     const handleBack = onBack || (() => {
       if (typeof window !== 'undefined' && window.history.length > 1) {
         router.back();
+      } else if (webApp) {
+        webApp.close();
       } else {
         router.push('/');
       }
@@ -26,7 +28,7 @@ export default function TelegramBackButtonController({ onBack }: TelegramBackBut
     return () => {
       hideBackButton();
     };
-  }, [showBackButton, hideBackButton, onBack, router]);
+  }, [showBackButton, hideBackButton, onBack, router, webApp]);
 
   return null;
 }

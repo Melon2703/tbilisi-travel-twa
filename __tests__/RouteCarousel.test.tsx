@@ -1,9 +1,17 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import RouteCarousel from '@/components/RouteCarousel';
 import { Route } from '@/lib/types/route';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
+
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn(() => ({
+    back: vi.fn(),
+    push: vi.fn(),
+  })),
+  notFound: vi.fn(),
+}));
 
 const mockRoute: Route = {
   id: 'carousel-test-route',
@@ -46,5 +54,15 @@ describe('RouteCarousel Component', () => {
     expect(stickyStartBar).toHaveClass('fixed');
     expect(stickyStartBar).toHaveClass('bottom-0');
     expect(stickyStartBar).toHaveClass('bg-gradient-to-t');
+  });
+
+  it('renders RouteCarousel without throwing errors when mounted with TelegramProvider', () => {
+    render(
+      <LanguageProvider>
+        <RouteCarousel route={mockRoute} />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByText('Sololaki Architectural Gems')).toBeInTheDocument();
   });
 });

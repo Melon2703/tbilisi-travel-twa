@@ -84,6 +84,26 @@ describe('TelegramProvider Component', () => {
     expect(screen.getByTestId('scheme')).toHaveTextContent('light');
   });
 
+  it('initializes Telegram WebApp SDK when window.Telegram.WebApp becomes available after mount', async () => {
+    render(
+      <TelegramProvider>
+        <TestConsumer />
+      </TelegramProvider>
+    );
+
+    expect(screen.getByTestId('ready')).toHaveTextContent('ready');
+    expect(screen.getByTestId('scheme')).toHaveTextContent('light');
+
+    // Simulate async Telegram script loading and attaching to window
+    await act(async () => {
+      (window as any).Telegram = { WebApp: mockWebApp };
+      window.dispatchEvent(new Event('DOMContentLoaded'));
+    });
+
+    expect(mockWebApp.ready).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('scheme')).toHaveTextContent('dark');
+  });
+
   it('binds native Telegram BackButton handlers correctly', () => {
     (window as any).Telegram = { WebApp: mockWebApp };
 
