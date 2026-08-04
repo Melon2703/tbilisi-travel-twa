@@ -191,7 +191,7 @@ export default function RouteOverviewMap({
             <div
               key={stop.id}
               data-testid={`map-pin-${stop.order}`}
-              className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all group-hover:scale-105"
+              className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all"
               style={{ left: `${screenX}px`, top: `${screenY}px` }}
               aria-label={`Stop ${stop.order}: ${stop.name}`}
             >
@@ -212,7 +212,7 @@ export default function RouteOverviewMap({
         {/* ── Full-width Glassmorphism Bottom Action Bar ── */}
         <div
           data-testid="tap-to-view-full-map-bar"
-          className="absolute bottom-0 left-0 right-0 z-30 bg-[#1C1008]/60 backdrop-blur-md border-t border-white/20 px-4 py-2.5 flex items-center justify-center gap-2 text-white font-bold text-xs text-center shadow-lg transition-colors group-hover:bg-[#1C1008]/70"
+          className="absolute bottom-0 left-0 right-0 z-30 bg-[#1C1008]/60 backdrop-blur-md border-t border-white/20 px-4 py-2.5 flex items-center justify-center gap-2 text-white font-bold text-xs text-center shadow-lg transition-colors"
         >
           <span>{t('tapToViewFullMap')}</span>
         </div>

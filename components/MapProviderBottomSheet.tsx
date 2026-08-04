@@ -80,7 +80,7 @@ export default function MapProviderBottomSheet({
           <button
             onClick={onClose}
             aria-label="Close"
-            className="w-9 h-9 rounded-full bg-[#FAFAF7] border border-[#E5E5E0] flex items-center justify-center text-[#7A6552] hover:text-[#1C1008] active:scale-95 transition-all"
+            className="w-9 h-9 rounded-full bg-[#FAFAF7] border border-[#E5E5E0] flex items-center justify-center text-[#7A6552] active:scale-95 transition-all"
           >
             <FaXmark className="w-4 h-4" />
           </button>
@@ -102,7 +102,7 @@ export default function MapProviderBottomSheet({
                 className={`flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border transition-all active:scale-[0.98] ${
                   isPreferred
                     ? 'bg-white border-[#C4572A] shadow-xs'
-                    : 'bg-white/80 border-[#E5E5E0] hover:border-[#C4572A]/50'
+                    : 'bg-white/80 border-[#E5E5E0]'
                 }`}
               >
                 <div className="flex items-center gap-3.5 min-w-0">

@@ -120,7 +120,7 @@ export default function LightboxModal({
           data-testid="lightbox-close"
           onClick={onClose}
           aria-label="Close photo modal"
-          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
+          className="w-10 h-10 rounded-full bg-white/10 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
         >
           <span className="text-xl font-bold leading-none">✕</span>
         </button>
@@ -157,7 +157,7 @@ export default function LightboxModal({
               handlePrev();
             }}
             aria-label="Previous photo"
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center border border-white/20 shadow-lg cursor-pointer transition-all active:scale-95 z-20"
+            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 text-white flex items-center justify-center border border-white/20 shadow-lg cursor-pointer transition-all active:scale-95 z-20"
           >
             ‹
           </button>
@@ -173,7 +173,7 @@ export default function LightboxModal({
               handleNext();
             }}
             aria-label="Next photo"
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center border border-white/20 shadow-lg cursor-pointer transition-all active:scale-95 z-20"
+            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 text-white flex items-center justify-center border border-white/20 shadow-lg cursor-pointer transition-all active:scale-95 z-20"
           >
             ›
           </button>
@@ -189,7 +189,7 @@ export default function LightboxModal({
               type="button"
               onClick={() => setCurrentIndex(idx)}
               className={`h-2 rounded-full transition-all cursor-pointer ${
-                idx === currentIndex ? 'w-6 bg-white' : 'w-2 bg-white/40 hover:bg-white/70'
+                idx === currentIndex ? 'w-6 bg-white' : 'w-2 bg-white/40'
               }`}
               aria-label={`Go to photo ${idx + 1}`}
             />

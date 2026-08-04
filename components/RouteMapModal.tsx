@@ -382,7 +382,7 @@ export default function RouteMapModal({
                   setSelectedStopId(stop.id);
                 }}
                 className={`w-9 h-9 rounded-full flex items-center justify-center font-extrabold text-sm shadow-lg border-2 transition-all cursor-pointer active:scale-125 ${
-                  isSelected ? 'ring-4 ring-[#C4572A]/40 scale-110 z-40' : 'hover:scale-110'
+                  isSelected ? 'ring-4 ring-[#C4572A]/40 scale-110 z-40' : ''
                 }`}
                 style={{
                   backgroundColor: pinBg,
@@ -403,7 +403,7 @@ export default function RouteMapModal({
             type="button"
             data-testid="close-map-modal"
             onClick={onClose}
-            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all cursor-pointer"
+            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center active:scale-95 transition-all cursor-pointer"
             aria-label="Close map modal"
           >
             ✕
@@ -412,7 +412,7 @@ export default function RouteMapModal({
             type="button"
             data-testid="modal-map-zoom-in"
             onClick={() => setZoom((z) => Math.min(z + 1, 18))}
-            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all cursor-pointer"
+            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center active:scale-95 transition-all cursor-pointer"
             aria-label="Zoom In"
           >
             +
@@ -421,7 +421,7 @@ export default function RouteMapModal({
             type="button"
             data-testid="modal-map-zoom-out"
             onClick={() => setZoom((z) => Math.max(z - 1, 13))}
-            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all cursor-pointer"
+            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center active:scale-95 transition-all cursor-pointer"
             aria-label="Zoom Out"
           >
             −
@@ -430,7 +430,7 @@ export default function RouteMapModal({
             type="button"
             data-testid="modal-map-reset"
             onClick={resetView}
-            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-sm shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all cursor-pointer"
+            className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-sm shadow-md flex items-center justify-center active:scale-95 transition-all cursor-pointer"
             aria-label="Reset View"
           >
             ↺
@@ -488,7 +488,7 @@ export default function RouteMapModal({
               <button
                 type="button"
                 onClick={() => setSelectedStopId(null)}
-                className="w-7 h-7 rounded-full bg-black/5 hover:bg-black/10 text-[#7A6552] font-bold flex items-center justify-center transition-all shrink-0 cursor-pointer"
+                className="w-7 h-7 rounded-full bg-black/5 text-[#7A6552] font-bold flex items-center justify-center transition-all shrink-0 cursor-pointer"
                 aria-label="Dismiss stop details"
               >
                 ✕
@@ -504,7 +504,7 @@ export default function RouteMapModal({
                 href={getLaunchUrl(selectedStop.coordinates, mapProvider, selectedStop.name)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#C4572A] text-white hover:bg-[#A8451E] transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#C4572A] text-white transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
               >
                 <span>📍</span>
                 <span>{t('openInMap')}</span>

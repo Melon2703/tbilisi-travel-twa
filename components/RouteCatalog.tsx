@@ -104,7 +104,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
             disabled={isLocating}
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs min-h-[36px] ${userLocation
                 ? 'bg-[#228255] text-white ring-2 ring-[#228255]/30'
-                : 'bg-[#C4572A] text-white hover:bg-[#a84720] active:scale-95'
+                : 'bg-[#C4572A] text-white active:scale-95'
               }`}
           >
             <span>📍</span>
@@ -136,7 +136,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               onClick={() => setSelectedDuration('all')}
               className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedDuration === 'all'
                   ? 'bg-[#1C1008] text-white shadow-xs'
-                  : 'bg-[#F3EFEA] text-[#7A6552] border-0 hover:text-[#1C1008]'
+                  : 'bg-[#F3EFEA] text-[#7A6552] border-0'
                 }`}
             >
               {t('allDurations')}
@@ -149,7 +149,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 onClick={() => setSelectedDuration(d.id)}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedDuration === d.id
                     ? 'bg-[#C4572A] text-white shadow-xs'
-                    : 'bg-[#F3EFEA] text-[#7A6552] border-0 hover:text-[#1C1008]'
+                    : 'bg-[#F3EFEA] text-[#7A6552] border-0'
                   }`}
               >
                 {language === 'ru' ? d.labelRu : d.label}
@@ -170,7 +170,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               onClick={() => setSelectedVibe('all')}
               className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedVibe === 'all'
                   ? 'bg-[#1C1008] text-white shadow-xs'
-                  : 'bg-[#F3EFEA] text-[#7A6552] border-0 hover:text-[#1C1008]'
+                  : 'bg-[#F3EFEA] text-[#7A6552] border-0'
                 }`}
             >
               {t('allVibes')}
@@ -183,7 +183,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 onClick={() => setSelectedVibe(v.id)}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedVibe === v.id
                     ? 'bg-[#C4572A] text-white shadow-xs'
-                    : 'bg-[#F3EFEA] text-[#7A6552] border-0 hover:text-[#1C1008]'
+                    : 'bg-[#F3EFEA] text-[#7A6552] border-0'
                   }`}
               >
                 #{language === 'ru' ? v.labelRu : v.label}
@@ -251,7 +251,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               <Link
                 key={route.id}
                 href={`/twa/${route.id}`}
-                className="group flex flex-col bg-[#FFF8F3] rounded-2xl overflow-hidden border border-[#C4572A]/15 shadow-xs hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4572A] active:scale-[0.99]"
+                className="flex flex-col bg-[#FFF8F3] rounded-2xl overflow-hidden border border-[#C4572A]/15 shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4572A] active:scale-[0.99]"
               >
                 {/* Hero Card Image */}
                 <div className="relative w-full h-48 bg-[#FAF7F2] overflow-hidden">
@@ -261,7 +261,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                       alt={route.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover transition-transform duration-300"
                     />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
@@ -283,7 +283,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
                     <h3
-                      className="text-lg font-black text-[#1C1008] group-hover:text-[#C4572A] transition-colors leading-snug font-sans"
+                      className="text-lg font-black text-[#1C1008] transition-colors leading-snug font-sans"
                     >
                       {route.title}
                     </h3>
@@ -314,7 +314,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                         </span>
                       )}
                     </div>
-                    <span className="text-[#C4572A] group-hover:translate-x-1 transition-transform flex items-center gap-1 font-bold min-h-[44px]">
+                    <span className="text-[#C4572A] transition-transform flex items-center gap-1 font-bold min-h-[44px]">
                       {t('viewRoute')}
                     </span>
                   </div>

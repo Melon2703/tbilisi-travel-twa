@@ -192,7 +192,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
             alt={stop.name}
             fill
             sizes="(max-width: 640px) 100vw, 640px"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-300"
             priority={stop.order === 1}
           />
 

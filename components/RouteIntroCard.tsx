@@ -89,7 +89,7 @@ export default function RouteIntroCard({
               type="button"
               onClick={() => setLanguage('en')}
               className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
-                language === 'en' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
+                language === 'en' ? 'bg-[#C4572A] text-white' : 'text-white/80'
               }`}
               aria-label="Switch to English"
             >
@@ -99,7 +99,7 @@ export default function RouteIntroCard({
               type="button"
               onClick={() => setLanguage('ru')}
               className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
-                language === 'ru' ? 'bg-[#C4572A] text-white' : 'text-white/80 hover:text-white'
+                language === 'ru' ? 'bg-[#C4572A] text-white' : 'text-white/80'
               }`}
               aria-label="Переключить на русский"
             >
