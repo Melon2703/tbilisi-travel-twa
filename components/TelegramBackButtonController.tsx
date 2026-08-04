@@ -16,6 +16,8 @@ export default function TelegramBackButtonController({ onBack }: TelegramBackBut
     const handleBack = onBack || (() => {
       if (typeof window !== 'undefined' && window.history.length > 1) {
         router.back();
+      } else {
+        router.push('/');
       }
     });
 
