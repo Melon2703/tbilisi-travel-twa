@@ -15,8 +15,6 @@ import { useTelegram } from '@/components/TelegramProvider';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import Button from '@/components/ui/Button';
 
-import { getTelegramStartParam, parseStartParam } from '@/lib/utils/telegram';
-
 export interface RouteCarouselProps {
   route: Route;
 }
@@ -39,25 +37,6 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
   const isCompleted = sortedStops.length > 0 && visitedStopIds.length === sortedStops.length;
 
   const isProgrammatic = useRef<boolean>(false);
-
-  // Deep Link start_param Handler on TWA initialization
-  useEffect(() => {
-    const rawStartParam = getTelegramStartParam();
-    if (rawStartParam) {
-      const parsed = parseStartParam(rawStartParam);
-      if (parsed && parsed.stopId && parsed.routeId === route.id) {
-        const foundIndex = sortedStops.findIndex((s) => s.id === parsed.stopId);
-        if (foundIndex !== -1) {
-          const targetSlide = foundIndex + 1;
-          isProgrammatic.current = true;
-          setActiveIndex(targetSlide);
-          if (swiperRef.current) {
-            swiperRef.current.slideTo(targetSlide, 0);
-          }
-        }
-      }
-    }
-  }, [route.id, sortedStops]);
 
   // Synchronize Swiper slide position when activeIndex changes programmatically (e.g. via Timeline button tap)
   useEffect(() => {

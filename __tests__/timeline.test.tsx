@@ -654,7 +654,7 @@ describe('TWA Timeline & Card Feed UI', () => {
     });
   });
 
-  describe('Full-Screen Lightbox Modal & Deep-Link Sharing', () => {
+  describe('Full-Screen Lightbox Modal', () => {
     const mockMultiPhotoStop: Stop = {
       id: 'multi-photo-stop',
       order: 1,
@@ -743,22 +743,6 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(screen.getByTestId('lightbox-modal')).toBeInTheDocument();
       fireEvent.keyDown(window, { key: 'Escape' });
       expect(screen.queryByTestId('lightbox-modal')).not.toBeInTheDocument();
-    });
-
-    it('auto-navigates RouteCarousel to target stop slide upon TWA startapp deep link launch', () => {
-      window.Telegram = {
-        WebApp: {
-          initDataUnsafe: {
-            start_param: 'route_test-route-1_stop_sololaki-stop-2',
-          },
-        } as any,
-      };
-
-      render(<RouteCarousel route={mockRoute} />);
-
-      // Verify deep link navigated directly to Slide 2 (sololaki-stop-2) showing timeline bar
-      expect(screen.getByTestId('timeline-bar-container')).toBeInTheDocument();
-      expect(screen.getByTestId('timeline-stop-2')).toHaveAttribute('aria-current', 'step');
     });
   });
 });
