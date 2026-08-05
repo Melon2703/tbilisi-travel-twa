@@ -235,4 +235,56 @@ describe('StopCard Component', () => {
       expect(bookingCallout?.className).toContain('bg-[#F3EFEA]');
     });
   });
+
+  describe('Map Links resolve by Place Identity', () => {
+    const cyrillicStop: Stop = {
+      ...attractionStep1,
+      id: 'test-step-cyrillic',
+      name: 'Площадь Свободы',
+      placeIds: { google: 'ChIJde6a4L4XREARZ6pL-v6Hw8U' },
+    };
+
+    const renderStop = (stop: Stop) =>
+      render(
+        <LanguageProvider initialLanguage="en">
+          <StopCard stop={stop} totalStops={6} />
+        </LanguageProvider>
+      );
+
+    it('anchors the Google link on coordinates and carries the place identity, never the name', () => {
+      renderStop(cyrillicStop);
+
+      expect(screen.getByLabelText('Open in Google Maps')).toHaveAttribute(
+        'href',
+        'https://www.google.com/maps/search/?api=1&query=41.6934,44.8015&query_place_id=ChIJde6a4L4XREARZ6pL-v6Hw8U'
+      );
+    });
+
+    it('builds the Yandex link from coordinates only', () => {
+      renderStop(cyrillicStop);
+
+      expect(screen.getByLabelText('Open in Yandex Maps')).toHaveAttribute(
+        'href',
+        'https://yandex.com/maps/?pt=44.8015,41.6934&z=17'
+      );
+    });
+
+    it('still pins the correct coordinates for a Stop with no place identity', () => {
+      renderStop({ ...cyrillicStop, placeIds: undefined });
+
+      expect(screen.getByLabelText('Open in Google Maps')).toHaveAttribute(
+        'href',
+        'https://www.google.com/maps/search/?api=1&query=41.6934,44.8015'
+      );
+    });
+
+    it('offers Google and Yandex as direct one-tap links, with no provider chooser', () => {
+      renderStop(cyrillicStop);
+
+      expect(screen.getByLabelText('Open in Google Maps')).toBeInTheDocument();
+      expect(screen.getByLabelText('Open in Yandex Maps')).toBeInTheDocument();
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.queryByText(/Apple Maps/i)).not.toBeInTheDocument();
+    });
+  });
 });

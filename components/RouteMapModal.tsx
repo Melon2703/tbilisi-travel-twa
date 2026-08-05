@@ -6,8 +6,7 @@ import Image from 'next/image';
 import { Route, Stop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
-import { MapProvider } from '@/lib/utils/maps';
-import { useMapLauncher } from '@/hooks/useMapLauncher';
+import { buildGoogleMapLink, buildYandexMapLink, getPlaceIdentity } from '@/lib/utils/mapLinks';
 
 export interface RouteMapModalProps {
   route: Route;
@@ -43,13 +42,6 @@ export default function RouteMapModal({
   const [selectedStopId, setSelectedStopId] = useState<string | null>(
     sortedStops.find((s) => s.order === initialStopOrder)?.id || sortedStops[0]?.id || null
   );
-
-  const {
-    preferredProvider: mapProvider,
-    setPreferredProvider,
-    getLaunchUrl,
-    providers: MAP_PROVIDERS,
-  } = useMapLauncher();
 
   // Map center bounds
   const centerCoords = useMemo(() => {
@@ -500,15 +492,28 @@ export default function RouteMapModal({
               <span className="text-[11px] font-semibold text-[#A0876E]">
                 {t('stopsCount', { count: sortedStops.length })}
               </span>
-              <a
-                href={getLaunchUrl(selectedStop.coordinates, mapProvider, selectedStop.name)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#C4572A] text-white transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
-              >
-                <span>📍</span>
-                <span>{t('openInMap')}</span>
-              </a>
+              <div className="flex items-center gap-2">
+                <a
+                  href={buildGoogleMapLink(getPlaceIdentity(selectedStop))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open in Google Maps"
+                  className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#C4572A] text-white transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
+                >
+                  <span>📍</span>
+                  <span>Google</span>
+                </a>
+                <a
+                  href={buildYandexMapLink(getPlaceIdentity(selectedStop))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open in Yandex Maps"
+                  className="px-4 py-2 rounded-xl text-xs font-extrabold bg-white text-[#C4572A] border border-[#C4572A]/30 transition-all flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
+                >
+                  <span>📍</span>
+                  <span>Yandex</span>
+                </a>
+              </div>
             </div>
           </div>
         )}

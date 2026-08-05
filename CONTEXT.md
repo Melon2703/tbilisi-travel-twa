@@ -80,15 +80,15 @@ _Avoid_: General location node, sight.
 
 
 **Map Provider**:
-An external navigation mapping service (Google Maps, Apple Maps, or Yandex Maps) launched via universal link.
-_Avoid_: Navigation app, external map.
+An external navigation mapping service (Google Maps or Yandex Maps) launched via universal link. There is no provider chooser and no stored provider preference — each Stop offers both, one tap each.
+_Avoid_: Navigation app, external map, preferred provider.
 
 **Google Rating**:
 The place rating score and review count sourced exclusively from Google Places API.
 _Avoid_: Aggregated rating, place score, star rating, multi-provider rating.
 
 **Map Link**:
-Minimalist action deep-link buttons pointing to Map Providers (Google Maps, Yandex Maps) placed below the Google Rating.
+Minimalist action deep-link buttons pointing to Map Providers (Google Maps, Yandex Maps) placed below the Google Rating. Built from Place Identity, never from a display name: the Google link is anchored on coordinates and carries `place_id` as an enhancement, so an absent or unresolvable identity degrades to a correct pin; the Yandex link uses coordinates only.
 _Avoid_: Direction button, map button, navigation link, external map CTA.
 
 **Olya's Tips**:

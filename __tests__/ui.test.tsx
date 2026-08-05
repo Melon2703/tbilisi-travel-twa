@@ -40,7 +40,6 @@ describe('Common UI Components & Emoji System', () => {
       expect(EMOJI_ICONS.check).toBe('✅');
       expect(EMOJI_ICONS.close).toBe('✖️');
       expect(EMOJI_ICONS.googleMaps).toBe('🗺️');
-      expect(EMOJI_ICONS.appleMaps).toBe('🍏');
       expect(EMOJI_ICONS.yandexMaps).toBe('🔴');
       expect(EMOJI_ICONS.star).toBe('⭐');
     });

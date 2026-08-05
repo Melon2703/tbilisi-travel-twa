@@ -1,11 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import MapProviderBottomSheet from '@/components/MapProviderBottomSheet';
 import RouteMapModal from '@/components/RouteMapModal';
 import { Route } from '@/lib/types/route';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
-import { MAP_STORAGE_KEY } from '@/lib/utils/maps';
 
 const mockRoute: Route = {
   id: 'map-modal-test-route',
@@ -27,6 +25,7 @@ const mockRoute: Route = {
       estimatedMinutes: 45,
       imageUrl: 'https://example.com/fabrika.jpg',
       olyaTips: 'Great atmosphere and street art.',
+      placeIds: { google: 'ChIJFabrikaTbilisi_TB' },
     },
     {
       id: 'stop-2',
@@ -42,52 +41,10 @@ const mockRoute: Route = {
   ],
 };
 
-describe('RouteMapModal & MapProviderBottomSheet Components', () => {
+describe('RouteMapModal Component', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
-  });
-
-  describe('MapProviderBottomSheet', () => {
-    it('delegates provider selection and persistence to useMapLauncher', () => {
-      const mockOnClose = vi.fn();
-      render(
-        <LanguageProvider initialLanguage="en">
-          <MapProviderBottomSheet
-            isOpen={true}
-            onClose={mockOnClose}
-            coordinates={{ lat: 41.7095, lng: 44.8048 }}
-            stopName="Fabrika Tbilisi"
-          />
-        </LanguageProvider>
-      );
-
-      expect(screen.getByTestId('preferred-provider-badge-google')).toBeInTheDocument();
-
-      const yandexLink = screen.getByRole('link', { name: /Yandex Maps/i });
-      fireEvent.click(yandexLink);
-
-      expect(localStorage.getItem(MAP_STORAGE_KEY)).toBe('yandex');
-    });
-
-    it('highlights active and preferred provider badges correctly upon preference change', () => {
-      localStorage.setItem(MAP_STORAGE_KEY, 'apple');
-      const mockOnClose = vi.fn();
-
-      render(
-        <LanguageProvider initialLanguage="en">
-          <MapProviderBottomSheet
-            isOpen={true}
-            onClose={mockOnClose}
-            coordinates={{ lat: 41.7095, lng: 44.8048 }}
-            stopName="Fabrika Tbilisi"
-          />
-        </LanguageProvider>
-      );
-
-      expect(screen.getByTestId('preferred-provider-badge-apple')).toBeInTheDocument();
-      expect(screen.queryByTestId('preferred-provider-badge-google')).not.toBeInTheDocument();
-    });
   });
 
   describe('RouteMapModal', () => {
@@ -107,14 +64,26 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       return { ...result, mockOnClose };
     };
 
-    it('launches map navigation using getLaunchUrl with selected stop coordinates', () => {
+    it('launches map navigation anchored on the selected stop place identity', () => {
       renderModal();
 
       const openInMapBtn = screen.getByTestId('modal-stop-card').querySelector('a')!;
       expect(openInMapBtn).toBeInTheDocument();
       expect(openInMapBtn).toHaveAttribute(
         'href',
-        expect.stringContaining('google.com/maps/search/?api=1&query=Fabrika%20Tbilisi')
+        'https://www.google.com/maps/search/?api=1&query=41.7095,44.8048&query_place_id=ChIJFabrikaTbilisi_TB'
+      );
+    });
+
+    it('offers Google and Yandex as direct one-tap links on the selected stop', () => {
+      renderModal();
+
+      const links = screen.getByTestId('modal-stop-card').querySelectorAll('a');
+      expect(links).toHaveLength(2);
+      expect(links[1]).toHaveAttribute('aria-label', 'Open in Yandex Maps');
+      expect(links[1]).toHaveAttribute(
+        'href',
+        'https://yandex.com/maps/?pt=44.8048,41.7095&z=17'
       );
     });
 
@@ -135,7 +104,7 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
 
-    it('updates stop card coordinates when switching selected map pin', () => {
+    it('updates the map link, degrading to coordinates only, when switching selected map pin', () => {
       renderModal();
 
       const pin2 = screen.getByTestId('modal-map-pin-2');
@@ -144,7 +113,7 @@ describe('RouteMapModal & MapProviderBottomSheet Components', () => {
       const openInMapBtn = screen.getByTestId('modal-stop-card').querySelector('a')!;
       expect(openInMapBtn).toHaveAttribute(
         'href',
-        expect.stringContaining('google.com/maps/search/?api=1&query=Marjanishvili%20Theater')
+        'https://www.google.com/maps/search/?api=1&query=41.7081,44.7989'
       );
     });
 

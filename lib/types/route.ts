@@ -13,6 +13,11 @@ export type VibeCategory =
 export type LogisticsConstraint = AccessibilityLevel;
 export type Vibe = VibeCategory;
 
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
 export interface ProviderRating {
   rating: number;
   count: number;
@@ -37,7 +42,7 @@ export interface BaseStop {
   nameRu?: string;
   neighborhood: string;
   neighborhoodRu?: string;
-  coordinates: { lat: number; lng: number };
+  coordinates: Coordinates;
   estimatedMinutes: number;
   imageUrl: string;
   galleryImages?: string[];

@@ -9,7 +9,6 @@ import EmojiIcon from '@/components/ui/EmojiIcon';
 import Button from '@/components/ui/Button';
 import RouteOverviewMap from '@/components/RouteOverviewMap';
 import RouteMapModal from '@/components/RouteMapModal';
-import { useMapLauncher } from '@/hooks/useMapLauncher';
 
 export interface RouteIntroCardProps {
   route: Route;
@@ -23,7 +22,7 @@ export default function RouteIntroCard({
   showStartButton = true,
 }: RouteIntroCardProps) {
   const { language, setLanguage, t } = useLanguage();
-  const { isOpen: isMapModalOpen, openMapLauncher, closeMapLauncher } = useMapLauncher();
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
   const totalMinutes = sortedStops.reduce((acc, stop) => acc + stop.estimatedMinutes, 0);
@@ -160,7 +159,7 @@ export default function RouteIntroCard({
         <GeorgianOrnament />
 
         {/* 3. Upfront Cartographic Visual Route Overview Map */}
-        <RouteOverviewMap route={route} onOpenModal={() => openMapLauncher()} />
+        <RouteOverviewMap route={route} onOpenModal={() => setIsMapModalOpen(true)} />
 
         {/* 4. Olya's Welcome Quote Card */}
         {route.introCopy && (
@@ -316,7 +315,7 @@ export default function RouteIntroCard({
       <RouteMapModal
         route={route}
         isOpen={isMapModalOpen}
-        onClose={closeMapLauncher}
+        onClose={() => setIsMapModalOpen(false)}
       />
     </div>
   );

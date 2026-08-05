@@ -4,13 +4,12 @@ import React from 'react';
 import Image from 'next/image';
 import { Stop, VenueStop, AttractionStop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import { useMapLauncher } from '@/hooks/useMapLauncher';
+import { buildGoogleMapLink, buildYandexMapLink, getPlaceIdentity } from '@/lib/utils/mapLinks';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
 import LightboxModal from '@/components/timeline/LightboxModal';
-import MapProviderBottomSheet from '@/components/MapProviderBottomSheet';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaInstagram, FaGlobe } from 'react-icons/fa6';
 import { COLORS, TYPOGRAPHY, COMPONENT_TOKENS } from '@/lib/theme/tokens';
@@ -111,14 +110,9 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
   const { t, getLocalizedStop } = useLanguage();
   const stop = getLocalizedStop(rawStop);
 
-  const {
-    getLaunchUrl,
-    isOpen: isMapBottomSheetOpen,
-    closeMapLauncher,
-  } = useMapLauncher();
-
-  const googleMapsUrl = getLaunchUrl(stop.coordinates, 'google', stop.name);
-  const yandexMapsUrl = getLaunchUrl(stop.coordinates, 'yandex', stop.name);
+  const placeIdentity = getPlaceIdentity(stop);
+  const googleMapsUrl = buildGoogleMapLink(placeIdentity);
+  const yandexMapsUrl = buildYandexMapLink(placeIdentity);
 
   // Website link if defined on stop
   const websiteUrl = stop.websiteUrl;
@@ -467,14 +461,6 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         initialIndex={lightboxIndex}
         altText={stop.name}
         onClose={() => setIsLightboxOpen(false)}
-      />
-
-      {/* Map Provider Selection Bottom Sheet */}
-      <MapProviderBottomSheet
-        isOpen={isMapBottomSheetOpen}
-        onClose={closeMapLauncher}
-        coordinates={stop.coordinates}
-        stopName={stop.name}
       />
     </div>
   );

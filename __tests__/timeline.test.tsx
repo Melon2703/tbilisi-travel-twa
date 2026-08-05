@@ -272,6 +272,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       estimatedMinutes: 25,
       imageUrl: 'https://images.unsplash.com/photo-1570168007204-dfb528c6958f',
       olyaTips: 'Gently push through the wooden carriage doors into court #28.',
+      placeIds: { google: 'ChIJLadoAsatiani_TB' },
     };
 
     it('renders stop details, order badge, estimated time, and Olya\'s tips correctly', () => {
@@ -307,14 +308,14 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(googleLink).toBeInTheDocument();
       expect(googleLink).toHaveAttribute(
         'href',
-        'https://www.google.com/maps/search/?api=1&query=Lado%20Asatiani%20St%20Merchant%20Houses'
+        'https://www.google.com/maps/search/?api=1&query=41.6918,44.7972&query_place_id=ChIJLadoAsatiani_TB'
       );
       expect(googleLink).toHaveClass('min-h-[48px]');
 
       expect(yandexLink).toBeInTheDocument();
       expect(yandexLink).toHaveAttribute(
         'href',
-        'https://yandex.com/maps/?text=Lado%20Asatiani%20St%20Merchant%20Houses&pt=44.7972,41.6918&z=17'
+        'https://yandex.com/maps/?pt=44.7972,41.6918&z=17'
       );
       expect(yandexLink).toHaveClass('min-h-[48px]');
     });

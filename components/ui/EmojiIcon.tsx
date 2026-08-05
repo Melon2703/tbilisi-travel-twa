@@ -12,7 +12,6 @@ export const EMOJI_ICONS = {
   check: '✅',
   close: '✖️',
   googleMaps: '🗺️',
-  appleMaps: '🍏',
   yandexMaps: '🔴',
   star: '⭐',
   georgiaFlag: '🇬🇪',

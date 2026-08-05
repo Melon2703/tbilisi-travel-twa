@@ -62,7 +62,7 @@ Perform a radical UI/UX refactoring across the entire application (both catalog/
 ## Out of Scope
 - Backend route matching logic changes in `lib/engine/matcher.ts`.
 - Routing structure or URL scheme changes under `app/twa/[routeId]`.
-- Map coordinate calculations or universal link parameter formats in `lib/utils/maps.ts`.
+- Map coordinate calculations or universal link parameter formats in `lib/utils/mapLinks.ts`.
 
 ## Further Notes
 - The Georgia travel journal warmth is preserved through warm stone tinting (`#F3EFEA`), terracotta accents (`#C4572A`), and clean geometry.
