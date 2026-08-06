@@ -144,12 +144,11 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(scrollIndicator).toBeInTheDocument();
     });
 
-    it('renders swipe hint prompt with adequate bottom spacing clear of CTA bar', () => {
+    it('does not render an on-screen swipe hint', () => {
       render(<RouteIntroCard route={mockRoute} />);
 
-      const swipePrompt = screen.getByText(/👉 Swipe left or tap below to begin!/i);
-      expect(swipePrompt).toBeInTheDocument();
-      expect(swipePrompt.parentElement).toHaveClass('text-center');
+      expect(screen.queryByTestId('swipe-prompt-container')).not.toBeInTheDocument();
+      expect(screen.queryByText(/swipe/i)).not.toBeInTheDocument();
     });
 
     it('applies break-words and min-w-0 on h1 title to prevent right-edge truncation', () => {

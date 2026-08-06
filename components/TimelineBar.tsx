@@ -3,6 +3,11 @@
 import React, { useEffect, useRef } from 'react';
 import { Stop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import EmojiIcon from '@/components/ui/EmojiIcon';
+import { COLORS } from '@/lib/theme/tokens';
+
+/** Slide 0 of the carousel is the Route Intro Card. */
+const ROUTE_INTRO_SLIDE_INDEX = 0;
 
 export interface TimelineBarProps {
   stops: Stop[];
@@ -88,6 +93,33 @@ function TimelineBar({
     >
 
       <div className="flex items-center gap-3 px-4 py-3.5 max-w-2xl mx-auto w-full">
+        {/* Leading overview control — a different kind of destination than a numbered Stop,
+            so it is a squircle carrying a map glyph rather than a round numbered dot. */}
+        <button
+          type="button"
+          data-testid="timeline-overview"
+          onClick={() => onStopClick(ROUTE_INTRO_SLIDE_INDEX)}
+          aria-label={t('routeOverview')}
+          title={t('routeOverview')}
+          className="shrink-0 flex items-center justify-center rounded-xl transition-all duration-200 active:scale-95 select-none"
+          style={{
+            width: DOT,
+            // 48px touch height (DESIGN_SYSTEM 4.3) without stealing width from the Stop indicators
+            height: 48,
+            background: COLORS.canvasBg,
+            border: `1.5px solid ${COLORS.tipBoxBorder}`,
+          }}
+        >
+          <EmojiIcon name="routeOverview" size="sm" />
+        </button>
+
+        {/* Vertical Divider */}
+        <div
+          className="w-px self-stretch shrink-0"
+          style={{ background: 'rgba(196,87,42,0.10)', minHeight: 30 }}
+          aria-hidden="true"
+        />
+
         {/* Track + dots container */}
         <div
           ref={containerRef}

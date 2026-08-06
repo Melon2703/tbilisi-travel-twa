@@ -12,6 +12,7 @@ export const EMOJI_ICONS = {
   arrowRight: '➡️',
   check: '✅',
   close: '✖️',
+  routeOverview: 'ℹ️',
   googleMaps: '🗺️',
   yandexMaps: '🔴',
   star: '⭐',

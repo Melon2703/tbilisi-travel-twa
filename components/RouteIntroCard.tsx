@@ -293,12 +293,6 @@ export default function RouteIntroCard({
           })()}
         </div>
 
-        {/* 8. Swipe Prompt */}
-        <div className="text-center py-1 shrink-0" data-testid="swipe-prompt-container">
-          <p className="text-xs font-semibold text-[#C4572A]/80">
-            {t('swipePrompt')}
-          </p>
-        </div>
         </div>
       </div>
 

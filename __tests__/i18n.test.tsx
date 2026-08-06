@@ -49,7 +49,7 @@ describe('TWA Internationalization (Russian Support)', () => {
     expect(screen.getByText('НАЧАТЬ МАРШРУТ')).toBeInTheDocument();
     expect(screen.getByText('Приветствие от Оли')).toBeInTheDocument();
     expect(screen.getByText('Маршрут в деталях')).toBeInTheDocument();
-    expect(screen.getByText(/Смахните влево или нажмите ниже/i)).toBeInTheDocument();
+    expect(screen.getByText('Рельеф и логистика')).toBeInTheDocument();
   });
 
   it('renders StopCard with Russian headers and labels', () => {

@@ -11,7 +11,6 @@ export const TRANSLATIONS = {
     pedestrianWalkway: 'Pedestrian walkway',
     cableCar: 'Cable car',
     funicular: 'Funicular',
-    swipePrompt: '👉 Swipe left or tap below to begin!',
 
     // StopCard & Venue
     stopOf: 'STOP {order} OF {total}',
@@ -48,6 +47,7 @@ export const TRANSLATIONS = {
     jumpToStop: 'Jump to stop {order}: {name}',
     markAsVisited: 'Mark as visited',
     markAsUnvisited: 'Mark as unvisited',
+    routeOverview: 'Route overview',
     previousStops: 'Previous stops',
     moreStops: 'More stops',
 
@@ -116,7 +116,6 @@ export const TRANSLATIONS = {
     pedestrianWalkway: 'Пешеходный маршрут',
     cableCar: 'Канатная дорога',
     funicular: 'Фуникулёр',
-    swipePrompt: '👉 Смахните влево или нажмите ниже, чтобы начать!',
 
     // StopCard & Venue
     stopOf: 'ОСТАНОВКА {order} ИЗ {total}',
@@ -153,6 +152,7 @@ export const TRANSLATIONS = {
     jumpToStop: 'Перейти к остановке {order}: {name}',
     markAsVisited: 'Отметить как посещённую',
     markAsUnvisited: 'Снять отметку',
+    routeOverview: 'Обзор маршрута',
     previousStops: 'Предыдущие остановки',
     moreStops: 'Следующие остановки',
 

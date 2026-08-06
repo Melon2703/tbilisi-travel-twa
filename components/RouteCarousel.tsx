@@ -124,7 +124,7 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
         touchStartPreventDefault={false}
         touchReleaseOnEdges={true}
         threshold={25}
-        touchAngle={25}
+        touchAngle={45}
         touchEventsTarget="container"
         className="w-full h-[100dvh]"
       >

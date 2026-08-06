@@ -55,6 +55,78 @@ describe('TimelineBar Component', () => {
     expect(trackContainer).toHaveStyle({ height: '2px' });
   });
 
+  describe('Overview control', () => {
+    it('renders a leading overview control that navigates to the Route Intro Card', () => {
+      const handleStopClick = vi.fn();
+      render(
+        <LanguageProvider initialLanguage="en">
+          <TimelineBar
+            stops={mockStops}
+            activeIndex={2}
+            visitedStopIds={[]}
+            onStopClick={handleStopClick}
+            onToggleVisited={() => {}}
+          />
+        </LanguageProvider>
+      );
+
+      const overview = screen.getByTestId('timeline-overview');
+      expect(overview).toBeInTheDocument();
+      overview.click();
+      expect(handleStopClick).toHaveBeenCalledWith(0);
+    });
+
+    it('distinguishes the overview control from numbered Stop indicators', () => {
+      render(
+        <LanguageProvider initialLanguage="en">
+          <TimelineBar
+            stops={mockStops}
+            activeIndex={1}
+            visitedStopIds={[]}
+            onStopClick={() => {}}
+            onToggleVisited={() => {}}
+          />
+        </LanguageProvider>
+      );
+
+      const overview = screen.getByTestId('timeline-overview');
+      const stopDot = screen.getByTestId('timeline-stop-1');
+
+      // A different kind of destination: no Stop number, and named as the overview
+      expect(overview).not.toHaveTextContent(/\d/);
+      expect(overview).toHaveAccessibleName(/route overview/i);
+      expect(stopDot).toHaveTextContent('1');
+      expect(stopDot).toHaveAccessibleName(/jump to stop/i);
+    });
+
+    it('sits outside the scrolling Stop indicator container so it stays reachable on the longest Route', () => {
+      const stops = Array.from({ length: 12 }, (_, i) => ({
+        ...mockStops[0],
+        id: `stop-${i + 1}`,
+        order: i + 1,
+        name: `Stop ${i + 1}`,
+      }));
+
+      render(
+        <LanguageProvider initialLanguage="en">
+          <TimelineBar
+            stops={stops}
+            activeIndex={7}
+            visitedStopIds={[]}
+            onStopClick={() => {}}
+            onToggleVisited={() => {}}
+          />
+        </LanguageProvider>
+      );
+
+      const overview = screen.getByTestId('timeline-overview');
+      const dotsContainer = screen.getByTestId('timeline-bar-container');
+      expect(dotsContainer).not.toContainElement(overview);
+      expect(screen.getByTestId('timeline-ellipsis-left')).toBeInTheDocument();
+      expect(screen.getByTestId('timeline-ellipsis-right')).toBeInTheDocument();
+    });
+  });
+
   describe('Maximum visible dots & sliding window continuation', () => {
     const createStops = (count: number): Stop[] =>
       Array.from({ length: count }, (_, i) => ({
@@ -140,6 +212,27 @@ describe('TimelineBar Component', () => {
       expect(screen.getByTestId('timeline-stop-4')).toBeInTheDocument();
       expect(screen.queryByTestId('timeline-stop-5')).not.toBeInTheDocument();
       expect(screen.getByTestId('timeline-ellipsis-right')).toBeInTheDocument();
+    });
+
+    it('jumps to a Stop when tapping a visible Stop indicator', () => {
+      const stops = createStops(8);
+      const handleStopClick = vi.fn();
+
+      render(
+        <LanguageProvider initialLanguage="en">
+          <TimelineBar
+            stops={stops}
+            activeIndex={4}
+            visitedStopIds={[]}
+            onStopClick={handleStopClick}
+            onToggleVisited={() => {}}
+            maxVisibleDots={5}
+          />
+        </LanguageProvider>
+      );
+
+      screen.getByTestId('timeline-stop-6').click();
+      expect(handleStopClick).toHaveBeenCalledWith(6);
     });
 
     it('invokes onStopClick when tapping continuation ellipsis buttons', () => {

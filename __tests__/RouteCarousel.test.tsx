@@ -38,16 +38,14 @@ const mockRoute: Route = {
 };
 
 describe('RouteCarousel Component', () => {
-  it('renders bottom swipe hint and sticky START ROUTE CTA bar', () => {
+  it('renders sticky START ROUTE CTA bar without an on-screen swipe hint', () => {
     render(
       <LanguageProvider>
         <RouteCarousel route={mockRoute} />
       </LanguageProvider>
     );
 
-    const swipePrompt = screen.getByTestId('swipe-prompt-container');
-    expect(swipePrompt).toBeInTheDocument();
-    expect(swipePrompt).toHaveTextContent(/Swipe left or tap below to begin!/i);
+    expect(screen.queryByTestId('swipe-prompt-container')).not.toBeInTheDocument();
 
     const stickyStartBar = screen.getByTestId('sticky-start-container');
     expect(stickyStartBar).toBeInTheDocument();
