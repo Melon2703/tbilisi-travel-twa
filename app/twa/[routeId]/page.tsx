@@ -4,12 +4,23 @@ import { Metadata } from 'next';
 import { getRouteById } from '@/lib/data/routes';
 import TelegramBackButtonController from '@/components/TelegramBackButtonController';
 import RouteCarousel from '@/components/RouteCarousel';
+import { FIRST_RESUMABLE_POSITION } from '@/lib/utils/progress';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 import { Language } from '@/lib/i18n/types';
 
 interface PageProps {
   params: Promise<{ routeId: string }>;
-  searchParams?: Promise<{ lang?: string }>;
+  searchParams?: Promise<{ lang?: string; at?: string }>;
+}
+
+/**
+ * `at` carries the Card the catalog's Continue affordance resumes at. It is a
+ * traveler-editable URL, so anything that is not a Stop slide opens the Route
+ * Intro Card.
+ */
+function parseEntryPosition(at?: string): number | undefined {
+  const position = Number(at);
+  return Number.isInteger(position) && position >= FIRST_RESUMABLE_POSITION ? position : undefined;
 }
 
 export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
@@ -49,7 +60,10 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
   return (
     <main className="min-h-screen bg-[var(--twa-bg-color,#f7f4ef)] text-[var(--twa-text-color,#1f2421)] antialiased">
       <LanguageProvider initialLanguage={initialLang}>
-        <RouteCarousel route={route} />
+        <RouteCarousel
+          route={route}
+          entryProgressPosition={parseEntryPosition(resolvedSearchParams.at)}
+        />
       </LanguageProvider>
     </main>
   );

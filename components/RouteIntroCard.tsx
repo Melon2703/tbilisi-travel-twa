@@ -12,15 +12,17 @@ import RouteOverviewMap from '@/components/RouteOverviewMap';
 import RouteMapModal from '@/components/RouteMapModal';
 
 /**
- * The Route Intro Card's entry CTA: Continue, naming the Stop the traveler reached,
- * once the Route has a Progress Position — otherwise the default entry CTA.
- * Shared with the carousel, which renders this CTA as a sticky bar over Slide 0.
+ * The entry CTA for a Route: Continue, naming the Stop the traveler reached, once the
+ * Route has a Progress Position — otherwise the surface's own default label. Shared by
+ * every surface that offers entry into a Route: this card, the carousel's sticky bar
+ * over Slide 0, and the catalog card, which defaults to `viewRoute` instead.
  */
 export function routeEntryCtaLabel(
   t: (key: TranslationKey, params?: Record<string, string | number>) => string,
-  progressStopName?: string | null
+  progressStopName?: string | null,
+  defaultLabel: TranslationKey = 'startRoute'
 ): string {
-  return progressStopName ? t('continueRoute', { name: progressStopName }) : t('startRoute');
+  return progressStopName ? t('continueRoute', { name: progressStopName }) : t(defaultLabel);
 }
 
 export interface RouteIntroCardProps {

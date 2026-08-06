@@ -11,10 +11,12 @@
  * Stop Cards. Slide 0 is not progress worth resuming, so it is never stored.
  */
 
+import type { Stop } from '@/lib/types/route';
+
 export const PROGRESS_STORAGE_KEY = 'tbilisi_progress';
 
 /** The first slide index that counts as progress — Slide 0 is the Route Intro Card. */
-const FIRST_RESUMABLE_POSITION = 1;
+export const FIRST_RESUMABLE_POSITION = 1;
 
 export type ProgressPositions = Record<string, number>;
 
@@ -41,6 +43,18 @@ export function getProgressPositions(): ProgressPositions {
 
 export function getProgressPosition(routeId: string): number | null {
   return getProgressPositions()[routeId] ?? null;
+}
+
+/**
+ * The Stop a Progress Position names, or null when it names none — a Route that lost
+ * Stops since the traveler walked it leaves a position past its end, which no longer
+ * resumes anywhere.
+ */
+export function stopAtProgressPosition(stops: Stop[], position: number | null): Stop | null {
+  if (position === null || position < FIRST_RESUMABLE_POSITION || position > stops.length) {
+    return null;
+  }
+  return [...stops].sort((a, b) => a.order - b.order)[position - 1] ?? null;
 }
 
 /**

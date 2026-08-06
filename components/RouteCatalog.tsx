@@ -1,12 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Route, DurationCategory, VibeCategory } from '@/lib/types/route';
 import { sortRoutesByProximity, calculateDistance } from '@/lib/engine/matcher';
 import { getRouteDurationFormatted, formatAccessibilityLabel } from '@/lib/data/routes';
+import {
+  getProgressPositions,
+  stopAtProgressPosition,
+  type ProgressPositions,
+} from '@/lib/utils/progress';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { routeEntryCtaLabel } from '@/components/RouteIntroCard';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 
@@ -32,7 +38,20 @@ const VIBES: { id: VibeCategory; label: string; labelRu: string }[] = [
 ];
 
 export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
-  const { language, t } = useLanguage();
+  const { language, t, getLocalizedStop } = useLanguage();
+
+  /**
+   * Progress Position lives in browser storage, so it is unknown while the catalog
+   * renders on the server and on the first client render — null until it resolves here,
+   * in one storage read for the whole catalog. Until then a card shows no entry CTA at
+   * all rather than guessing at one: a partly-walked Route that opened on the default
+   * CTA would flash the wrong one. The slot keeps its size throughout, so nothing moves.
+   */
+  const [progressPositions, setProgressPositions] = useState<ProgressPositions | null>(null);
+
+  useEffect(() => {
+    setProgressPositions(getProgressPositions());
+  }, []);
 
   const [selectedDuration, setSelectedDuration] = useState<DurationCategory | 'all'>('all');
   const [selectedVibe, setSelectedVibe] = useState<VibeCategory | 'all'>('all');
@@ -247,10 +266,14 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               ).toFixed(1)
               : null;
 
+            const progressPosition = progressPositions?.[route.id] ?? null;
+            const resumedStop = stopAtProgressPosition(route.stops, progressPosition);
+
             return (
               <Link
                 key={route.id}
-                href={`/twa/${route.id}`}
+                data-testid={`route-card-${route.id}`}
+                href={resumedStop ? `/twa/${route.id}?at=${progressPosition}` : `/twa/${route.id}`}
                 className="flex flex-col bg-[#FFF8F3] rounded-2xl overflow-hidden border border-[#C4572A]/15 shadow-xs transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C4572A] active:scale-[0.99]"
               >
                 {/* Hero Card Image */}
@@ -295,7 +318,7 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                   <GeorgianOrnament />
 
                   {/* Card Footer Meta & CTA */}
-                  <div className="pt-3 border-t border-[#C4572A]/12 flex items-center justify-between text-xs font-semibold text-[#7A6552]">
+                  <div className="pt-3 border-t border-[#C4572A]/12 text-xs font-semibold text-[#7A6552]">
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="flex items-center gap-1">
                         <EmojiIcon name="mapPin" size="xs" />{' '}
@@ -316,8 +339,22 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                         </span>
                       )}
                     </div>
-                    <span className="text-[#C4572A] transition-transform flex items-center gap-1 font-bold min-h-[44px]">
-                      {t('viewRoute')}
+                    {/*
+                      A full-width row of its own: the label changes with progress, its
+                      geometry never does, and the reached Stop gets the whole card width
+                      to be named in.
+                    */}
+                    <span
+                      data-testid={`route-cta-${route.id}`}
+                      className="text-[#C4572A] transition-transform flex items-center justify-end gap-1 font-bold min-h-[48px] w-full truncate whitespace-nowrap text-right"
+                    >
+                      {progressPositions === null
+                        ? null
+                        : routeEntryCtaLabel(
+                          t,
+                          resumedStop ? getLocalizedStop(resumedStop).name : null,
+                          'viewRoute'
+                        )}
                     </span>
                   </div>
                 </div>

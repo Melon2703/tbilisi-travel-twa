@@ -7,7 +7,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Route } from '@/lib/types/route';
 import { getVisitedStops, toggleVisitedStop } from '@/lib/utils/visited';
-import { getProgressPosition, recordProgressPosition } from '@/lib/utils/progress';
+import {
+  getProgressPosition,
+  recordProgressPosition,
+  stopAtProgressPosition,
+} from '@/lib/utils/progress';
 import RouteIntroCard, { routeEntryCtaLabel } from './RouteIntroCard';
 import StopCard from './StopCard';
 import TimelineBar from './TimelineBar';
@@ -17,20 +21,33 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 import Button from '@/components/ui/Button';
 
 /** Slide 0 is the Route Intro Card; the Route's first Stop Card is Slide 1. */
+const ROUTE_INTRO_SLIDE_INDEX = 0;
 const FIRST_STOP_SLIDE_INDEX = 1;
 
 export interface RouteCarouselProps {
   route: Route;
+  /**
+   * The Progress Position to open at, carried in the URL by the catalog's Continue
+   * affordance. A position that names no Stop on this Route opens the Route Intro
+   * Card instead.
+   */
+  entryProgressPosition?: number;
 }
 
-export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
+export default function RouteCarousel({
+  route: rawRoute,
+  entryProgressPosition,
+}: RouteCarouselProps) {
   const { getLocalizedRoute, t } = useLanguage();
   const route = getLocalizedRoute(rawRoute);
   const { webApp } = useTelegram();
   const router = useRouter();
 
   const swiperRef = useRef<SwiperType | null>(null);
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const entrySlide = stopAtProgressPosition(rawRoute.stops, entryProgressPosition ?? null)
+    ? (entryProgressPosition ?? ROUTE_INTRO_SLIDE_INDEX)
+    : ROUTE_INTRO_SLIDE_INDEX;
+  const [activeIndex, setActiveIndex] = useState<number>(entrySlide);
   const [visitedStopIds, setVisitedStopIds] = useState<string[]>([]);
   const [progressPosition, setProgressPosition] = useState<number | null>(null);
 
@@ -67,15 +84,9 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
     }
   }, [activeIndex]);
 
-  /** Slide 0 is the Route Intro Card, so Slide 1..N carry Stop 0..N-1. */
-  const stopAtPosition = (position: number | null): typeof sortedStops[number] | null =>
-    position !== null && position >= 1 && position <= sortedStops.length
-      ? sortedStops[position - 1]
-      : null;
-
   // A Progress Position past the end of the Route — a Route that lost Stops since the
   // traveler walked it — names no Stop, so entry falls back to the first Stop.
-  const progressStop = stopAtPosition(progressPosition);
+  const progressStop = stopAtProgressPosition(sortedStops, progressPosition);
   const entryPosition =
     progressStop && progressPosition !== null ? progressPosition : FIRST_STOP_SLIDE_INDEX;
 

@@ -202,3 +202,27 @@ describe('Continue CTA on the Route Intro Card', () => {
     expect(screen.getByTestId('sticky-start-container')).toHaveTextContent(/ПРОДОЛЖИТЬ/i);
   });
 });
+
+describe('Entering a Route at a Card the catalog named', () => {
+  it('opens at the recorded Card rather than the Route Intro Card', () => {
+    recordProgressPosition('sololaki', 2);
+    render(
+      <LanguageProvider>
+        <RouteCarousel route={mockRoute} entryProgressPosition={2} />
+      </LanguageProvider>
+    );
+
+    expect(activeStopOrder()).toBe('timeline-stop-2');
+    expect(screen.queryByTestId('sticky-start-container')).not.toBeInTheDocument();
+  });
+
+  it('opens at the Route Intro Card when the named Card is not on the Route', () => {
+    render(
+      <LanguageProvider>
+        <RouteCarousel route={mockRoute} entryProgressPosition={9} />
+      </LanguageProvider>
+    );
+
+    expect(screen.getByTestId('sticky-start-container')).toBeInTheDocument();
+  });
+});
