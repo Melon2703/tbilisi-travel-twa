@@ -7,13 +7,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Route } from '@/lib/types/route';
 import { getVisitedStops, toggleVisitedStop } from '@/lib/utils/visited';
-import RouteIntroCard from './RouteIntroCard';
+import { getProgressPosition, recordProgressPosition } from '@/lib/utils/progress';
+import RouteIntroCard, { routeEntryCtaLabel } from './RouteIntroCard';
 import StopCard from './StopCard';
 import TimelineBar from './TimelineBar';
 import TelegramBackButtonController from './TelegramBackButtonController';
 import { useTelegram } from '@/components/TelegramProvider';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import Button from '@/components/ui/Button';
+
+/** Slide 0 is the Route Intro Card; the Route's first Stop Card is Slide 1. */
+const FIRST_STOP_SLIDE_INDEX = 1;
 
 export interface RouteCarouselProps {
   route: Route;
@@ -28,10 +32,25 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [visitedStopIds, setVisitedStopIds] = useState<string[]>([]);
+  const [progressPosition, setProgressPosition] = useState<number | null>(null);
 
   useEffect(() => {
     setVisitedStopIds(getVisitedStops(route.id));
+    setProgressPosition(getProgressPosition(route.id));
   }, [route.id]);
+
+  /**
+   * The single place a Card becomes the current one. Every navigation path — swipe,
+   * Stop indicator, overview control, marking a Stop visited — arrives here, so
+   * Progress Position is recorded once, for all of them.
+   */
+  const reachCard = useCallback(
+    (slideIndex: number) => {
+      setActiveIndex(slideIndex);
+      setProgressPosition(recordProgressPosition(route.id, slideIndex));
+    },
+    [route.id]
+  );
 
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
   const isCompleted = sortedStops.length > 0 && visitedStopIds.length === sortedStops.length;
@@ -48,13 +67,25 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
     }
   }, [activeIndex]);
 
-  const handleStartRoute = () => {
-    handleStopClick(1);
+  /** Slide 0 is the Route Intro Card, so Slide 1..N carry Stop 0..N-1. */
+  const stopAtPosition = (position: number | null): typeof sortedStops[number] | null =>
+    position !== null && position >= 1 && position <= sortedStops.length
+      ? sortedStops[position - 1]
+      : null;
+
+  // A Progress Position past the end of the Route — a Route that lost Stops since the
+  // traveler walked it — names no Stop, so entry falls back to the first Stop.
+  const progressStop = stopAtPosition(progressPosition);
+  const entryPosition =
+    progressStop && progressPosition !== null ? progressPosition : FIRST_STOP_SLIDE_INDEX;
+
+  const handleEnterRoute = () => {
+    handleStopClick(entryPosition);
   };
 
   const handleStopClick = (slideIndex: number) => {
     isProgrammatic.current = true;
-    setActiveIndex(slideIndex);
+    reachCard(slideIndex);
     if (swiperRef.current) {
       swiperRef.current.slideTo(slideIndex, 250);
     }
@@ -110,10 +141,10 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
           }
         }}
         onSlideChange={(swiper) => {
-          setActiveIndex(swiper.activeIndex);
+          reachCard(swiper.activeIndex);
         }}
         onSlideChangeTransitionEnd={(swiper) => {
-          setActiveIndex(swiper.activeIndex);
+          reachCard(swiper.activeIndex);
         }}
         slidesPerView={1}
         spaceBetween={0}
@@ -131,7 +162,12 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
         {/* Slide 0: Route Intro Card */}
         <SwiperSlide key="route-intro">
           <div className="h-[100dvh] w-full overflow-hidden bg-[#FAF7F2]">
-            <RouteIntroCard route={route} onStartRoute={handleStartRoute} showStartButton={false} />
+            <RouteIntroCard
+              route={route}
+              onStartRoute={handleEnterRoute}
+              showStartButton={false}
+              progressStopName={progressStop?.name}
+            />
           </div>
         </SwiperSlide>
 
@@ -157,8 +193,8 @@ export default function RouteCarousel({ route: rawRoute }: RouteCarouselProps) {
           data-testid="sticky-start-container"
           className="fixed bottom-0 left-0 right-0 p-4 pt-6 max-w-2xl mx-auto z-[99999] pointer-events-auto bg-gradient-to-t from-[#FAF7F2] via-[#FAF7F2]/90 to-transparent"
         >
-          <Button onClick={handleStartRoute} emoji="arrowRight">
-            {t('startRoute')}
+          <Button onClick={handleEnterRoute} emoji="arrowRight">
+            {routeEntryCtaLabel(t, progressStop?.name)}
           </Button>
         </div>
       )}

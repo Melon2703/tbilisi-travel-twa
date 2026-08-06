@@ -4,6 +4,7 @@ export const TRANSLATIONS = {
   en: {
     // RouteIntroCard
     startRoute: 'Start Route',
+    continueRoute: 'Continue: {name}',
     olyaWelcome: "Olya's route welcome",
     routeAtAGlance: 'Route at a glance',
     curatedStops: 'curated stops',
@@ -109,6 +110,7 @@ export const TRANSLATIONS = {
   ru: {
     // RouteIntroCard
     startRoute: 'НАЧАТЬ МАРШРУТ',
+    continueRoute: 'ПРОДОЛЖИТЬ: {name}',
     olyaWelcome: 'Приветствие от Оли',
     routeAtAGlance: 'Маршрут в деталях',
     curatedStops: 'Остановок в маршруте',

@@ -4,22 +4,38 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import type { TranslationKey } from '@/lib/i18n/translations';
 import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import Button from '@/components/ui/Button';
 import RouteOverviewMap from '@/components/RouteOverviewMap';
 import RouteMapModal from '@/components/RouteMapModal';
 
+/**
+ * The Route Intro Card's entry CTA: Continue, naming the Stop the traveler reached,
+ * once the Route has a Progress Position — otherwise the default entry CTA.
+ * Shared with the carousel, which renders this CTA as a sticky bar over Slide 0.
+ */
+export function routeEntryCtaLabel(
+  t: (key: TranslationKey, params?: Record<string, string | number>) => string,
+  progressStopName?: string | null
+): string {
+  return progressStopName ? t('continueRoute', { name: progressStopName }) : t('startRoute');
+}
+
 export interface RouteIntroCardProps {
   route: Route;
   onStartRoute?: () => void;
   showStartButton?: boolean;
+  /** Name of the Stop at this Route's Progress Position, if it has one. */
+  progressStopName?: string | null;
 }
 
 export default function RouteIntroCard({
   route,
   onStartRoute,
   showStartButton = true,
+  progressStopName = null,
 }: RouteIntroCardProps) {
   const { language, setLanguage, t } = useLanguage();
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
@@ -300,7 +316,7 @@ export default function RouteIntroCard({
       {showStartButton && (
         <div className="fixed bottom-4 left-4 right-4 max-w-2xl mx-auto z-30 pointer-events-auto">
           <Button onClick={onStartRoute} emoji="arrowRight">
-            {t('startRoute')}
+            {routeEntryCtaLabel(t, progressStopName)}
           </Button>
         </div>
       )}
