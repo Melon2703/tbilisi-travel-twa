@@ -8,6 +8,7 @@ export const EMOJI_ICONS = {
   chat: '💬',
   camera: '📸',
   warning: '⚠️',
+  directive: '🧭',
   arrowRight: '➡️',
   check: '✅',
   close: '✖️',

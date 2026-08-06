@@ -100,8 +100,12 @@ An instruction from Olya that changes what the traveler physically does at a Sto
 _Avoid_: Tip, note, advice, hint.
 
 **Act Layer**:
-Stop Card content that answers "what do I do here, now" — it passes the five-minute test: it changes what the traveler does in the next five minutes, standing on this spot. Includes Map Links, working hours, transit steps, photo spot, recommended dishes, booking advice, Logistics Warning, and Stop Directive. Occupies a fixed zone directly beneath the Stop title.
+Stop Card content that answers "what do I do here, now" — it passes the five-minute test: it changes what the traveler does in the next five minutes, standing on this spot. Includes Google Rating, Map Links, working hours, transit steps, photo spot, recommended dishes, booking advice, Logistics Warning, and Stop Directive. Occupies a fixed zone directly beneath the Stop title.
 _Avoid_: Primary content, above the fold, summary.
+
+**Act Block**:
+The fixed zone on the Stop Card that holds the Act Layer — directly beneath the Stop title and neighborhood metadata, above the divider that opens the Story Layer. Absent items are omitted outright rather than left as gaps, so a Stop carrying nothing but Map Links collapses to a single row.
+_Avoid_: Action bar, header block, hero section.
 
 **Story Layer**:
 Stop Card content that rewards attention but does not direct action — historical summary, fun fact, and Olya's Tips. Read on site, standing in front of the place; it is the reason a traveler chooses a curated Route over a map, and is therefore never hidden behind a tap.

@@ -28,6 +28,8 @@ import { COLORS, TYPOGRAPHY, SPACING, COMPONENT_TOKENS } from '@/lib/theme/token
 - **Card Background (`--card-bg`, `#FFF8F3`)**: Warm paper tone for journal cards.
 - **Tip Box Background (`--tip-box-bg`, `#FFF8F3`)**: Warm background container for curator callouts.
 - **Tip Box Border (`--tip-box-border`, `rgba(196, 87, 42, 0.18)`)**: Subtle terracotta accent border.
+- **Advisory Background (`advisoryBg`, `#FDECE2`)**: Warm alert tint for the Act Layer advisory surface (Logistics Warning, Stop Directive).
+- **Advisory Border (`advisoryBorder`, `rgba(196, 87, 42, 0.25)`)**: Border of the advisory surface, with a 4px terracotta-accent left rule.
 - **Success Accent (`--success-accent`, `#228255`)**: Emerald green for completed visited states and veggie badges.
 - **Text Primary (`--text-primary`, `#1C1008`)**: Deep warm charcoal for high legibility.
 - **Text Secondary (`--text-secondary`, `#7A6552`)**: Muted brown-slate for secondary metadata.
@@ -114,53 +116,40 @@ Layouts and padding follow a strict **8px base grid system**:
 
 ---
 
-## 3. Standard 5-Part Card Hierarchy
+## 3. Stop Card Hierarchy: Act Layer, then Story Layer
 
-Every **Stop Card** on the TWA timeline follows a strict, predictable 5-part vertical content structure rendered on a continuous scroll surface without accordions:
+Every **Stop Card** renders on a continuous scroll surface without accordions. Above a visible divider sits the **Act Block** — everything that passes the five-minute test. Below it, the **Story Layer** scrolls freely and at full length. See `docs/adr/0005-street-first-product-posture.md` and the Act Layer / Story Layer entries in `CONTEXT.md`.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│ 1. HEADER                                              │
-│    - Hero Image Gallery / Lightbox Trigger              │
-│    - Stop Title (Sans-Serif) + Neighborhood + Duration │
+│ 1. VISUAL COVER                                         │
+│    - Hero image / lightbox trigger, floating badges     │
 ├─────────────────────────────────────────────────────────┤
-│ 2. BADGES                                               │
-│    - Category & Cuisine Pills (e.g. ☕ Cafe • Georgian)  │
-│    - 🌱 Veggie Friendly Indicator                        │
-│    - Optional Pitstop Flag (☕ Refuel Pitstop)          │
+│ 2. HEADER                                               │
+│    - STOP X OF Y order badge, Pitstop & Visited flags   │
+│    - Stop title + neighborhood metadata                 │
 ├─────────────────────────────────────────────────────────┤
-│ 3. OLYA'S TIP BLOCK                                     │
-│    - Warm terracotta container with Olya's advice       │
-│    - Conversational, local curator tone                 │
-├─────────────────────────────────────────────────────────┤
-│ 4. STORY & MUST-TRY DISHES                              │
-│    - Attraction: 2-sentence story & 💡 Fun Fact         │
-│    - Venue: Interactive dish pills & booking advice     │
-├─────────────────────────────────────────────────────────┤
-│ 5. ACTION BAR                                           │
-│    - Google Maps / Yandex Maps deep-link CTA           │
+│ 3. ACT BLOCK (fixed zone, directly beneath the title)   │
+│    - Google Rating (only when Google resolves one)      │
+│    - Map Links (Google / Yandex, website, Instagram)    │
+│    - Venue category & cuisine, 🌱 Veggie Friendly       │
+│    - Working hours, transit step                        │
+│    - Recommended dishes, booking advice, photo spot     │
+│    - 🧭 Stop Directive      ─┐ advisory surface         │
+│    - ⚠️ Logistics Warning   ─┘                          │
+├─────────────────────────── divider ─────────────────────┤
+│ 4. STORY LAYER (never truncated or behind a tap)        │
+│    - 🏛️ Historical overview                             │
+│    - 💡 Fun fact                                        │
+│    - 💬 Olya's tip                                      │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Breakdown of the 5 Parts:
+### Rules
 
-1. **Header Section**:
-   - High-resolution hero image or swipeable image carousel.
-   - Stop title styled in Geist Sans sans-serif typography (`var(--font-sans)`).
-   - Metadata line displaying neighborhood, estimated time, and order badge (`STOP 1 OF N`).
-2. **Badges Section**:
-   - Venue Category badge (`☕ Cafe`, `🍷 Bar`, `🍽️ Restaurant`).
-   - Cuisine details (`Georgian`, `European`).
-   - `🌱 Veggie Friendly` badge when applicable.
-   - `Refuel Pitstop` tag for optional food/beverage breaks.
-3. **Olya's Tip Block**:
-   - Highlighted container (`.journal-card-highlight` / `--tip-box-bg`) with a warm terracotta border.
-   - Contains personal, conversational advice directly from local curator Olya.
-4. **Story & Recommended Items Section**:
-   - **Attraction Stops**: Historical context, architectural notes, and highlighted `💡 Fun Fact`.
-   - **Venue Stops**: Interactive `Recommended Dishes` pills (selectable for travelers) and reservation/booking advice.
-5. **Action Bar Section**:
-   - Primary `📍 Open Map` CTA button launching Google Maps / Yandex Maps universal links.
+- **Absent items are omitted outright.** A Stop with nothing beyond a title and Map Links renders an Act Block holding only the Map Links row — no placeholders, no empty gaps.
+- **The Story Layer is never demoted.** It is not truncated, collapsed, or hidden behind a tap; it is the reason a traveler picks a curated Route over a map.
+- **Advisory surface.** Stop Directive and Logistics Warning use `Card variant="highlight"` (`advisoryBg` + 4px terracotta left rule), deliberately distinct from the neutral `callout` surface the Route Intro Card summarises route-wide warnings on.
 
 ---
 

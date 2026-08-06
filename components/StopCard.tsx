@@ -106,6 +106,32 @@ function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): s
   );
 }
 
+interface TextCalloutProps {
+  testId: string;
+  emoji: string;
+  title: string;
+  text: string;
+  variant?: 'default' | 'warning';
+  className?: string;
+}
+
+/** A single block of Stop prose on a callout surface — the shape every Act
+ *  Layer and Story Layer text block shares. */
+function TextCallout({ testId, emoji, title, text, variant = 'default', className = '' }: TextCalloutProps) {
+  return (
+    <div data-testid={testId}>
+      <Callout emoji={emoji} title={title} variant={variant}>
+        <p
+          className={`text-xs sm:text-sm leading-relaxed font-medium ${className}`}
+          style={{ color: COLORS.dishText }}
+        >
+          {text}
+        </p>
+      </Callout>
+    </div>
+  );
+}
+
 function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }: StopCardProps) {
   const { t, getLocalizedStop } = useLanguage();
   const stop = getLocalizedStop(rawStop);
@@ -266,78 +292,89 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         </div>
       </div>
 
-      {/* Google Rating Badge — omitted entirely when no real rating resolves */}
-      {rating && (
-        <div
-          data-testid="google-rating-badge"
-          className="flex items-center gap-1.5 text-xs font-medium pt-0.5"
-          style={{ color: COLORS.textSecondary }}
-        >
-          <span className="font-bold text-sm" style={{ color: COLORS.terracottaAccent }}>
-            ★ {rating.rating.toFixed(1)}
-          </span>
-          <span> ({rating.count.toLocaleString()} reviews on Google)</span>
-        </div>
-      )}
-
-      {/* Map Provider Action Buttons directly underneath location title, neighborhood metadata, and rating */}
-      <div className="flex items-center gap-3 pt-1" data-testid="map-pills-row">
-        <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
-          <GoogleMapsIcon />
-        </ActionButtonLink>
-
-        <ActionButtonLink href={yandexMapsUrl} ariaLabel="Open in Yandex Maps" title="Yandex Maps">
-          <YandexMapsIcon />
-        </ActionButtonLink>
-
-        {websiteUrl && (
-          <ActionButtonLink href={websiteUrl} ariaLabel="Visit Website" title="Website">
-            <GlobeIcon />
-          </ActionButtonLink>
-        )}
-
-        {stop.instagramUrl && (
-          <ActionButtonLink href={stop.instagramUrl} ariaLabel="Visit Instagram" title="Instagram">
-            <InstagramIcon />
-          </ActionButtonLink>
-        )}
-      </div>
     </div>
   );
 
-  /* Unified Content Blocks in Standard Hierarchy */
-  const renderContentBlocks = () => {
+  /*
+   * The Act Block: everything that passes the five-minute test, in a fixed zone
+   * directly beneath the Stop title. Absent items are omitted outright, so the
+   * block collapses to the Map Links row for a Stop that carries nothing else.
+   */
+  const renderActBlock = () => {
     const hasVenueDishes = Boolean(venueStop?.venueDetails.recommendedDishes && venueStop.venueDetails.recommendedDishes.length > 0);
     const hasBookingAdvice = Boolean(venueStop?.venueDetails.bookingAdvice);
 
     return (
-      <>
-        {stop.historicalSummary && (
-          <div data-testid="historical-summary">
-            <Callout emoji="landmark" title={t('historicalSummary')}>
-              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
-                {stop.historicalSummary}
-              </p>
-            </Callout>
+      <div className="space-y-3" data-testid="act-block">
+        {/* Google Rating — omitted entirely when no real rating resolves */}
+        {rating && (
+          <div
+            data-testid="google-rating-badge"
+            className="flex items-center gap-1.5 text-xs font-medium"
+            style={{ color: COLORS.textSecondary }}
+          >
+            <span className="font-bold text-sm" style={{ color: COLORS.terracottaAccent }}>
+              ★ {rating.rating.toFixed(1)}
+            </span>
+            <span> ({rating.count.toLocaleString()} reviews on Google)</span>
           </div>
         )}
 
-        {stop.funFact && (
-          <div data-testid="fun-fact">
-            <Callout emoji="bulb" title={t('funFact')}>
-              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
-                {stop.funFact}
-              </p>
-            </Callout>
+        {/* Map Links — one tap each, no provider chooser */}
+        <div className="flex items-center gap-3" data-testid="map-pills-row">
+          <ActionButtonLink href={googleMapsUrl} ariaLabel="Open in Google Maps" title="Google Maps">
+            <GoogleMapsIcon />
+          </ActionButtonLink>
+
+          <ActionButtonLink href={yandexMapsUrl} ariaLabel="Open in Yandex Maps" title="Yandex Maps">
+            <YandexMapsIcon />
+          </ActionButtonLink>
+
+          {websiteUrl && (
+            <ActionButtonLink href={websiteUrl} ariaLabel="Visit Website" title="Website">
+              <GlobeIcon />
+            </ActionButtonLink>
+          )}
+
+          {stop.instagramUrl && (
+            <ActionButtonLink href={stop.instagramUrl} ariaLabel="Visit Instagram" title="Instagram">
+              <InstagramIcon />
+            </ActionButtonLink>
+          )}
+        </div>
+
+        {venueStop && (
+          <div className="flex flex-wrap items-center gap-2" data-testid="venue-details-header">
+            <span
+              data-testid="venue-category-cuisine"
+              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border"
+              style={{
+                backgroundColor: COLORS.badgeBg,
+                color: COLORS.badgeText,
+                borderColor: COLORS.badgeBorder,
+              }}
+            >
+              {formatCategoryCuisine(venueStop, t)}
+            </span>
+            {venueStop.venueDetails.isVegetarianFriendly && (
+              <Badge variant="visited" data-testid="veggie-friendly-badge" className="normal-case tracking-normal text-xs font-semibold">
+                {t('veggieFriendly')}
+              </Badge>
+            )}
           </div>
         )}
 
-        {stop.olyaTips && (
-          <div data-testid="olya-tip">
-            <Callout emoji="chat" title={t('olyaTip')}>
-              <p className="text-xs sm:text-sm italic leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
-                &ldquo;{stop.olyaTips}&rdquo;
-              </p>
+        {stop.workingHours && (
+          <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: COLORS.textSecondary }} data-testid="working-hours-badge">
+            <EmojiIcon name="clock" size="xs" />
+            <span>{t('workingHours')}: {stop.workingHours}</span>
+          </div>
+        )}
+
+        {attractionStop?.transitBadge && (
+          <div data-testid="transit-badge">
+            <Callout emoji="funicular" title={t('transitStep')}>
+              <p className="font-semibold" style={{ color: COLORS.textPrimary }}>{attractionStop.transitBadge}</p>
             </Callout>
           </div>
         )}
@@ -350,94 +387,91 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         )}
 
         {hasBookingAdvice && (
-          <div data-testid="booking-advice">
-            <Callout emoji="calendar" title={t('bookingAdvice')}>
-              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
-                {venueStop!.venueDetails.bookingAdvice}
-              </p>
-            </Callout>
-          </div>
+          <TextCallout
+            testId="booking-advice"
+            emoji="calendar"
+            title={t('bookingAdvice')}
+            text={venueStop!.venueDetails.bookingAdvice!}
+          />
         )}
 
         {stop.photoSpot && (
-          <div data-testid="photo-spot">
-            <Callout emoji="camera" title={t('photoSpotRec')}>
-              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
-                {stop.photoSpot}
-              </p>
-            </Callout>
-          </div>
+          <TextCallout testId="photo-spot" emoji="camera" title={t('photoSpotRec')} text={stop.photoSpot} />
+        )}
+
+        {stop.stopDirective && (
+          <TextCallout
+            testId="stop-directive"
+            emoji="directive"
+            title={t('stopDirective')}
+            text={stop.stopDirective}
+            variant="warning"
+            className="font-semibold"
+          />
         )}
 
         {stop.logisticsWarning && (
-          <div data-testid="logistics-warning">
-            <Callout emoji="warning" title={t('logisticsWarning')} variant="warning">
-              <p className="text-xs sm:text-sm leading-relaxed font-medium" style={{ color: COLORS.dishText }}>
-                {stop.logisticsWarning}
-              </p>
-            </Callout>
-          </div>
+          <TextCallout
+            testId="logistics-warning"
+            emoji="warning"
+            title={t('logisticsWarning')}
+            text={stop.logisticsWarning}
+            variant="warning"
+          />
         )}
-      </>
+      </div>
     );
   };
 
-  /* Part 3: Short Overview Layout for AttractionStop */
-  const renderAttractionLayout = (attraction: AttractionStop) => (
-    <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full">
-      {renderHeaderBar()}
+  /*
+   * The Story Layer: read on site, in front of the place. Never truncated,
+   * collapsed, or hidden behind a tap — see ADR 0005.
+   */
+  const hasStoryLayer = Boolean(stop.historicalSummary || stop.funFact || stop.olyaTips);
 
-      {stop.workingHours && (
-        <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: COLORS.textSecondary }} data-testid="working-hours-badge">
-          <EmojiIcon name="clock" size="xs" />
-          <span>{t('workingHours')}: {stop.workingHours}</span>
-        </div>
+  const renderStoryLayer = () => (
+    <div className="space-y-4" data-testid="story-layer">
+      {stop.historicalSummary && (
+        <TextCallout
+          testId="historical-summary"
+          emoji="landmark"
+          title={t('historicalSummary')}
+          text={stop.historicalSummary}
+        />
       )}
 
-      {attraction.transitBadge && (
-        <div data-testid="transit-badge">
-          <Callout emoji="funicular" title={t('transitStep')}>
-            <p className="font-semibold" style={{ color: COLORS.textPrimary }}>{attraction.transitBadge}</p>
-          </Callout>
-        </div>
+      {stop.funFact && (
+        <TextCallout testId="fun-fact" emoji="bulb" title={t('funFact')} text={stop.funFact} />
       )}
 
-      {renderContentBlocks()}
+      {stop.olyaTips && (
+        <TextCallout
+          testId="olya-tip"
+          emoji="chat"
+          title={t('olyaTip')}
+          text={`“${stop.olyaTips}”`}
+          className="italic"
+        />
+      )}
     </div>
   );
 
-  /* Part 3: Short Overview Layout for VenueStop */
-  const renderVenueLayout = (venue: VenueStop) => (
+  const renderStopBody = () => (
     <div className="p-4 sm:p-6 space-y-4 max-w-2xl mx-auto w-full">
       {renderHeaderBar()}
+      {renderActBlock()}
 
-      <div className="flex flex-wrap items-center gap-2 pt-0.5" data-testid="venue-details-header">
-        <span
-          data-testid="venue-category-cuisine"
-          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border"
-          style={{
-            backgroundColor: COLORS.badgeBg,
-            color: COLORS.badgeText,
-            borderColor: COLORS.badgeBorder,
-          }}
-        >
-          {formatCategoryCuisine(venue, t)}
-        </span>
-        {venue.venueDetails.isVegetarianFriendly && (
-          <Badge variant="visited" data-testid="veggie-friendly-badge" className="normal-case tracking-normal text-xs font-semibold">
-            {t('veggieFriendly')}
-          </Badge>
-        )}
-      </div>
-
-      {stop.workingHours && (
-        <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: COLORS.textSecondary }} data-testid="working-hours-badge">
-          <EmojiIcon name="clock" size="xs" />
-          <span>{t('workingHours')}: {stop.workingHours}</span>
-        </div>
+      {hasStoryLayer && (
+        <>
+          <div
+            data-testid="layer-divider"
+            role="separator"
+            className="border-t"
+            style={{ borderColor: COLORS.neutralBorder }}
+          />
+          {renderStoryLayer()}
+        </>
       )}
-
-      {renderContentBlocks()}
     </div>
   );
 
@@ -449,7 +483,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     >
       <div className="w-full flex-1 overflow-y-auto scrollbar-none pb-24 sm:pb-28">
         {renderVisualCover()}
-        {venueStop ? renderVenueLayout(venueStop) : renderAttractionLayout(attractionStop!)}
+        {renderStopBody()}
       </div>
 
       {/* Photo Lightbox Modal */}

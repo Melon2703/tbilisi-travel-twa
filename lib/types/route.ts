@@ -56,6 +56,13 @@ export interface BaseStop {
   instagramUrl?: string;
   olyaTips: string;
   olyaTipsRu?: string;
+  /**
+   * Act Layer instruction that changes what the traveler physically does at
+   * this Stop — which door, which staircase, buy the ticket before queueing.
+   * Distinct from `logisticsWarning`, which describes the leg between Stops.
+   */
+  stopDirective?: string;
+  stopDirectiveRu?: string;
   logisticsWarning?: string;
   logisticsWarningRu?: string;
   bestTimeOfDay?: string;

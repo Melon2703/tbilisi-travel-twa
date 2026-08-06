@@ -45,6 +45,7 @@ export function getLocalizedStop(stop: Stop, lang: Language): Stop {
       funFact: stop.funFactRu || stop.funFact,
       workingHours: stop.workingHoursRu || stop.workingHours,
       olyaTips: stop.olyaTipsRu || stop.olyaTips,
+      stopDirective: stop.stopDirectiveRu || stop.stopDirective,
       logisticsWarning: stop.logisticsWarningRu || stop.logisticsWarning,
       photoSpot: stop.photoSpotRu || stop.photoSpot,
       bestTimeOfDay: stop.bestTimeOfDayRu || stop.bestTimeOfDay,

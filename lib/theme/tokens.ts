@@ -16,6 +16,10 @@ export const COLORS = {
   cardBg: '#FFF8F3',
   tipBoxBg: '#FFF8F3',
   tipBoxBorder: 'rgba(196, 87, 42, 0.18)',
+  // Advisory surface: a Logistics Warning or Stop Directive the traveler acts
+  // on now, deliberately distinct from the neutral callout surface.
+  advisoryBg: '#FDECE2',
+  advisoryBorder: 'rgba(196, 87, 42, 0.25)',
   successAccent: '#228255',
   textPrimary: '#1C1008',
   textSecondary: '#7A6552',
