@@ -84,8 +84,7 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
         expect(screen.getByTestId('olya-tip')).toBeInTheDocument();
       }
 
-      // Part 5: Rating Badge & Map/Website Action Pills
-      expect(screen.getByTestId('google-rating-badge')).toBeInTheDocument();
+      // Part 5: Map/Website Action Pills
       expect(screen.getByTestId('map-pills-row')).toBeInTheDocument();
       expect(screen.getByLabelText('Open in Google Maps')).toBeInTheDocument();
       expect(screen.getByLabelText('Open in Yandex Maps')).toBeInTheDocument();
@@ -94,9 +93,8 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
     });
   });
 
-  it('4. Verifies rating badges, map links, and website buttons across all stops of heartbeat-express-1-2h', () => {
+  it('4. Verifies map links and website buttons across all stops of heartbeat-express-1-2h', () => {
     expect(expressRoute).toBeDefined();
-    const expectedRatings = ['4.7', '4.6', '4.8', '4.8', '4.6', '4.5'];
     const expectedWebsites: Record<number, string> = {
       0: 'https://tbilisi.gov.ge',
       1: 'https://orbelianibazaar.ge',
@@ -110,9 +108,6 @@ describe('Heartbeat Express (heartbeat-express-1-2h) Parity & Component Test Sui
           <StopCard stop={stop} totalStops={6} />
         </LanguageProvider>
       );
-
-      // Verify Google Rating score matching exact curated rating
-      expect(screen.getByTestId('google-rating-badge')).toHaveTextContent(expectedRatings[index]);
 
       // Verify Map Links
       expect(screen.getByLabelText('Open in Google Maps')).toBeInTheDocument();

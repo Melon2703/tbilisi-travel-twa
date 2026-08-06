@@ -1,218 +1,148 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { getStopRatings, fetchPlaceRatingsFromAPI } from '../lib/services/places';
-import { Stop } from '../lib/types/route';
+import { fetchPlaceRating } from '../lib/services/places';
 import { GET } from '../app/api/places/ratings/route';
-import { readRatingsCache, writeRatingsCache, TTL_MS } from '../lib/utils/ratingsCache';
 
-describe('Places Ratings Service', () => {
-  const mockStop: Stop = {
-    id: 'test-stop-1',
-    order: 1,
-    stopType: 'attraction',
-    name: 'Fabrika Tbilisi',
-    neighborhood: 'Marjanishvili',
-    coordinates: { lat: 41.7096, lng: 44.8058 },
-    estimatedMinutes: 45,
-    imageUrl: '/images/fabrika.jpg',
-    olyaTips: 'Great atmosphere',
-    ratings: {
-      google: { rating: 4.7, count: 3200 },
-    },
-    placeIds: {
-      google: 'ChIJx5mG_r8XREARaZ2b_test',
-    },
-  };
+describe('fetchPlaceRating', () => {
+  it('resolves a rating for a Place Identity that carries a place_id', async () => {
+    const fetchImpl = vi.fn(
+      async () => new Response(JSON.stringify({ google: { rating: 4.4, count: 91 } }), { status: 200 })
+    );
 
-  it('returns Google rating when defined on Stop object', () => {
-    const ratings = getStopRatings(mockStop);
-    expect(ratings.google).toEqual({ rating: 4.7, count: 3200 });
+    const rating = await fetchPlaceRating(
+      { coordinates: { lat: 41.6918, lng: 44.7972 }, googlePlaceId: 'ChIJplace' },
+      fetchImpl as unknown as typeof fetch
+    );
+
+    expect(rating).toEqual({ rating: 4.4, count: 91 });
+    expect(fetchImpl).toHaveBeenCalledWith('/api/places/ratings?googleId=ChIJplace');
   });
 
-  it('falls back to single rating when ratings object is missing', () => {
-    const legacyStop: Stop = {
-      ...mockStop,
-      ratings: undefined,
-      rating: 4.6,
-      ratingCount: 800,
-    };
-    const ratings = getStopRatings(legacyStop);
-    expect(ratings.google).toEqual({ rating: 4.6, count: 800 });
+  it('resolves to no rating for a Place Identity without a place_id, without calling out', async () => {
+    const fetchImpl = vi.fn();
+
+    const rating = await fetchPlaceRating(
+      { coordinates: { lat: 41.6918, lng: 44.7972 } },
+      fetchImpl as unknown as typeof fetch
+    );
+
+    expect(rating).toBeNull();
+    expect(fetchImpl).not.toHaveBeenCalled();
   });
 
-  it('uses global default when no ratings are provided', () => {
-    const emptyStop: Stop = {
-      ...mockStop,
-      ratings: undefined,
-      rating: undefined,
-      ratingCount: undefined,
-    };
-    const ratings = getStopRatings(emptyStop);
-    expect(ratings.google).toEqual({ rating: 4.7, count: 1250 });
-  });
+  it('resolves to no rating when the request fails', async () => {
+    const fetchImpl = vi.fn(async () => {
+      throw new Error('offline');
+    });
 
-  it('returns fallback data when API keys are not present', async () => {
-    const result = await fetchPlaceRatingsFromAPI(mockStop);
-    expect(result.google).toEqual({ rating: 4.7, count: 3200 });
+    const rating = await fetchPlaceRating(
+      { coordinates: { lat: 41.6918, lng: 44.7972 }, googlePlaceId: 'ChIJplace' },
+      fetchImpl as unknown as typeof fetch
+    );
+
+    expect(rating).toBeNull();
   });
 });
 
-describe('Places Ratings API Route GET /api/places/ratings', () => {
+describe('GET /api/places/ratings', () => {
   const originalEnv = process.env;
-  let initialCacheState: Record<string, unknown> = {};
+  const originalFetch = globalThis.fetch;
 
   beforeEach(() => {
     process.env = { ...originalEnv };
-    initialCacheState = readRatingsCache();
-    writeRatingsCache({});
   });
 
   afterEach(() => {
     process.env = originalEnv;
-    writeRatingsCache(initialCacheState as any);
+    globalThis.fetch = originalFetch;
     vi.restoreAllMocks();
   });
 
-  it('returns fallback_mode status when no API keys are set and cache is missing', async () => {
+  it('returns no rating when no API key is configured', async () => {
     delete process.env.GOOGLE_PLACES_API_KEY;
-
-    const request = new Request('http://localhost/api/places/ratings?googleId=abc');
-    const response = await GET(request);
-
-    expect(response.status).toBe(200);
-    const data = await response.json();
-    expect(data.status).toBe('fallback_mode');
-    expect(data.google).toBeNull();
-    expect(data.yandex).toBeUndefined();
-  });
-
-  it('fetches real Google rating, queries field masks, writes to cache, and resets 14-day TTL', async () => {
-    process.env.GOOGLE_PLACES_API_KEY = 'mock_google_key';
-
-    const fetchSpy = vi.fn().mockImplementation(async (url: string, init?: RequestInit) => {
-      if (url.includes('maps.googleapis.com')) {
-        expect(url).toContain('fields=rating,user_ratings_total');
-        expect(init?.headers).toMatchObject({
-          'X-Goog-FieldMask': 'rating,user_ratings_total',
-        });
-
-        return new Response(
-          JSON.stringify({
-            result: {
-              rating: 4.9,
-              user_ratings_total: 4500,
-            },
-          }),
-          { status: 200 }
-        );
-      }
-      return new Response(JSON.stringify({}), { status: 404 });
-    });
-    globalThis.fetch = fetchSpy;
-
-    const beforeTime = Date.now();
-    const request = new Request('http://localhost/api/places/ratings?googleId=place_123');
-    const response = await GET(request);
-    const data = await response.json();
-
-    expect(data.status).toBe('ok');
-    expect(data.google).toEqual({ rating: 4.9, count: 4500 });
-    expect(fetchSpy).toHaveBeenCalledTimes(1);
-
-    const cache = readRatingsCache();
-    expect(cache['place_123']).toBeDefined();
-    expect(cache['place_123'].rating).toBe(4.9);
-    expect(cache['place_123'].count).toBe(4500);
-    expect(cache['place_123'].fetchedAt).toBeGreaterThanOrEqual(beforeTime);
-  });
-
-  it('returns cached rating with 0 API calls when TTL is valid (< 14 days)', async () => {
-    process.env.GOOGLE_PLACES_API_KEY = 'mock_google_key';
-
-    const now = Date.now();
-    writeRatingsCache({
-      cached_place_1: {
-        rating: 4.8,
-        count: 2100,
-        fetchedAt: now - 10000,
-      },
-    });
-
     const fetchSpy = vi.fn();
-    globalThis.fetch = fetchSpy;
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
 
-    const request = new Request('http://localhost/api/places/ratings?googleId=cached_place_1');
-    const response = await GET(request);
-    const data = await response.json();
+    const response = await GET(new Request('http://localhost/api/places/ratings?googleId=abc'));
 
     expect(response.status).toBe(200);
-    expect(data.status).toBe('ok');
-    expect(data.google).toEqual({ rating: 4.8, count: 2100 });
-    expect(fetchSpy).toHaveBeenCalledTimes(0);
+    await expect(response.json()).resolves.toEqual({ google: null });
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it('refetches Google Places API when cache entry is expired (> 14 days)', async () => {
+  it('returns no rating when no place_id is given', async () => {
     process.env.GOOGLE_PLACES_API_KEY = 'mock_google_key';
+    const fetchSpy = vi.fn();
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
 
-    const fifteenDaysAgo = Date.now() - (TTL_MS + 86400000);
-    writeRatingsCache({
-      expired_place: {
-        rating: 4.0,
-        count: 500,
-        fetchedAt: fifteenDaysAgo,
-      },
-    });
+    const response = await GET(new Request('http://localhost/api/places/ratings'));
 
-    const fetchSpy = vi.fn().mockImplementation(async (url: string) => {
-      if (url.includes('maps.googleapis.com')) {
-        return new Response(
-          JSON.stringify({
-            result: {
-              rating: 4.95,
-              user_ratings_total: 6000,
-            },
-          }),
-          { status: 200 }
-        );
-      }
-      return new Response(JSON.stringify({}), { status: 404 });
-    });
-    globalThis.fetch = fetchSpy;
-
-    const request = new Request('http://localhost/api/places/ratings?googleId=expired_place');
-    const response = await GET(request);
-    const data = await response.json();
-
-    expect(data.status).toBe('ok');
-    expect(data.google).toEqual({ rating: 4.95, count: 6000 });
-    expect(fetchSpy).toHaveBeenCalledTimes(1);
-
-    const cache = readRatingsCache();
-    expect(cache['expired_place'].rating).toBe(4.95);
-    expect(cache['expired_place'].fetchedAt).toBeGreaterThan(fifteenDaysAgo);
+    await expect(response.json()).resolves.toEqual({ google: null });
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it('completely ignores yandexId and does not make Yandex API calls', async () => {
+  it('returns the real Google rating, leaving the outbound request to the framework data cache', async () => {
     process.env.GOOGLE_PLACES_API_KEY = 'mock_google_key';
 
-    const fetchSpy = vi.fn().mockImplementation(async (url: string) => {
+    const fetchSpy = vi.fn(async (url: string, init?: RequestInit) => {
+      expect(url).toContain('place_id=place_123');
+      expect(init).toMatchObject({ next: { revalidate: 86400 } });
+      expect(url).toContain('fields=rating,user_ratings_total');
       return new Response(
-        JSON.stringify({
-          result: { rating: 4.5, user_ratings_total: 100 },
-        }),
+        JSON.stringify({ result: { rating: 4.9, user_ratings_total: 4500 } }),
         { status: 200 }
       );
     });
-    globalThis.fetch = fetchSpy;
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
 
-    const request = new Request('http://localhost/api/places/ratings?googleId=g_123&yandexId=y_456');
-    const response = await GET(request);
-    const data = await response.json();
+    const response = await GET(
+      new Request('http://localhost/api/places/ratings?googleId=place_123')
+    );
 
-    expect(data.google).toEqual({ rating: 4.5, count: 100 });
-    expect(data.yandex).toBeUndefined();
+    await expect(response.json()).resolves.toEqual({ google: { rating: 4.9, count: 4500 } });
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(fetchSpy.mock.calls[0][1]).toMatchObject({ next: { revalidate: 86400 } });
+  });
 
-    for (const call of fetchSpy.mock.calls) {
-      expect(call[0]).not.toContain('yandex');
-    }
+  it('returns no rating when Google has no rating for the place', async () => {
+    process.env.GOOGLE_PLACES_API_KEY = 'mock_google_key';
+    globalThis.fetch = vi.fn(
+      async () => new Response(JSON.stringify({ result: {} }), { status: 200 })
+    ) as unknown as typeof fetch;
+
+    const response = await GET(
+      new Request('http://localhost/api/places/ratings?googleId=unresolvable_place')
+    );
+
+    await expect(response.json()).resolves.toEqual({ google: null });
+  });
+
+  it('returns no rating when the Google request fails', async () => {
+    process.env.GOOGLE_PLACES_API_KEY = 'mock_google_key';
+    globalThis.fetch = vi.fn(async () => {
+      throw new Error('network down');
+    }) as unknown as typeof fetch;
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const response = await GET(new Request('http://localhost/api/places/ratings?googleId=g_123'));
+
+    await expect(response.json()).resolves.toEqual({ google: null });
+  });
+
+  it('ignores a yandexId and never calls Yandex', async () => {
+    process.env.GOOGLE_PLACES_API_KEY = 'mock_google_key';
+    const fetchSpy = vi.fn(async (url: string) => {
+      expect(url).not.toContain('yandex');
+      return new Response(JSON.stringify({ result: { rating: 4.5, user_ratings_total: 100 } }), {
+        status: 200,
+      });
+    });
+    globalThis.fetch = fetchSpy as unknown as typeof fetch;
+
+    const response = await GET(
+      new Request('http://localhost/api/places/ratings?googleId=g_123&yandexId=y_456')
+    );
+
+    await expect(response.json()).resolves.toEqual({ google: { rating: 4.5, count: 100 } });
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 });

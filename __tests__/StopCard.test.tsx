@@ -19,7 +19,6 @@ describe('StopCard Component', () => {
     historicalSummary: 'Historical central square in Tbilisi.',
     funFact: 'Monument of St. George stands in the center.',
     olyaTips: 'Great starting point for walking Kala district.',
-    ratings: { google: { rating: 4.7, count: 8520 } },
   };
 
   const venueStep6: VenueStop = {
@@ -43,7 +42,6 @@ describe('StopCard Component', () => {
       recommendedDishes: ['Tbilisi Ponchiki', 'Lagidze Water'],
       bookingAdvice: 'Book sunset terrace tables in advance.',
     },
-    ratings: { google: { rating: 4.8, count: 2400 } },
   };
 
   describe('5-Part Layout & Styling', () => {
@@ -80,15 +78,12 @@ describe('StopCard Component', () => {
       expect(orderBadge.className).toContain('tracking-[0.06em]');
     });
 
-    it('renders Google Rating badge and map navigation action buttons', () => {
+    it('renders map navigation action buttons', () => {
       render(
         <LanguageProvider initialLanguage="en">
           <StopCard stop={attractionStep1} totalStops={6} />
         </LanguageProvider>
       );
-
-      expect(screen.getByTestId('google-rating-badge')).toBeInTheDocument();
-      expect(screen.getByText(/4.7/)).toBeInTheDocument();
 
       const googleBtn = screen.getByLabelText('Open in Google Maps');
       const yandexBtn = screen.getByLabelText('Open in Yandex Maps');
@@ -100,7 +95,7 @@ describe('StopCard Component', () => {
       expect(yandexBtn).toHaveAttribute('href', expect.stringContaining('yandex.com/maps'));
     });
 
-    it('positions map provider buttons directly underneath location title, neighborhood metadata, and google rating badge', () => {
+    it('positions map provider buttons directly underneath location title and neighborhood metadata', () => {
       render(
         <LanguageProvider initialLanguage="en">
           <StopCard stop={attractionStep1} totalStops={6} />
@@ -110,19 +105,17 @@ describe('StopCard Component', () => {
       const headerContainer = screen.getByTestId('stop-card-header-container');
       const heading = screen.getByRole('heading', { name: 'Freedom Square' });
       const neighborhoodMeta = screen.getByTestId('stop-neighborhood-metadata');
-      const ratingBadge = screen.getByTestId('google-rating-badge');
       const mapPillsRow = screen.getByTestId('map-pills-row');
 
       expect(heading).toBeInTheDocument();
       expect(neighborhoodMeta).toBeInTheDocument();
-      expect(ratingBadge).toBeInTheDocument();
       expect(mapPillsRow).toBeInTheDocument();
 
-      expect(headerContainer).toContainElement(ratingBadge);
+      expect(headerContainer).toContainElement(neighborhoodMeta);
       expect(headerContainer).toContainElement(mapPillsRow);
 
-      // Verify DOM order: ratingBadge comes before mapPillsRow inside headerContainer
-      expect(ratingBadge.compareDocumentPosition(mapPillsRow)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+      // Verify DOM order: neighborhood metadata comes before mapPillsRow
+      expect(neighborhoodMeta.compareDocumentPosition(mapPillsRow)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     });
 
     it('renders Globe website link button when websiteUrl is present', () => {

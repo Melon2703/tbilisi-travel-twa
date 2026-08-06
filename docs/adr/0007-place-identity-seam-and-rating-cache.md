@@ -11,3 +11,4 @@ The filesystem rating cache (`lib/utils/ratingsCache.ts`) is removed. It wrote w
 ## Consequences
 
 - A Stop with no resolvable rating renders **no rating at all**. The `DEFAULT_RATING` of 4.7 / 1,250 was an invented number displayed as "reviews on Google"; ratings are the one part of the app required to be real.
+- "Real" means **resolved from Google Places at request time**, so hand-authored `ratings` on the Stop model are removed along with the default — one Stop carried the 4.7 / 1,250 default verbatim, and with most place_ids still placeholders those authored numbers were what the app actually displayed. Until real place identities land, most Stops therefore show no rating. A Stop has a Place Identity or it has no rating; there is no third source.

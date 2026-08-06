@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import RouteCarousel from '@/components/RouteCarousel';
-import { Route } from '@/lib/types/route';
+import { Route, Stop } from '@/lib/types/route';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 
 vi.mock('next/navigation', () => ({
@@ -64,5 +64,94 @@ describe('RouteCarousel Component', () => {
     );
 
     expect(screen.getByText('Sololaki Architectural Gems')).toBeInTheDocument();
+  });
+
+  describe('Google Rating', () => {
+    const originalFetch = globalThis.fetch;
+
+    afterEach(() => {
+      globalThis.fetch = originalFetch;
+      vi.restoreAllMocks();
+    });
+
+    const routeWith = (stop: Partial<Stop>): Route => ({
+      ...mockRoute,
+      stops: [{ ...mockRoute.stops[0], ...stop } as Stop],
+    });
+
+    const renderCarousel = (route: Route) =>
+      render(
+        <LanguageProvider>
+          <RouteCarousel route={route} />
+        </LanguageProvider>
+      );
+
+    it('renders no rating element for a Stop whose rating cannot be resolved', () => {
+      renderCarousel(routeWith({}));
+
+      expect(screen.queryByTestId('google-rating-badge')).not.toBeInTheDocument();
+      expect(screen.queryByText(/reviews on Google/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/★/)).not.toBeInTheDocument();
+    });
+
+    it('renders a real rating with its review count', async () => {
+      globalThis.fetch = vi.fn(
+        async () =>
+          new Response(JSON.stringify({ google: { rating: 4.6, count: 8520 } }), { status: 200 })
+      ) as unknown as typeof fetch;
+
+      renderCarousel(routeWith({ placeIds: { google: 'ChIJkalantarov' } }));
+
+      await waitFor(() =>
+        expect(screen.getByTestId('google-rating-badge')).toHaveTextContent(
+          /★ 4\.6 \(8,520 reviews on Google\)/
+        )
+      );
+
+      // The rating sits above the Map Links, as CONTEXT.md describes them.
+      const ratingBadge = screen.getByTestId('google-rating-badge');
+      const mapPillsRow = screen.getByTestId('map-pills-row');
+      expect(ratingBadge.compareDocumentPosition(mapPillsRow)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING
+      );
+    });
+
+    it('renders the rest of the Stop Card before the rating resolves, then shows the arriving rating', async () => {
+      let resolveFetch: (response: Response) => void = () => {};
+      globalThis.fetch = vi.fn(
+        () => new Promise<Response>((resolve) => { resolveFetch = resolve; })
+      ) as unknown as typeof fetch;
+
+      renderCarousel(routeWith({ placeIds: { google: 'ChIJkalantarov' } }));
+
+      // The card is fully readable while the rating is still in flight.
+      expect(screen.getAllByText('Kalantarov Mansion').length).toBeGreaterThan(0);
+      const tipBeforeRating = screen.getByText(/Look up at the painted ceiling\./);
+      const mapLinkBeforeRating = screen.getByRole('link', { name: /Google Maps/i });
+      expect(screen.queryByTestId('google-rating-badge')).not.toBeInTheDocument();
+
+      resolveFetch(
+        new Response(JSON.stringify({ google: { rating: 4.9, count: 1204 } }), { status: 200 })
+      );
+
+      await waitFor(() =>
+        expect(screen.getByTestId('google-rating-badge')).toHaveTextContent(
+          /★ 4\.9 \(1,204 reviews on Google\)/
+        )
+      );
+
+      // The rest of the card is the same DOM, untouched by the arriving rating.
+      expect(screen.getByText(/Look up at the painted ceiling\./)).toBe(tipBeforeRating);
+      expect(screen.getByRole('link', { name: /Google Maps/i })).toBe(mapLinkBeforeRating);
+    });
+
+    it('renders no rating when the resolution fails', async () => {
+      globalThis.fetch = vi.fn(async () => new Response('{}', { status: 500 })) as unknown as typeof fetch;
+
+      renderCarousel(routeWith({ placeIds: { google: 'ChIJkalantarov' } }));
+
+      await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
+      expect(screen.queryByTestId('google-rating-badge')).not.toBeInTheDocument();
+    });
   });
 });

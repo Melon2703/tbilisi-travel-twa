@@ -320,12 +320,8 @@ describe('TWA Timeline & Card Feed UI', () => {
       expect(yandexLink).toHaveClass('min-h-[48px]');
     });
 
-    it('renders standalone Google Rating badge below divider and minimalist map buttons without ratings inside', () => {
+    it('renders minimalist map buttons with no rating numbers or star icons inside', () => {
       render(<StopCard stop={mockStopWithoutWarning} isLast={false} />);
-
-      const ratingBadge = screen.getByTestId('google-rating-badge');
-      expect(ratingBadge).toBeInTheDocument();
-      expect(ratingBadge).toHaveTextContent(/★ 4.7 \(1,250 reviews on Google\)/i);
 
       const googleLink = screen.getByRole('link', { name: /Google Maps/i });
       const yandexLink = screen.getByRole('link', { name: /Yandex Maps/i });

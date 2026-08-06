@@ -2,13 +2,13 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Stop, VenueStop, AttractionStop } from '@/lib/types/route';
+import { Stop, VenueStop, AttractionStop, ProviderRating } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { buildGoogleMapLink, buildYandexMapLink, getPlaceIdentity } from '@/lib/utils/mapLinks';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
-import { getStopRatings, fetchPlaceRatingsFromAPI, ResolvedRatings } from '@/lib/services/places';
+import { fetchPlaceRating } from '@/lib/services/places';
 import LightboxModal from '@/components/timeline/LightboxModal';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaInstagram, FaGlobe } from 'react-icons/fa6';
@@ -110,15 +110,15 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
   const { t, getLocalizedStop } = useLanguage();
   const stop = getLocalizedStop(rawStop);
 
-  const placeIdentity = getPlaceIdentity(stop);
+  // Place Identity is language-independent, so it reads the unlocalized Stop.
+  const placeIdentity = React.useMemo(() => getPlaceIdentity(rawStop), [rawStop]);
   const googleMapsUrl = buildGoogleMapLink(placeIdentity);
   const yandexMapsUrl = buildYandexMapLink(placeIdentity);
 
   // Website link if defined on stop
   const websiteUrl = stop.websiteUrl;
 
-  const staticRatings = getStopRatings(stop);
-  const [liveRatings, setLiveRatings] = React.useState<{ stopId: string; ratings: ResolvedRatings } | null>(null);
+  const [resolvedRating, setResolvedRating] = React.useState<{ stopId: string; rating: ProviderRating } | null>(null);
 
   const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
   const [lightboxIndex, setLightboxIndex] = React.useState(0);
@@ -127,26 +127,22 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
     ? stop.galleryImages
     : (stop.imageUrl ? [stop.imageUrl] : []);
 
-  const ratings = (liveRatings && liveRatings.stopId === stop.id) ? liveRatings.ratings : staticRatings;
+  // Only a rating Google resolved is ever displayed; otherwise there is none.
+  const rating = resolvedRating?.stopId === rawStop.id ? resolvedRating.rating : null;
 
+  // The card never waits on this — a resolved rating simply arrives later.
   React.useEffect(() => {
-    if (stop.placeIds?.google) {
-      let isMounted = true;
-      const initial = getStopRatings(stop);
-      fetchPlaceRatingsFromAPI(stop).then((fetchedRatings) => {
-        if (
-          isMounted &&
-          (fetchedRatings.google.rating !== initial.google.rating ||
-            fetchedRatings.google.count !== initial.google.count)
-        ) {
-          setLiveRatings({ stopId: stop.id, ratings: fetchedRatings });
-        }
-      });
-      return () => {
-        isMounted = false;
-      };
-    }
-  }, [stop]);
+    let isMounted = true;
+    fetchPlaceRating(placeIdentity).then((fetched) => {
+      if (isMounted && fetched) {
+        setResolvedRating({ stopId: rawStop.id, rating: fetched });
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [rawStop.id, placeIdentity]);
 
   const stopLabel = t('stopOf', { order: stop.order, total: totalStops });
 
@@ -270,17 +266,19 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         </div>
       </div>
 
-      {/* Google Rating Badge */}
-      <div
-        data-testid="google-rating-badge"
-        className="flex items-center gap-1.5 text-xs font-medium pt-0.5"
-        style={{ color: COLORS.textSecondary }}
-      >
-        <span className="font-bold text-sm" style={{ color: COLORS.terracottaAccent }}>
-          ★ {ratings.google.rating.toFixed(1)}
-        </span>
-        <span> ({ratings.google.count.toLocaleString()} reviews on Google)</span>
-      </div>
+      {/* Google Rating Badge — omitted entirely when no real rating resolves */}
+      {rating && (
+        <div
+          data-testid="google-rating-badge"
+          className="flex items-center gap-1.5 text-xs font-medium pt-0.5"
+          style={{ color: COLORS.textSecondary }}
+        >
+          <span className="font-bold text-sm" style={{ color: COLORS.terracottaAccent }}>
+            ★ {rating.rating.toFixed(1)}
+          </span>
+          <span> ({rating.count.toLocaleString()} reviews on Google)</span>
+        </div>
+      )}
 
       {/* Map Provider Action Buttons directly underneath location title, neighborhood metadata, and rating */}
       <div className="flex items-center gap-3 pt-1" data-testid="map-pills-row">

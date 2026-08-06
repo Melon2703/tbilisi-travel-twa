@@ -62,17 +62,11 @@ export interface BaseStop {
   bestTimeOfDayRu?: string;
   photoSpot?: string;
   photoSpotRu?: string;
-  ratings?: {
-    google?: ProviderRating;
-    [key: string]: ProviderRating | undefined;
-  };
   placeIds?: {
     google?: string;
     yandex?: string;
     [key: string]: string | undefined;
   };
-  rating?: number;
-  ratingCount?: number;
 }
 
 export interface AttractionStop extends BaseStop {
