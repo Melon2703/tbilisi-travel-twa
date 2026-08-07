@@ -10,6 +10,7 @@ import EmojiIcon from '@/components/ui/EmojiIcon';
 import Button from '@/components/ui/Button';
 import RouteOverviewMap from '@/components/RouteOverviewMap';
 import RouteMapModal from '@/components/RouteMapModal';
+import LanguageToggle from '@/components/LanguageToggle';
 
 /**
  * The entry CTA for a Route: Continue, naming the Stop the traveler reached, once the
@@ -39,7 +40,7 @@ export default function RouteIntroCard({
   showStartButton = true,
   progressStopName = null,
 }: RouteIntroCardProps) {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, t } = useLanguage();
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
   const sortedStops = [...route.stops].sort((a, b) => a.order - b.order);
@@ -101,28 +102,7 @@ export default function RouteIntroCard({
           />
 
           {/* Top Language Toggle Switch */}
-          <div className="absolute top-3 right-3 z-20 flex items-center bg-black/60 backdrop-blur-md rounded-full p-1 border border-white/20 shadow-md">
-            <button
-              type="button"
-              onClick={() => setLanguage('en')}
-              className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
-                language === 'en' ? 'bg-[#C4572A] text-white' : 'text-white/80'
-              }`}
-              aria-label="Switch to English"
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => setLanguage('ru')}
-              className={`px-3 py-1 rounded-full text-xs font-bold transition-all min-h-[48px] min-w-[48px] flex items-center justify-center ${
-                language === 'ru' ? 'bg-[#C4572A] text-white' : 'text-white/80'
-              }`}
-              aria-label="Переключить на русский"
-            >
-              RU
-            </button>
-          </div>
+          <LanguageToggle tone="hero" className="absolute top-3 right-3 z-20" />
         </div>
 
         {/* ── Scrollable content body ── */}

@@ -1,12 +1,11 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Home from '@/app/page';
 import { ROUTES } from '@/lib/data/routes';
 
 describe('Home Root Page (Route Directory)', () => {
-  it('renders main heading and hero subtitle', () => {
-    render(<Home />);
+  it('renders main heading and hero subtitle', async () => {
+    render(await Home({}));
     
     // Check main heading
     const heading = screen.getByRole('heading', { level: 1 });
@@ -17,16 +16,16 @@ describe('Home Root Page (Route Directory)', () => {
     expect(screen.getByText(/Curated walking routes|Explore Tbilisi/i)).toBeInTheDocument();
   });
 
-  it('renders all curated routes from routes data', () => {
-    render(<Home />);
+  it('renders all curated routes from routes data', async () => {
+    render(await Home({}));
 
     ROUTES.forEach((route) => {
       expect(screen.getByText(route.title)).toBeInTheDocument();
     });
   });
 
-  it('renders route details including duration, accessibility, and stop count without hashtag badge rows on card summaries', () => {
-    render(<Home />);
+  it('renders route details including duration, accessibility, and stop count without hashtag badge rows on card summaries', async () => {
+    render(await Home({}));
 
     const firstRoute = ROUTES[0];
     
@@ -46,8 +45,8 @@ describe('Home Root Page (Route Directory)', () => {
     expect(essentialBadgesContainers[0].children).toHaveLength(2);
   });
 
-  it('renders links to /twa/[routeId] for every route', () => {
-    render(<Home />);
+  it('renders links to /twa/[routeId] for every route', async () => {
+    render(await Home({}));
 
     ROUTES.forEach((route) => {
       const link = screen.getByRole('link', { name: new RegExp(route.title, 'i') });
@@ -57,8 +56,8 @@ describe('Home Root Page (Route Directory)', () => {
   });
 
   describe('Route Filter Controls & Geo-Proximity Relative Sorting', () => {
-    it('renders a duration filter option for every duration the catalog carries, and none it does not', () => {
-      render(<Home />);
+    it('renders a duration filter option for every duration the catalog carries, and none it does not', async () => {
+      render(await Home({}));
 
       expect(screen.getByTestId('duration-filter-1-2h')).toBeInTheDocument();
       expect(screen.getByTestId('duration-filter-3-4h')).toBeInTheDocument();
@@ -67,8 +66,8 @@ describe('Home Root Page (Route Directory)', () => {
       expect(screen.queryByTestId('duration-filter-full-day')).toBeNull();
     });
 
-    it('filters routes when duration category option is selected', () => {
-      render(<Home />);
+    it('filters routes when duration category option is selected', async () => {
+      render(await Home({}));
 
       const filterBtn = screen.getByTestId('duration-filter-1-2h');
       fireEvent.click(filterBtn);
@@ -85,8 +84,8 @@ describe('Home Root Page (Route Directory)', () => {
       });
     });
 
-    it('renders vibe tag filter options (insta-locations, cultural, hiking) and filters catalog', () => {
-      render(<Home />);
+    it('renders vibe tag filter options (insta-locations, cultural, hiking) and filters catalog', async () => {
+      render(await Home({}));
 
       const hikingBtn = screen.getByTestId('vibe-filter-hiking');
       expect(hikingBtn).toBeInTheDocument();
@@ -121,7 +120,7 @@ describe('Home Root Page (Route Directory)', () => {
         configurable: true,
       });
 
-      render(<Home />);
+      render(await Home({}));
 
       const geoBtn = screen.getByTestId('geo-location-button');
       expect(geoBtn).toBeInTheDocument();

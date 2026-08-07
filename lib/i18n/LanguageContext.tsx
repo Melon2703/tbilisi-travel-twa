@@ -2,6 +2,15 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { Language } from './types';
+import {
+  DEFAULT_LANGUAGE,
+  getStoredLanguage,
+  readTelegramLocale,
+  readUrlLanguage,
+  resolveLanguage,
+  storeLanguage,
+  writeUrlLanguage,
+} from './languagePreference';
 import { TRANSLATIONS, TranslationKey } from './translations';
 import { Route, RouteFamily, Stop } from '@/lib/types/route';
 
@@ -32,7 +41,8 @@ export const useLanguage = () => useContext(LanguageContext);
 
 interface LanguageProviderProps {
   children: React.ReactNode;
-  initialLanguage?: Language;
+  /** The `lang` URL parameter as the server read it, or null when the URL names none. */
+  initialLanguage?: Language | null;
 }
 
 export function getLocalizedStop(stop: Stop, lang: Language): Stop {
@@ -82,31 +92,36 @@ export function getLocalizedFamilyName(family: RouteFamily, lang: Language): str
 }
 
 export function LanguageProvider({ children, initialLanguage }: LanguageProviderProps) {
-  const [language, setLanguageState] = useState<Language>(initialLanguage || 'en');
+  const [language, setLanguageState] = useState<Language>(initialLanguage || DEFAULT_LANGUAGE);
 
+  /*
+    `initialLanguage` is the URL parameter as the server already read it — the top of
+    the resolution order, so there is nothing left to resolve. Without one, the rest of
+    the order is only knowable in the browser: storage and the Telegram client locale.
+  */
   useEffect(() => {
     if (initialLanguage) {
       setLanguageState(initialLanguage);
       return;
     }
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlLang = urlParams.get('lang');
-      if (urlLang === 'ru' || urlLang === 'en') {
-        setLanguageState(urlLang as Language);
-        return;
-      }
-      if (window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code) {
-        const tgLang = window.Telegram.WebApp.initDataUnsafe.user.language_code.toLowerCase();
-        if (tgLang.startsWith('ru')) {
-          setLanguageState('ru');
-        }
-      }
-    }
+    setLanguageState(
+      resolveLanguage({
+        url: readUrlLanguage(),
+        stored: getStoredLanguage(),
+        telegramLocale: readTelegramLocale(),
+      })
+    );
   }, [initialLanguage]);
 
+  /*
+    A deliberate choice is written to both places it has to survive: the URL, so a
+    reload and any link carried out of the client keep it, and storage, so a cold start
+    with no parameter opens in it rather than back in the Telegram client's locale.
+  */
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
+    storeLanguage(lang);
+    writeUrlLanguage(lang);
   }, []);
 
   const t = useCallback(

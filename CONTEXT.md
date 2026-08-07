@@ -119,6 +119,10 @@ _Avoid_: Matched route, filter result, search output.
 A highlighted advisory on physical obstacles such as steep hills, broken pavement, or summer heat.
 _Avoid_: Alert, hazard, difficulty note.
 
+**Language Preference**:
+The language the traveler deliberately chose, stored in the browser and mirrored into the `lang` URL parameter so it survives a reload and a cold start. Resolution order is explicit URL parameter → Language Preference → Telegram client locale → English: a deliberate choice outranks the client locale, and a URL parameter outranks everything, which keeps the bot's links authoritative. Changing it replaces the URL entry rather than pushing one — a language switch is not a place Back should return to.
+_Avoid_: Locale setting, i18n state, language toggle state.
+
 **Telegram WebApp SDK**:
 The JavaScript bridge (`window.Telegram.WebApp`) embedded by Telegram to sync theme colors, control native buttons, and manage webview lifecycle.
 _Avoid_: Telegram API, webview plugin.

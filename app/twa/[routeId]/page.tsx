@@ -6,7 +6,7 @@ import TelegramBackButtonController from '@/components/TelegramBackButtonControl
 import RouteCarousel from '@/components/RouteCarousel';
 import { FIRST_RESUMABLE_POSITION } from '@/lib/utils/progress';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
-import { Language } from '@/lib/i18n/types';
+import { parseLanguage } from '@/lib/i18n/languagePreference';
 
 interface PageProps {
   params: Promise<{ routeId: string }>;
@@ -55,7 +55,12 @@ export default async function RoutePage({ params, searchParams }: PageProps) {
     notFound();
   }
 
-  const initialLang: Language = lang === 'ru' ? 'ru' : 'en';
+  /*
+    Only a URL parameter that actually names a language is passed down. Without one the
+    provider resolves the rest of the order in the browser, so a Route opened from the
+    catalog keeps the traveler's stored preference instead of snapping back to English.
+  */
+  const initialLang = parseLanguage(lang);
 
   return (
     <main className="min-h-screen bg-[var(--twa-bg-color,#f7f4ef)] text-[var(--twa-text-color,#1f2421)] antialiased">
