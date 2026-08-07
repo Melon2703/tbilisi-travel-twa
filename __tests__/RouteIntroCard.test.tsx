@@ -184,7 +184,7 @@ describe('RouteIntroCard Component', () => {
     expect(screen.getByTestId('close-map-modal')).toBeInTheDocument();
   });
 
-  it('8. RouteOverviewMap does not render inline zoom controls, popover tooltips, or SVG path lines', () => {
+  it('8. RouteOverviewMap does not render inline zoom controls or popover tooltips, and draws only the sequence connector', () => {
     const { container } = render(
       <LanguageProvider>
         <RouteIntroCard route={mockRoute} />
@@ -195,6 +195,8 @@ describe('RouteIntroCard Component', () => {
     expect(screen.queryByTestId('map-control-zoom-out')).not.toBeInTheDocument();
     expect(screen.queryByTestId('map-control-reset')).not.toBeInTheDocument();
     expect(screen.queryByTestId('map-stop-popover')).not.toBeInTheDocument();
+    // The connector conveys sequence, never a walkable path (ADR 0005).
     expect(container.querySelector('svg path')).not.toBeInTheDocument();
+    expect(screen.getByTestId('map-sequence-connector')).toBeInTheDocument();
   });
 });

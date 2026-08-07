@@ -3,6 +3,8 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import RouteSequenceConnector from '@/components/RouteSequenceConnector';
+import { buildTileGrid, frameStops, projectCoordinates } from '@/lib/utils/mapFraming';
 
 export interface RouteOverviewMapProps {
   route: Route;
@@ -10,14 +12,8 @@ export interface RouteOverviewMapProps {
   onOpenModal?: () => void;
 }
 
-// Mercator Projection & Helper functions defined outside component body
-const lngToWorldX = (lng: number, z: number) => ((lng + 180) / 360) * 256 * Math.pow(2, z);
-const latToWorldY = (lat: number, z: number) => {
-  const sinLat = Math.sin((lat * Math.PI) / 180);
-  const clampedSin = Math.max(-0.9999, Math.min(0.9999, sinLat));
-  return (0.5 - Math.log((1 + clampedSin) / (1 - clampedSin)) / (4 * Math.PI)) * 256 * Math.pow(2, z);
-};
-const roundCoord = (val: number) => Math.round(val * 1000) / 1000;
+/** Room kept clear for the pin and its shadow. */
+const PREVIEW_PADDING = 48;
 
 export default function RouteOverviewMap({
   route,
@@ -51,67 +47,34 @@ export default function RouteOverviewMap({
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  // Compute bounding center
-  const centerCoords = useMemo(() => {
-    const lats = sortedStops.map((s) => s.coordinates.lat);
-    const lngs = sortedStops.map((s) => s.coordinates.lng);
-    const minLat = Math.min(...lats);
-    const maxLat = Math.max(...lats);
-    const minLng = Math.min(...lngs);
-    const maxLng = Math.max(...lngs);
-    return {
-      lat: (minLat + maxLat) / 2,
-      lng: (minLng + maxLng) / 2,
-    };
-  }, [sortedStops]);
-
-  const zoom = 14;
-
-  const centerWorldX = useMemo(() => lngToWorldX(centerCoords.lng, zoom), [centerCoords.lng, zoom]);
-  const centerWorldY = useMemo(() => latToWorldY(centerCoords.lat, zoom), [centerCoords.lat, zoom]);
+  // Framing that puts the whole Route on canvas, longest Route included
+  const framing = useMemo(
+    () =>
+      frameStops(
+        sortedStops.map((s) => s.coordinates),
+        viewportSize,
+        { padding: PREVIEW_PADDING }
+      ),
+    [sortedStops, viewportSize]
+  );
 
   // Screen Projected Stops
-  const projectedStops = useMemo(() => {
-    return sortedStops.map((stop) => {
-      const worldX = lngToWorldX(stop.coordinates.lng, zoom);
-      const worldY = latToWorldY(stop.coordinates.lat, zoom);
+  const projectedStops = useMemo(
+    () =>
+      sortedStops.map((stop) => {
+        const { x, y } = projectCoordinates(stop.coordinates, framing, viewportSize);
+        return { stop, screenX: x, screenY: y };
+      }),
+    [sortedStops, framing, viewportSize]
+  );
 
-      const screenX = roundCoord(worldX - centerWorldX + viewportSize.width / 2);
-      const screenY = roundCoord(worldY - centerWorldY + viewportSize.height / 2);
-
-      return {
-        stop,
-        screenX,
-        screenY,
-      };
-    });
-  }, [sortedStops, centerWorldX, centerWorldY, viewportSize, zoom]);
+  const connectorPoints = useMemo(
+    () => projectedStops.map(({ screenX, screenY }) => ({ x: screenX, y: screenY })),
+    [projectedStops]
+  );
 
   // CartoDB Voyager Tile Grid
-  const tiles = useMemo(() => {
-    const minWorldX = centerWorldX - viewportSize.width / 2;
-    const maxWorldX = centerWorldX + viewportSize.width / 2;
-    const minWorldY = centerWorldY - viewportSize.height / 2;
-    const maxWorldY = centerWorldY + viewportSize.height / 2;
-
-    const startTileX = Math.floor(minWorldX / 256);
-    const endTileX = Math.floor(maxWorldX / 256);
-    const startTileY = Math.floor(minWorldY / 256);
-    const endTileY = Math.floor(maxWorldY / 256);
-
-    const tileList: { key: string; url: string; left: number; top: number }[] = [];
-
-    for (let tx = startTileX; tx <= endTileX; tx++) {
-      for (let ty = startTileY; ty <= endTileY; ty++) {
-        const left = roundCoord(tx * 256 - centerWorldX + viewportSize.width / 2);
-        const top = roundCoord(ty * 256 - centerWorldY + viewportSize.height / 2);
-        const url = `https://a.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${tx}/${ty}@2x.png`;
-        tileList.push({ key: `${zoom}-${tx}-${ty}`, url, left, top });
-      }
-    }
-
-    return tileList;
-  }, [zoom, centerWorldX, centerWorldY, viewportSize]);
+  const tiles = useMemo(() => buildTileGrid(framing, viewportSize), [framing, viewportSize]);
 
   const handleContainerClick = () => {
     if (onOpenModal) {
@@ -179,7 +142,14 @@ export default function RouteOverviewMap({
         {/* Backdrop Gradient Overlay */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/5 z-0" />
 
-        {/* ── Numbered Stop Pin Markers (Without connecting lines) ── */}
+        {/* ── Dashed Sequence Connector (behind the pins) ── */}
+        <RouteSequenceConnector
+          points={connectorPoints}
+          viewport={viewportSize}
+          testId="map-sequence-connector"
+        />
+
+        {/* ── Numbered Stop Pin Markers ── */}
         {projectedStops.map(({ stop, screenX, screenY }) => {
           const isStart = stop.order === 1;
           const isEnd = stop.order === sortedStops.length;

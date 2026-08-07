@@ -7,6 +7,16 @@ import { Route, Stop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import { buildGoogleMapLink, buildYandexMapLink, getPlaceIdentity } from '@/lib/utils/mapLinks';
+import RouteSequenceConnector from '@/components/RouteSequenceConnector';
+import {
+  buildTileGrid,
+  clampZoom,
+  frameStops,
+  projectCoordinates,
+} from '@/lib/utils/mapFraming';
+
+/** Room kept clear for the pin and its start/finish badge. */
+const MODAL_PADDING = 72;
 
 export interface RouteMapModalProps {
   route: Route;
@@ -43,25 +53,29 @@ export default function RouteMapModal({
     sortedStops.find((s) => s.order === initialStopOrder)?.id || sortedStops[0]?.id || null
   );
 
-  // Map center bounds
-  const centerCoords = useMemo(() => {
-    const lats = sortedStops.map((s) => s.coordinates.lat);
-    const lngs = sortedStops.map((s) => s.coordinates.lng);
-    const minLat = Math.min(...lats);
-    const maxLat = Math.max(...lats);
-    const minLng = Math.min(...lngs);
-    const maxLng = Math.max(...lngs);
-    return {
-      lat: (minLat + maxLat) / 2,
-      lng: (minLng + maxLng) / 2,
-    };
-  }, [sortedStops]);
+  // Framing that puts the whole Route on canvas; the traveler zooms from there
+  const fitFraming = useMemo(
+    () =>
+      frameStops(
+        sortedStops.map((s) => s.coordinates),
+        viewportSize,
+        { padding: MODAL_PADDING }
+      ),
+    [sortedStops, viewportSize]
+  );
 
-  const [zoom, setZoom] = useState<number>(15);
+  const [zoomSteps, setZoomSteps] = useState<number>(0);
   const [panOffset, setPanOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const isDraggingRef = useRef<boolean>(false);
   const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const panStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const panOffsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  // The native gesture listener reads the pan through this ref, never through
+  // the closure it was registered with.
+  useEffect(() => {
+    panOffsetRef.current = panOffset;
+  }, [panOffset]);
 
   // Update container size on mount & window resize
   useEffect(() => {
@@ -125,15 +139,65 @@ export default function RouteMapModal({
     };
   }, [isOpen]);
 
-  // Native capture-phase touch event interceptor to prevent touch bubbling to Swiper
+  // Drag-panning runs on this same capture-phase listener: the interceptor below
+  // swallows the gesture before React's delegated handlers ever see it, so the
+  // pan has to be driven from here rather than from props on the viewport.
   useEffect(() => {
     if (!isOpen || !mounted || !modalRootRef.current) return;
     const el = modalRootRef.current;
 
-    const stopNative = (e: Event) => {
+    const gesturePoint = (e: Event): { x: number; y: number } | null => {
+      if ('touches' in e) {
+        const touches = (e as TouchEvent).touches;
+        if (touches.length !== 1) return null;
+        return { x: touches[0].clientX, y: touches[0].clientY };
+      }
+      const mouse = e as MouseEvent;
+      return { x: mouse.clientX, y: mouse.clientY };
+    };
+
+    /**
+     * A drag anywhere on the canvas pans, pins included — the pin still gets
+     * its click on release. Only the floating controls opt out, since a drag
+     * that started on the zoom button is not a pan.
+     */
+    const startsPan = (e: Event) => {
+      const target = e.target as HTMLElement | null;
+      if (!target || !containerRef.current?.contains(target)) return false;
+      return !target.closest('[data-map-controls]');
+    };
+
+    const beginPan = (e: Event) => {
+      const point = startsPan(e) ? gesturePoint(e) : null;
+      if (!point) return;
+      isDraggingRef.current = true;
+      dragStartRef.current = point;
+      panStartRef.current = { ...panOffsetRef.current };
+    };
+
+    const continuePan = (e: Event) => {
+      if (!isDraggingRef.current) return;
+      const point = gesturePoint(e);
+      if (!point) return;
+      setPanOffset({
+        x: panStartRef.current.x + point.x - dragStartRef.current.x,
+        y: panStartRef.current.y + point.y - dragStartRef.current.y,
+      });
+    };
+
+    const endPan = () => {
+      isDraggingRef.current = false;
+    };
+
+    const handleNative = (e: Event) => {
+      if (e.type === 'mousedown' || e.type === 'touchstart') beginPan(e);
+      else if (e.type === 'mousemove' || e.type === 'touchmove') continuePan(e);
+      else if (e.type === 'mouseup' || e.type === 'touchend' || e.type === 'touchcancel') endPan();
+
+      // Keep the gesture off Swiper, which listens above the modal.
       e.stopPropagation();
       if ('stopImmediatePropagation' in e) {
-        (e as any).stopImmediatePropagation();
+        (e as Event & { stopImmediatePropagation: () => void }).stopImmediatePropagation();
       }
     };
 
@@ -152,126 +216,58 @@ export default function RouteMapModal({
     ];
 
     events.forEach((evt) => {
-      el.addEventListener(evt, stopNative, { capture: true, passive: false });
+      el.addEventListener(evt, handleNative, { capture: true, passive: false });
     });
+
+    // A button released outside the window never reaches the modal.
+    window.addEventListener('mouseup', endPan);
+    window.addEventListener('blur', endPan);
 
     return () => {
       events.forEach((evt) => {
-        el.removeEventListener(evt, stopNative, { capture: true });
+        el.removeEventListener(evt, handleNative, { capture: true });
       });
+      window.removeEventListener('mouseup', endPan);
+      window.removeEventListener('blur', endPan);
     };
   }, [isOpen, mounted]);
 
-  // Exact Web Mercator Projection Functions
-  const lngToWorldX = (lng: number, z: number) => ((lng + 180) / 360) * 256 * Math.pow(2, z);
-  const latToWorldY = (lat: number, z: number) => {
-    const sinLat = Math.sin((lat * Math.PI) / 180);
-    const clampedSin = Math.max(-0.9999, Math.min(0.9999, sinLat));
-    return (0.5 - Math.log((1 + clampedSin) / (1 - clampedSin)) / (4 * Math.PI)) * 256 * Math.pow(2, z);
-  };
-
-  const centerWorldX = useMemo(() => lngToWorldX(centerCoords.lng, zoom), [centerCoords.lng, zoom]);
-  const centerWorldY = useMemo(() => latToWorldY(centerCoords.lat, zoom), [centerCoords.lat, zoom]);
-
-  // Helper to round coordinates to 3 decimal places to prevent float precision hydration mismatches
-  const roundCoord = (val: number) => Math.round(val * 1000) / 1000;
+  // The fitted framing, moved by however far the traveler has zoomed
+  const framing = useMemo(
+    () => ({ zoom: clampZoom(fitFraming.zoom + zoomSteps), center: fitFraming.center }),
+    [fitFraming, zoomSteps]
+  );
 
   // Projected Screen Coordinates for all Stops
-  const projectedStops = useMemo(() => {
-    return sortedStops.map((stop) => {
-      const worldX = lngToWorldX(stop.coordinates.lng, zoom);
-      const worldY = latToWorldY(stop.coordinates.lat, zoom);
+  const projectedStops = useMemo(
+    () =>
+      sortedStops.map((stop) => {
+        const { x, y } = projectCoordinates(stop.coordinates, framing, viewportSize, panOffset);
+        return { stop, screenX: x, screenY: y };
+      }),
+    [sortedStops, framing, viewportSize, panOffset]
+  );
 
-      const screenX = roundCoord(worldX - centerWorldX + viewportSize.width / 2 + panOffset.x);
-      const screenY = roundCoord(worldY - centerWorldY + viewportSize.height / 2 + panOffset.y);
-
-      return {
-        stop,
-        screenX,
-        screenY,
-      };
-    });
-  }, [sortedStops, centerWorldX, centerWorldY, viewportSize, panOffset, zoom]);
-
-
+  const connectorPoints = useMemo(
+    () => projectedStops.map(({ screenX, screenY }) => ({ x: screenX, y: screenY })),
+    [projectedStops]
+  );
 
   // Calculate CartoDB Voyager Tile Grid
-  const tiles = useMemo(() => {
-    const minScreenX = 0;
-    const maxScreenX = viewportSize.width;
-    const minScreenY = 0;
-    const maxScreenY = viewportSize.height;
+  const tiles = useMemo(
+    () => buildTileGrid(framing, viewportSize, panOffset),
+    [framing, viewportSize, panOffset]
+  );
 
-    const minWorldX = centerWorldX - viewportSize.width / 2 - panOffset.x + minScreenX;
-    const maxWorldX = centerWorldX - viewportSize.width / 2 - panOffset.x + maxScreenX;
-    const minWorldY = centerWorldY - viewportSize.height / 2 - panOffset.y + minScreenY;
-    const maxWorldY = centerWorldY - viewportSize.height / 2 - panOffset.y + maxScreenY;
-
-    const startTileX = Math.floor(minWorldX / 256);
-    const endTileX = Math.floor(maxWorldX / 256);
-    const startTileY = Math.floor(minWorldY / 256);
-    const endTileY = Math.floor(maxWorldY / 256);
-
-    const tileList: { key: string; url: string; left: number; top: number }[] = [];
-
-    for (let tx = startTileX; tx <= endTileX; tx++) {
-      for (let ty = startTileY; ty <= endTileY; ty++) {
-        const left = roundCoord(tx * 256 - centerWorldX + viewportSize.width / 2 + panOffset.x);
-        const top = roundCoord(ty * 256 - centerWorldY + viewportSize.height / 2 + panOffset.y);
-        const url = `https://a.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${tx}/${ty}@2x.png`;
-        tileList.push({ key: `${zoom}-${tx}-${ty}`, url, left, top });
-      }
-    }
-
-    return tileList;
-  }, [zoom, centerWorldX, centerWorldY, viewportSize, panOffset]);
-
-  // Mouse & Touch Drag-Pan Event Handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    dragStartRef.current = { x: e.clientX, y: e.clientY };
-    panStartRef.current = { ...panOffset };
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
-    setPanOffset({
-      x: panStartRef.current.x + dx,
-      y: panStartRef.current.y + dy,
-    });
-  };
-
-  const handleMouseUp = () => setIsDragging(false);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    e.stopPropagation();
-    if (e.touches.length === 1) {
-      setIsDragging(true);
-      dragStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      panStartRef.current = { ...panOffset };
-    }
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    e.stopPropagation();
-    if (!isDragging || e.touches.length !== 1) return;
-    const dx = e.touches[0].clientX - dragStartRef.current.x;
-    const dy = e.touches[0].clientY - dragStartRef.current.y;
-    setPanOffset({
-      x: panStartRef.current.x + dx,
-      y: panStartRef.current.y + dy,
-    });
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    e.stopPropagation();
-    setIsDragging(false);
-  };
+  /**
+   * Zoom is counted in steps away from the fitted framing, clamped so the steps
+   * never drift past the tile range and leave a button pressing on nothing.
+   */
+  const stepZoom = (steps: number, delta: number) =>
+    clampZoom(fitFraming.zoom + steps + delta) - fitFraming.zoom;
 
   const resetView = () => {
-    setZoom(15);
+    setZoomSteps(0);
     setPanOffset({ x: 0, y: 0 });
     setSelectedStopId(sortedStops[0]?.id || null);
   };
@@ -300,13 +296,6 @@ export default function RouteMapModal({
         ref={containerRef}
         data-testid="interactive-map-viewport"
         className="relative flex-1 bg-[#EAE5D9] overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
         {/* Seamless Sub-Pixel Mercator Cartographic Tiles */}
         <div className="absolute inset-0 pointer-events-none">
@@ -331,6 +320,12 @@ export default function RouteMapModal({
         </div>
 
 
+        {/* ── Dashed Sequence Connector (behind the pins) ── */}
+        <RouteSequenceConnector
+          points={connectorPoints}
+          viewport={viewportSize}
+          testId="modal-map-sequence-connector"
+        />
 
         {/* ── Numbered Stop Pin Markers ── */}
         {projectedStops.map(({ stop, screenX, screenY }) => {
@@ -344,6 +339,7 @@ export default function RouteMapModal({
           return (
             <div
               key={stop.id}
+              data-testid={`modal-map-pin-position-${stop.order}`}
               className="absolute z-30 transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
               style={{ left: `${screenX}px`, top: `${screenY}px` }}
             >
@@ -390,7 +386,10 @@ export default function RouteMapModal({
         })}
 
         {/* ── Floating Controls (Close, Zoom & Reset) ── */}
-        <div className="absolute top-4 right-4 z-40 flex flex-col gap-2 pointer-events-auto">
+        <div
+          data-map-controls
+          className="absolute top-4 right-4 z-40 flex flex-col gap-2 pointer-events-auto"
+        >
           <button
             type="button"
             data-testid="close-map-modal"
@@ -403,7 +402,7 @@ export default function RouteMapModal({
           <button
             type="button"
             data-testid="modal-map-zoom-in"
-            onClick={() => setZoom((z) => Math.min(z + 1, 18))}
+            onClick={() => setZoomSteps((s) => stepZoom(s, +1))}
             className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center active:scale-95 transition-all cursor-pointer"
             aria-label="Zoom In"
           >
@@ -412,7 +411,7 @@ export default function RouteMapModal({
           <button
             type="button"
             data-testid="modal-map-zoom-out"
-            onClick={() => setZoom((z) => Math.max(z - 1, 13))}
+            onClick={() => setZoomSteps((s) => stepZoom(s, -1))}
             className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center active:scale-95 transition-all cursor-pointer"
             aria-label="Zoom Out"
           >
