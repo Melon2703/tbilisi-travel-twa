@@ -57,13 +57,14 @@ describe('Home Root Page (Route Directory)', () => {
   });
 
   describe('Route Filter Controls & Geo-Proximity Relative Sorting', () => {
-    it('renders duration category filter options (1-2h, 3-4h, half-day, full-day)', () => {
+    it('renders a duration filter option for every duration the catalog carries, and none it does not', () => {
       render(<Home />);
 
       expect(screen.getByTestId('duration-filter-1-2h')).toBeInTheDocument();
       expect(screen.getByTestId('duration-filter-3-4h')).toBeInTheDocument();
       expect(screen.getByTestId('duration-filter-half-day')).toBeInTheDocument();
-      expect(screen.getByTestId('duration-filter-full-day')).toBeInTheDocument();
+      // No Route is a full day, so the option is not offered — it would return nothing.
+      expect(screen.queryByTestId('duration-filter-full-day')).toBeNull();
     });
 
     it('filters routes when duration category option is selected', () => {

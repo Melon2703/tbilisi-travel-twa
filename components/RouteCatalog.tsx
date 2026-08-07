@@ -3,8 +3,24 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Route, RouteFamily, DurationCategory, VibeCategory } from '@/lib/types/route';
+import {
+  Route,
+  RouteFamily,
+  DurationCategory,
+  VibeCategory,
+  LogisticsConstraint,
+} from '@/lib/types/route';
 import { sortRoutesByProximity, calculateDistance } from '@/lib/engine/matcher';
+import {
+  offeredDurations,
+  offeredVibes,
+  offeredLogisticsConstraints,
+  filterRoutes,
+  NO_FILTERS,
+  type CatalogFilters,
+} from '@/lib/engine/catalogFilters';
+import type { TranslationKey } from '@/lib/i18n/translations';
+import FilterChipGroup from '@/components/ui/FilterChipGroup';
 import { getRouteDurationFormatted, formatAccessibilityLabel, ROUTE_FAMILIES } from '@/lib/data/routes';
 import { describeRouteFamily } from '@/lib/utils/family';
 import {
@@ -22,22 +38,37 @@ export interface RouteCatalogProps {
   families?: RouteFamily[];
 }
 
-const DURATIONS: { id: DurationCategory; label: string; labelRu: string }[] = [
-  { id: '1-2h', label: '1-2 Hours', labelRu: '1-2 часа' },
-  { id: '3-4h', label: '3-4 Hours', labelRu: '3-4 часа' },
-  { id: 'half-day', label: 'Half-Day', labelRu: 'Полдня' },
-  { id: 'full-day', label: 'Full-Day', labelRu: 'Весь день' },
-];
+/*
+  Chip labels only. Which chips are offered is decided against the catalog in
+  lib/engine/catalogFilters — a label here never puts an option on screen by itself,
+  so a duration or Vibe that no longer earns a chip cannot linger as a dead end.
+*/
+const DURATION_LABELS: Record<DurationCategory, { en: string; ru: string }> = {
+  '1-2h': { en: '1-2 Hours', ru: '1-2 часа' },
+  '3-4h': { en: '3-4 Hours', ru: '3-4 часа' },
+  'half-day': { en: 'Half-Day', ru: 'Полдня' },
+  'full-day': { en: 'Full-Day', ru: 'Весь день' },
+};
 
-const VIBES: { id: VibeCategory; label: string; labelRu: string }[] = [
-  { id: 'insta-locations', label: 'Insta-Spots', labelRu: 'Инста-места' },
-  { id: 'cultural', label: 'Cultural', labelRu: 'Культура' },
-  { id: 'hiking', label: 'Hiking', labelRu: 'Хайкинг' },
-  { id: 'food-wine', label: 'Food & Wine', labelRu: 'Еда и вино' },
-  { id: 'courtyards', label: 'Courtyards', labelRu: 'Дворики' },
-  { id: 'photo-spots', label: 'Photo Spots', labelRu: 'Фотолокации' },
-  { id: 'architecture', label: 'Architecture', labelRu: 'Архитектура' },
-];
+const VIBE_LABELS: Record<VibeCategory, { en: string; ru: string }> = {
+  'insta-locations': { en: 'Insta-Spots', ru: 'Инста-места' },
+  cultural: { en: 'Cultural', ru: 'Культура' },
+  hiking: { en: 'Hiking', ru: 'Хайкинг' },
+  'food-wine': { en: 'Food & Wine', ru: 'Еда и вино' },
+  courtyards: { en: 'Courtyards', ru: 'Дворики' },
+  'photo-spots': { en: 'Photo Spots', ru: 'Фотолокации' },
+  architecture: { en: 'Architecture', ru: 'Архитектура' },
+};
+
+/*
+  Phrased as what the traveler can walk, not as a property of the Route: a Hard
+  Constraint is answered by the body, not by a preference.
+*/
+const LOGISTICS_LABEL_KEYS: Record<LogisticsConstraint, TranslationKey> = {
+  'stroller-friendly': 'logisticsStepFree',
+  moderate: 'logisticsCobblestones',
+  'steep-stairs': 'logisticsStairs',
+};
 
 export default function RouteCatalog({
   initialRoutes,
@@ -58,8 +89,7 @@ export default function RouteCatalog({
     setProgressPositions(getProgressPositions());
   }, []);
 
-  const [selectedDuration, setSelectedDuration] = useState<DurationCategory | 'all'>('all');
-  const [selectedVibe, setSelectedVibe] = useState<VibeCategory | 'all'>('all');
+  const [filters, setFilters] = useState<CatalogFilters>(NO_FILTERS);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState<boolean>(false);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -92,15 +122,25 @@ export default function RouteCatalog({
     }
   };
 
-  let filteredRoutes = initialRoutes.filter((route) => {
-    if (selectedDuration !== 'all' && route.durationCategory !== selectedDuration) {
-      return false;
-    }
-    if (selectedVibe !== 'all' && !route.vibes.includes(selectedVibe)) {
-      return false;
-    }
-    return true;
-  });
+  /*
+    Offered options are read from the catalog on every render, not from a hand-kept
+    list: a chip is on screen only if tapping it changes what the traveler sees.
+  */
+  const locale = language === 'ru' ? 'ru' : 'en';
+  const durationOptions = offeredDurations(initialRoutes).map((duration) => ({
+    value: duration,
+    label: DURATION_LABELS[duration][locale],
+  }));
+  const vibeOptions = offeredVibes(initialRoutes).map((vibe) => ({
+    value: vibe,
+    label: `#${VIBE_LABELS[vibe][locale]}`,
+  }));
+  const logisticsOptions = offeredLogisticsConstraints(initialRoutes).map((constraint) => ({
+    value: constraint,
+    label: t(LOGISTICS_LABEL_KEYS[constraint]),
+  }));
+
+  let filteredRoutes = filterRoutes(initialRoutes, filters);
 
   if (userLocation) {
     filteredRoutes = sortRoutesByProximity(filteredRoutes, userLocation);
@@ -148,77 +188,52 @@ export default function RouteCatalog({
           <p className="text-xs text-red-600 font-medium">{locationError}</p>
         )}
 
-        {/* Duration Filters Row */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-[#7A6552] flex items-center gap-1">
-            <span>⏱️</span> {language === 'ru' ? 'Длительность' : 'Duration'}
-          </label>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              data-testid="duration-filter-all"
-              onClick={() => setSelectedDuration('all')}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedDuration === 'all'
-                  ? 'bg-[#1C1008] text-white shadow-xs'
-                  : 'bg-[#F3EFEA] text-[#7A6552] border-0'
-                }`}
-            >
-              {t('allDurations')}
-            </button>
-            {DURATIONS.map((d) => (
-              <button
-                key={d.id}
-                type="button"
-                data-testid={`duration-filter-${d.id}`}
-                onClick={() => setSelectedDuration(d.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedDuration === d.id
-                    ? 'bg-[#C4572A] text-white shadow-xs'
-                    : 'bg-[#F3EFEA] text-[#7A6552] border-0'
-                  }`}
-              >
-                {language === 'ru' ? d.labelRu : d.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/*
+          ── Hard Constraint ──
+          Leads the panel and is boxed off from the pills below it. A traveler with a
+          stroller or bad knees is answering a question about their body, not stating a
+          preference, so the block says outright that it is never relaxed.
+        */}
+        {logisticsOptions.length > 0 && (
+          <FilterChipGroup
+            kind="hard"
+            testIdPrefix="logistics"
+            icon="♿"
+            label={t('logisticsFilterLabel')}
+            note={t('hardConstraintNote')}
+            unconstrainedLabel={t('anyLogistics')}
+            options={logisticsOptions}
+            selected={filters.logistics}
+            onSelect={(logistics) => setFilters((f) => ({ ...f, logistics }))}
+          />
+        )}
 
-        {/* Vibe Filters Row */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-[#7A6552] flex items-center gap-1">
-            <span>✨</span> {language === 'ru' ? 'Атмосфера' : 'Vibe'}
-          </label>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              data-testid="vibe-filter-all"
-              onClick={() => setSelectedVibe('all')}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedVibe === 'all'
-                  ? 'bg-[#1C1008] text-white shadow-xs'
-                  : 'bg-[#F3EFEA] text-[#7A6552] border-0'
-                }`}
-            >
-              {t('allVibes')}
-            </button>
-            {VIBES.map((v) => (
-              <button
-                key={v.id}
-                type="button"
-                data-testid={`vibe-filter-${v.id}`}
-                onClick={() => setSelectedVibe(v.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all min-h-[36px] ${selectedVibe === v.id
-                    ? 'bg-[#C4572A] text-white shadow-xs'
-                    : 'bg-[#F3EFEA] text-[#7A6552] border-0'
-                  }`}
-              >
-                #{language === 'ru' ? v.labelRu : v.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* ── Soft Constraints ── */}
+        <FilterChipGroup
+          kind="soft"
+          testIdPrefix="duration"
+          icon="⏱️"
+          label={language === 'ru' ? 'Длительность' : 'Duration'}
+          unconstrainedLabel={t('allDurations')}
+          options={durationOptions}
+          selected={filters.duration}
+          onSelect={(duration) => setFilters((f) => ({ ...f, duration }))}
+        />
+
+        <FilterChipGroup
+          kind="soft"
+          testIdPrefix="vibe"
+          icon="✨"
+          label={language === 'ru' ? 'Атмосфера' : 'Vibe'}
+          unconstrainedLabel={t('allVibes')}
+          options={vibeOptions}
+          selected={filters.vibe}
+          onSelect={(vibe) => setFilters((f) => ({ ...f, vibe }))}
+        />
 
         {filteredRoutes.length !== initialRoutes.length && (
           <div className="pt-2 flex justify-end">
-            <span className="text-[11px] font-semibold text-[#C4572A]">
+            <span data-testid="filter-match-count" className="text-[11px] font-semibold text-[#C4572A]">
               {filteredRoutes.length} / {initialRoutes.length} {language === 'ru' ? 'маршрутов' : 'routes'}
             </span>
           </div>
@@ -245,15 +260,14 @@ export default function RouteCatalog({
               ? 'Попробуйте ослабить фильтры для просмотра всех вариантов.'
               : 'Try clearing some filters to see all available walking routes.'}
           </p>
+          {/* Clears the Hard Constraint along with the rest — one reset, no leftovers. */}
           <button
             type="button"
-            onClick={() => {
-              setSelectedDuration('all');
-              setSelectedVibe('all');
-            }}
+            data-testid="reset-filters"
+            onClick={() => setFilters(NO_FILTERS)}
             className="mt-2 px-4 py-2 bg-[#C4572A] text-white text-xs font-bold rounded-full shadow-xs"
           >
-            {language === 'ru' ? 'Сбросить фильтры' : 'Reset Filters'}
+            {t('resetFilters')}
           </button>
         </div>
       ) : (
