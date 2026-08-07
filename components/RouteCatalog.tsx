@@ -3,21 +3,23 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Route, DurationCategory, VibeCategory } from '@/lib/types/route';
+import { Route, RouteFamily, DurationCategory, VibeCategory } from '@/lib/types/route';
 import { sortRoutesByProximity, calculateDistance } from '@/lib/engine/matcher';
-import { getRouteDurationFormatted, formatAccessibilityLabel } from '@/lib/data/routes';
+import { getRouteDurationFormatted, formatAccessibilityLabel, ROUTE_FAMILIES } from '@/lib/data/routes';
+import { describeRouteFamily } from '@/lib/utils/family';
 import {
   getProgressPositions,
   stopAtProgressPosition,
   type ProgressPositions,
 } from '@/lib/utils/progress';
-import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { useLanguage, getLocalizedFamilyName } from '@/lib/i18n/LanguageContext';
 import { routeEntryCtaLabel } from '@/components/RouteIntroCard';
 import EmojiIcon from '@/components/ui/EmojiIcon';
 import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 
 export interface RouteCatalogProps {
   initialRoutes: Route[];
+  families?: RouteFamily[];
 }
 
 const DURATIONS: { id: DurationCategory; label: string; labelRu: string }[] = [
@@ -37,7 +39,10 @@ const VIBES: { id: VibeCategory; label: string; labelRu: string }[] = [
   { id: 'architecture', label: 'Architecture', labelRu: 'Архитектура' },
 ];
 
-export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
+export default function RouteCatalog({
+  initialRoutes,
+  families = ROUTE_FAMILIES,
+}: RouteCatalogProps) {
   const { language, t, getLocalizedStop } = useLanguage();
 
   /**
@@ -266,6 +271,12 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
               ).toFixed(1)
               : null;
 
+            /*
+              Read against the whole catalog, not the filtered view: a Route keeps its
+              place in its Route Family whether or not its siblings are on screen.
+            */
+            const familyStanding = describeRouteFamily(route, initialRoutes, families);
+
             const progressPosition = progressPositions?.[route.id] ?? null;
             const resumedStop = stopAtProgressPosition(route.stops, progressPosition);
 
@@ -313,6 +324,27 @@ export default function RouteCatalog({ initialRoutes }: RouteCatalogProps) {
                     <p className="text-xs sm:text-sm text-[#7A6552] leading-relaxed">
                       {route.subtitle}
                     </p>
+                    {/*
+                      One line, label only. It says which shared Stop pool this Route is
+                      drawn from and how much of it this Route walks — never what the
+                      traveler gave up by choosing it (ADR 0005).
+                    */}
+                    {familyStanding && (
+                      <p
+                        data-testid={`route-family-${route.id}`}
+                        className="text-[11px] font-semibold text-[#7A6552]/90 leading-snug"
+                      >
+                        {familyStanding.role === 'full-version'
+                          ? t('familyFullVersion', {
+                            family: getLocalizedFamilyName(familyStanding.family, language),
+                          })
+                          : t('familyVariant', {
+                            family: getLocalizedFamilyName(familyStanding.family, language),
+                            count: familyStanding.stopCount,
+                            total: familyStanding.fullVersionStopCount,
+                          })}
+                      </p>
+                    )}
                   </div>
 
                   <GeorgianOrnament />

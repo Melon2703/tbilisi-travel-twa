@@ -90,6 +90,29 @@ export interface VenueStop extends BaseStop {
 
 export type Stop = AttractionStop | VenueStop;
 
+/**
+ * Route Family: a named group of Routes drawn from one shared pool of Stops.
+ * The pool itself lives on the Full Version — a Variant references the same Stops
+ * rather than copying them.
+ */
+export interface RouteFamily {
+  id: string;
+  name: string;
+  nameRu?: string;
+}
+
+/** The Full Version holds the family's whole Stop pool; a Variant holds a subset. */
+export type RouteFamilyRole = 'full-version' | 'variant';
+
+/**
+ * A Route's place in its Route Family, stated in the data. Membership is never
+ * inferred from id prefixes or title matching.
+ */
+export interface RouteFamilyMembership {
+  familyId: string;
+  role: RouteFamilyRole;
+}
+
 export interface Route {
   id: string;
   title: string;
@@ -103,6 +126,8 @@ export interface Route {
   introCopy: string;
   introCopyRu?: string;
   stops: Stop[];
+  /** Absent on a standalone Route — one that shares its Stop pool with nothing. */
+  family?: RouteFamilyMembership;
 }
 
 export interface MatchCriteria {

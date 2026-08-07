@@ -1,4 +1,4 @@
-import { Route, Stop } from '../types/route';
+import { Route, RouteFamily, Stop } from '../types/route';
 
 const HEARTBEAT_STOPS: Stop[] = [
   {
@@ -548,6 +548,21 @@ function selectStops(indices: number[]): Stop[] {
   }));
 }
 
+/**
+ * Route Families. `HEARTBEAT_FAMILY_ID` names the group whose shared Stop pool is
+ * `HEARTBEAT_STOPS`: the Full Version carries the pool whole, the Variants carry
+ * subsets of it via `selectStops`.
+ */
+const HEARTBEAT_FAMILY_ID = 'old-tbilisi-heartbeat-family';
+
+export const ROUTE_FAMILIES: RouteFamily[] = [
+  {
+    id: HEARTBEAT_FAMILY_ID,
+    name: 'Old Tbilisi Heartbeat',
+    nameRu: 'Сердце Старого Тбилиси',
+  },
+];
+
 export const ROUTES: Route[] = [
   {
     id: 'old-tbilisi-heartbeat',
@@ -564,6 +579,7 @@ export const ROUTES: Route[] = [
     introCopyRu:
       'Привет! Готовы исследовать легендарный центр Тбилиси? От шоу часов до водопада в серных банях и заката на фуникулёре!',
     stops: HEARTBEAT_STOPS,
+    family: { familyId: HEARTBEAT_FAMILY_ID, role: 'full-version' },
   },
   {
     id: 'heartbeat-express-1-2h',
@@ -578,6 +594,7 @@ export const ROUTES: Route[] = [
     introCopy: 'A short, accessible walk through flat pedestrian avenues and historic spots.',
     introCopyRu: 'Короткая, удобная прогулка по ровным пешеходным улицам и историческим местам.',
     stops: selectStops([0, 1, 2, 3, 7, 8]),
+    family: { familyId: HEARTBEAT_FAMILY_ID, role: 'variant' },
   },
   {
     id: 'heartbeat-old-kala-moderate',
@@ -592,6 +609,7 @@ export const ROUTES: Route[] = [
     introCopy: 'Discover the ancient sulfur bath district and hidden waterfall in Old Tbilisi.',
     introCopyRu: 'Откройте для себя древний район серных бань и скрытый водопад в Старом Тбилиси.',
     stops: selectStops([3, 4, 5, 6, 13, 14, 15, 16]),
+    family: { familyId: HEARTBEAT_FAMILY_ID, role: 'variant' },
   },
   {
     id: 'heartbeat-culinary-sunset',
@@ -606,6 +624,7 @@ export const ROUTES: Route[] = [
     introCopy: 'Combine rooftop dining, fresh pomegranate juice, and sunset donuts high above the city.',
     introCopyRu: 'Совместите обед на крыше, свежий гранатовый сок и закатные пончики высоко над городом.',
     stops: selectStops([12, 15, 17, 18]),
+    family: { familyId: HEARTBEAT_FAMILY_ID, role: 'variant' },
   },
   {
     id: 'sololaki-courtyards',

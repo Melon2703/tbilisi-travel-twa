@@ -106,6 +106,8 @@ export const TRANSLATIONS = {
     footerTitle: 'Tbilisi Travel Guide — Telegram WebApp',
     footerRights: "© {year} Olya's Curated Tbilisi Routes",
     stopsCount: '{count} stops',
+    familyFullVersion: '{family} — the complete walk',
+    familyVariant: 'A shorter version of {family} — {count} of {total} stops',
   },
   ru: {
     // RouteIntroCard
@@ -212,6 +214,8 @@ export const TRANSLATIONS = {
     footerTitle: 'Путеводитель по Тбилиси — Telegram WebApp',
     footerRights: '© {year} Авторские маршруты Оли по Тбилиси',
     stopsCount: '{count} остановок',
+    familyFullVersion: '{family} — полный маршрут',
+    familyVariant: 'Короткая версия маршрута «{family}» — {count} из {total} остановок',
   },
 } as const;
 

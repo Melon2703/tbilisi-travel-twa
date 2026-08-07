@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { Language } from './types';
 import { TRANSLATIONS, TranslationKey } from './translations';
-import { Route, Stop } from '@/lib/types/route';
+import { Route, RouteFamily, Stop } from '@/lib/types/route';
 
 interface LanguageContextValue {
   language: Language;
@@ -75,6 +75,10 @@ export function getLocalizedRoute(route: Route, lang: Language): Route {
     };
   }
   return route;
+}
+
+export function getLocalizedFamilyName(family: RouteFamily, lang: Language): string {
+  return lang === 'ru' ? family.nameRu || family.name : family.name;
 }
 
 export function LanguageProvider({ children, initialLanguage }: LanguageProviderProps) {
