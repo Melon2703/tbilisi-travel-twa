@@ -3,23 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  Route,
-  RouteFamily,
-  DurationCategory,
-  VibeCategory,
-  LogisticsConstraint,
-} from '@/lib/types/route';
+import { Route, RouteFamily, DurationCategory, VibeCategory } from '@/lib/types/route';
 import { sortRoutesByProximity, calculateDistance } from '@/lib/engine/matcher';
 import {
   offeredDurations,
   offeredVibes,
-  offeredLogisticsConstraints,
   filterRoutes,
   NO_FILTERS,
   type CatalogFilters,
 } from '@/lib/engine/catalogFilters';
-import type { TranslationKey } from '@/lib/i18n/translations';
 import FilterChipGroup from '@/components/ui/FilterChipGroup';
 import { getRouteDurationFormatted, formatAccessibilityLabel, ROUTE_FAMILIES } from '@/lib/data/routes';
 import { describeRouteFamily } from '@/lib/utils/family';
@@ -58,16 +50,6 @@ const VIBE_LABELS: Record<VibeCategory, { en: string; ru: string }> = {
   courtyards: { en: 'Courtyards', ru: 'Дворики' },
   'photo-spots': { en: 'Photo Spots', ru: 'Фотолокации' },
   architecture: { en: 'Architecture', ru: 'Архитектура' },
-};
-
-/*
-  Phrased as what the traveler can walk, not as a property of the Route: a Hard
-  Constraint is answered by the body, not by a preference.
-*/
-const LOGISTICS_LABEL_KEYS: Record<LogisticsConstraint, TranslationKey> = {
-  'stroller-friendly': 'logisticsStepFree',
-  moderate: 'logisticsCobblestones',
-  'steep-stairs': 'logisticsStairs',
 };
 
 export default function RouteCatalog({
@@ -135,10 +117,6 @@ export default function RouteCatalog({
     value: vibe,
     label: `#${VIBE_LABELS[vibe][locale]}`,
   }));
-  const logisticsOptions = offeredLogisticsConstraints(initialRoutes).map((constraint) => ({
-    value: constraint,
-    label: t(LOGISTICS_LABEL_KEYS[constraint]),
-  }));
 
   let filteredRoutes = filterRoutes(initialRoutes, filters);
 
@@ -189,28 +167,11 @@ export default function RouteCatalog({
         )}
 
         {/*
-          ── Hard Constraint ──
-          Leads the panel and is boxed off from the pills below it. A traveler with a
-          stroller or bad knees is answering a question about their body, not stating a
-          preference, so the block says outright that it is never relaxed.
+          ── Soft Constraints ──
+          The whole panel. The catalog asks nothing about terrain: accessibility is stated
+          on every card, and the Hard Constraint is asked and enforced in the bot flow.
         */}
-        {logisticsOptions.length > 0 && (
-          <FilterChipGroup
-            kind="hard"
-            testIdPrefix="logistics"
-            icon="♿"
-            label={t('logisticsFilterLabel')}
-            note={t('hardConstraintNote')}
-            unconstrainedLabel={t('anyLogistics')}
-            options={logisticsOptions}
-            selected={filters.logistics}
-            onSelect={(logistics) => setFilters((f) => ({ ...f, logistics }))}
-          />
-        )}
-
-        {/* ── Soft Constraints ── */}
         <FilterChipGroup
-          kind="soft"
           testIdPrefix="duration"
           icon="⏱️"
           label={language === 'ru' ? 'Длительность' : 'Duration'}
@@ -221,7 +182,6 @@ export default function RouteCatalog({
         />
 
         <FilterChipGroup
-          kind="soft"
           testIdPrefix="vibe"
           icon="✨"
           label={language === 'ru' ? 'Атмосфера' : 'Vibe'}
@@ -260,7 +220,7 @@ export default function RouteCatalog({
               ? 'Попробуйте ослабить фильтры для просмотра всех вариантов.'
               : 'Try clearing some filters to see all available walking routes.'}
           </p>
-          {/* Clears the Hard Constraint along with the rest — one reset, no leftovers. */}
+          {/* One reset, no leftovers. */}
           <button
             type="button"
             data-testid="reset-filters"

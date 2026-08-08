@@ -13,11 +13,13 @@ The catalog previously offered a Full-Day duration matching no Route at all, and
 
 The dropped Vibe stays on the Route as a descriptive attribute. It is still true of the place; it just is not a way to choose between places.
 
-## The Logistics Constraint is exempt from relaxation, not from the rule
+## The catalog offers no Logistics Constraint filter
 
-The Logistics Constraint filter uses `isAccessibilitySatisfied` — the same predicate the matching engine applies — so the catalog and Olya's Recommendation can never disagree about what a stroller can walk. It is a Hard Constraint: it is never relaxed to fill out results, and it is presented as a requirement rather than a preference, boxed off and visually distinct from the Soft Constraint pills.
+The catalog once led its panel with a Logistics Constraint block — a Hard Constraint, boxed off from the Soft Constraint pills. It no longer does. Browsing is not the moment the traveler is asked about their body: every Route states its accessibility on its own card, which is enough to browse by, and a Hard Constraint that silently removes Routes from a catalog costs more than it gives.
 
-It still obeys the narrowing rule. The loosest constraint (`steep-stairs`) admits every Route by definition, so offering it would duplicate "no requirement" and is suppressed.
+The constraint itself is untouched. The bot conversation still asks about accessibility, and the matching engine still enforces it via `isAccessibilitySatisfied` when it recommends a Route — the place where the traveler asked for a recommendation rather than a shelf.
+
+Every filter the catalog does offer is therefore a Soft Constraint.
 
 ## Consequences
 

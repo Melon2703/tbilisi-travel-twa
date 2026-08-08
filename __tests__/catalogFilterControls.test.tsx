@@ -1,15 +1,10 @@
 import React from 'react';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import RouteCatalog from '@/components/RouteCatalog';
 import { ROUTES } from '@/lib/data/routes';
 import { LanguageProvider } from '@/lib/i18n/LanguageContext';
-import {
-  offeredDurations,
-  offeredVibes,
-  offeredLogisticsConstraints,
-} from '@/lib/engine/catalogFilters';
-import { HARD_CHIP, SOFT_CHIP } from '@/components/ui/FilterChipGroup';
+import { offeredDurations, offeredVibes } from '@/lib/engine/catalogFilters';
 import type { Route, Stop, DurationCategory, VibeCategory, LogisticsConstraint } from '@/lib/types/route';
 
 vi.mock('next/navigation', () => ({
@@ -90,7 +85,7 @@ describe('Catalog filter controls tell the truth', () => {
     }
   });
 
-  it('4. A Logistics Constraint filter is present and narrows the results', () => {
+  it('4. The panel offers no terrain filter at all', () => {
     const catalog = [
       route('flat', '1-2h', 'stroller-friendly', ['cultural']),
       route('cobbles', '1-2h', 'moderate', ['cultural']),
@@ -98,52 +93,49 @@ describe('Catalog filter controls tell the truth', () => {
     ];
     renderCatalog(catalog);
 
-    expect(cards()).toHaveLength(3);
+    expect(screen.queryByTestId('logistics-filter-group')).toBeNull();
+    expect(screen.queryByTestId('hard-constraint-note')).toBeNull();
+    for (const constraint of ['stroller-friendly', 'moderate', 'steep-stairs', 'all']) {
+      expect(screen.queryByTestId(`logistics-filter-${constraint}`)).toBeNull();
+    }
+  });
 
-    fireEvent.click(screen.getByTestId('logistics-filter-stroller-friendly'));
-    expect(cards().map((c) => c.getAttribute('data-testid'))).toEqual(['route-card-flat']);
+  it('5. No terrain constraint narrows the catalog — every accessibility level stays on screen', () => {
+    const catalog = [
+      route('flat', '1-2h', 'stroller-friendly', ['cultural']),
+      route('cobbles', '1-2h', 'moderate', ['cultural']),
+      route('stairs', '1-2h', 'steep-stairs', ['cultural']),
+      route('elsewhere', 'half-day', 'moderate', ['hiking']),
+    ];
+    renderCatalog(catalog);
 
-    fireEvent.click(screen.getByTestId('logistics-filter-moderate'));
+    expect(cards()).toHaveLength(4);
+
+    fireEvent.click(screen.getByTestId('duration-filter-1-2h'));
+    fireEvent.click(screen.getByTestId('vibe-filter-cultural'));
+
+    // Every accessibility level survives the tightest the panel can be set.
     expect(cards().map((c) => c.getAttribute('data-testid'))).toEqual([
       'route-card-flat',
       'route-card-cobbles',
+      'route-card-stairs',
     ]);
-
-    fireEvent.click(screen.getByTestId('logistics-filter-all'));
-    expect(cards()).toHaveLength(3);
   });
 
-  it('5. Only Logistics Constraints that genuinely narrow the catalog are offered', () => {
+  it('6. The surviving filter groups are the Soft Constraints, in panel order', () => {
     renderCatalog(ROUTES);
 
-    expect(offeredLogisticsConstraints(ROUTES)).not.toContain('steep-stairs');
-    expect(screen.queryByTestId('logistics-filter-steep-stairs')).toBeNull();
-  });
+    const groups = screen
+      .getAllByTestId(/-filter-group$/)
+      .map((g) => g.getAttribute('data-testid'));
 
-  it('6. The Logistics Constraint filter is marked a Hard Constraint, visually distinct from the Soft Constraint filters', () => {
-    renderCatalog(ROUTES);
-
-    const hard = screen.getByTestId('logistics-filter-group');
-    expect(hard).toHaveAttribute('data-constraint', 'hard');
-
-    for (const testId of ['duration-filter-group', 'vibe-filter-group']) {
-      expect(screen.getByTestId(testId)).toHaveAttribute('data-constraint', 'soft');
-    }
-
-    // It says outright that it is not a preference.
-    expect(within(hard).getByTestId('hard-constraint-note')).toBeInTheDocument();
-
-    // Soft chips are pills; the Hard Constraint chips are shaped differently. The two
-    // styles are asserted through the exported constants, so a restyle moves one place.
-    expect(HARD_CHIP).not.toEqual(SOFT_CHIP);
-    expect(screen.getByTestId('logistics-filter-stroller-friendly').className).toContain(HARD_CHIP);
-    expect(screen.getByTestId('duration-filter-1-2h').className).toContain(SOFT_CHIP);
+    expect(groups).toEqual(['duration-filter-group', 'vibe-filter-group']);
   });
 
   it('7. Filters combine, and the match count reflects the filtered total', () => {
     const catalog = [
       route('a', '1-2h', 'stroller-friendly', ['cultural']),
-      route('b', '1-2h', 'steep-stairs', ['cultural']),
+      route('b', '1-2h', 'steep-stairs', ['hiking']),
       route('c', 'half-day', 'stroller-friendly', ['cultural']),
       route('d', '1-2h', 'stroller-friendly', ['hiking']),
     ];
@@ -151,13 +143,12 @@ describe('Catalog filter controls tell the truth', () => {
 
     fireEvent.click(screen.getByTestId('duration-filter-1-2h'));
     fireEvent.click(screen.getByTestId('vibe-filter-cultural'));
-    fireEvent.click(screen.getByTestId('logistics-filter-stroller-friendly'));
 
     expect(cards().map((c) => c.getAttribute('data-testid'))).toEqual(['route-card-a']);
     expect(screen.getByTestId('filter-match-count')).toHaveTextContent('1 / 4');
   });
 
-  it('8. The empty-results state appears and its reset action clears every filter, the Hard Constraint included', () => {
+  it('8. The empty-results state appears and its reset action clears every filter', () => {
     const catalog = [
       route('a', '1-2h', 'stroller-friendly', ['cultural']),
       route('b', 'half-day', 'steep-stairs', ['hiking']),
@@ -166,7 +157,6 @@ describe('Catalog filter controls tell the truth', () => {
 
     fireEvent.click(screen.getByTestId('duration-filter-1-2h'));
     fireEvent.click(screen.getByTestId('vibe-filter-hiking'));
-    fireEvent.click(screen.getByTestId('logistics-filter-stroller-friendly'));
 
     expect(cards()).toHaveLength(0);
     expect(screen.getByText('No matching routes found')).toBeInTheDocument();
@@ -184,8 +174,8 @@ describe('Catalog filter controls tell the truth', () => {
       </LanguageProvider>
     );
 
-    const hard = screen.getByTestId('logistics-filter-group');
-    expect(hard.textContent).not.toMatch(/logistics[A-Z]|hardConstraintNote|anyLogistics/);
-    expect(screen.getByTestId('logistics-filter-stroller-friendly').textContent?.trim()).toBeTruthy();
+    const panel = screen.getByTestId('filter-controls-panel');
+    expect(panel.textContent).not.toMatch(/allDurations|allVibes|useMyLocation/);
+    expect(screen.getByTestId('duration-filter-all').textContent?.trim()).toBeTruthy();
   });
 });

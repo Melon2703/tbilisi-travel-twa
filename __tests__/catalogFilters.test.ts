@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import {
   offeredDurations,
   offeredVibes,
-  offeredLogisticsConstraints,
   filterRoutes,
   NO_CONSTRAINT,
 } from '@/lib/engine/catalogFilters';
@@ -92,39 +91,6 @@ describe('offeredVibes', () => {
   });
 });
 
-describe('offeredLogisticsConstraints', () => {
-  it('offers constraints that genuinely narrow the catalog', () => {
-    const catalog = [
-      route('a', '1-2h', 'stroller-friendly', []),
-      route('b', '1-2h', 'moderate', []),
-      route('c', '1-2h', 'steep-stairs', []),
-    ];
-
-    expect(offeredLogisticsConstraints(catalog)).toEqual(['stroller-friendly', 'moderate']);
-  });
-
-  it('drops a constraint that admits the whole catalog — it is not a constraint', () => {
-    const catalog = [
-      route('a', '1-2h', 'stroller-friendly', []),
-      route('b', '1-2h', 'stroller-friendly', []),
-    ];
-
-    expect(offeredLogisticsConstraints(catalog)).toEqual([]);
-  });
-
-  it('every offered constraint over the real catalog returns fewer Routes than the whole catalog, and at least one', () => {
-    for (const constraint of offeredLogisticsConstraints(ROUTES)) {
-      const matched = filterRoutes(ROUTES, {
-        duration: NO_CONSTRAINT,
-        vibe: NO_CONSTRAINT,
-        logistics: constraint,
-      });
-      expect(matched.length).toBeGreaterThan(0);
-      expect(matched.length).toBeLessThan(ROUTES.length);
-    }
-  });
-});
-
 describe('filterRoutes', () => {
   const catalog = [
     route('easy-short', '1-2h', 'stroller-friendly', ['cultural']),
@@ -138,39 +104,44 @@ describe('filterRoutes', () => {
       filterRoutes(catalog, {
         duration: NO_CONSTRAINT,
         vibe: NO_CONSTRAINT,
-        logistics: NO_CONSTRAINT,
       })
     ).toHaveLength(4);
   });
 
-  it('narrows by Logistics Constraint as a Hard Constraint — a stricter need never admits rougher terrain', () => {
+  it('narrows by duration', () => {
     const ids = filterRoutes(catalog, {
-      duration: NO_CONSTRAINT,
+      duration: 'half-day',
       vibe: NO_CONSTRAINT,
-      logistics: 'stroller-friendly',
     }).map((r) => r.id);
 
-    expect(ids).toEqual(['easy-short', 'easy-long']);
+    expect(ids).toEqual(['easy-long']);
   });
 
-  it('admits gentler terrain than asked for — moderate accepts stroller-friendly Routes', () => {
+  it('narrows by Vibe', () => {
     const ids = filterRoutes(catalog, {
       duration: NO_CONSTRAINT,
-      vibe: NO_CONSTRAINT,
-      logistics: 'moderate',
+      vibe: 'food-wine',
     }).map((r) => r.id);
 
-    expect(ids).toEqual(['easy-short', 'easy-long', 'mid-short']);
+    expect(ids).toEqual(['easy-long']);
   });
 
-  it('combines all three constraints', () => {
+  it('never narrows on terrain — steep stairs survive the tightest filter pair', () => {
     const ids = filterRoutes(catalog, {
       duration: '1-2h',
       vibe: 'cultural',
-      logistics: 'moderate',
     }).map((r) => r.id);
 
-    expect(ids).toEqual(['easy-short', 'mid-short']);
+    expect(ids).toEqual(['easy-short', 'rough-short', 'mid-short']);
+  });
+
+  it('combines both constraints', () => {
+    const ids = filterRoutes(catalog, {
+      duration: 'half-day',
+      vibe: 'food-wine',
+    }).map((r) => r.id);
+
+    expect(ids).toEqual(['easy-long']);
   });
 
   it('can combine into an empty result', () => {
@@ -178,14 +149,13 @@ describe('filterRoutes', () => {
       filterRoutes(catalog, {
         duration: 'half-day',
         vibe: 'cultural',
-        logistics: NO_CONSTRAINT,
       })
     ).toEqual([]);
   });
 
   it('leaves the input catalog untouched', () => {
     const before = [...catalog];
-    filterRoutes(catalog, { duration: '1-2h', vibe: NO_CONSTRAINT, logistics: NO_CONSTRAINT });
+    filterRoutes(catalog, { duration: '1-2h', vibe: NO_CONSTRAINT });
     expect(catalog).toEqual(before);
   });
 });
