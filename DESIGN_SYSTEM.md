@@ -80,9 +80,11 @@ For bright sunlight outdoor visibility:
 #### Icons
 Icons are named, never drawn as emoji characters. `components/ui/EmojiIcon.tsx` maps each name in the vocabulary (`mapPin`, `clock`, `warning`, `directive`, …) to a `react-icons` glyph. A glyph draws at `1em` in `currentColor`, so it takes its size from the `xs`–`xl` scale above and its colour from the surrounding text — including the tinted icon tiles, which set the colour on the wrapper.
 
-The project contains no emoji characters at all. Not in markup, not in a prop, not inside a translation string or a Telegram message: a picture is chosen by name, and a name missing from the vocabulary is added to it. Three things hold this together — `__tests__/noRawEmoji.test.ts` scans `components/`, `app/`, `lib/` and `__tests__/` and fails on any raw emoji character; every icon prop is typed `KnownEmojiIconName`, so a glyph passed where a name belongs fails to compile; and `EmojiIcon` has no raw-string fallback, so an unknown name cannot reach the screen as text.
+The app contains no emoji characters at all. Not in markup, not in a prop, not inside a translation string: a picture is chosen by name at the render site, and a name missing from the vocabulary is added to it. Translated copy is words only, so the same badge is drawn in English and in Russian, and translators never handle a glyph. Three things hold this together — `__tests__/noRawEmoji.test.ts` scans `components/`, `app/`, `lib/` and `__tests__/` and fails on any raw emoji character, `__tests__/i18n.test.tsx` scans every translated value; every icon prop is typed `KnownEmojiIconName`, so a glyph passed where a name belongs fails to compile; and `EmojiIcon` has no raw-string fallback, so an unknown name cannot reach the screen as text.
 
-Icons are decorative by default — hidden from assistive tech unless given an `ariaLabel`, which the surrounding button's own label usually makes unnecessary. The Telegram bot is the one surface with no markup to hang an icon on, so its messages and buttons are plain text.
+Icons are decorative by default — hidden from assistive tech unless given an `ariaLabel`, which the surrounding button's own label usually makes unnecessary.
+
+The Telegram bot is the one exception, and the only one: a bot message is text with no markup to draw an icon into, so its messages and buttons keep their emoji. `lib/engine/bot.ts` is exempt from the scan, and a companion test asserts the emoji are still there — the carve-out is deliberate, not a hole.
 
 ---
 

@@ -2,8 +2,9 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Stop, VenueStop, AttractionStop, ProviderRating } from '@/lib/types/route';
+import { Stop, VenueStop, VenueCategory, AttractionStop, ProviderRating } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import type { TranslationKey } from '@/lib/i18n/translations';
 import { buildGoogleMapLink, buildYandexMapLink, getPlaceIdentity } from '@/lib/utils/mapLinks';
 import EmojiIcon, { type KnownEmojiIconName } from '@/components/ui/EmojiIcon';
 import Badge from '@/components/ui/Badge';
@@ -66,20 +67,28 @@ function ActionButtonLink({ href, ariaLabel, title, children }: ActionButtonLink
   );
 }
 
-const CATEGORY_KEYS: Record<string, string> = {
-  cafe: 'cafe',
-  restaurant: 'restaurant',
-  bar: 'bar',
-  wine_bar: 'wine_bar',
+/**
+ * One row per kind of Venue Stop: the word it is named by, and the picture drawn beside
+ * that word. The picture is decided here rather than carried inside the translated
+ * string, so both languages read the same badge. Exhaustive over `VenueCategory` — a
+ * new kind is a compile error here, not a card that quietly loses its icon.
+ */
+const VENUE_KINDS: Record<VenueCategory, { label: TranslationKey; icon: KnownEmojiIconName }> = {
+  cafe: { label: 'cafe', icon: 'coffee' },
+  restaurant: { label: 'restaurant', icon: 'utensils' },
+  bar: { label: 'bar', icon: 'cocktail' },
+  wine_bar: { label: 'wine_bar', icon: 'wine' },
 };
 
-function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): string {
-  const categoryKey = CATEGORY_KEYS[venueStop.venueDetails.category] || venueStop.venueDetails.category;
-  const categoryText = t(categoryKey as any) || venueStop.venueDetails.category;
+function formatCategoryCuisine(
+  venueStop: VenueStop,
+  t: (key: TranslationKey) => string
+): string {
+  const categoryText = t(VENUE_KINDS[venueStop.venueDetails.category].label);
 
   if (venueStop.venueDetails.cuisines && venueStop.venueDetails.cuisines.length > 0) {
     const cuisinesText = venueStop.venueDetails.cuisines
-      .map((c) => t(c as any) || c.charAt(0).toUpperCase() + c.slice(1))
+      .map((c) => t(c) || c.charAt(0).toUpperCase() + c.slice(1))
       .join(', ');
     return `${categoryText} • ${cuisinesText}`;
   }
@@ -352,13 +361,14 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           <div className="flex flex-wrap items-center gap-2" data-testid="venue-details-header">
             <span
               data-testid="venue-category-cuisine"
-              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border"
               style={{
                 backgroundColor: COLORS.badgeBg,
                 color: COLORS.badgeText,
                 borderColor: COLORS.badgeBorder,
               }}
             >
+              <EmojiIcon name={VENUE_KINDS[venueStop.venueDetails.category].icon} size="xs" />
               {formatCategoryCuisine(venueStop, t)}
             </span>
             {venueStop.venueDetails.isVegetarianFriendly && (

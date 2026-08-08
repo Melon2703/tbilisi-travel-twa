@@ -97,7 +97,6 @@ export const TRANSLATIONS = {
     headerTitle: 'Tbilisi Travel Routes',
     headerSubtitle: 'Curated Telegram WebApp Guides',
     curatedRoutesCount: '{count} Curated Routes',
-    interactiveCatalog: 'Interactive Catalog',
     heroTitle: 'Explore Tbilisi on Foot with Local Knowledge',
     heroDesc:
       "Pick a route below for step-by-step navigation, timing advice, Olya's personal recommendations, and logistics notes for steep hills or cobblestone alleys.",
@@ -206,7 +205,6 @@ export const TRANSLATIONS = {
     headerTitle: 'Пешие маршруты по Тбилиси',
     headerSubtitle: 'Персональный путеводитель в Telegram WebApp',
     curatedRoutesCount: '{count} отобранных маршрутов',
-    interactiveCatalog: 'Интерактивный каталог',
     heroTitle: 'Исследуйте Тбилиси пешком с локальным гидом',
     heroDesc:
       'Выберите маршрут ниже для пошаговой навигации, рекомендаций по времени, личных советов Оли и предупреждений о крутых подъемах.',

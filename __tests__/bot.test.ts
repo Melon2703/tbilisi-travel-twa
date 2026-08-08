@@ -144,7 +144,7 @@ describe('Bot Funnel Engine i18n Flow', () => {
 
     const buttons = response?.reply_markup?.inline_keyboard.flat();
     expect(buttons?.some((b) => b.callback_data === 'lang:ru|dur:1-2h')).toBe(true);
-    expect(buttons?.some((b) => b.text === '1–2 часа')).toBe(true);
+    expect(buttons?.some((b) => b.text === '⏱️ 1–2 часа')).toBe(true);
   });
 
   it('handles Russian funnel to final Recommendation with web_app URL containing ?lang=ru', () => {
@@ -169,7 +169,7 @@ describe('Bot Funnel Engine i18n Flow', () => {
     const buttons = response?.reply_markup?.inline_keyboard.flat();
     const webAppButton = buttons?.find((b) => b.web_app !== undefined);
     expect(webAppButton).toBeDefined();
-    expect(webAppButton?.text).toBe('Открыть пеший маршрут');
+    expect(webAppButton?.text).toBe('🗺️ Открыть пеший маршрут');
     expect(webAppButton?.web_app?.url).toBe('https://example.com/twa/heartbeat-express-1-2h?lang=ru');
 
     const restartButton = buttons?.find((b) => b.callback_data === 'restart|lang:ru');

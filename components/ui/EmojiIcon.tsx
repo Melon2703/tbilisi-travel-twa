@@ -27,6 +27,9 @@ import {
   LuRotateCcw,
   LuImages,
   LuCoffee,
+  LuArmchair,
+  LuMartini,
+  LuWine,
   LuTag,
   LuFlagTriangleRight,
   LuLeaf,
@@ -71,7 +74,13 @@ export const EMOJI_ICONS = {
   finish: LuTarget,
   reset: LuRotateCcw,
   gallery: LuImages,
-  pitstop: LuCoffee,
+  // A rest rather than a cup: the Pitstop badge sits beside the badge naming the
+  // venue kind, and a Cafe Pitstop must not draw the same picture twice.
+  pitstop: LuArmchair,
+  // One per Venue Stop kind, so the badge that names the kind can draw it.
+  coffee: LuCoffee,
+  cocktail: LuMartini,
+  wine: LuWine,
   tag: LuTag,
   leaf: LuLeaf,
 } as const satisfies Record<string, IconType>;

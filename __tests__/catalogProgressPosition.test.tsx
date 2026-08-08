@@ -109,6 +109,29 @@ describe('Continue affordance on catalog cards', () => {
     expect(cardCta('sololaki')).toHaveTextContent(/ПРОДОЛЖИТЬ/i);
   });
 
+  it('trails the CTA with a drawn arrow, whichever label it carries', () => {
+    recordProgressPosition('sololaki', 2);
+    renderCatalog();
+
+    expect(cardCta('sololaki')).toHaveTextContent(/Continue/i);
+    expect(cardCta('sololaki').querySelector('svg')).toBeInTheDocument();
+    expect(cardCta('abanotubani')).toHaveTextContent('View');
+    expect(cardCta('abanotubani').querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('trails the CTA with a drawn arrow in Russian too', () => {
+    recordProgressPosition('sololaki', 1);
+    render(
+      <LanguageProvider initialLanguage="ru">
+        <RouteCatalog initialRoutes={ROUTES} />
+      </LanguageProvider>
+    );
+
+    expect(cardCta('sololaki').querySelector('svg')).toBeInTheDocument();
+    expect(cardCta('abanotubani')).toHaveTextContent('Смотреть');
+    expect(cardCta('abanotubani').querySelector('svg')).toBeInTheDocument();
+  });
+
   it('reads progress for the whole catalog in a single storage read', () => {
     recordProgressPosition('sololaki', 2);
     recordProgressPosition('abanotubani', 1);

@@ -121,17 +121,17 @@ export function handleBotUpdate(
         chat_id: chatId,
         ...(messageId ? { message_id: messageId } : {}),
         text:
-          '<b>Select your language / Выберите язык</b>\n\n' +
-          "Hi! I'm Olya, your local guide to Tbilisi\n" +
+          '🌐 <b>Select your language / Выберите язык</b>\n\n' +
+          "Hi! I'm Olya, your local guide to Tbilisi 🌿\n" +
           'Please select your preferred language to continue.\n\n' +
-          'Привет! Я Оля, ваш гид по Тбилиси\n' +
+          'Привет! Я Оля, ваш гид по Тбилиси 🌿\n' +
           'Выберите удобный язык для продолжения.',
         parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [
             [
-              { text: 'English', callback_data: 'lang:en' },
-              { text: 'Русский', callback_data: 'lang:ru' },
+              { text: '🇬🇧 English', callback_data: 'lang:en' },
+              { text: '🇷🇺 Русский', callback_data: 'lang:ru' },
             ],
           ],
         },
@@ -141,8 +141,8 @@ export function handleBotUpdate(
     case 'duration': {
       const isRu = lang === 'ru';
       const text = isRu
-        ? 'Привет! Я Оля, ваш локальный гид по Тбилиси\n\nДавайте найдём идеальный пеший маршрут для вас. Сначала подскажите, сколько у вас сегодня времени?'
-        : "Hi! I'm Olya, your local guide to Tbilisi\n\nLet's find the perfect walking route for you. First, how much time do you have today?";
+        ? 'Привет! Я Оля, ваш локальный гид по Тбилиси 🌿\n\nДавайте найдём идеальный пеший маршрут для вас. Сначала подскажите, сколько у вас сегодня времени?'
+        : "Hi! I'm Olya, your local guide to Tbilisi 🌿\n\nLet's find the perfect walking route for you. First, how much time do you have today?";
 
       return {
         method,
@@ -153,11 +153,11 @@ export function handleBotUpdate(
         reply_markup: {
           inline_keyboard: [
             [
-              { text: isRu ? '1–2 часа' : '1–2 Hours', callback_data: `lang:${lang}|dur:1-2h` },
-              { text: isRu ? '2–4 часа' : '2–4 Hours', callback_data: `lang:${lang}|dur:2-4h` },
+              { text: isRu ? '⏱️ 1–2 часа' : '⏱️ 1–2 Hours', callback_data: `lang:${lang}|dur:1-2h` },
+              { text: isRu ? '⏱️ 2–4 часа' : '⏱️ 2–4 Hours', callback_data: `lang:${lang}|dur:2-4h` },
             ],
-            [{ text: isRu ? 'Полдня' : 'Half Day', callback_data: `lang:${lang}|dur:half-day` }],
-            [{ text: isRu ? 'Изменить язык' : 'Change Language', callback_data: 'change_lang' }],
+            [{ text: isRu ? '⏱️ Полдня' : '⏱️ Half Day', callback_data: `lang:${lang}|dur:half-day` }],
+            [{ text: isRu ? '🌐 Изменить язык' : '🌐 Change Language', callback_data: 'change_lang' }],
           ],
         },
       };
@@ -179,19 +179,19 @@ export function handleBotUpdate(
           inline_keyboard: [
             [
               {
-                text: isRu ? 'Удобно с коляской (ровно)' : 'Stroller-Friendly (Flat)',
+                text: isRu ? '👶 Удобно с коляской (ровно)' : '👶 Stroller-Friendly (Flat)',
                 callback_data: `lang:${lang}|dur:${state.durationCategory}|acc:stroller-friendly`,
               },
             ],
             [
               {
-                text: isRu ? 'Умеренное покрытие' : 'Moderate Paving',
+                text: isRu ? '🚶 Умеренное покрытие' : '🚶 Moderate Paving',
                 callback_data: `lang:${lang}|dur:${state.durationCategory}|acc:moderate`,
               },
             ],
             [
               {
-                text: isRu ? 'Крутые лестницы и подъёмы' : 'Steep Citadel Stairs',
+                text: isRu ? '🧗 Крутые лестницы и подъёмы' : '🧗 Steep Citadel Stairs',
                 callback_data: `lang:${lang}|dur:${state.durationCategory}|acc:steep-stairs`,
               },
             ],
@@ -216,21 +216,21 @@ export function handleBotUpdate(
           inline_keyboard: [
             [
               {
-                text: isRu ? 'Фотолокации' : 'Photo Spots',
+                text: isRu ? '📸 Фотолокации' : '📸 Photo Spots',
                 callback_data: `lang:${lang}|dur:${state.durationCategory}|acc:${state.accessibility}|vibe:photo-spots`,
               },
               {
-                text: isRu ? 'Скрытые дворики' : 'Hidden Courtyards',
+                text: isRu ? '🏡 Скрытые дворики' : '🏡 Hidden Courtyards',
                 callback_data: `lang:${lang}|dur:${state.durationCategory}|acc:${state.accessibility}|vibe:courtyards`,
               },
             ],
             [
               {
-                text: isRu ? 'Еда и вино' : 'Food & Wine',
+                text: isRu ? '🍷 Еда и вино' : '🍷 Food & Wine',
                 callback_data: `lang:${lang}|dur:${state.durationCategory}|acc:${state.accessibility}|vibe:food-wine`,
               },
               {
-                text: isRu ? 'Искусство и архитектура' : 'Art & Architecture',
+                text: isRu ? '🏛️ Искусство и архитектура' : '🏛️ Art & Architecture',
                 callback_data: `lang:${lang}|dur:${state.durationCategory}|acc:${state.accessibility}|vibe:architecture`,
               },
             ],
@@ -258,7 +258,7 @@ export function handleBotUpdate(
             : "Sorry, I couldn't find any route matching your criteria. Let's try again with different settings!",
           parse_mode: 'HTML',
           reply_markup: {
-            inline_keyboard: [[{ text: isRu ? 'Начать заново' : 'Start Over', callback_data: `restart|lang:${lang}` }]],
+            inline_keyboard: [[{ text: isRu ? '🔄 Начать заново' : '🔄 Start Over', callback_data: `restart|lang:${lang}` }]],
           },
         };
       }
@@ -269,16 +269,16 @@ export function handleBotUpdate(
       const introCopy = isRu && route.introCopyRu ? route.introCopyRu : route.introCopy;
 
       const noteSection = matchResult.explanationNote
-        ? `\n\n<i>${matchResult.explanationNote}</i>`
+        ? `\n\nℹ️ <i>${matchResult.explanationNote}</i>`
         : '';
 
       const text = isRu
-        ? `<b>Рекомендация маршрута от Оли</b>\n\n` +
+        ? `✨ <b>Рекомендация маршрута от Оли</b>\n\n` +
           `<b>${title}</b>\n` +
           `<i>${subtitle}</i>\n\n` +
           `${introCopy}` +
           noteSection
-        : `<b>Olya's Route Recommendation</b>\n\n` +
+        : `✨ <b>Olya's Route Recommendation</b>\n\n` +
           `<b>${title}</b>\n` +
           `<i>${subtitle}</i>\n\n` +
           `${introCopy}` +
@@ -294,12 +294,12 @@ export function handleBotUpdate(
           inline_keyboard: [
             [
               {
-                text: isRu ? 'Открыть пеший маршрут' : 'Open Walking Route',
+                text: isRu ? '🗺️ Открыть пеший маршрут' : '🗺️ Open Walking Route',
                 web_app: { url: `${cleanBaseUrl}/twa/${route.id}?lang=${lang}` },
               },
             ],
-            [{ text: isRu ? 'Начать заново' : 'Start Over', callback_data: `restart|lang:${lang}` }],
-            [{ text: isRu ? 'Изменить язык' : 'Change Language', callback_data: 'change_lang' }],
+            [{ text: isRu ? '🔄 Начать заново' : '🔄 Start Over', callback_data: `restart|lang:${lang}` }],
+            [{ text: isRu ? '🌐 Изменить язык' : '🌐 Change Language', callback_data: 'change_lang' }],
           ],
         },
       };

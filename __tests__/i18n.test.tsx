@@ -5,6 +5,8 @@ import RoutePage from '../app/twa/[routeId]/page';
 import RouteIntroCard from '../components/RouteIntroCard';
 import StopCard from '../components/StopCard';
 import { LanguageProvider, getLocalizedRoute, getLocalizedStop } from '../lib/i18n/LanguageContext';
+import { TRANSLATIONS } from '../lib/i18n/translations';
+import { EMOJI } from './support/emojiPattern';
 import { ROUTES } from '../lib/data/routes';
 
 vi.mock('next/navigation', () => ({
@@ -16,6 +18,20 @@ vi.mock('next/navigation', () => ({
     push: vi.fn(),
   })),
 }));
+
+/**
+ * Translators handle words, never pictures: a glyph is chosen at the render site from
+ * the icon vocabulary, so no string carries one through i18n in either language.
+ */
+describe('Translated copy is plain text', () => {
+  it.each(['en', 'ru'] as const)('carries no emoji character in any %s value', (language) => {
+    const offenders = Object.entries(TRANSLATIONS[language])
+      .filter(([, value]) => EMOJI.test(value))
+      .map(([key, value]) => `${key}: ${value}`);
+
+    expect(offenders).toEqual([]);
+  });
+});
 
 describe('TWA Internationalization (Russian Support)', () => {
   const sampleRoute = ROUTES[0]; // 'old-tbilisi-heartbeat'

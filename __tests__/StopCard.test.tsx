@@ -416,4 +416,48 @@ describe('StopCard Component', () => {
       expect(screen.getByTestId('logistics-warning').querySelector('svg')).toBeInTheDocument();
     });
   });
+
+  describe('Venue kind icon', () => {
+    const renderVenue = (
+      category: VenueStop['venueDetails']['category'],
+      language: 'en' | 'ru' = 'en'
+    ) =>
+      render(
+        <LanguageProvider initialLanguage={language}>
+          <StopCard
+            stop={{ ...venueStep6, venueDetails: { ...venueStep6.venueDetails, category } }}
+            totalStops={6}
+          />
+        </LanguageProvider>
+      );
+
+    const badge = () => screen.getByTestId('venue-category-cuisine');
+
+    it.each([
+      ['cafe', 'Cafe', 'Кафе'],
+      ['restaurant', 'Restaurant', 'Ресторан'],
+      ['bar', 'Bar', 'Бар'],
+      ['wine_bar', 'Wine bar', 'Винный бар'],
+    ] as const)('draws the %s icon beside plain translated words', (category, en, ru) => {
+      const { unmount } = renderVenue(category);
+      expect(badge()).toHaveTextContent(en);
+      expect(badge().querySelector('svg')).toBeInTheDocument();
+      unmount();
+
+      renderVenue(category, 'ru');
+      expect(badge()).toHaveTextContent(ru);
+      expect(badge().querySelector('svg')).toBeInTheDocument();
+    });
+
+    it('gives each venue kind its own picture', () => {
+      const drawn = (['cafe', 'restaurant', 'bar', 'wine_bar'] as const).map((category) => {
+        const { unmount } = renderVenue(category);
+        const markup = badge().querySelector('svg')!.innerHTML;
+        unmount();
+        return markup;
+      });
+
+      expect(new Set(drawn).size).toBe(drawn.length);
+    });
+  });
 });

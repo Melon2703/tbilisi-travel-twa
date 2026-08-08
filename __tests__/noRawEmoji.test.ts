@@ -1,12 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { EMOJI } from './support/emojiPattern';
 
 /**
- * The project ships no emoji at all — not in markup, not in a prop, not inside a
- * translation string or a Telegram message. A picture is chosen by name from the
- * vocabulary in `components/ui/EmojiIcon`, which is the only place a glyph is
- * decided, and where it is a `react-icons` component rather than a character.
+ * The project ships no emoji anywhere it has markup to hang an icon on — not in a
+ * component, not in a prop, not inside a translation string. A picture is chosen by
+ * name from the vocabulary in `components/ui/EmojiIcon`, which is the only place a
+ * glyph is decided, and where it is a `react-icons` component rather than a character.
+ *
+ * The Telegram bot is the exception, and the only one: a bot message is text, so an
+ * icon cannot be drawn into it and the emoji stays.
  */
 
 const ROOT = join(__dirname, '..');
@@ -14,13 +18,8 @@ const ROOT = join(__dirname, '..');
 /** Every directory this project's own code lives in. */
 const SCANNED_DIRS = ['components', 'app', 'lib', '__tests__'];
 
-/**
- * Pictographs, plus the dingbat, symbol and emoji-arrow blocks. Deliberately
- * excludes the plain arrows (U+2190–U+2193) and geometric shapes that prose and
- * diagrams use as punctuation.
- */
-const EMOJI =
-  /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{2194}-\u{2199}\u{21A9}-\u{21AA}\u{231A}-\u{23FA}\u{FE0F}\u{2122}\u{2139}\u{24C2}\u{2934}\u{2935}\u{3030}\u{303D}]/u;
+/** The surfaces with no markup of their own, where an emoji is the only picture available. */
+const TEXT_ONLY_SURFACES = ['lib/engine/bot.ts', '__tests__/bot.test.ts'];
 
 function sourceFiles(dir: string): string[] {
   const found: string[] = [];
@@ -44,6 +43,7 @@ describe('icon vocabulary', () => {
     for (const dir of SCANNED_DIRS) {
       for (const file of sourceFiles(dir)) {
         const rel = relative(ROOT, file).split('\\').join('/');
+        if (TEXT_ONLY_SURFACES.includes(rel)) continue;
 
         readFileSync(file, 'utf8')
           .split('\n')
@@ -56,5 +56,11 @@ describe('icon vocabulary', () => {
     }
 
     expect(offenders).toEqual([]);
+  });
+
+  /* The exemption is a deliberate carve-out, not a hole: if the bot ever loses its
+     emoji, that is a regression in the one place a picture cannot be drawn. */
+  it('keeps the emoji in the Telegram bot, which has no markup to draw an icon in', () => {
+    expect(EMOJI.test(readFileSync(join(ROOT, 'lib/engine/bot.ts'), 'utf8'))).toBe(true);
   });
 });

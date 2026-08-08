@@ -349,19 +349,23 @@ export default function RouteCatalog({
                     {/*
                       A full-width row of its own: the label changes with progress, its
                       geometry never does, and the reached Stop gets the whole card width
-                      to be named in.
+                      to be named in. The arrow is drawn beside whichever label lands, and
+                      before any label does, so entry always points the same way.
                     */}
                     <span
                       data-testid={`route-cta-${route.id}`}
                       className="text-[#C4572A] transition-transform flex items-center justify-end gap-1 font-bold min-h-[48px] w-full truncate whitespace-nowrap text-right"
                     >
-                      {progressPositions === null
-                        ? null
-                        : routeEntryCtaLabel(
-                          t,
-                          resumedStop ? getLocalizedStop(resumedStop).name : null,
-                          'viewRoute'
-                        )}
+                      <span className="truncate">
+                        {progressPositions === null
+                          ? null
+                          : routeEntryCtaLabel(
+                            t,
+                            resumedStop ? getLocalizedStop(resumedStop).name : null,
+                            'viewRoute'
+                          )}
+                      </span>
+                      <EmojiIcon name="arrowRight" size="xs" />
                     </span>
                   </div>
                 </div>
