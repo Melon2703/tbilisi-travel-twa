@@ -413,7 +413,7 @@ describe('StopCard Component', () => {
       expect(logisticsCallout?.className).toContain('border-l-4');
       expect(storyCallout?.className).toContain('bg-[#F3EFEA]');
       expect(logisticsCallout?.className).not.toContain('bg-[#F3EFEA]');
-      expect(screen.getByTestId('logistics-warning')).toHaveTextContent('⚠️');
+      expect(screen.getByTestId('logistics-warning').querySelector('svg')).toBeInTheDocument();
     });
   });
 });

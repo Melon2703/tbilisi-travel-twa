@@ -9,39 +9,69 @@ import Callout from '@/components/ui/Callout';
 
 describe('Common UI Components & Emoji System', () => {
   describe('EmojiIcon Component', () => {
-    it('renders the correct emoji for valid icon names', () => {
-      render(<EmojiIcon name="mapPin" data-testid="map-pin-emoji" />);
-      const element = screen.getByTestId('map-pin-emoji');
+    it('draws a real icon glyph, not an emoji character', () => {
+      render(<EmojiIcon name="mapPin" data-testid="map-pin-icon" />);
+      const element = screen.getByTestId('map-pin-icon');
       expect(element).toBeInTheDocument();
-      expect(element.textContent).toBe('📍');
+      expect(element.querySelector('svg')).toBeInTheDocument();
+      expect(element.textContent).toBe('');
     });
 
-    it('renders fallback or direct emoji when raw string is passed', () => {
-      render(<EmojiIcon name="🚶" data-testid="raw-emoji" />);
+    it('draws a distinct glyph for each name', () => {
+      render(
+        <>
+          <EmojiIcon name="mapPin" data-testid="a" />
+          <EmojiIcon name="clock" data-testid="b" />
+        </>
+      );
+      expect(screen.getByTestId('a').innerHTML).not.toBe(
+        screen.getByTestId('b').innerHTML
+      );
+    });
+
+    it('falls back to rendering the raw string for an unknown name', () => {
+      render(<EmojiIcon name="🚶‍♀️" data-testid="raw-emoji" />);
       const element = screen.getByTestId('raw-emoji');
-      expect(element.textContent).toBe('🚶');
+      expect(element.querySelector('svg')).toBeNull();
+      expect(element.textContent).toBe('🚶‍♀️');
     });
 
     it('supports aria-hidden by default for visual icons', () => {
-      render(<EmojiIcon name="clock" data-testid="clock-emoji" />);
-      const element = screen.getByTestId('clock-emoji');
+      render(<EmojiIcon name="clock" data-testid="clock-icon" />);
+      const element = screen.getByTestId('clock-icon');
       expect(element).toHaveAttribute('aria-hidden', 'true');
+      expect(element.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
     });
 
-    it('defines all required application icon mappings', () => {
-      expect(EMOJI_ICONS.mapPin).toBe('📍');
-      expect(EMOJI_ICONS.footprints).toBe('🚶');
-      expect(EMOJI_ICONS.funicular).toBe('🚠');
-      expect(EMOJI_ICONS.clock).toBe('⏱️');
-      expect(EMOJI_ICONS.chat).toBe('💬');
-      expect(EMOJI_ICONS.camera).toBe('📸');
-      expect(EMOJI_ICONS.warning).toBe('⚠️');
-      expect(EMOJI_ICONS.arrowRight).toBe('➡️');
-      expect(EMOJI_ICONS.check).toBe('✅');
-      expect(EMOJI_ICONS.close).toBe('✖️');
-      expect(EMOJI_ICONS.googleMaps).toBe('🗺️');
-      expect(EMOJI_ICONS.yandexMaps).toBe('🔴');
-      expect(EMOJI_ICONS.star).toBe('⭐');
+    it('exposes an accessible label when one is given', () => {
+      render(<EmojiIcon name="star" ariaLabel="Rating" data-testid="star-icon" />);
+      const element = screen.getByTestId('star-icon');
+      expect(element).toHaveAttribute('role', 'img');
+      expect(element).toHaveAttribute('aria-label', 'Rating');
+      expect(element).not.toHaveAttribute('aria-hidden');
+    });
+
+    it('inherits currentColor and sizes from the text scale', () => {
+      render(<EmojiIcon name="star" size="lg" data-testid="star-icon" />);
+      const element = screen.getByTestId('star-icon');
+      expect(element).toHaveClass('text-lg');
+      const svg = element.querySelector('svg')!;
+      // Line icons paint with stroke, solid ones with fill — either way the
+      // colour comes from the surrounding text, never from the icon itself.
+      expect([svg.getAttribute('stroke'), svg.getAttribute('fill')]).toContain(
+        'currentColor'
+      );
+      expect(svg).toHaveAttribute('height', '1em');
+      expect(svg).toHaveAttribute('width', '1em');
+    });
+
+    it('renders an icon for every name in the vocabulary', () => {
+      const names = Object.keys(EMOJI_ICONS);
+      expect(names.length).toBeGreaterThan(0);
+      for (const name of names) {
+        const { container } = render(<EmojiIcon name={name} />);
+        expect(container.querySelector('svg')).not.toBeNull();
+      }
     });
   });
 
@@ -73,7 +103,7 @@ describe('Common UI Components & Emoji System', () => {
         </Button>
       );
       expect(screen.getByRole('button')).toHaveTextContent('Start Route');
-      expect(screen.getByRole('button')).toHaveTextContent('➡️');
+      expect(screen.getByRole('button').querySelector('svg')).toBeInTheDocument();
     });
   });
 
@@ -84,8 +114,9 @@ describe('Common UI Components & Emoji System', () => {
           Great view of the city!
         </Callout>
       );
-      expect(screen.getByText("Olya's Tip")).toBeInTheDocument();
-      expect(screen.getByText('💬')).toBeInTheDocument();
+      const title = screen.getByText("Olya's Tip");
+      expect(title).toBeInTheDocument();
+      expect(title.parentElement?.querySelector('svg')).toBeInTheDocument();
       expect(screen.getByText('Great view of the city!')).toBeInTheDocument();
     });
   });

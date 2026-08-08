@@ -77,6 +77,9 @@ For bright sunlight outdoor visibility:
 #### Letter Spacing (Tracking)
 - `badge`: `0.06em` (`uppercase tracking-[0.06em]` for tiny 11px status/order badges)
 
+#### Icons
+Icons are named, never drawn as emoji characters. `components/ui/EmojiIcon.tsx` maps each name in the vocabulary (`mapPin`, `clock`, `warning`, `directive`, …) to a `react-icons` glyph. A glyph draws at `1em` in `currentColor`, so it takes its size from the `xs`–`xl` scale above and its colour from the surrounding text — including the tinted icon tiles, which set the colour on the wrapper.
+
 ---
 
 ### 2.3 Spacing (8px Grid System)
@@ -132,16 +135,16 @@ Every **Stop Card** renders on a continuous scroll surface without accordions. A
 │ 3. ACT BLOCK (fixed zone, directly beneath the title)   │
 │    - Google Rating (only when Google resolves one)      │
 │    - Map Links (Google / Yandex, website, Instagram)    │
-│    - Venue category & cuisine, 🌱 Veggie Friendly       │
+│    - Venue category & cuisine, Veggie Friendly          │
 │    - Working hours, transit step                        │
 │    - Recommended dishes, booking advice, photo spot     │
-│    - 🧭 Stop Directive      ─┐ advisory surface         │
-│    - ⚠️ Logistics Warning   ─┘                          │
+│    - [directive] Stop Directive   ─┐ advisory surface   │
+│    - [warning] Logistics Warning  ─┘                    │
 ├─────────────────────────── divider ─────────────────────┤
 │ 4. STORY LAYER (never truncated or behind a tap)        │
-│    - 🏛️ Historical overview                             │
-│    - 💡 Fun fact                                        │
-│    - 💬 Olya's tip                                      │
+│    - [landmark] Historical overview                     │
+│    - [bulb] Fun fact                                    │
+│    - [chat] Olya's tip                                  │
 └─────────────────────────────────────────────────────────┘
 ```
 
