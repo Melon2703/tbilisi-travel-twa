@@ -253,14 +253,17 @@ export default function RouteIntroCard({
             {t('logisticsTerrainTitle')}
           </h3>
           <div className="flex flex-wrap gap-2 text-xs">
-            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium">
-              🏷️ {t(route.accessibility as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.accessibility.replace('-', ' ')}
+            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium inline-flex items-center gap-1">
+              <EmojiIcon name="tag" />
+              {t(route.accessibility as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.accessibility.replace('-', ' ')}
             </span>
-            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium">
-              ⏱️ {t(route.durationCategory as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.durationCategory}
+            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium inline-flex items-center gap-1">
+              <EmojiIcon name="clock" />
+              {t(route.durationCategory as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.durationCategory}
             </span>
-            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium">
-              👟 ~{approxKm} km
+            <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium inline-flex items-center gap-1">
+              <EmojiIcon name="footprints" />
+              <span>~{approxKm} km</span>
             </span>
           </div>
 

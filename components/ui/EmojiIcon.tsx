@@ -22,6 +22,13 @@ import {
   LuLightbulb,
   LuUtensils,
   LuGlobe,
+  LuMap,
+  LuTarget,
+  LuRotateCcw,
+  LuImages,
+  LuCoffee,
+  LuTag,
+  LuFlagTriangleRight,
 } from 'react-icons/lu';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaInstagram } from 'react-icons/fa6';
@@ -56,9 +63,21 @@ export const EMOJI_ICONS = {
   utensils: LuUtensils,
   globe: LuGlobe,
   instagram: FaInstagram,
+  map: LuMap,
+  // Distinct from `georgiaFlag`: a Route's start marker and a country badge sit
+  // on the same screen, so they must not resolve to the same picture.
+  start: LuFlagTriangleRight,
+  finish: LuTarget,
+  reset: LuRotateCcw,
+  gallery: LuImages,
+  pitstop: LuCoffee,
+  tag: LuTag,
 } as const satisfies Record<string, IconType>;
 
-export type EmojiIconName = keyof typeof EMOJI_ICONS | (string & {});
+/** A name the vocabulary actually knows — the only thing a caller should pass. */
+export type KnownEmojiIconName = keyof typeof EMOJI_ICONS;
+
+export type EmojiIconName = KnownEmojiIconName | (string & {});
 
 export interface EmojiIconProps extends React.HTMLAttributes<HTMLSpanElement> {
   name: EmojiIconName;

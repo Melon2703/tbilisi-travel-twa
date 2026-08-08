@@ -2,6 +2,7 @@
 
 import React, { useId } from 'react';
 import { NO_CONSTRAINT, type NoConstraint } from '@/lib/engine/catalogFilters';
+import EmojiIcon, { type KnownEmojiIconName } from '@/components/ui/EmojiIcon';
 
 /**
  * Every catalog filter is a Soft Constraint — a preference, dressed as a pill that reads
@@ -27,7 +28,8 @@ export interface FilterChipOption<T extends string> {
 export interface FilterChipGroupProps<T extends string> {
   /** Prefix for this group's test ids: `<testIdPrefix>-filter-group`, `-filter-<value>`. */
   testIdPrefix: string;
-  icon: string;
+  /** A name from the icon vocabulary, never a glyph — a stray emoji fails to compile. */
+  icon: KnownEmojiIconName;
   label: string;
   unconstrainedLabel: string;
   options: FilterChipOption<T>[];
@@ -54,7 +56,7 @@ export default function FilterChipGroup<T extends string>({
       className="space-y-1.5"
     >
       <p id={labelId} className="text-xs font-bold flex items-center gap-1 text-[#7A6552]">
-        <span aria-hidden="true">{icon}</span> {label}
+        <EmojiIcon name={icon} /> {label}
       </p>
 
       <div className="flex flex-wrap gap-2">

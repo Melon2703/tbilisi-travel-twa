@@ -231,7 +231,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
                 data-testid="photo-count-badge"
                 className="backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-white px-2.5 py-1.5 rounded-full font-semibold flex items-center gap-1 border border-white/20 shadow-xs"
               >
-                🖼️ 1/{galleryImages.length}
+                <EmojiIcon name="gallery" size="xs" />1/{galleryImages.length}
               </span>
             )}
             <span className="backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-white px-3 py-1.5 rounded-full font-semibold flex items-center gap-1.5 border border-white/20 shadow-xs">
@@ -260,7 +260,8 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           </p>
           {isPitstop && (
             <Badge variant="subtle" data-testid="pitstop-badge" className="normal-case tracking-normal">
-              ☕ {t('pitstop')}
+              <EmojiIcon name="pitstop" />
+              {t('pitstop')}
             </Badge>
           )}
         </div>
@@ -313,8 +314,12 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
             className="flex items-center gap-1.5 text-xs font-medium"
             style={{ color: COLORS.textSecondary }}
           >
-            <span className="font-bold text-sm" style={{ color: COLORS.terracottaAccent }}>
-              ★ {rating.rating.toFixed(1)}
+            <span
+              className="font-bold text-sm inline-flex items-center gap-1"
+              style={{ color: COLORS.terracottaAccent }}
+            >
+              <EmojiIcon name="star" size="sm" />
+              {rating.rating.toFixed(1)}
             </span>
             <span> ({rating.count.toLocaleString()} reviews on Google)</span>
           </div>

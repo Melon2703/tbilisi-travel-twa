@@ -102,7 +102,7 @@ describe('RouteCarousel Component', () => {
 
       await waitFor(() =>
         expect(screen.getByTestId('google-rating-badge')).toHaveTextContent(
-          /★ 4\.6 \(8,520 reviews on Google\)/
+          /4\.6 \(8,520 reviews on Google\)/
         )
       );
 
@@ -134,7 +134,7 @@ describe('RouteCarousel Component', () => {
 
       await waitFor(() =>
         expect(screen.getByTestId('google-rating-badge')).toHaveTextContent(
-          /★ 4\.9 \(1,204 reviews on Google\)/
+          /4\.9 \(1,204 reviews on Google\)/
         )
       );
 

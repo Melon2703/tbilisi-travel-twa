@@ -196,9 +196,9 @@ describe('RouteIntroCard Component', () => {
     expect(screen.queryByTestId('map-control-reset')).not.toBeInTheDocument();
     expect(screen.queryByTestId('map-stop-popover')).not.toBeInTheDocument();
     // The connector conveys sequence, never a walkable path (ADR 0005). Scoped
-    // to the map itself — icons elsewhere on the card are drawn as SVG too.
+    // to the map canvas — the header's named icon is drawn as an SVG path too.
     expect(
-      screen.getByTestId('route-overview-map').querySelector('svg path')
+      screen.getByTestId('map-tile-container').querySelector('svg path')
     ).not.toBeInTheDocument();
     expect(screen.getByTestId('map-sequence-connector')).toBeInTheDocument();
   });

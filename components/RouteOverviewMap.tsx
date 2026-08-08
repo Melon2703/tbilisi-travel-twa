@@ -4,6 +4,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import RouteSequenceConnector from '@/components/RouteSequenceConnector';
+import EmojiIcon from '@/components/ui/EmojiIcon';
 import { buildTileGrid, frameStops, projectCoordinates } from '@/lib/utils/mapFraming';
 
 export interface RouteOverviewMapProps {
@@ -97,7 +98,7 @@ export default function RouteOverviewMap({
       {/* ── Header Bar ── */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-sm">🗺️</span>
+          <EmojiIcon name="map" size="sm" />
           <h3 className="text-xs font-bold text-[#C4572A]">
             {t('overviewMapTitle')}
           </h3>

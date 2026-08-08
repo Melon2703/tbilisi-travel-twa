@@ -80,6 +80,10 @@ For bright sunlight outdoor visibility:
 #### Icons
 Icons are named, never drawn as emoji characters. `components/ui/EmojiIcon.tsx` maps each name in the vocabulary (`mapPin`, `clock`, `warning`, `directive`, …) to a `react-icons` glyph. A glyph draws at `1em` in `currentColor`, so it takes its size from the `xs`–`xl` scale above and its colour from the surrounding text — including the tinted icon tiles, which set the colour on the wrapper.
 
+No component types a glyph into its own markup: a picture is chosen by name, and a name missing from the vocabulary is added to it. `__tests__/noRawEmoji.test.ts` scans `components/` and `app/` and fails on any raw emoji character. A prop that names an icon is typed `KnownEmojiIconName`, so passing a glyph where a name belongs fails to compile. Icons are decorative by default — hidden from assistive tech unless given an `ariaLabel`, which the surrounding button's own label usually makes unnecessary.
+
+Translation strings under `lib/i18n/` are not yet covered: a few still carry a glyph inside the sentence itself, and moving those into markup is a separate change.
+
 ---
 
 ### 2.3 Spacing (8px Grid System)

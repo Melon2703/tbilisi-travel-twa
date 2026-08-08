@@ -346,8 +346,9 @@ export default function RouteMapModal({
               {/* Start Badge */}
               {isStart && (
                 <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 pointer-events-none whitespace-nowrap z-40">
-                  <span className="bg-[#228255] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white/40">
-                    🏁 {t('startPoint')}
+                  <span className="bg-[#228255] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white/40 inline-flex items-center gap-1">
+                    <EmojiIcon name="start" />
+                    {t('startPoint')}
                   </span>
                 </div>
               )}
@@ -355,8 +356,9 @@ export default function RouteMapModal({
               {/* Finish Badge */}
               {isEnd && (
                 <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 pointer-events-none whitespace-nowrap z-40">
-                  <span className="bg-[#C4572A] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white/40">
-                    🎯 {t('finishPoint')}
+                  <span className="bg-[#C4572A] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white/40 inline-flex items-center gap-1">
+                    <EmojiIcon name="finish" />
+                    {t('finishPoint')}
                   </span>
                 </div>
               )}
@@ -397,7 +399,7 @@ export default function RouteMapModal({
             className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-lg shadow-md flex items-center justify-center active:scale-95 transition-all cursor-pointer"
             aria-label="Close map modal"
           >
-            ✕
+            <EmojiIcon name="close" />
           </button>
           <button
             type="button"
@@ -424,7 +426,7 @@ export default function RouteMapModal({
             className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-md border border-black/15 text-black font-extrabold text-sm shadow-md flex items-center justify-center active:scale-95 transition-all cursor-pointer"
             aria-label="Reset View"
           >
-            ↺
+            <EmojiIcon name="reset" />
           </button>
         </div>
 
@@ -482,7 +484,7 @@ export default function RouteMapModal({
                 className="w-7 h-7 rounded-full bg-black/5 text-[#7A6552] font-bold flex items-center justify-center transition-all shrink-0 cursor-pointer"
                 aria-label="Dismiss stop details"
               >
-                ✕
+                <EmojiIcon name="close" />
               </button>
             </div>
 
@@ -499,7 +501,7 @@ export default function RouteMapModal({
                   aria-label="Open in Google Maps"
                   className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#C4572A] text-white transition-all flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer"
                 >
-                  <span>📍</span>
+                  <EmojiIcon name="mapPin" />
                   <span>Google</span>
                 </a>
                 <a
@@ -509,7 +511,7 @@ export default function RouteMapModal({
                   aria-label="Open in Yandex Maps"
                   className="px-4 py-2 rounded-xl text-xs font-extrabold bg-white text-[#C4572A] border border-[#C4572A]/30 transition-all flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer"
                 >
-                  <span>📍</span>
+                  <EmojiIcon name="mapPin" />
                   <span>Yandex</span>
                 </a>
               </div>

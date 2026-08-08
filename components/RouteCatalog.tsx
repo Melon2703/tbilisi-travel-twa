@@ -149,7 +149,7 @@ export default function RouteCatalog({
                 : 'bg-[#C4572A] text-white active:scale-95'
               }`}
           >
-            <span>📍</span>
+            <EmojiIcon name="mapPin" />
             <span>
               {isLocating
                 ? t('locating')
@@ -173,7 +173,7 @@ export default function RouteCatalog({
         */}
         <FilterChipGroup
           testIdPrefix="duration"
-          icon="⏱️"
+          icon="clock"
           label={language === 'ru' ? 'Длительность' : 'Duration'}
           unconstrainedLabel={t('allDurations')}
           options={durationOptions}
@@ -183,7 +183,7 @@ export default function RouteCatalog({
 
         <FilterChipGroup
           testIdPrefix="vibe"
-          icon="✨"
+          icon="sparkles"
           label={language === 'ru' ? 'Атмосфера' : 'Vibe'}
           unconstrainedLabel={t('allVibes')}
           options={vibeOptions}
@@ -341,7 +341,8 @@ export default function RouteCatalog({
                           data-testid="route-distance-badge"
                           className="flex items-center gap-0.5 text-[#228255] font-bold"
                         >
-                          📍 {distanceKm} km
+                          <EmojiIcon name="mapPin" size="xs" />
+                          {distanceKm} km
                         </span>
                       )}
                     </div>

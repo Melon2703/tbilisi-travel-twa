@@ -605,7 +605,7 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       const pitstopBadge = screen.getByTestId('pitstop-badge');
       expect(pitstopBadge).toBeInTheDocument();
-      expect(pitstopBadge).toHaveTextContent('☕ Pitstop');
+      expect(pitstopBadge).toHaveTextContent('Pitstop');
     });
 
     it('renders transit step badge on AttractionStop', () => {
@@ -672,7 +672,7 @@ describe('TWA Timeline & Card Feed UI', () => {
       render(<StopCard stop={mockMultiPhotoStop} isLast={false} totalStops={1} />);
       const badge = screen.getByTestId('photo-count-badge');
       expect(badge).toBeInTheDocument();
-      expect(badge).toHaveTextContent('🖼️ 1/3');
+      expect(badge).toHaveTextContent('1/3');
     });
 
     it('opens full-screen LightboxModal when hero image is clicked', () => {
