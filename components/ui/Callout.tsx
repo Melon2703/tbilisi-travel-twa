@@ -1,10 +1,10 @@
 import React from 'react';
 import Card from './Card';
-import EmojiIcon, { EmojiIconName } from './EmojiIcon';
+import EmojiIcon, { KnownEmojiIconName } from './EmojiIcon';
 
 export interface CalloutProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  emoji?: EmojiIconName;
+  emoji?: KnownEmojiIconName;
   title: string;
   variant?: 'default' | 'warning' | 'tip';
   className?: string;

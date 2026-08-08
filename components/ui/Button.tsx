@@ -1,10 +1,10 @@
 import React from 'react';
-import EmojiIcon, { EmojiIconName } from './EmojiIcon';
+import EmojiIcon, { KnownEmojiIconName } from './EmojiIcon';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'outline' | 'visited';
-  emoji?: EmojiIconName;
+  emoji?: KnownEmojiIconName;
   emojiPosition?: 'left' | 'right';
   className?: string;
 }

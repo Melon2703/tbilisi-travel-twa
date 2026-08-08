@@ -89,7 +89,6 @@ describe('RouteCarousel Component', () => {
 
       expect(screen.queryByTestId('google-rating-badge')).not.toBeInTheDocument();
       expect(screen.queryByText(/reviews on Google/i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/★/)).not.toBeInTheDocument();
     });
 
     it('renders a real rating with its review count', async () => {

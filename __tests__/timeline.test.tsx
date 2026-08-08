@@ -325,14 +325,15 @@ describe('TWA Timeline & Card Feed UI', () => {
       const googleLink = screen.getByRole('link', { name: /Google Maps/i });
       const yandexLink = screen.getByRole('link', { name: /Yandex Maps/i });
 
-      // Minimalist icon-only map buttons have title/aria-label but no rating numbers or star icons inside
+      // Minimalist icon-only map buttons: the accessible name lives on the link,
+      // and nothing — rating, star, label — is written inside it.
       expect(googleLink).toHaveAttribute('aria-label', 'Open in Google Maps');
       expect(googleLink).not.toHaveTextContent('4.7');
-      expect(googleLink).not.toHaveTextContent('★');
+      expect(googleLink.textContent?.trim()).toBe('');
 
       expect(yandexLink).toHaveAttribute('aria-label', 'Open in Yandex Maps');
       expect(yandexLink).not.toHaveTextContent('4.7');
-      expect(yandexLink).not.toHaveTextContent('★');
+      expect(yandexLink.textContent?.trim()).toBe('');
     });
 
     it('renders Visited badge on the right when isVisited is true and not inside the title', () => {
@@ -567,15 +568,15 @@ describe('TWA Timeline & Card Feed UI', () => {
 
       const categoryCuisine = screen.getByTestId('venue-category-cuisine');
       expect(categoryCuisine).toBeInTheDocument();
-      expect(categoryCuisine).toHaveTextContent('☕ Cafe • Georgian, European');
+      expect(categoryCuisine).toHaveTextContent('Cafe • Georgian, European');
     });
 
-    it('renders 🌱 Veggie Friendly badge when isVegetarianFriendly is true', () => {
+    it('renders the Veggie Friendly badge when isVegetarianFriendly is true', () => {
       render(<StopCard stop={mockVenueStop} isLast={false} totalStops={2} />);
 
       const veggieBadge = screen.getByTestId('veggie-friendly-badge');
       expect(veggieBadge).toBeInTheDocument();
-      expect(veggieBadge).toHaveTextContent('🌱 Veggie Friendly');
+      expect(veggieBadge).toHaveTextContent('Veggie Friendly');
     });
 
     it('renders recommended food items for VenueStop as unbordered vertical bulleted text list', () => {

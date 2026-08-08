@@ -29,11 +29,11 @@ describe('Common UI Components & Emoji System', () => {
       );
     });
 
-    it('falls back to rendering the raw string for an unknown name', () => {
-      render(<EmojiIcon name="🚶‍♀️" data-testid="raw-emoji" />);
-      const element = screen.getByTestId('raw-emoji');
-      expect(element.querySelector('svg')).toBeNull();
-      expect(element.textContent).toBe('🚶‍♀️');
+    it('writes no text of its own — a name always resolves to a drawn glyph', () => {
+      render(<EmojiIcon name="mapPin" data-testid="drawn" />);
+      const element = screen.getByTestId('drawn');
+      expect(element.querySelector('svg')).not.toBeNull();
+      expect(element.textContent).toBe('');
     });
 
     it('supports aria-hidden by default for visual icons', () => {
@@ -66,7 +66,7 @@ describe('Common UI Components & Emoji System', () => {
     });
 
     it('renders an icon for every name in the vocabulary', () => {
-      const names = Object.keys(EMOJI_ICONS);
+      const names = Object.keys(EMOJI_ICONS) as (keyof typeof EMOJI_ICONS)[];
       expect(names.length).toBeGreaterThan(0);
       for (const name of names) {
         const { container } = render(<EmojiIcon name={name} />);

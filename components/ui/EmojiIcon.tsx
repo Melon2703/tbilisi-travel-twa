@@ -29,6 +29,7 @@ import {
   LuCoffee,
   LuTag,
   LuFlagTriangleRight,
+  LuLeaf,
 } from 'react-icons/lu';
 import { SiGooglemaps } from 'react-icons/si';
 import { FaYandex, FaInstagram } from 'react-icons/fa6';
@@ -72,15 +73,18 @@ export const EMOJI_ICONS = {
   gallery: LuImages,
   pitstop: LuCoffee,
   tag: LuTag,
+  leaf: LuLeaf,
 } as const satisfies Record<string, IconType>;
 
-/** A name the vocabulary actually knows — the only thing a caller should pass. */
+/**
+ * The vocabulary is closed: a name it doesn't know is a compile error, not a
+ * string that quietly reaches the screen. This is what keeps a stray glyph from
+ * arriving through a prop instead of through markup.
+ */
 export type KnownEmojiIconName = keyof typeof EMOJI_ICONS;
 
-export type EmojiIconName = KnownEmojiIconName | (string & {});
-
 export interface EmojiIconProps extends React.HTMLAttributes<HTMLSpanElement> {
-  name: EmojiIconName;
+  name: KnownEmojiIconName;
   className?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   ariaLabel?: string;
@@ -101,7 +105,7 @@ export default function EmojiIcon({
   ariaLabel,
   ...props
 }: EmojiIconProps) {
-  const Glyph = (EMOJI_ICONS as Record<string, IconType | undefined>)[name];
+  const Glyph = EMOJI_ICONS[name];
   const sizeClass = size ? SIZE_MAP[size] : '';
 
   return (
@@ -114,7 +118,7 @@ export default function EmojiIcon({
     >
       {/* react-icons draws at 1em in currentColor, so the wrapper's text size
           and colour keep governing the icon exactly as they did the emoji. */}
-      {Glyph ? <Glyph aria-hidden="true" focusable="false" /> : name}
+      <Glyph aria-hidden="true" focusable="false" />
     </span>
   );
 }

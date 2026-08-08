@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Stop, VenueStop, AttractionStop, ProviderRating } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { buildGoogleMapLink, buildYandexMapLink, getPlaceIdentity } from '@/lib/utils/mapLinks';
-import EmojiIcon from '@/components/ui/EmojiIcon';
+import EmojiIcon, { type KnownEmojiIconName } from '@/components/ui/EmojiIcon';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 import { fetchPlaceRating } from '@/lib/services/places';
@@ -108,7 +108,7 @@ function formatCategoryCuisine(venueStop: VenueStop, t: (key: any) => string): s
 
 interface TextCalloutProps {
   testId: string;
-  emoji: string;
+  emoji: KnownEmojiIconName;
   title: string;
   text: string;
   variant?: 'default' | 'warning';
@@ -363,6 +363,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
             </span>
             {venueStop.venueDetails.isVegetarianFriendly && (
               <Badge variant="visited" data-testid="veggie-friendly-badge" className="normal-case tracking-normal text-xs font-semibold">
+                <EmojiIcon name="leaf" />
                 {t('veggieFriendly')}
               </Badge>
             )}

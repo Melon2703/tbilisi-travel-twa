@@ -143,8 +143,10 @@ describe('RouteIntroCard Component', () => {
     expect(logisticsNotes.className).toContain('border-0');
 
     const warningHeader = logisticsNotes.querySelector('p');
+    // The warning's picture is a named icon, so the header's text is the label
+    // and nothing else. `noRawEmoji` holds the no-glyph half of this.
     expect(warningHeader).toHaveTextContent('Logistics warning');
-    expect(warningHeader?.textContent).not.toContain('⚠️');
+    expect(warningHeader?.textContent?.trim()).toBe('Logistics warning');
   });
 
   it('6. RouteOverviewMap renders glassmorphism bottom bar with EN and RU translations', () => {
@@ -156,7 +158,7 @@ describe('RouteIntroCard Component', () => {
 
     const bottomBarEn = screen.getByTestId('tap-to-view-full-map-bar');
     expect(bottomBarEn).toBeInTheDocument();
-    expect(bottomBarEn).toHaveTextContent('Tap to view full map 🗺️');
+    expect(bottomBarEn).toHaveTextContent('Tap to view full map');
     expect(bottomBarEn.className).toContain('backdrop-blur-md');
 
     rerender(
@@ -166,7 +168,7 @@ describe('RouteIntroCard Component', () => {
     );
 
     const bottomBarRu = screen.getByTestId('tap-to-view-full-map-bar');
-    expect(bottomBarRu).toHaveTextContent('Нажмите, чтобы открыть карту 🗺️');
+    expect(bottomBarRu).toHaveTextContent('Нажмите, чтобы открыть карту');
   });
 
   it('7. Tapping anywhere on preview map container triggers full map modal', () => {
@@ -196,9 +198,9 @@ describe('RouteIntroCard Component', () => {
     expect(screen.queryByTestId('map-control-reset')).not.toBeInTheDocument();
     expect(screen.queryByTestId('map-stop-popover')).not.toBeInTheDocument();
     // The connector conveys sequence, never a walkable path (ADR 0005). Scoped
-    // to the map canvas — the header's named icon is drawn as an SVG path too.
+    // to the connector itself — the card's named icons are SVG paths too.
     expect(
-      screen.getByTestId('map-tile-container').querySelector('svg path')
+      screen.getByTestId('map-sequence-connector').querySelector('path')
     ).not.toBeInTheDocument();
     expect(screen.getByTestId('map-sequence-connector')).toBeInTheDocument();
   });
