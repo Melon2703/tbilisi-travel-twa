@@ -6,7 +6,7 @@ import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import type { TranslationKey } from '@/lib/i18n/translations';
 import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
-import EmojiIcon from '@/components/ui/EmojiIcon';
+import Icon from '@/components/ui/Icon';
 import Button from '@/components/ui/Button';
 import RouteOverviewMap from '@/components/RouteOverviewMap';
 import RouteMapModal from '@/components/RouteMapModal';
@@ -205,7 +205,7 @@ export default function RouteIntroCard({
                 className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-[#C4572A]"
                 style={{ background: 'rgba(196,87,42,0.1)' }}
               >
-                <EmojiIcon name="mapPin" size="md" />
+                <Icon name="mapPin" size="md" />
               </div>
               <div>
                 <p className="text-sm font-bold leading-none text-[#1C1008]">
@@ -220,7 +220,7 @@ export default function RouteIntroCard({
                 className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-[#7A6552]"
                 style={{ background: 'rgba(28,16,8,0.06)' }}
               >
-                <EmojiIcon name="footprints" size="md" />
+                <Icon name="footprints" size="md" />
               </div>
               <div>
                 <p className="text-sm font-bold leading-none text-[#1C1008]">~{approxKm} km</p>
@@ -233,7 +233,7 @@ export default function RouteIntroCard({
                 className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-[#7A6552]"
                 style={{ background: 'rgba(28,16,8,0.06)' }}
               >
-                <EmojiIcon name="funicular" size="md" />
+                <Icon name="funicular" size="md" />
               </div>
               <div>
                 <p className="text-sm font-bold leading-none text-[#1C1008]">{transitModeStr}</p>
@@ -254,15 +254,15 @@ export default function RouteIntroCard({
           </h3>
           <div className="flex flex-wrap gap-2 text-xs">
             <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium inline-flex items-center gap-1">
-              <EmojiIcon name="tag" />
+              <Icon name="tag" />
               {t(route.accessibility as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.accessibility.replace('-', ' ')}
             </span>
             <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium inline-flex items-center gap-1">
-              <EmojiIcon name="clock" />
+              <Icon name="clock" />
               {t(route.durationCategory as keyof typeof import('@/lib/i18n/translations').TRANSLATIONS.en) || route.durationCategory}
             </span>
             <span className="px-3 py-1 rounded-full bg-[#FAF7F2] text-[#1C1008] border border-black/10 font-medium inline-flex items-center gap-1">
-              <EmojiIcon name="footprints" />
+              <Icon name="footprints" />
               <span>~{approxKm} km</span>
             </span>
           </div>
@@ -300,7 +300,7 @@ export default function RouteIntroCard({
       {/* 6. Sticky Bottom CTA Button */}
       {showStartButton && (
         <div className="fixed bottom-4 left-4 right-4 max-w-2xl mx-auto z-30 pointer-events-auto">
-          <Button onClick={onStartRoute} emoji="arrowRight">
+          <Button onClick={onStartRoute} icon="arrowRight">
             {routeEntryCtaLabel(t, progressStopName)}
           </Button>
         </div>

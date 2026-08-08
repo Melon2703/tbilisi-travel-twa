@@ -6,7 +6,7 @@ import Callout from '@/components/ui/Callout';
 describe('Callout Component', () => {
   it('uses soft background tinting (#F3EFEA), rounded-2xl, border-0, generous padding and sentence case header', () => {
     render(
-      <Callout emoji="chat" title="Historical Overview">
+      <Callout icon="chat" title="Historical Overview">
         <p>Callout content</p>
       </Callout>
     );

@@ -5,7 +5,7 @@ import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import RouteCatalog from '@/components/RouteCatalog';
 import LanguageToggle from '@/components/LanguageToggle';
-import EmojiIcon from '@/components/ui/EmojiIcon';
+import Icon from '@/components/ui/Icon';
 
 export interface CatalogShellProps {
   routes: Route[];
@@ -25,7 +25,7 @@ export default function CatalogShell({ routes }: CatalogShellProps) {
       <header className="border-b border-[#C4572A]/15 bg-[#FAF7F2]/90 backdrop-blur-md sticky top-0 z-20">
         <div className="max-w-6xl mx-auto px-4 py-4 sm:px-6 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <EmojiIcon name="georgiaFlag" className="text-2xl" ariaLabel="Georgia Flag" />
+            <Icon name="georgiaFlag" className="text-2xl" ariaLabel="Georgia Flag" />
             <div className="min-w-0">
               <h1 className="text-lg sm:text-xl font-black tracking-tight text-[#1C1008] font-sans">
                 {t('headerTitle')}

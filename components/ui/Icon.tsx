@@ -42,7 +42,7 @@ import { FaYandex, FaInstagram } from 'react-icons/fa6';
  * from `react-icons`. Names outlive the glyph behind them — swapping an icon
  * here changes every call site at once and none of them by name.
  */
-export const EMOJI_ICONS = {
+export const ICONS = {
   mapPin: LuMapPin,
   footprints: LuFootprints,
   funicular: LuCableCar,
@@ -90,10 +90,10 @@ export const EMOJI_ICONS = {
  * string that quietly reaches the screen. This is what keeps a stray glyph from
  * arriving through a prop instead of through markup.
  */
-export type KnownEmojiIconName = keyof typeof EMOJI_ICONS;
+export type IconName = keyof typeof ICONS;
 
-export interface EmojiIconProps extends React.HTMLAttributes<HTMLSpanElement> {
-  name: KnownEmojiIconName;
+export interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
+  name: IconName;
   className?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   ariaLabel?: string;
@@ -107,14 +107,14 @@ const SIZE_MAP = {
   xl: 'text-xl',
 };
 
-export default function EmojiIcon({
+export default function Icon({
   name,
   className = '',
   size,
   ariaLabel,
   ...props
-}: EmojiIconProps) {
-  const Glyph = EMOJI_ICONS[name];
+}: IconProps) {
+  const Glyph = ICONS[name];
   const sizeClass = size ? SIZE_MAP[size] : '';
 
   return (
@@ -126,7 +126,7 @@ export default function EmojiIcon({
       {...props}
     >
       {/* react-icons draws at 1em in currentColor, so the wrapper's text size
-          and colour keep governing the icon exactly as they did the emoji. */}
+          and colour govern the glyph. */}
       <Glyph aria-hidden="true" focusable="false" />
     </span>
   );

@@ -6,7 +6,7 @@ import { EMOJI } from './support/emojiPattern';
 /**
  * The project ships no emoji anywhere it has markup to hang an icon on — not in a
  * component, not in a prop, not inside a translation string. A picture is chosen by
- * name from the vocabulary in `components/ui/EmojiIcon`, which is the only place a
+ * name from the vocabulary in `components/ui/Icon`, which is the only place a
  * glyph is decided, and where it is a `react-icons` component rather than a character.
  *
  * The Telegram bot is the exception, and the only one: a bot message is text, so an

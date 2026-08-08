@@ -6,7 +6,7 @@ import { Stop, VenueStop, VenueCategory, AttractionStop, ProviderRating } from '
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import type { TranslationKey } from '@/lib/i18n/translations';
 import { buildGoogleMapLink, buildYandexMapLink, getPlaceIdentity } from '@/lib/utils/mapLinks';
-import EmojiIcon, { type KnownEmojiIconName } from '@/components/ui/EmojiIcon';
+import Icon, { type IconName } from '@/components/ui/Icon';
 import Badge from '@/components/ui/Badge';
 import Callout from '@/components/ui/Callout';
 import { fetchPlaceRating } from '@/lib/services/places';
@@ -73,7 +73,7 @@ function ActionButtonLink({ href, ariaLabel, title, children }: ActionButtonLink
  * string, so both languages read the same badge. Exhaustive over `VenueCategory` — a
  * new kind is a compile error here, not a card that quietly loses its icon.
  */
-const VENUE_KINDS: Record<VenueCategory, { label: TranslationKey; icon: KnownEmojiIconName }> = {
+const VENUE_KINDS: Record<VenueCategory, { label: TranslationKey; icon: IconName }> = {
   cafe: { label: 'cafe', icon: 'coffee' },
   restaurant: { label: 'restaurant', icon: 'utensils' },
   bar: { label: 'bar', icon: 'cocktail' },
@@ -96,7 +96,7 @@ function formatCategoryCuisine(
 }function RecommendedDishesSection({ dishes, title }: { dishes: string[]; title: string }) {
   return (
     <div data-testid="recommended-dishes">
-      <Callout emoji="utensils" title={title}>
+      <Callout icon="utensils" title={title}>
         <ul data-testid="recommended-dishes-list" className="space-y-1 pl-1 pt-0.5">
           {dishes.map((dish, index) => (
             <li
@@ -117,7 +117,7 @@ function formatCategoryCuisine(
 
 interface TextCalloutProps {
   testId: string;
-  emoji: KnownEmojiIconName;
+  icon: IconName;
   title: string;
   text: string;
   variant?: 'default' | 'warning';
@@ -126,10 +126,10 @@ interface TextCalloutProps {
 
 /** A single block of Stop prose on a callout surface — the shape every Act
  *  Layer and Story Layer text block shares. */
-function TextCallout({ testId, emoji, title, text, variant = 'default', className = '' }: TextCalloutProps) {
+function TextCallout({ testId, icon, title, text, variant = 'default', className = '' }: TextCalloutProps) {
   return (
     <div data-testid={testId}>
-      <Callout emoji={emoji} title={title} variant={variant}>
+      <Callout icon={icon} title={title} variant={variant}>
         <p
           className={`text-xs sm:text-sm leading-relaxed font-medium ${className}`}
           style={{ color: COLORS.dishText }}
@@ -230,7 +230,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           <span
             className="absolute top-3 left-3 backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-white px-3 py-1.5 rounded-full font-semibold z-20 flex items-center gap-1.5 border border-white/20 shadow-xs"
           >
-            <EmojiIcon name="mapPin" size="xs" />
+            <Icon name="mapPin" size="xs" />
             {stop.neighborhood}
           </span>
 
@@ -240,11 +240,11 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
                 data-testid="photo-count-badge"
                 className="backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-white px-2.5 py-1.5 rounded-full font-semibold flex items-center gap-1 border border-white/20 shadow-xs"
               >
-                <EmojiIcon name="gallery" size="xs" />1/{galleryImages.length}
+                <Icon name="gallery" size="xs" />1/{galleryImages.length}
               </span>
             )}
             <span className="backdrop-blur-md bg-black/50 bg-slate-900/80 text-xs text-white px-3 py-1.5 rounded-full font-semibold flex items-center gap-1.5 border border-white/20 shadow-xs">
-              <EmojiIcon name="clock" size="xs" />
+              <Icon name="clock" size="xs" />
               {stop.estimatedMinutes} {t('min')}
             </span>
           </div>
@@ -269,7 +269,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           </p>
           {isPitstop && (
             <Badge variant="subtle" data-testid="pitstop-badge" className="normal-case tracking-normal">
-              <EmojiIcon name="pitstop" />
+              <Icon name="pitstop" />
               {t('pitstop')}
             </Badge>
           )}
@@ -297,7 +297,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
           className="flex items-center gap-1.5 text-xs font-medium"
           style={{ color: COLORS.textSecondary }}
         >
-          <EmojiIcon name="mapPin" size="xs" />
+          <Icon name="mapPin" size="xs" />
           <span>{stop.neighborhood}</span>
         </div>
       </div>
@@ -327,7 +327,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
               className="font-bold text-sm inline-flex items-center gap-1"
               style={{ color: COLORS.terracottaAccent }}
             >
-              <EmojiIcon name="star" size="sm" />
+              <Icon name="star" size="sm" />
               {rating.rating.toFixed(1)}
             </span>
             <span> ({rating.count.toLocaleString()} reviews on Google)</span>
@@ -368,12 +368,12 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
                 borderColor: COLORS.badgeBorder,
               }}
             >
-              <EmojiIcon name={VENUE_KINDS[venueStop.venueDetails.category].icon} size="xs" />
+              <Icon name={VENUE_KINDS[venueStop.venueDetails.category].icon} size="xs" />
               {formatCategoryCuisine(venueStop, t)}
             </span>
             {venueStop.venueDetails.isVegetarianFriendly && (
               <Badge variant="visited" data-testid="veggie-friendly-badge" className="normal-case tracking-normal text-xs font-semibold">
-                <EmojiIcon name="leaf" />
+                <Icon name="leaf" />
                 {t('veggieFriendly')}
               </Badge>
             )}
@@ -382,14 +382,14 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
 
         {stop.workingHours && (
           <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: COLORS.textSecondary }} data-testid="working-hours-badge">
-            <EmojiIcon name="clock" size="xs" />
+            <Icon name="clock" size="xs" />
             <span>{t('workingHours')}: {stop.workingHours}</span>
           </div>
         )}
 
         {attractionStop?.transitBadge && (
           <div data-testid="transit-badge">
-            <Callout emoji="funicular" title={t('transitStep')}>
+            <Callout icon="funicular" title={t('transitStep')}>
               <p className="font-semibold" style={{ color: COLORS.textPrimary }}>{attractionStop.transitBadge}</p>
             </Callout>
           </div>
@@ -405,20 +405,20 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         {hasBookingAdvice && (
           <TextCallout
             testId="booking-advice"
-            emoji="calendar"
+            icon="calendar"
             title={t('bookingAdvice')}
             text={venueStop!.venueDetails.bookingAdvice!}
           />
         )}
 
         {stop.photoSpot && (
-          <TextCallout testId="photo-spot" emoji="camera" title={t('photoSpotRec')} text={stop.photoSpot} />
+          <TextCallout testId="photo-spot" icon="camera" title={t('photoSpotRec')} text={stop.photoSpot} />
         )}
 
         {stop.stopDirective && (
           <TextCallout
             testId="stop-directive"
-            emoji="directive"
+            icon="directive"
             title={t('stopDirective')}
             text={stop.stopDirective}
             variant="warning"
@@ -429,7 +429,7 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
         {stop.logisticsWarning && (
           <TextCallout
             testId="logistics-warning"
-            emoji="warning"
+            icon="warning"
             title={t('logisticsWarning')}
             text={stop.logisticsWarning}
             variant="warning"
@@ -450,20 +450,20 @@ function StopCard({ stop: rawStop, routeId, totalStops = 6, isVisited = false }:
       {stop.historicalSummary && (
         <TextCallout
           testId="historical-summary"
-          emoji="landmark"
+          icon="landmark"
           title={t('historicalSummary')}
           text={stop.historicalSummary}
         />
       )}
 
       {stop.funFact && (
-        <TextCallout testId="fun-fact" emoji="bulb" title={t('funFact')} text={stop.funFact} />
+        <TextCallout testId="fun-fact" icon="bulb" title={t('funFact')} text={stop.funFact} />
       )}
 
       {stop.olyaTips && (
         <TextCallout
           testId="olya-tip"
-          emoji="chat"
+          icon="chat"
           title={t('olyaTip')}
           text={`“${stop.olyaTips}”`}
           className="italic"

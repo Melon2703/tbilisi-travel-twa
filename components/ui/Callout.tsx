@@ -1,10 +1,10 @@
 import React from 'react';
 import Card from './Card';
-import EmojiIcon, { KnownEmojiIconName } from './EmojiIcon';
+import Icon, { IconName } from './Icon';
 
 export interface CalloutProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  emoji?: KnownEmojiIconName;
+  icon?: IconName;
   title: string;
   variant?: 'default' | 'warning' | 'tip';
   className?: string;
@@ -12,7 +12,7 @@ export interface CalloutProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function Callout({
   children,
-  emoji,
+  icon,
   title,
   variant = 'default',
   className = '',
@@ -23,7 +23,7 @@ export default function Callout({
   return (
     <Card variant={cardVariant} className={`space-y-1.5 ${className}`} {...props}>
       <div className="flex items-center gap-2 text-[#C4572A] font-bold text-xs">
-        {emoji && <EmojiIcon name={emoji} />}
+        {icon && <Icon name={icon} />}
         <span>{title}</span>
       </div>
       <div className="text-xs sm:text-sm text-[#4A3828] leading-relaxed font-medium">

@@ -22,7 +22,7 @@ import {
 } from '@/lib/utils/progress';
 import { useLanguage, getLocalizedFamilyName } from '@/lib/i18n/LanguageContext';
 import { routeEntryCtaLabel } from '@/components/RouteIntroCard';
-import EmojiIcon from '@/components/ui/EmojiIcon';
+import Icon from '@/components/ui/Icon';
 import GeorgianOrnament from '@/components/ui/GeorgianOrnament';
 
 export interface RouteCatalogProps {
@@ -149,7 +149,7 @@ export default function RouteCatalog({
                 : 'bg-[#C4572A] text-white active:scale-95'
               }`}
           >
-            <EmojiIcon name="mapPin" />
+            <Icon name="mapPin" />
             <span>
               {isLocating
                 ? t('locating')
@@ -327,13 +327,13 @@ export default function RouteCatalog({
                   <div className="pt-3 border-t border-[#C4572A]/12 text-xs font-semibold text-[#7A6552]">
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="flex items-center gap-1">
-                        <EmojiIcon name="mapPin" size="xs" />{' '}
+                        <Icon name="mapPin" size="xs" />{' '}
                         <span className="text-[#1C1008] font-bold">
                           {t('stopsCount', { count: route.stops.length })}
                         </span>
                       </span>
                       <span className="flex items-center gap-1">
-                        <EmojiIcon name="clock" size="xs" />{' '}
+                        <Icon name="clock" size="xs" />{' '}
                         <span className="text-[#1C1008] font-bold">{formattedTime}</span>
                       </span>
                       {distanceKm !== null && (
@@ -341,7 +341,7 @@ export default function RouteCatalog({
                           data-testid="route-distance-badge"
                           className="flex items-center gap-0.5 text-[#228255] font-bold"
                         >
-                          <EmojiIcon name="mapPin" size="xs" />
+                          <Icon name="mapPin" size="xs" />
                           {distanceKm} km
                         </span>
                       )}
@@ -365,7 +365,7 @@ export default function RouteCatalog({
                             'viewRoute'
                           )}
                       </span>
-                      <EmojiIcon name="arrowRight" size="xs" />
+                      <Icon name="arrowRight" size="xs" />
                     </span>
                   </div>
                 </div>

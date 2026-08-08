@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Stop } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-import EmojiIcon from '@/components/ui/EmojiIcon';
+import Icon from '@/components/ui/Icon';
 import { COLORS } from '@/lib/theme/tokens';
 
 /** Slide 0 of the carousel is the Route Intro Card. */
@@ -110,7 +110,7 @@ function TimelineBar({
             border: `1.5px solid ${COLORS.tipBoxBorder}`,
           }}
         >
-          <EmojiIcon name="routeOverview" size="sm" />
+          <Icon name="routeOverview" size="sm" />
         </button>
 
         {/* Vertical Divider */}

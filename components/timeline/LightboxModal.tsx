@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import EmojiIcon from '@/components/ui/EmojiIcon';
+import Icon from '@/components/ui/Icon';
 
 export interface LightboxModalProps {
   isOpen: boolean;
@@ -123,7 +123,7 @@ export default function LightboxModal({
           aria-label="Close photo modal"
           className="w-10 h-10 rounded-full bg-white/10 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
         >
-          <EmojiIcon name="close" className="text-xl font-bold leading-none" />
+          <Icon name="close" className="text-xl font-bold leading-none" />
         </button>
       </div>
 

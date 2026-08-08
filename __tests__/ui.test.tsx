@@ -1,16 +1,16 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import EmojiIcon, { EMOJI_ICONS } from '@/components/ui/EmojiIcon';
+import Icon, { ICONS } from '@/components/ui/Icon';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Callout from '@/components/ui/Callout';
 
-describe('Common UI Components & Emoji System', () => {
-  describe('EmojiIcon Component', () => {
+describe('Common UI Components & Icon System', () => {
+  describe('Icon Component', () => {
     it('draws a real icon glyph, not an emoji character', () => {
-      render(<EmojiIcon name="mapPin" data-testid="map-pin-icon" />);
+      render(<Icon name="mapPin" data-testid="map-pin-icon" />);
       const element = screen.getByTestId('map-pin-icon');
       expect(element).toBeInTheDocument();
       expect(element.querySelector('svg')).toBeInTheDocument();
@@ -20,8 +20,8 @@ describe('Common UI Components & Emoji System', () => {
     it('draws a distinct glyph for each name', () => {
       render(
         <>
-          <EmojiIcon name="mapPin" data-testid="a" />
-          <EmojiIcon name="clock" data-testid="b" />
+          <Icon name="mapPin" data-testid="a" />
+          <Icon name="clock" data-testid="b" />
         </>
       );
       expect(screen.getByTestId('a').innerHTML).not.toBe(
@@ -30,21 +30,21 @@ describe('Common UI Components & Emoji System', () => {
     });
 
     it('writes no text of its own — a name always resolves to a drawn glyph', () => {
-      render(<EmojiIcon name="mapPin" data-testid="drawn" />);
+      render(<Icon name="mapPin" data-testid="drawn" />);
       const element = screen.getByTestId('drawn');
       expect(element.querySelector('svg')).not.toBeNull();
       expect(element.textContent).toBe('');
     });
 
     it('supports aria-hidden by default for visual icons', () => {
-      render(<EmojiIcon name="clock" data-testid="clock-icon" />);
+      render(<Icon name="clock" data-testid="clock-icon" />);
       const element = screen.getByTestId('clock-icon');
       expect(element).toHaveAttribute('aria-hidden', 'true');
       expect(element.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
     });
 
     it('exposes an accessible label when one is given', () => {
-      render(<EmojiIcon name="star" ariaLabel="Rating" data-testid="star-icon" />);
+      render(<Icon name="star" ariaLabel="Rating" data-testid="star-icon" />);
       const element = screen.getByTestId('star-icon');
       expect(element).toHaveAttribute('role', 'img');
       expect(element).toHaveAttribute('aria-label', 'Rating');
@@ -52,7 +52,7 @@ describe('Common UI Components & Emoji System', () => {
     });
 
     it('inherits currentColor and sizes from the text scale', () => {
-      render(<EmojiIcon name="star" size="lg" data-testid="star-icon" />);
+      render(<Icon name="star" size="lg" data-testid="star-icon" />);
       const element = screen.getByTestId('star-icon');
       expect(element).toHaveClass('text-lg');
       const svg = element.querySelector('svg')!;
@@ -66,12 +66,35 @@ describe('Common UI Components & Emoji System', () => {
     });
 
     it('renders an icon for every name in the vocabulary', () => {
-      const names = Object.keys(EMOJI_ICONS) as (keyof typeof EMOJI_ICONS)[];
+      const names = Object.keys(ICONS) as (keyof typeof ICONS)[];
       expect(names.length).toBeGreaterThan(0);
       for (const name of names) {
-        const { container } = render(<EmojiIcon name={name} />);
+        const { container } = render(<Icon name={name} />);
         expect(container.querySelector('svg')).not.toBeNull();
       }
+    });
+
+  });
+
+  // Every prop that takes a picture takes a name from the closed vocabulary, so
+  // an unknown name — or a glyph passed where a name belongs — cannot reach the
+  // screen. `tsc --noEmit`, not `vitest`, is what enforces this: each directive
+  // below fails the typecheck as an unused `@ts-expect-error` the moment its
+  // prop stops rejecting the value. The runtime body only keeps the JSX alive
+  // for the compiler to look at.
+  describe('Closed icon vocabulary', () => {
+    it('rejects a name outside the vocabulary at compile time', () => {
+      const rejected = (
+        <>
+          {/* @ts-expect-error — not a name in the vocabulary */}
+          <Icon name="unicorn" />
+          {/* @ts-expect-error — not a name in the vocabulary */}
+          <Button icon="unicorn">Go</Button>
+          {/* @ts-expect-error — not a name in the vocabulary */}
+          <Callout icon="unicorn" title="Tip">body</Callout>
+        </>
+      );
+      expect(rejected).toBeTruthy();
     });
   });
 
@@ -96,9 +119,9 @@ describe('Common UI Components & Emoji System', () => {
   });
 
   describe('Button Component', () => {
-    it('renders CTA button with emoji icon and label', () => {
+    it('renders CTA button with icon and label', () => {
       render(
-        <Button emoji="arrowRight">
+        <Button icon="arrowRight">
           Start Route
         </Button>
       );
@@ -110,7 +133,7 @@ describe('Common UI Components & Emoji System', () => {
   describe('Callout Component', () => {
     it('renders callout header with icon and title', () => {
       render(
-        <Callout emoji="chat" title="Olya's Tip">
+        <Callout icon="chat" title="Olya's Tip">
           Great view of the city!
         </Callout>
       );

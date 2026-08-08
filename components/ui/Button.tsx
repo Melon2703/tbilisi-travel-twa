@@ -1,19 +1,19 @@
 import React from 'react';
-import EmojiIcon, { KnownEmojiIconName } from './EmojiIcon';
+import Icon, { IconName } from './Icon';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'outline' | 'visited';
-  emoji?: KnownEmojiIconName;
-  emojiPosition?: 'left' | 'right';
+  icon?: IconName;
+  iconPosition?: 'left' | 'right';
   className?: string;
 }
 
 export default function Button({
   children,
   variant = 'primary',
-  emoji,
-  emojiPosition = 'right',
+  icon,
+  iconPosition = 'right',
   className = '',
   ...props
 }: ButtonProps) {
@@ -30,9 +30,9 @@ export default function Button({
       className={`${variantClasses[variant]} ${className}`}
       {...props}
     >
-      {emoji && emojiPosition === 'left' && <EmojiIcon name={emoji} />}
+      {icon && iconPosition === 'left' && <Icon name={icon} />}
       <span>{children}</span>
-      {emoji && emojiPosition === 'right' && <EmojiIcon name={emoji} />}
+      {icon && iconPosition === 'right' && <Icon name={icon} />}
     </button>
   );
 }

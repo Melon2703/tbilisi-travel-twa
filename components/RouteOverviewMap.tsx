@@ -4,7 +4,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Route } from '@/lib/types/route';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import RouteSequenceConnector from '@/components/RouteSequenceConnector';
-import EmojiIcon from '@/components/ui/EmojiIcon';
+import Icon from '@/components/ui/Icon';
 import { buildTileGrid, frameStops, projectCoordinates } from '@/lib/utils/mapFraming';
 
 export interface RouteOverviewMapProps {
@@ -98,7 +98,7 @@ export default function RouteOverviewMap({
       {/* ── Header Bar ── */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <EmojiIcon name="map" size="sm" />
+          <Icon name="map" size="sm" />
           <h3 className="text-xs font-bold text-[#C4572A]">
             {t('overviewMapTitle')}
           </h3>
@@ -186,7 +186,7 @@ export default function RouteOverviewMap({
           className="absolute bottom-0 left-0 right-0 z-30 bg-[#1C1008]/60 backdrop-blur-md border-t border-white/20 px-4 py-2.5 flex items-center justify-center gap-2 text-white font-bold text-xs text-center shadow-lg transition-colors"
         >
           <span>{t('tapToViewFullMap')}</span>
-          <EmojiIcon name="map" size="xs" />
+          <Icon name="map" size="xs" />
         </div>
       </div>
     </div>
